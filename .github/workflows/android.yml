@@ -1,0 +1,46 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ "develop" ]
+  pull_request_target:
+    branches: [ "develop" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # 소스코드를 체크아웃한다.
+      - name: Checkout Code
+        uses: actions/checkout@v4.2.2
+
+      # JDK 17 를 준비한다.
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      # gradlew 의 root 실행권한을 부여한다.
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # 의존성 캐싱
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: gradle-cache-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-cache-${{ runner.os }}-
+
+      # Gradle 을 빌드한다.
+      - name: Build Gradle
+        run: ./gradlew build --stacktrace
+
+      # 테스트를 실행한다.
+      - name: Run Test
+        run: ./gradlew test
