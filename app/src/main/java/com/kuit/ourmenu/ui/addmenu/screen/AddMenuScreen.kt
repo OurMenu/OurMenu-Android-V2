@@ -95,7 +95,7 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
         //전체 화면 구성, 지도는 추가 예정
         Column(modifier = Modifier.padding(horizontal = 12.dp)) {
             Spacer(modifier = Modifier.height(12.dp))
-            SearchBar(placeholder = "placeholder", onSearch = { })
+            SearchBar(onSearch = { })
         }
     }
 }
