@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -63,6 +65,10 @@ import androidx.compose.ui.unit.sp
  *
  * @param cursorColor 커서에 대한 색상을 Color 객체를 통해 지정한다
  * 기본 값으로는 Color.Black으로 지정
+ *
+ * @param keyboardOptions 키보드에 대한 설정을 KeyboardOptions를 통해 지정한다
+ *
+ * @param keyboardActions 키보드에서 특정 버튼을 눌렀을 때의 작업을 keyboardActions를 통해 지정한다
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -79,6 +85,8 @@ fun CustomTextField(
     paddingValues: PaddingValues = PaddingValues(0.dp),
     containerColor: Color = Color.White,
     cursorColor: Color = Color.Black,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
     //Basic TextField의 상호작용 상태를 추적하려면 사용 가능
     val interactionSource = remember {
@@ -96,7 +104,9 @@ fun CustomTextField(
         interactionSource = interactionSource,
         enabled = enabled,
         singleLine = singleLine,
-        textStyle = textStyle
+        textStyle = textStyle,
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions
     ) { innerTextField ->
 
         TextFieldDefaults.DecorationBox(
