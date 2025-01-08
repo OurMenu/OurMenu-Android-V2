@@ -15,8 +15,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.kuit.ourmenu.ui.addmenu.component.AddMenuBottomSheetContent
 import com.kuit.ourmenu.ui.common.SearchBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -30,16 +32,16 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
             TopAppBar(
                 title = { Text("OURMENU") },
                 navigationIcon = {
-                    IconButton(onClick = { TODO() }) {
+                    IconButton(onClick = { TODO("뒤로가기 구현") }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 }
             )
         },
+        sheetContainerColor = Color.White,
         sheetContent = {
-            Column {
-                Text("Bottom Sheet")
-            }
+            //bottom sheet 구성
+            AddMenuBottomSheetContent()
         },
         //조건 만족하면 bottom sheet 보여주고, 아니면 화면에 안보이도록 처리
         sheetPeekHeight = if(showBottomSheet) 100.dp else 0.dp
@@ -47,7 +49,6 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
         //전체 화면 구성
         Column {
             SearchBar(placeholder = "placeholder", onSearch = { })
-            Text("Add Menu Screen")
         }
     }
 }
