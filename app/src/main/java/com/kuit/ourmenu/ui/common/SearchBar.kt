@@ -30,7 +30,7 @@ fun SearchBar(
 ) {
     Card(
         modifier = Modifier
-            .shadow(elevation = 4.dp)
+            .shadow(elevation = 4.dp, shape = RoundedCornerShape(8.dp))
             .fillMaxWidth(),
         shape = RoundedCornerShape(8.dp)
     ) {
