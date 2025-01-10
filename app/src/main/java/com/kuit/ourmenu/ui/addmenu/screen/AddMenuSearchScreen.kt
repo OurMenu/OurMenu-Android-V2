@@ -5,12 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -21,7 +17,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -31,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.addmenu.component.AddMenuTopAppBar
 import com.kuit.ourmenu.ui.addmenu.component.RestaurantSearchItem
+import com.kuit.ourmenu.ui.common.BottomFullWidthButton
 import com.kuit.ourmenu.ui.common.SearchBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,20 +60,12 @@ fun AddMenuSearchScreen(modifier: Modifier = Modifier) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Button(
-                    onClick = { /*TODO*/ },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .size(320.dp, 52.dp)
-                        .shadow(elevation = 4.dp, shape = RoundedCornerShape(12.dp)),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFF7F7F9),
-                        contentColor = Color(0xFFA4A4A6)
-                    ),
-                ) {
-                    Text(text = "가게와 메뉴 직접 추가하기")
-                }
+                BottomFullWidthButton(
+                    onClick = { TODO() },
+                    containerColor = Color(0xFFF7F7F9),
+                    contentColor = Color(0xFFA4A4A6),
+                    text = "가게와 메뉴 직접 추가"
+                )
             }
         },
         content = { paddingValues ->
