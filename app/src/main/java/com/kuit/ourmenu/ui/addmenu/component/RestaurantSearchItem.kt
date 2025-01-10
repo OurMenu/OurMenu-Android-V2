@@ -25,7 +25,7 @@ fun RestaurantSearchItem(isLastItem: Boolean = false) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 20.dp),
+            .padding(vertical = 20.dp, horizontal = 20.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -34,8 +34,8 @@ fun RestaurantSearchItem(isLastItem: Boolean = false) {
             tint = Color.Unspecified
         )
         Column(modifier = Modifier.padding(start = 20.dp)){
-            Text(text = "메뉴 이름", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-            Text(text = "14,000원", fontSize = 14.sp, color = Color.Gray)
+            Text(text = "아워떡볶이", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            Text(text = "서울 광진구 능동로 112", fontSize = 14.sp, color = Color.Gray)
         }
     }
 
