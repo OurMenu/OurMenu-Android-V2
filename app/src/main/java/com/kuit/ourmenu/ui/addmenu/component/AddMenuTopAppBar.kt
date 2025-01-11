@@ -18,7 +18,7 @@ import com.kuit.ourmenu.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddMenuTopAppBar(topAppbarText : @Composable (() -> Unit)) {
+fun AddMenuTopAppBar(topAppbarText: @Composable (() -> Unit)) {
     TopAppBar(
         title = {
             topAppbarText()

@@ -39,8 +39,7 @@ fun SearchBar(
                 .fillMaxWidth()
                 .border(0.8.dp, Color.Gray, RoundedCornerShape(8.dp))
                 .clip(RoundedCornerShape(8.dp))
-                .height(44.dp)
-            ,
+                .height(44.dp),
             shape = RoundedCornerShape(8.dp),
             placeHolder = { Text(text = "placeholder", fontSize = 20.sp, color = Color.Gray) },
             textStyle = TextStyle(fontSize = 20.sp, color = Color(0xFF666668)),

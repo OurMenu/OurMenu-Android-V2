@@ -48,9 +48,11 @@ fun AddMenuBottomSheetContent() {
             )
         }
 
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 8.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp), horizontalArrangement = Arrangement.SpaceBetween
+        ) {
             //이미지 3개 배치
             Image(
                 painter = painterResource(id = R.drawable.img_dummy_pizza),
@@ -81,7 +83,9 @@ fun AddMenuBottomSheetContent() {
             )
         }
 
-        Column(modifier = Modifier.fillMaxWidth().padding(top = 12.dp)) {
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 12.dp)) {
             SelectMenuItem(false)
             SelectMenuItem(true)
         }

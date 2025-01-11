@@ -42,7 +42,7 @@ fun SelectMenuItem(isSelected: Boolean = false) {
             Text(text = "메뉴 이름", fontSize = 16.sp, fontWeight = FontWeight.Bold)
             Text(text = "14,000원", fontSize = 14.sp, color = Color.Gray)
         }
-        if(isSelected){
+        if (isSelected) {
             Button(
                 onClick = {},
                 shape = RoundedCornerShape(16.dp),
@@ -52,9 +52,12 @@ fun SelectMenuItem(isSelected: Boolean = false) {
                 modifier = Modifier.size(44.dp, 28.dp),
                 contentPadding = PaddingValues(0.dp)
             ) {
-                Icon(painter = painterResource(R.drawable.ic_btn_check_white), contentDescription = "selected button")
+                Icon(
+                    painter = painterResource(R.drawable.ic_btn_check_white),
+                    contentDescription = "selected button"
+                )
             }
-        }else{
+        } else {
             Button(
                 onClick = {},
                 shape = RoundedCornerShape(16.dp),
@@ -66,7 +69,10 @@ fun SelectMenuItem(isSelected: Boolean = false) {
                 modifier = Modifier.size(44.dp, 28.dp),
                 contentPadding = PaddingValues(0.dp)
             ) {
-                Icon(painter = painterResource(R.drawable.ic_btn_plus_orange), contentDescription = "unselected button")
+                Icon(
+                    painter = painterResource(R.drawable.ic_btn_plus_orange),
+                    contentDescription = "unselected button"
+                )
             }
         }
     }
