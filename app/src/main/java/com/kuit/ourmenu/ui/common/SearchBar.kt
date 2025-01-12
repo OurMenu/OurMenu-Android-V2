@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -30,7 +31,7 @@ fun SearchBar(
 ) {
     Card(
         modifier = Modifier
-            .shadow(elevation = 4.dp, shape = RoundedCornerShape(8.dp))
+            .shadow(elevation = 2.dp, shape = RoundedCornerShape(8.dp))
             .fillMaxWidth(),
         shape = RoundedCornerShape(8.dp)
     ) {
@@ -61,7 +62,7 @@ fun SearchBar(
 @Preview(showBackground = true)
 @Composable
 private fun SearchBarPreview() {
-    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
+    Column(modifier = Modifier.fillMaxSize().padding(20.dp), verticalArrangement = Arrangement.Center) {
         SearchBar(
             onSearch = { }
         )
