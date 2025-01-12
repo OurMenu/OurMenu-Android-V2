@@ -9,12 +9,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.ui.theme.NeutralBlack
+import com.kuit.ourmenu.ui.theme.Primary500Main
+import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,7 +36,7 @@ fun AddMenuTopAppBar(topAppbarText: @Composable (() -> Unit)) {
         modifier = Modifier
             .drawBehind {
                 drawRect(
-                    color = Color.Black
+                    color = NeutralBlack
                 )
             }
             .shadow(elevation = 4.dp)
@@ -46,9 +48,9 @@ fun AddMenuTopAppBar(topAppbarText: @Composable (() -> Unit)) {
 private fun AddMenuTopAppBarPreview() {
     AddMenuTopAppBar {
         Text(
-            "OURMENU",
-            color = Color(0xFFFF5420),
-            fontWeight = FontWeight.Bold
+            stringResource(R.string.ourmenu),
+            style = ourMenuTypography().pretendard_600_18,
+            color = Primary500Main
         )
     }
 }

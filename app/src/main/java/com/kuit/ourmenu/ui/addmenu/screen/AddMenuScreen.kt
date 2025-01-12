@@ -21,12 +21,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.addmenu.component.AddMenuBottomSheetContent
 import com.kuit.ourmenu.ui.addmenu.component.AddMenuTopAppBar
 import com.kuit.ourmenu.ui.common.SearchBar
+import com.kuit.ourmenu.ui.theme.Primary500Main
+import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,9 +41,9 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
         topBar = {
             AddMenuTopAppBar {
                 Text(
-                    "OURMENU",
-                    color = Color(0xFFFF5420),
-                    fontWeight = FontWeight.Bold
+                    text = stringResource(R.string.ourmenu),
+                    style = ourMenuTypography().pretendard_600_18,
+                    color = Primary500Main,
                 )
             }
         },

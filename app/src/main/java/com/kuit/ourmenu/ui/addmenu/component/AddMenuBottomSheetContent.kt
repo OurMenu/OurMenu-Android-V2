@@ -30,17 +30,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.BottomFullWidthButton
 import com.kuit.ourmenu.ui.theme.Neutral100
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral400
 import com.kuit.ourmenu.ui.theme.Neutral500
+import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.NeutralWhite
+import com.kuit.ourmenu.ui.theme.ourMenuTypography
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,7 +48,7 @@ import kotlinx.coroutines.launch
 fun AddMenuBottomSheetContent(scaffoldState: BottomSheetScaffoldState) {
     val coroutineScope = rememberCoroutineScope()
     val dummyMenuItemList = listOf(
-        false, false, true, false, false,false, false, false
+        false, false, true, false, false, false, false, false
     )
 
     Column(
@@ -56,7 +56,10 @@ fun AddMenuBottomSheetContent(scaffoldState: BottomSheetScaffoldState) {
             .fillMaxSize()
             .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
     ) {
-        Text(text = "식당 이름", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+        Text(
+            text = "식당 이름",
+            style = ourMenuTypography().pretendard_700_20
+            )
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_location_info),
@@ -66,8 +69,8 @@ fun AddMenuBottomSheetContent(scaffoldState: BottomSheetScaffoldState) {
             )
             Text(
                 text = "주소에 해당하는 텍스트",
-                color = Color.Gray,
-                fontSize = 14.sp,
+                style = ourMenuTypography().pretendard_500_14,
+                color = Neutral700,
                 modifier = Modifier.padding(start = 8.dp)
             )
         }
@@ -124,7 +127,7 @@ fun AddMenuBottomSheetContent(scaffoldState: BottomSheetScaffoldState) {
                     scaffoldState.bottomSheetState.expand()
                 }
             }
-        }else{
+        } else {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -140,7 +143,7 @@ fun AddMenuBottomSheetContent(scaffoldState: BottomSheetScaffoldState) {
                 BottomFullWidthButton(
                     containerColor = Neutral100,
                     contentColor = Neutral500,
-                    text = stringResource(R.string.add_menu_by_my_own)
+                    text = stringResource(R.string.add_menu_by_myself)
                 ) {
 
                 }
@@ -163,7 +166,7 @@ fun AddMenuBottomSheetContent(scaffoldState: BottomSheetScaffoldState) {
 @Composable
 private fun AddMenuBottomSheetContentPreview() {
     val scaffoldState = rememberBottomSheetScaffoldState()
-    LaunchedEffect(Unit){
+    LaunchedEffect(Unit) {
         //아래 주석 해제하면 bottom sheet 확장된 상태 확인 가능
 //       scaffoldState.bottomSheetState.expand()
     }

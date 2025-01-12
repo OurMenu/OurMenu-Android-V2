@@ -15,11 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.ui.theme.Neutral300
+import com.kuit.ourmenu.ui.theme.Neutral700
+import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
 fun RestaurantSearchItem(isLastItem: Boolean = false) {
@@ -35,8 +36,15 @@ fun RestaurantSearchItem(isLastItem: Boolean = false) {
             tint = Color.Unspecified
         )
         Column(modifier = Modifier.padding(start = 20.dp)) {
-            Text(text = stringResource(R.string.our_ddeokbokki), fontSize = 16.sp, fontWeight = FontWeight.Bold)
-            Text(text = stringResource(R.string.neungdongro_112), fontSize = 14.sp, color = Color.Gray)
+            Text(
+                text = stringResource(R.string.our_ddeokbokki),
+                style = ourMenuTypography().pretendard_600_16,
+            )
+            Text(
+                text = stringResource(R.string.neungdongro_112),
+                style = ourMenuTypography().pretendard_500_14,
+                color = Neutral700
+            )
         }
     }
 
@@ -44,7 +52,7 @@ fun RestaurantSearchItem(isLastItem: Boolean = false) {
     if (!isLastItem) {
         HorizontalDivider(
             thickness = 1.dp,
-            color = Color.LightGray,
+            color = Neutral300,
             modifier = Modifier.fillMaxWidth()
         )
     }

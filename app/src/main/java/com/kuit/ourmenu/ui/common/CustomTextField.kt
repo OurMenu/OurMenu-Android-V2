@@ -27,11 +27,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.kuit.ourmenu.R
+import com.kuit.ourmenu.ui.theme.Neutral500
+import com.kuit.ourmenu.ui.theme.NeutralBlack
+import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 
 /**
@@ -151,10 +155,15 @@ private fun CustomTextFieldPreview() {
         CustomTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .border(0.8.dp, Color.Gray, RoundedCornerShape(8.dp)),
+                .border(0.8.dp, Neutral500, RoundedCornerShape(8.dp)),
             shape = RoundedCornerShape(8.dp),
-            placeHolder = { Text("placeholder", fontSize = 20.sp) },
-            textStyle = TextStyle(fontSize = 20.sp, color = Color.Black),
+            placeHolder = {
+                Text(
+                    stringResource(R.string.placeholder),
+                    style = ourMenuTypography().pretendard_600_18.copy(color = Neutral500)
+                )
+            },
+            textStyle = ourMenuTypography().pretendard_500_20.copy(color = NeutralBlack),
             trailingIcon = {
                 Icon(
                     imageVector = Icons.Default.Search,

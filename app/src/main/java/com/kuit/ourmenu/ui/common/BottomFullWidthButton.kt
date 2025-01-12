@@ -15,8 +15,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.kuit.ourmenu.R
+import com.kuit.ourmenu.ui.theme.Neutral100
+import com.kuit.ourmenu.ui.theme.Neutral500
+import com.kuit.ourmenu.ui.theme.NeutralWhite
+import com.kuit.ourmenu.ui.theme.Primary500Main
+import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
 fun BottomFullWidthButton(
@@ -37,7 +44,10 @@ fun BottomFullWidthButton(
             contentColor = contentColor
         ),
     ) {
-        Text(text = text)
+        Text(text = text,
+            style = ourMenuTypography().pretendard_700_16,
+            color = contentColor
+        )
     }
 }
 
@@ -45,11 +55,11 @@ fun BottomFullWidthButton(
 @Composable
 private fun BottomFullWidthButtonPreview() {
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
-        BottomFullWidthButton(Color(0xFFF7F7F9), Color(0xFFA4A4A6), "가게와 메뉴 직접 추가하기"){
+        BottomFullWidthButton(Neutral100, Neutral500, stringResource(R.string.add_restaurant_and_menu_by_myself)){
             //onClick 작성
         }
         Spacer(modifier = Modifier.height(16.dp))
-        BottomFullWidthButton(Color(0xFFFF5420), Color.White, "메뉴 추가하기"){
+        BottomFullWidthButton(Primary500Main, NeutralWhite, stringResource(R.string.add_menu)){
             //onClick 작성
         }
     }

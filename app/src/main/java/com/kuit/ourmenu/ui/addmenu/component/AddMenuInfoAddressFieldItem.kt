@@ -39,7 +39,7 @@ fun AddMenuInfoAddressFieldItem() {
                 .padding(bottom = 4.dp)
         ) {
             Text(
-                text = "가게 주소",
+                text = stringResource(R.string.resaturant_address),
                 style = ourMenuTypography().pretendard_600_14
             )
             Text(
@@ -58,7 +58,7 @@ fun AddMenuInfoAddressFieldItem() {
             containerColor = Neutral100,
             placeHolder = {
                 Text(
-                    text = "가게 주소를 입력해주세요.",
+                    text = stringResource(R.string.type_restaurant_address),
                     style = ourMenuTypography().pretendard_500_14,
                     color = Neutral500
                 )
@@ -78,7 +78,7 @@ fun AddMenuInfoAddressFieldItem() {
             containerColor = Neutral100,
             placeHolder = {
                 Text(
-                    text = "상세 주소를 입력해주세요.",
+                    text = stringResource(R.string.type_restaurant_detailed_address),
                     style = ourMenuTypography().pretendard_500_14,
                     color = Neutral500
                 )

@@ -92,17 +92,17 @@ private fun AddMenuInfoTextFieldItemPreview() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         AddMenuInfoTextFieldItem(
-            fieldName = "메뉴 이름",
-            placeholder = "메뉴 이름을 입력해주세요"
+            fieldName = stringResource(R.string.menu_name),
+            placeholder = stringResource(R.string.type_menu_name)
         )
         AddMenuInfoTextFieldItem(
-            fieldName = "메뉴 가격",
-            placeholder = "직접 가격을 입력해주세요",
+            fieldName = stringResource(R.string.menu_price),
+            placeholder = stringResource(R.string.type_menu_price),
             isPriceInfo = true
         )
         AddMenuInfoTextFieldItem(
-            fieldName = "가게 이름",
-            placeholder = "가게 이름을 입력해주세요"
+            fieldName = stringResource(R.string.restaurant_name),
+            placeholder = stringResource(R.string.type_restaurant_name)
         )
     }
 
