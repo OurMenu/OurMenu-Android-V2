@@ -20,10 +20,10 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun BottomFullWidthButton(
-    onClick: () -> Unit,
     containerColor: Color,
     contentColor: Color,
-    text: String
+    text: String,
+    onClick: () -> Unit
 ) {
     Button(
         onClick = onClick,
@@ -45,8 +45,12 @@ fun BottomFullWidthButton(
 @Composable
 private fun BottomFullWidthButtonPreview() {
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
-        BottomFullWidthButton({}, Color(0xFFF7F7F9), Color(0xFFA4A4A6), "가게와 메뉴 직접 추가하기")
+        BottomFullWidthButton(Color(0xFFF7F7F9), Color(0xFFA4A4A6), "가게와 메뉴 직접 추가하기"){
+            //onClick 작성
+        }
         Spacer(modifier = Modifier.height(16.dp))
-        BottomFullWidthButton({}, Color(0xFFFF5420), Color.White, "메뉴 추가하기")
+        BottomFullWidthButton(Color(0xFFFF5420), Color.White, "메뉴 추가하기"){
+            //onClick 작성
+        }
     }
 }
