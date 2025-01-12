@@ -4,4 +4,8 @@
     <string name="neungdongro_112">서울 광진구 능동로 112</string>
     <string name="add_menu_by_my_own">메뉴 직접 추가하기</string>
     <string name="next">다음</string>
+    <string name="add_menu">메뉴 추가하기</string>
+    <string name="asterisk">*</string>
+    <string name="menuboard">메뉴판</string>
+    <string name="save_menuboard">메뉴판을 선택해주세요</string>
 </resources>
