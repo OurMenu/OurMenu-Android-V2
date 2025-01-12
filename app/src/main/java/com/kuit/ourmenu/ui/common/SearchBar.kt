@@ -19,11 +19,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.ui.theme.Neutral500
+import com.kuit.ourmenu.ui.theme.Neutral700
+import com.kuit.ourmenu.ui.theme.Primary500Main
+import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
 fun SearchBar(
@@ -38,12 +41,17 @@ fun SearchBar(
         CustomTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .border(0.8.dp, Color.Gray, RoundedCornerShape(8.dp))
+                .border(0.8.dp, Neutral500, RoundedCornerShape(8.dp))
                 .clip(RoundedCornerShape(8.dp))
                 .height(44.dp),
             shape = RoundedCornerShape(8.dp),
-            placeHolder = { Text(text = "placeholder", fontSize = 20.sp, color = Color.Gray) },
-            textStyle = TextStyle(fontSize = 20.sp, color = Color(0xFF666668)),
+            placeHolder = {
+                Text(
+                    text = stringResource(R.string.placeholder),
+                    style = ourMenuTypography().pretendard_600_18.copy(color = Neutral500)
+                )
+            },
+            textStyle = ourMenuTypography().pretendard_700_20.copy(color = Neutral700),
             trailingIcon = {
                 Icon(
                     painter = painterResource(R.drawable.ic_searchbar_search),
@@ -53,7 +61,7 @@ fun SearchBar(
                 )
             },
             paddingValues = PaddingValues(start = 28.dp, top = 0.dp, bottom = 0.dp),
-            cursorColor = Color(0xFFFF5420)
+            cursorColor = Primary500Main
         )
     }
 
@@ -62,7 +70,11 @@ fun SearchBar(
 @Preview(showBackground = true)
 @Composable
 private fun SearchBarPreview() {
-    Column(modifier = Modifier.fillMaxSize().padding(20.dp), verticalArrangement = Arrangement.Center) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(20.dp), verticalArrangement = Arrangement.Center
+    ) {
         SearchBar(
             onSearch = { }
         )
