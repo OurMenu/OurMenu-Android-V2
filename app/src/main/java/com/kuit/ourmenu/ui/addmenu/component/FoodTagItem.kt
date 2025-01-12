@@ -22,12 +22,12 @@ fun FoodTagItem(
     label: String,
     iconId: Int,
     isSelected: Boolean,
-    onSelected: (Boolean) -> Unit
+    onSelected: () -> Unit
 ) {
     AssistChip(
         onClick = {
             // 클릭 이벤트 처리
-            onSelected(isSelected)
+            onSelected()
         },
         label = {
             Text(
@@ -36,19 +36,11 @@ fun FoodTagItem(
             )
         },
         leadingIcon = {
-            if (isSelected) {
                 Icon(
                     painterResource(iconId),
                     contentDescription = null,
-                    tint = NeutralWhite
+                    tint = if(isSelected) NeutralWhite else Neutral900
                 )
-            } else {
-                Icon(
-                    painterResource(iconId),
-                    contentDescription = null,
-                    tint = Neutral900
-                )
-            }
         },
         colors = AssistChipDefaults.assistChipColors(
             containerColor = if (isSelected) Primary500Main else NeutralWhite,
