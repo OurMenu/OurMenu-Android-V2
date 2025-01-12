@@ -18,7 +18,7 @@ import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun FoodTag(
+fun FoodTagItem(
     label: String,
     iconId: Int,
     isSelected: Boolean,
@@ -61,7 +61,7 @@ fun FoodTag(
 @Composable
 private fun FoodTagPreview() {
     var isSelected by rememberSaveable { mutableStateOf(false) }
-    FoodTag(
+    FoodTagItem(
         label = "밥",
         iconId = R.drawable.ic_tag_rice,
         isSelected = isSelected,
