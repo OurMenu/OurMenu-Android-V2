@@ -39,8 +39,16 @@ fun SelectMenuItem(isSelected: Boolean = false) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Column {
-            Text(text = "메뉴 이름", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-            Text(text = "14,000원", fontSize = 14.sp, color = Color.Gray)
+            Text(
+                text = "메뉴 이름",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = "14,000원",
+                fontSize = 14.sp,
+                color = Color.Gray
+            )
         }
         if (isSelected) {
             Button(
