@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,8 +35,8 @@ fun RestaurantSearchItem(isLastItem: Boolean = false) {
             tint = Color.Unspecified
         )
         Column(modifier = Modifier.padding(start = 20.dp)) {
-            Text(text = "아워떡볶이", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-            Text(text = "서울 광진구 능동로 112", fontSize = 14.sp, color = Color.Gray)
+            Text(text = stringResource(R.string.our_ddeokbokki), fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            Text(text = stringResource(R.string.neungdongro_112), fontSize = 14.sp, color = Color.Gray)
         }
     }
 
