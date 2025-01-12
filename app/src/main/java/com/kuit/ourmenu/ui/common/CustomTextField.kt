@@ -147,8 +147,7 @@ private fun CustomTextFieldPreview() {
         CustomTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .border(0.8.dp, Color.Gray, RoundedCornerShape(8.dp))
-            ,
+                .border(0.8.dp, Color.Gray, RoundedCornerShape(8.dp)),
             shape = RoundedCornerShape(8.dp),
             placeHolder = { Text("placeholder", fontSize = 20.sp) },
             textStyle = TextStyle(fontSize = 20.sp, color = Color.Black),

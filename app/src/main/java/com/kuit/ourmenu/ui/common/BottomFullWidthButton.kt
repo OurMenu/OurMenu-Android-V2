@@ -19,7 +19,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun BottomFullWidthButton(onClick: () -> Unit, containerColor: Color, contentColor: Color, text: String) {
+fun BottomFullWidthButton(
+    onClick: () -> Unit,
+    containerColor: Color,
+    contentColor: Color,
+    text: String
+) {
     Button(
         onClick = onClick,
         modifier = Modifier

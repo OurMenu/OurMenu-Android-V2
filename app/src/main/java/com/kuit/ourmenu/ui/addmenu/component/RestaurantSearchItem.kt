@@ -33,14 +33,14 @@ fun RestaurantSearchItem(isLastItem: Boolean = false) {
             contentDescription = "location info",
             tint = Color.Unspecified
         )
-        Column(modifier = Modifier.padding(start = 20.dp)){
+        Column(modifier = Modifier.padding(start = 20.dp)) {
             Text(text = "아워떡볶이", fontSize = 16.sp, fontWeight = FontWeight.Bold)
             Text(text = "서울 광진구 능동로 112", fontSize = 14.sp, color = Color.Gray)
         }
     }
 
     //마지막 item이 아닌경우에만 하단에 divider 표시
-    if(!isLastItem){
+    if (!isLastItem) {
         HorizontalDivider(
             thickness = 1.dp,
             color = Color.LightGray,
