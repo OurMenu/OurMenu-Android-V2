@@ -47,10 +47,10 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
         sheetContainerColor = Color.White,
         sheetContent = {
             //bottom sheet 구성
-            AddMenuBottomSheetContent()
+            AddMenuBottomSheetContent(scaffoldState)
         },
         //조건 만족하면 bottom sheet 보여주고, 아니면 화면에 안보이도록 처리
-        sheetPeekHeight = if (showBottomSheet) 100.dp else 0.dp,
+        sheetPeekHeight = if (showBottomSheet) 254.dp else 0.dp,
         sheetDragHandle = {
             // 커스텀 핸들
             Column(
