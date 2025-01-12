@@ -33,7 +33,6 @@ import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddMenuSearchScreen(modifier: Modifier = Modifier) {
     val searchActionDone by rememberSaveable { mutableStateOf(true) }

@@ -28,6 +28,7 @@ import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.addmenu.component.AddMenuBottomSheetContent
 import com.kuit.ourmenu.ui.addmenu.component.AddMenuTopAppBar
 import com.kuit.ourmenu.ui.common.SearchBar
+import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
@@ -67,13 +68,13 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
                         .width(120.dp)
                         .height(4.dp)
                         .clip(RoundedCornerShape(6.dp))
-                        .background(Color(0xFFE5E5E7))
+                        .background(Neutral300)
                 )
             }
         }
     ) {
         //전체 화면 구성, 지도는 추가 예정
-        Column(modifier = Modifier.padding(horizontal = 12.dp)) {
+        Column(modifier = Modifier.padding(horizontal = 20.dp)) {
             Spacer(modifier = Modifier.height(12.dp))
             SearchBar(onSearch = { })
         }
