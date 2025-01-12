@@ -24,4 +24,12 @@
     <string name="cancel">취소</string>
     <string name="apply">적용하기</string>
     <string name="placeholder">placeholder</string>
+    <string name="tag">태그</string>
+    <string name="choose_tag">태그 고르기</string>
+    <string name="memo">메모</string>
+    <string name="icon">아이콘</string>
+    <string name="type_title">제목을 입력해주세요.</string>
+    <string name="type_body">본문을 입력해주세요.</string>
+    <string name="food_tag">음식 태그</string>
+    <string name="multiple_choice_available">중복 선택 가능</string>
 </resources>
