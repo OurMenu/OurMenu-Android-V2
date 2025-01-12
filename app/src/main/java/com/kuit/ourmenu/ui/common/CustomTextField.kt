@@ -35,6 +35,10 @@ import androidx.compose.ui.unit.sp
 
 
 /**
+ * padding 값을 직접 지정할 수 있는 커스텀 TextField를 구현한 Composable 함수입니다.
+ * 각 parameter들의 기본 값은 초기화 되어 있고 composable 사용시에 직접 설정하여 원하는 TextField를 만들 수 있습니다.
+ *
+ *
  * @param modifier modifier를 통해 전체 컴포넌트의 크기, border 등을 설정한다.
  * modifier에서 정의한 border는 배경이 아닌 외부 테두리 선에만 영향을 준다
  *
@@ -159,5 +163,7 @@ private fun CustomTextFieldPreview() {
             },
             paddingValues = PaddingValues(20.dp, 0.dp)
         )
+
+        CustomTextField()
     }
 }
