@@ -31,6 +31,12 @@ fun IconSelectBottomSheet(modifier: Modifier = Modifier) {
         }
         Spacer(modifier = Modifier.height(20.dp))
         //아이콘들 추가
+        IconItem(
+            iconId = R.drawable.ic_tag_rice,
+            isSelected = true
+        ) {
+
+        }
 
     }
 }
