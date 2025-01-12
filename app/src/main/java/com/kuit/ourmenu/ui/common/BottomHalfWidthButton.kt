@@ -21,13 +21,12 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun BottomHalfWidthButton(
-    onClick: () -> Unit,
     containerColor: Color,
     contentColor: Color,
-    text: String
+    text: String,
+    onClick: () -> Unit
 ) {
     Button(
-        onClick = onClick,
         modifier = Modifier
             .size(154.dp, 52.dp)
             .shadow(elevation = 4.dp, shape = RoundedCornerShape(12.dp)),
@@ -36,6 +35,7 @@ fun BottomHalfWidthButton(
             containerColor = containerColor,
             contentColor = contentColor
         ),
+        onClick = onClick
     ) {
         Text(text = text)
     }
@@ -52,8 +52,12 @@ private fun BottomHalfWidthButtonPreview() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            BottomHalfWidthButton({}, Color(0xFFC2C2C4), Color.White, "취소")
-            BottomHalfWidthButton({}, Color(0xFFFF5420), Color.White, "적용하기")
+            BottomHalfWidthButton(Color(0xFFC2C2C4), Color.White, "취소"){
+
+            }
+            BottomHalfWidthButton(Color(0xFFFF5420), Color.White, "적용하기"){
+
+            }
         }
     }
 }
