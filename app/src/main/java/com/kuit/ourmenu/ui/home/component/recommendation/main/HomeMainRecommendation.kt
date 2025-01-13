@@ -40,7 +40,7 @@ fun HomeMainRecommendation(
 
 @Preview(showBackground = true)
 @Composable
-private fun MainRecommendationListPreview() {
+private fun MainRecommendationPreview() {
     HomeMainRecommendation(
         modifier = Modifier.padding(top = 16.dp),
         homeMainDataList = HomeDummyData.dummyData
