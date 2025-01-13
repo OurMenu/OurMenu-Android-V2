@@ -12,17 +12,17 @@ data class HomeDummyData(
         val dummyData = listOf(
             HomeDummyData(
                 imageRes = R.drawable.img_dummy_pizza,
-                name = "초코 소프트콘",
+                name = "초코 소프트콘 1",
                 store = "아이스크림세계할인점",
             ),
             HomeDummyData(
-                imageRes = 0,
-                name = "초코 소프트콘",
+                imageRes = R.drawable.img_dummy_pizza,
+                name = "초코 소프트콘 2",
                 store = "아이스크림세계할인점",
             ),
             HomeDummyData(
-                imageRes = 0,
-                name = "초코 소프트콘",
+                imageRes = R.drawable.img_dummy_pizza,
+                name = "초코 소프트콘 3",
                 store = "아이스크림세계할인점",
             ),
         )
