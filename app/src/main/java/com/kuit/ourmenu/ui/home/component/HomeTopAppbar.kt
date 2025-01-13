@@ -11,13 +11,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,10 +34,11 @@ fun HomeTopAppBar(modifier: Modifier = Modifier) {
         modifier = Modifier
             .fillMaxWidth(),
         title = {
-            Image(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_ourmenu_text_logo),
+            Icon(
+                painter = painterResource(R.drawable.ic_ourmenu_text_logo),
                 contentDescription = "Top App Bar Logo",
-                modifier = Modifier.padding(start = 8.dp)
+                modifier = Modifier.padding(start = 8.dp),
+                tint = Color.Unspecified
             )
         },
         actions = {
@@ -42,9 +46,10 @@ fun HomeTopAppBar(modifier: Modifier = Modifier) {
                 onClick = { /* TODO : Add Menu Button Click Event */ },
                 modifier = Modifier.padding(end = 20.dp)
             ) {
-                Image(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_home_plus),
-                    contentDescription = "Top App Bar Add Menu Button"
+                Icon(
+                    painter = painterResource(R.drawable.ic_home_plus),
+                    contentDescription = "Top App Bar Add Menu Button",
+                    tint = Color.Unspecified
                 )
             }
         }
