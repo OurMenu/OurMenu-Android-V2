@@ -1,19 +1,12 @@
-package com.kuit.ourmenu.ui.home.component
+package com.kuit.ourmenu.ui.home.component.recommendation.main
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,34 +19,14 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MainRecommendationList() {
-    val state = rememberLazyListState() // TODO : hoisting
-
-    LazyRow(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(244.dp),
-        contentPadding = PaddingValues(horizontal = 28.dp),
-        flingBehavior = rememberSnapFlingBehavior(lazyListState = state), // Snap Fling Behavior
-        state = state
-    ) {
-        items(5) {
-            MainRecommendationItem()
-        }
-    }
-}
-
-@Composable
-fun MainRecommendationItem() {
+fun HomeMainRecommendationItem() {
     Box(
         modifier = Modifier
             .height(244.dp)
@@ -115,17 +88,4 @@ fun MainRecommendationItem() {
             }
         }
     }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-private fun MainRecommendationListPreview() {
-    MainRecommendationList()
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun MainRecommendationItemPreview() {
-    MainRecommendationItem()
 }
