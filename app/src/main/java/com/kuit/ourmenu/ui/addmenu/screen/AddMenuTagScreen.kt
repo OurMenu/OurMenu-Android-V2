@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -58,6 +60,8 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
     val useTagBottomSheet by rememberSaveable { mutableStateOf(false) }
     var memoTitle by rememberSaveable { mutableStateOf("") }
     var memoBody by rememberSaveable { mutableStateOf("") }
+    val scrollState = rememberScrollState()
+
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         topBar = {
@@ -71,10 +75,10 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
         },
         sheetContainerColor = Color.White,
         sheetContent = {
-            if (useTagBottomSheet){
+            if (useTagBottomSheet) {
                 //음색 태그 선택하는 bottom sheet
                 TagSelectBottomSheet()
-            }else{
+            } else {
                 //아이콘 선택하는 bottom sheet
                 IconSelectBottomSheet()
             }
@@ -158,7 +162,7 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
                 text = memoTitle,
                 onTextChange = { memoTitle = it },
                 shape = RoundedCornerShape(8.dp),
-                paddingValues = PaddingValues(28.dp,12.dp),
+                paddingValues = PaddingValues(28.dp, 12.dp),
                 containerColor = Neutral100,
                 placeHolder = {
                     Text(
@@ -170,25 +174,34 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
                 textStyle = ourMenuTypography().pretendard_500_14.copy(color = Neutral700)
             )
             Spacer(modifier = Modifier.height(8.dp))
-            CustomTextField(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(88.dp)
-                    .border(1.dp, Neutral300, RoundedCornerShape(8.dp)),
-                text = memoBody,
-                onTextChange = { memoBody = it },
-                shape = RoundedCornerShape(8.dp),
-                paddingValues = PaddingValues(28.dp,12.dp),
-                containerColor = Neutral100,
-                placeHolder = {
-                    Text(
-                        text = stringResource(R.string.type_body),
-                        style = ourMenuTypography().pretendard_500_12,
-                        color = Neutral500,
-                    )
-                },
-                textStyle = ourMenuTypography().pretendard_500_14.copy(color = Neutral700)
-            )
+                    .background(Neutral100)
+                    .border(1.dp, Neutral300, RoundedCornerShape(8.dp))
+                    .verticalScroll(scrollState),
+            ) {
+                CustomTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(88.dp),
+                    text = memoBody,
+                    singleLine = false,
+                    onTextChange = { memoBody = it },
+                    shape = RoundedCornerShape(8.dp),
+                    paddingValues = PaddingValues(28.dp, 12.dp),
+                    containerColor = Neutral100,
+                    placeHolder = {
+                        Text(
+                            text = stringResource(R.string.type_body),
+                            style = ourMenuTypography().pretendard_500_12,
+                            color = Neutral500,
+                        )
+                    },
+                    textStyle = ourMenuTypography().pretendard_500_14.copy(color = Neutral700)
+                )
+            }
 
             //아이콘
             Spacer(modifier = Modifier.height(20.dp))
