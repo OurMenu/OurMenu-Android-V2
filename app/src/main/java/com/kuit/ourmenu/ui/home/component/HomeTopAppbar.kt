@@ -29,26 +29,18 @@ fun HomeTopAppBar(modifier: Modifier = Modifier) {
     // 기본
     TopAppBar(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                start = 4.dp,
-                end = 4.dp,
-                top = 14.dp
-            )
-            .height(40.dp),
+            .fillMaxWidth(),
         title = {
             Image(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_ourmenu_text_logo),
                 contentDescription = "Top App Bar Logo",
-                modifier = Modifier
-                    .padding(vertical = 11.dp)
+                modifier = Modifier.padding(start = 8.dp)
             )
         },
         actions = {
             IconButton(
                 onClick = { /* TODO : Add Menu Button Click Event */ },
-                modifier = Modifier
-                    .padding(end = 16.dp)
+                modifier = Modifier.padding(end = 20.dp)
             ) {
                 Image(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_home_plus),

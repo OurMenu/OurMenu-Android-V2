@@ -11,12 +11,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.kuit.ourmenu.ui.home.dummy.HomeDummyData
 
 @Composable
-fun HomeMainRecommendation() {
+fun HomeMainRecommendation(
+    modifier: Modifier = Modifier,
+    homeMainDataList : List<HomeDummyData>) {
     Column(
-        modifier = Modifier
-            .padding(top = 16.dp)
+        modifier = modifier
     ) {
         HomeMainRecommendationText(
             modifier = Modifier
@@ -29,7 +31,8 @@ fun HomeMainRecommendation() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 32.dp)
-                .height(244.dp)
+                .height(244.dp),
+            homeMainDataList = homeMainDataList
         )
     }
 }
@@ -37,5 +40,8 @@ fun HomeMainRecommendation() {
 @Preview(showBackground = true)
 @Composable
 private fun MainRecommendationListPreview() {
-    HomeMainRecommendation()
+    HomeMainRecommendation(
+        modifier = Modifier.padding(top = 16.dp),
+        homeMainDataList = HomeDummyData.dummyData
+    )
 }

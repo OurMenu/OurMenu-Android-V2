@@ -8,12 +8,13 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.kuit.ourmenu.ui.home.dummy.HomeDummyData
 
 @Composable
 fun HomeSubRecommendationList(
     modifier: Modifier = Modifier,
     state: LazyListState,
-    homeSubDataList: List<HomeSubDummyData>
+    homeSubDataList: List<HomeDummyData>
 ) {
     LazyRow(
         modifier = modifier,
