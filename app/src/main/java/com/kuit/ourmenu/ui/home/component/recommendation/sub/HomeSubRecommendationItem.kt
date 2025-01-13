@@ -61,6 +61,5 @@ fun HomeSubRecommendationItem(
                 letterSpacing = (-0.154).sp
             )
         )
-
     }
 }

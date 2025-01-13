@@ -37,27 +37,27 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         ) {
 
             HomeMainRecommendation(
-                modifier = Modifier.padding(top = 16.dp),
+                modifier = Modifier
+                    .padding(top = 16.dp, bottom = 29.dp),
                 homeMainDataList = HomeDummyData.dummyData
             )
 
-            Spacer(modifier = Modifier.size(29.dp))
 
             HomeSubRecommendation(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .wrapContentHeight(),
+                    .wrapContentHeight()
+                    .padding(bottom = 25.dp),
                 homeSubDataList = HomeDummyData.dummyData
             )
-            Spacer(modifier = Modifier.size(25.dp))
 
             HomeSubRecommendation(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .wrapContentHeight(),
+                    .wrapContentHeight()
+                    .padding(bottom = 25.dp),
                 homeSubDataList = HomeDummyData.dummyData
             )
-
         }
     }
 }

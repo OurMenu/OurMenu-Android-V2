@@ -16,7 +16,8 @@ import com.kuit.ourmenu.ui.home.dummy.HomeDummyData
 @Composable
 fun HomeMainRecommendation(
     modifier: Modifier = Modifier,
-    homeMainDataList : List<HomeDummyData>) {
+    homeMainDataList : List<HomeDummyData>
+) {
     Column(
         modifier = modifier
     ) {

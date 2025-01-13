@@ -27,10 +27,7 @@ fun HomeSubRecommendation(
     homeSubDataList: List<HomeDummyData> = listOf()
 ) {
     val state = rememberLazyListState() // TODO : hoisting
-
-    Column(
-        modifier = modifier
-    ) {
+    Column(modifier = modifier) {
         HomeSubRecommendationText(
             modifier = Modifier
                 .padding(start = 20.dp, end = 20.dp, bottom = 11.dp),
