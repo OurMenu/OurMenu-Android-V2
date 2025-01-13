@@ -1,4 +1,4 @@
-package com.kuit.ourmenu.ui.home.component
+package com.kuit.ourmenu.ui.home.component.recommendation.sub
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,9 +16,7 @@ fun HomeSubRecommendationList(
     homeSubDataList: List<HomeSubDummyData>
 ) {
     LazyRow(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight(),
+        modifier = modifier,
         state = state,
         contentPadding = PaddingValues(
             start = 20.dp, end = 9.dp

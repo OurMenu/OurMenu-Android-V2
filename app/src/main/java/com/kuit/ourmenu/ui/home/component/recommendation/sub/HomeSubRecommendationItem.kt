@@ -1,4 +1,4 @@
-package com.kuit.ourmenu.ui.home.component
+package com.kuit.ourmenu.ui.home.component.recommendation.sub
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
