@@ -58,7 +58,8 @@ fun MainRecommendationItem() {
         modifier = Modifier
             .height(244.dp)
             .width(304.dp)
-            .padding(horizontal = 6.dp)
+            .padding(horizontal = 6.dp),
+        contentAlignment = Alignment.BottomStart
     ) {
         Image(
             painter = painterResource(id = R.drawable.img_dummy_pizza), // TODO : 추후 Async Image Loading 적용
@@ -73,8 +74,6 @@ fun MainRecommendationItem() {
         Column(
             modifier = Modifier.padding(horizontal = 16.dp)
         ) {
-            Spacer(Modifier.size(163.dp))
-
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -96,6 +95,7 @@ fun MainRecommendationItem() {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(bottom = 16.dp)
                     .height(24.dp),
                 contentAlignment = Alignment.CenterStart, // 수직 및 수평 중앙 정렬
             ) {
