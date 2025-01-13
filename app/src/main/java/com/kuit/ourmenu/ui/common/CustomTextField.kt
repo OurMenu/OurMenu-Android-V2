@@ -5,8 +5,10 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -41,10 +43,21 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 /**
  * padding 값을 직접 지정할 수 있는 커스텀 TextField를 구현한 Composable 함수입니다.
  * 각 parameter들의 기본 값은 초기화 되어 있고 composable 사용시에 직접 설정하여 원하는 TextField를 만들 수 있습니다.
+ * 필수적으로 넘겨주어야 하는 파라미터는 text, onTextChange 파라미터입니다.
  *
  *
  * @param modifier modifier를 통해 전체 컴포넌트의 크기, border 등을 설정한다.
  * modifier에서 정의한 border는 배경이 아닌 외부 테두리 선에만 영향을 준다
+ *
+ * @param text CustomTextField를 사용한 컴포넌트가 위치하는 곳에 text의 상태를 관리할 수 있는 변수를 선언하고,
+ * 파라미터로 넘겨주어 사용합니다. (상태 호이스팅을 적용하여 사용)
+ *
+ * @param onTextChange 위의 text 파라미터에 해당하는 변수를 선언한 코드에서 함께 작성하면 되고,  { newText -> text = newText } 또는 { text = it }
+ * 의 형태로된 함수를 파라미터에 넘겨주어 사용합니다. 이 예시에서 text는 CustomTextField의 text 파라미터에 넘겨준 변수명입니다.
+ *
+ * @param interactionSource TextField의 상태(focus, drag, click 등)를 관리하기 위한 파라미터입나다. 기본값으로 초기화 되어있고,
+ * 해당 상태의 관리가 필요하다면 remember { MutableInteractionSource() } 의 값을 가지는 변수를 파라미터로 넘겨주고,
+ * val isPressed by interactionSource.collectIsPressedAsState()와 같이 변수를 선언하여 상태를 추적할 수 있습니다.
  *
  * @param visualTransformation 입력된 텍스트의 값은 유지하면서, 화면에 보여지는 방식을 변경시킬 때 사용하는 파라미터이다.
  * 예를 들어서 비밀번호 입력 필드로 사용한다면,
@@ -82,6 +95,9 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 @Composable
 fun CustomTextField(
     modifier: Modifier = Modifier,
+    text: String,
+    onTextChange: (String) -> Unit,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     visualTransformation: VisualTransformation = VisualTransformation.None,
     enabled: Boolean = true,
     singleLine: Boolean = true,
@@ -96,17 +112,10 @@ fun CustomTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
-    //Basic TextField의 상호작용 상태를 추적하려면 사용 가능
-    val interactionSource = remember {
-        MutableInteractionSource()
-    }
-
-    //입력된 text 값을 저장하는 state
-    var text by rememberSaveable { mutableStateOf("") }
 
     BasicTextField(
         value = text,
-        onValueChange = { text = it },
+        onValueChange = onTextChange,
         modifier = modifier,
         visualTransformation = visualTransformation,
         interactionSource = interactionSource,
@@ -147,15 +156,30 @@ fun CustomTextField(
 @Preview(showBackground = true)
 @Composable
 private fun CustomTextFieldPreview() {
+    var text by rememberSaveable { mutableStateOf("") }
+    var textForSimple by rememberSaveable { mutableStateOf("") }
+
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        //간소화 버전(최소 요구사항, modifier가 없어도 작동은 하지만 가시성을 위해 추가)
+        CustomTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(0.8.dp, Color.Black),
+            text = textForSimple,
+            onTextChange = { textForSimple = it }
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        //추가 기능이 있는 버전
         CustomTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .border(0.8.dp, Neutral500, RoundedCornerShape(8.dp)),
+            text = text,
+            onTextChange = { text = it },
             shape = RoundedCornerShape(8.dp),
             placeHolder = {
                 Text(
@@ -172,7 +196,5 @@ private fun CustomTextFieldPreview() {
             },
             paddingValues = PaddingValues(20.dp, 0.dp)
         )
-
-        CustomTextField()
     }
 }
