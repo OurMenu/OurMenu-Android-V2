@@ -22,20 +22,21 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.ui.home.dummy.HomeDummyData
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun HomeMainRecommendationItem() {
+fun HomeMainRecommendationItem(
+    modifier: Modifier = Modifier,
+    recommendData: HomeDummyData
+) {
     Box(
-        modifier = Modifier
-            .height(244.dp)
-            .width(304.dp)
-            .padding(horizontal = 6.dp),
+        modifier = modifier,
         contentAlignment = Alignment.BottomStart
     ) {
         Image(
-            painter = painterResource(id = R.drawable.img_dummy_pizza), // TODO : 추후 Async Image Loading 적용
+            painter = painterResource(recommendData.imageRes), // TODO : 추후 Async Image Loading 적용
             contentDescription = "Main Recommendation Image",
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -54,7 +55,7 @@ fun HomeMainRecommendationItem() {
                 contentAlignment = Alignment.CenterStart, // 수직 및 수평 중앙 정렬
             ) {
                 Text(
-                    text = "화산라멘",
+                    text = recommendData.name,
                     style = ourMenuTypography().pretendard_700_24.copy(
                         shadow = Shadow(
                             color = Color.Black.copy(alpha = 0.2f), // 그림자 색상 및 투명도
@@ -73,7 +74,7 @@ fun HomeMainRecommendationItem() {
                 contentAlignment = Alignment.CenterStart, // 수직 및 수평 중앙 정렬
             ) {
                 Text(
-                    text = "화산라멘 멘야마쯔리 홍대점",
+                    text = recommendData.store,
                     style = ourMenuTypography().pretendard_600_16.copy(
                         shadow = Shadow(
                             color = Color.Black.copy(alpha = 0.2f), // 그림자 색상 및 투명도

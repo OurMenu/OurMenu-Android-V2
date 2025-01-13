@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.ui.home.dummy.HomeDummyData
 import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
@@ -26,7 +27,7 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
 fun HomeSubRecommendationItem(
-    recommendData: HomeSubDummyData
+    recommendData: HomeDummyData
 ) {
     Column(
         modifier = Modifier.padding(end = 11.dp)

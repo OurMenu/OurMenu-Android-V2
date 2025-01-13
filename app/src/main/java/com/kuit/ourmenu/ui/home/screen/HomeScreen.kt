@@ -1,48 +1,62 @@
 package com.kuit.ourmenu.ui.home.screen
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.kuit.ourmenu.R
+import com.kuit.ourmenu.ui.home.component.recommendation.sub.HomeSubRecommendation
 import com.kuit.ourmenu.ui.home.component.HomeTopAppBar
-import com.kuit.ourmenu.ui.home.component.MainRecommendationList
-import com.kuit.ourmenu.ui.home.component.MainRecommendationText
+import com.kuit.ourmenu.ui.home.component.recommendation.main.HomeMainRecommendation
+import com.kuit.ourmenu.ui.home.dummy.HomeDummyData
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
+
+    val scrollState = rememberScrollState()
+
     Scaffold(
         topBar = {
             HomeTopAppBar()
         }
     ) { innerPadding ->
         Column(
-            modifier = Modifier.padding(innerPadding),
+            modifier = Modifier
+                .padding(innerPadding)
+                .verticalScroll(scrollState),
             horizontalAlignment = Alignment.Start
         ) {
 
-            Spacer(modifier = Modifier.size(26.dp))
+            HomeMainRecommendation(
+                modifier = Modifier.padding(top = 16.dp),
+                homeMainDataList = HomeDummyData.dummyData
+            )
 
-            MainRecommendationText()
+            Spacer(modifier = Modifier.size(29.dp))
 
-            Spacer(modifier = Modifier.size(32.dp))
+            HomeSubRecommendation(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                homeSubDataList = HomeDummyData.dummyData
+            )
+            Spacer(modifier = Modifier.size(25.dp))
 
-            MainRecommendationList()
+            HomeSubRecommendation(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                homeSubDataList = HomeDummyData.dummyData
+            )
 
         }
     }

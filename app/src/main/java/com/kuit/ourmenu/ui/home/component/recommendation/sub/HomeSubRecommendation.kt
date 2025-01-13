@@ -17,19 +17,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.ui.home.dummy.HomeDummyData
 import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
 fun HomeSubRecommendation(
-    homeSubDataList: List<HomeSubDummyData> = listOf()
+    modifier: Modifier = Modifier,
+    homeSubDataList: List<HomeDummyData> = listOf()
 ) {
     val state = rememberLazyListState() // TODO : hoisting
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
+        modifier = modifier
     ) {
         HomeSubRecommendationText(
             modifier = Modifier
@@ -52,28 +52,9 @@ fun HomeSubRecommendation(
 @Composable
 private fun HomeSubRecommendationListPreview() {
     HomeSubRecommendation(
-        listOf(
-            HomeSubDummyData(
-                imageRes = R.drawable.img_dummy_pizza,
-                name = "초코 소프트콘",
-                store = "아이스크림세계할인점",
-            ),
-            HomeSubDummyData(
-                imageRes = R.drawable.img_dummy_pizza,
-                name = "초코 소프트콘",
-                store = "아이스크림세계할인점",
-            ),
-            HomeSubDummyData(
-                imageRes = R.drawable.img_dummy_pizza,
-                name = "초코 소프트콘",
-                store = "아이스크림세계할인점",
-            ),
-        )
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight(),
+        HomeDummyData.dummyData
     )
 }
-
-data class HomeSubDummyData(
-    val imageRes: Int,
-    val name: String,
-    val store: String,
-)
