@@ -12,6 +12,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -28,7 +32,10 @@ import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun AddMenuInfoMenuBoardFieldItem() {
+fun AddMenuInfoMenuBoardFieldItem(
+    text: String,
+    onTextChange: (String) -> Unit,
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -50,11 +57,14 @@ fun AddMenuInfoMenuBoardFieldItem() {
                 color = Primary500Main
             )
         }
+        //드롭다운으로 수정할 예정
         CustomTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(44.dp)
                 .border(1.dp, Neutral300, RoundedCornerShape(8.dp)),
+            text = text,
+            onTextChange = onTextChange,
             shape = RoundedCornerShape(8.dp),
             paddingValues = PaddingValues(start = 28.dp, top = 12.dp, bottom = 12.dp),
             containerColor = Neutral100,
@@ -81,5 +91,9 @@ fun AddMenuInfoMenuBoardFieldItem() {
 @Preview(showBackground = true)
 @Composable
 private fun AddMenuInfoMenuBoardFieldItemPreview() {
-    AddMenuInfoMenuBoardFieldItem()
+    var text by rememberSaveable { mutableStateOf("") }
+    AddMenuInfoMenuBoardFieldItem(
+        text = text,
+        onTextChange = { text = it }
+    )
 }

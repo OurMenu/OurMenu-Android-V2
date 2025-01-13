@@ -14,6 +14,10 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -30,6 +34,8 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
 fun SearchBar(
+    text: String,
+    onTextChange: (String) -> Unit,
     onSearch: () -> Unit,
 ) {
     Card(
@@ -44,6 +50,8 @@ fun SearchBar(
                 .border(0.8.dp, Neutral500, RoundedCornerShape(8.dp))
                 .clip(RoundedCornerShape(8.dp))
                 .height(44.dp),
+            text = text,
+            onTextChange = onTextChange,
             shape = RoundedCornerShape(8.dp),
             placeHolder = {
                 Text(
@@ -70,12 +78,16 @@ fun SearchBar(
 @Preview(showBackground = true)
 @Composable
 private fun SearchBarPreview() {
+    var text by rememberSaveable { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(20.dp), verticalArrangement = Arrangement.Center
     ) {
         SearchBar(
+            text = text,
+            onTextChange = { text = it },
             onSearch = { }
         )
     }

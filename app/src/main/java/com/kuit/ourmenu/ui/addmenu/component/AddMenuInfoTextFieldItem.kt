@@ -13,6 +13,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -31,6 +35,8 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 @Composable
 fun AddMenuInfoTextFieldItem(
     fieldName: String,
+    text: String,
+    onTextChange: (String) -> Unit,
     placeholder: String,
     isPriceInfo: Boolean = false,
 ) {
@@ -60,6 +66,8 @@ fun AddMenuInfoTextFieldItem(
                 .fillMaxWidth()
                 .height(44.dp)
                 .border(1.dp, Neutral300, RoundedCornerShape(8.dp)),
+            text = text,
+            onTextChange = onTextChange,
             shape = RoundedCornerShape(8.dp),
             paddingValues = PaddingValues(start = 28.dp, top = 12.dp, bottom = 12.dp),
             containerColor = Neutral100,
@@ -86,22 +94,25 @@ fun AddMenuInfoTextFieldItem(
 @Preview(showBackground = true)
 @Composable
 private fun AddMenuInfoTextFieldItemPreview() {
+    var priceText by rememberSaveable { mutableStateOf("") }
+    var restaurantNameText by rememberSaveable { mutableStateOf("") }
+
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         AddMenuInfoTextFieldItem(
-            fieldName = stringResource(R.string.menu_name),
-            placeholder = stringResource(R.string.type_menu_name)
-        )
-        AddMenuInfoTextFieldItem(
             fieldName = stringResource(R.string.menu_price),
+            text = priceText,
+            onTextChange = { priceText = it },
             placeholder = stringResource(R.string.type_menu_price),
             isPriceInfo = true
         )
         AddMenuInfoTextFieldItem(
             fieldName = stringResource(R.string.restaurant_name),
+            text = restaurantNameText,
+            onTextChange = { restaurantNameText = it },
             placeholder = stringResource(R.string.type_restaurant_name)
         )
     }

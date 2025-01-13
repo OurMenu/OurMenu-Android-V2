@@ -12,6 +12,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,7 +30,12 @@ import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun AddMenuInfoAddressFieldItem() {
+fun AddMenuInfoAddressFieldItem(
+    mainAddressText: String,
+    detailedAddressText: String,
+    onMainAddressChange: (String) -> Unit,
+    onDetailedAddressChange: (String) -> Unit,
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -53,6 +62,8 @@ fun AddMenuInfoAddressFieldItem() {
                 .fillMaxWidth()
                 .height(44.dp)
                 .border(1.dp, Neutral300, RoundedCornerShape(8.dp)),
+            text = mainAddressText,
+            onTextChange = onMainAddressChange,
             shape = RoundedCornerShape(8.dp),
             paddingValues = PaddingValues(start = 28.dp, top = 12.dp, bottom = 12.dp),
             containerColor = Neutral100,
@@ -73,6 +84,8 @@ fun AddMenuInfoAddressFieldItem() {
                 .fillMaxWidth()
                 .height(44.dp)
                 .border(1.dp, Neutral300, RoundedCornerShape(8.dp)),
+            text = detailedAddressText,
+            onTextChange = onDetailedAddressChange,
             shape = RoundedCornerShape(8.dp),
             paddingValues = PaddingValues(start = 28.dp, top = 12.dp, bottom = 12.dp),
             containerColor = Neutral100,
@@ -91,5 +104,12 @@ fun AddMenuInfoAddressFieldItem() {
 @Preview(showBackground = true)
 @Composable
 private fun AddMenuInfoAddressFieldItemPreview() {
-    AddMenuInfoAddressFieldItem()
+    var mainAddressText by rememberSaveable { mutableStateOf("") }
+    var detailedAddressText by rememberSaveable { mutableStateOf("") }
+    AddMenuInfoAddressFieldItem(
+        mainAddressText = mainAddressText,
+        detailedAddressText = detailedAddressText,
+        onMainAddressChange = { mainAddressText = it },
+        onDetailedAddressChange = { detailedAddressText = it },
+    )
 }
