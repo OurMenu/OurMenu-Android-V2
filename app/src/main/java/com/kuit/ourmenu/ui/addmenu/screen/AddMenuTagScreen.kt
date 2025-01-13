@@ -27,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,6 +56,8 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
     val scaffoldState = rememberBottomSheetScaffoldState()
     val showBottomSheet by remember { mutableStateOf(true) }
     val useTagBottomSheet by rememberSaveable { mutableStateOf(false) }
+    var memoTitle by rememberSaveable { mutableStateOf("") }
+    var memoBody by rememberSaveable { mutableStateOf("") }
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         topBar = {
@@ -152,6 +155,8 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
                     .fillMaxWidth()
                     .height(44.dp)
                     .border(1.dp, Neutral300, RoundedCornerShape(8.dp)),
+                text = memoTitle,
+                onTextChange = { memoTitle = it },
                 shape = RoundedCornerShape(8.dp),
                 paddingValues = PaddingValues(28.dp,12.dp),
                 containerColor = Neutral100,
@@ -170,6 +175,8 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
                     .fillMaxWidth()
                     .height(88.dp)
                     .border(1.dp, Neutral300, RoundedCornerShape(8.dp)),
+                text = memoBody,
+                onTextChange = { memoBody = it },
                 shape = RoundedCornerShape(8.dp),
                 paddingValues = PaddingValues(28.dp,12.dp),
                 containerColor = Neutral100,

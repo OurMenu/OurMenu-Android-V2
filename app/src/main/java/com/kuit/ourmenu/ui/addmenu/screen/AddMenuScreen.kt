@@ -17,6 +17,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,6 +39,8 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 fun AddMenuScreen(modifier: Modifier = Modifier) {
     val scaffoldState = rememberBottomSheetScaffoldState()
     val showBottomSheet by remember { mutableStateOf(true) }
+    var searchText by rememberSaveable { mutableStateOf("") }
+
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         topBar = {
@@ -76,7 +80,12 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
         //전체 화면 구성, 지도는 추가 예정
         Column(modifier = Modifier.padding(horizontal = 20.dp)) {
             Spacer(modifier = Modifier.height(12.dp))
-            SearchBar(onSearch = { })
+            SearchBar(
+                text = searchText,
+                onTextChange = { searchText = it },
+            ){
+                //onSearch 함수
+            }
         }
     }
 }
