@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,9 +20,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.kuit.ourmenu.ui.common.dialog.DialogBigButton
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.NeutralWhite
+import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
@@ -35,7 +39,7 @@ fun HomePopUpDialog(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .shadow(elevation = 8.dp)
                 .fillMaxWidth()
-                .height(431.dp)
+                .wrapContentHeight()
                 .background(
                     color = NeutralWhite,
                     shape = RoundedCornerShape(size = 12.dp)
@@ -44,13 +48,15 @@ fun HomePopUpDialog(modifier: Modifier = Modifier) {
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
                     .padding(
                         start = 20.dp,
                         end = 16.dp,
                         top = 16.dp,
                         bottom = 24.dp
                     )
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+
             ) {
                 HomeDialogAssets(
                     onDiceClick = {
@@ -73,7 +79,7 @@ fun HomePopUpDialog(modifier: Modifier = Modifier) {
                 )
                 Text(
                     modifier = Modifier
-                        .padding(top = 13.dp)
+                        .padding(top = 13.dp, bottom = 19.dp)
                         .fillMaxWidth(),
                     text = "질문에 답해 기분에 맞는 메뉴를\n" +
                             "추천받아보세요!",
@@ -84,6 +90,22 @@ fun HomePopUpDialog(modifier: Modifier = Modifier) {
                     textAlign = TextAlign.Center
                 )
 
+                DialogBigButton(
+                    modifier = Modifier
+                        .padding(bottom = 8.dp)
+                        .fillMaxWidth()
+                        .height(48.dp),
+                    buttonText = "좋아!",
+                    containerColor = Primary500Main
+                )
+
+                DialogBigButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp),
+                    buttonText = "별로야..",
+                    containerColor = Primary500Main
+                )
             }
         }
     }
