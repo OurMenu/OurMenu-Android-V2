@@ -49,7 +49,7 @@ fun HomePopUpDialog(modifier: Modifier = Modifier) {
             Column(
                 modifier = Modifier
                     .padding(
-                        start = 20.dp,
+                        start = 16.dp,
                         end = 16.dp,
                         top = 16.dp,
                         bottom = 24.dp
@@ -93,6 +93,7 @@ fun HomePopUpDialog(modifier: Modifier = Modifier) {
                 DialogBigButton(
                     modifier = Modifier
                         .padding(bottom = 8.dp)
+                        .padding(horizontal = 4.dp)
                         .fillMaxWidth()
                         .height(48.dp),
                     buttonText = "좋아!",
@@ -101,6 +102,7 @@ fun HomePopUpDialog(modifier: Modifier = Modifier) {
 
                 DialogBigButton(
                     modifier = Modifier
+                        .padding(horizontal = 4.dp)
                         .fillMaxWidth()
                         .height(48.dp),
                     buttonText = "별로야..",
