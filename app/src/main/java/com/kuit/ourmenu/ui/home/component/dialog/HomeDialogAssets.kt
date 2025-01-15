@@ -35,7 +35,7 @@ fun HomeDialogAssets(
         Row {
             HomeDialogTouchBox(
                 modifier = Modifier
-                    .padding(top = 4.dp)
+                    .padding(top = 4.dp, start = 4.dp)
                     .height(32.dp)
                     .weight(72f)
             )
