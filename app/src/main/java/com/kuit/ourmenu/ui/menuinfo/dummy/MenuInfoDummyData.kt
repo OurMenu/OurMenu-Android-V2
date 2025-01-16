@@ -4,16 +4,20 @@ import androidx.annotation.DrawableRes
 import com.kuit.ourmenu.R
 
 data class MenuInfoDummyData(
-    @DrawableRes val imgRes: Int,
+    @DrawableRes val imgRes: List<Int>,
+    val menuTitle: String,
+    val menuPrice: Int,
+    val store: String,
 ) {
     companion object {
-        private val dummyData = MenuInfoDummyData(
-            imgRes = R.drawable.img_dummy_pizza,
-        )
-        val dummyPageDataList = listOf(
-            dummyData,
-            dummyData,
-            dummyData
-        )
+        val dummyData = MenuInfoDummyData(
+            listOf(
+                R.drawable.img_dummy_pizza,
+                R.drawable.img_dummy_pizza,
+                R.drawable.img_dummy_pizza,
+            ),
+            "화산라멘",
+            14000,
+            "화산라멘 멘야마쯔리 홍대점")
     }
 }
