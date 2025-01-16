@@ -27,10 +27,10 @@ import com.tbuonomo.viewpagerdotsindicator.compose.type.SpringIndicatorType
 @Composable
 fun MenuInfoImagePager(
     pagerState: PagerState,
-    pageItems: List<MenuInfoDummyData>
+    pageItems: MenuInfoDummyData
 ) {
 
-    val pagerCount = pageItems.size
+    val pagerCount = pageItems.imgRes.size
 
     Box(
         contentAlignment = Alignment.BottomCenter
@@ -46,7 +46,7 @@ fun MenuInfoImagePager(
                 modifier = Modifier
                     .fillMaxSize(),
                 contentScale = ContentScale.Crop,
-                painter = painterResource(pageItems[index].imgRes)
+                painter = painterResource(pageItems.imgRes[index])
             )
         }
         DotsIndicator(
@@ -79,6 +79,6 @@ private fun MenuInfoPreview() {
 
     MenuInfoImagePager(
         pagerState = state,
-        pageItems = MenuInfoDummyData.dummyPageDataList
+        pageItems = MenuInfoDummyData.dummyData
     )
 }
