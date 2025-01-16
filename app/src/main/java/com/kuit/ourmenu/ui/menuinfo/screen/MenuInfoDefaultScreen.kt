@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.kuit.ourmenu.ui.menuinfo.component.MenuInfoAdditionalContent
 import com.kuit.ourmenu.ui.menuinfo.component.MenuInfoContent
 import com.kuit.ourmenu.ui.menuinfo.component.MenuInfoImagePager
 import com.kuit.ourmenu.ui.menuinfo.component.MenuInfoTopIcons
@@ -48,10 +49,13 @@ fun MenuInfoDefaultScreen() {
         HorizontalDivider(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp),
+                .padding(vertical = 16.dp),
             color = Neutral300
         )
 
+        MenuInfoAdditionalContent(
+            menuInfoData = MenuInfoDummyData.dummyData
+        )
     }
 }
 
