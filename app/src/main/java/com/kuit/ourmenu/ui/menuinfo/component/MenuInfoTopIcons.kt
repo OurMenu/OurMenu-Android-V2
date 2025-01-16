@@ -1,6 +1,7 @@
 package com.kuit.ourmenu.ui.menuinfo.component
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,22 +19,33 @@ import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 
 @Composable
-fun MenuInfoTopIcons(modifier: Modifier = Modifier) {
+fun MenuInfoTopIcons(
+    onBackClick : () -> Unit,
+    onVertClick : () -> Unit
+) {
     Box(
-        modifier = modifier
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp)
+            .height(52.dp)
     ) {
         Icon(
             painter = painterResource(R.drawable.ic_top_bar_back),
             contentDescription = null,
             tint = NeutralWhite,
-            modifier = Modifier.align(Alignment.CenterStart)
+            modifier = Modifier
+                .padding(top = 18.dp)
+                .clickable { onBackClick() }
         )
 
         Icon(
             painter = painterResource(R.drawable.icon_vert_white_24),
             contentDescription = null,
             tint = NeutralWhite,
-            modifier = Modifier.align(Alignment.CenterEnd)
+            modifier = Modifier
+                .padding(top = 18.dp)
+                .align(Alignment.TopEnd)
+                .clickable { onVertClick() }
         )
     }
 
@@ -44,9 +56,7 @@ fun MenuInfoTopIcons(modifier: Modifier = Modifier) {
 @Composable
 private fun MenuInfoPreview() {
     MenuInfoTopIcons(
-        Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp)
-            .height(28.dp)
+        onBackClick = {},
+        onVertClick = {}
     )
 }
