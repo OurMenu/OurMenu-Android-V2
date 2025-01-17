@@ -2,17 +2,12 @@ package com.kuit.ourmenu.ui.menuinfo.component
 
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.staggeredgrid.LazyHorizontalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.kuit.ourmenu.ui.common.MenuFolderChip
+import com.kuit.ourmenu.ui.common.chip.MenuFolderChip
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable

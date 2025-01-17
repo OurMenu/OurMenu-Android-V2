@@ -9,10 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kuit.ourmenu.ui.common.MenuFolderChip
 import com.kuit.ourmenu.ui.menuinfo.dummy.MenuInfoDummyData
 import com.kuit.ourmenu.ui.theme.Neutral500
-import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
