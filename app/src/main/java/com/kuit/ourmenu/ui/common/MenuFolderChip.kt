@@ -27,10 +27,11 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 @Composable
 fun MenuFolderChip(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = { }
+    onClick: () -> Unit = { },
+    menuFolderTitle: String = ""
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .clickable { onClick() }
             .border(
                 width = 1.dp,
@@ -46,7 +47,7 @@ fun MenuFolderChip(
         )
         Text(
             modifier = Modifier.padding(start = 8.dp),
-            text = "홍대맛집",
+            text = menuFolderTitle,
             style = ourMenuTypography().pretendard_600_32.copy(
                 fontSize = 12.sp,
                 lineHeight = 12.sp,
@@ -55,10 +56,13 @@ fun MenuFolderChip(
         )
     }
 
+
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
 @Composable
 private fun MenuFolderChipPreview() {
-    MenuFolderChip()
+    MenuFolderChip(
+        menuFolderTitle = "홍대 맛집"
+    )
 }
