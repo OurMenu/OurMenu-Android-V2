@@ -33,8 +33,23 @@ fun MenuInfoAdditionalContent(
             ),
             modifier = Modifier.padding(bottom = 6.dp)
         )
-        // TODO : Grid or Staggered Grid
-        MenuFolderChip()
+
+        MenuInfoFolderChipGrid(
+            menuFolderList = menuInfoData.menuFolderList
+        )
+
+        Text(
+            text = "Tag",
+            style = ourMenuTypography().pretendard_600_32.copy(
+                fontSize = 12.sp,
+                lineHeight = 12.sp,
+                color = Neutral500
+            ),
+            modifier = Modifier.padding(
+                top = 12.dp,
+                bottom = 6.dp
+            )
+        )
 
 
     }
