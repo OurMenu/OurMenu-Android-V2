@@ -14,11 +14,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.ui.theme.Neutral300
+import com.kuit.ourmenu.ui.theme.Neutral700
+import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
 fun RestaurantSearchItem(isLastItem: Boolean = false) {
@@ -33,17 +35,24 @@ fun RestaurantSearchItem(isLastItem: Boolean = false) {
             contentDescription = "location info",
             tint = Color.Unspecified
         )
-        Column(modifier = Modifier.padding(start = 20.dp)){
-            Text(text = "아워떡볶이", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-            Text(text = "서울 광진구 능동로 112", fontSize = 14.sp, color = Color.Gray)
+        Column(modifier = Modifier.padding(start = 20.dp)) {
+            Text(
+                text = stringResource(R.string.our_ddeokbokki),
+                style = ourMenuTypography().pretendard_600_16,
+            )
+            Text(
+                text = stringResource(R.string.neungdongro_112),
+                style = ourMenuTypography().pretendard_500_14,
+                color = Neutral700
+            )
         }
     }
 
     //마지막 item이 아닌경우에만 하단에 divider 표시
-    if(!isLastItem){
+    if (!isLastItem) {
         HorizontalDivider(
             thickness = 1.dp,
-            color = Color.LightGray,
+            color = Neutral300,
             modifier = Modifier.fillMaxWidth()
         )
     }
