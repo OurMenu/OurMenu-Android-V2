@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -15,23 +14,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.addmenu.component.AddMenuTopAppBar
 import com.kuit.ourmenu.ui.addmenu.component.RestaurantSearchItem
 import com.kuit.ourmenu.ui.common.BottomFullWidthButton
 import com.kuit.ourmenu.ui.common.SearchBar
+import com.kuit.ourmenu.ui.theme.Neutral100
+import com.kuit.ourmenu.ui.theme.Neutral500
+import com.kuit.ourmenu.ui.theme.Neutral700
+import com.kuit.ourmenu.ui.theme.Primary500Main
+import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddMenuSearchScreen(modifier: Modifier = Modifier) {
+    var searchText by rememberSaveable { mutableStateOf("") }
     val searchActionDone by rememberSaveable { mutableStateOf(true) }
     val dummyRecentSearchList = mutableListOf(
         false,
@@ -46,9 +50,9 @@ fun AddMenuSearchScreen(modifier: Modifier = Modifier) {
         topBar = {
             AddMenuTopAppBar {
                 Text(
-                    "OURMENU",
-                    color = Color(0xFFFF5420),
-                    fontWeight = FontWeight.Bold
+                    text = stringResource(R.string.ourmenu),
+                    color = Primary500Main,
+                    style = ourMenuTypography().pretendard_600_18
                 )
             }
         },
@@ -62,9 +66,9 @@ fun AddMenuSearchScreen(modifier: Modifier = Modifier) {
             ) {
                 BottomFullWidthButton(
                     onClick = { TODO() },
-                    containerColor = Color(0xFFF7F7F9),
-                    contentColor = Color(0xFFA4A4A6),
-                    text = "가게와 메뉴 직접 추가"
+                    containerColor = Neutral100,
+                    contentColor = Neutral500,
+                    text = stringResource(R.string.add_restaurant_and_menu_by_myself)
                 )
             }
         },
@@ -80,7 +84,12 @@ fun AddMenuSearchScreen(modifier: Modifier = Modifier) {
                         .fillMaxWidth()
                         .padding(vertical = 12.dp, horizontal = 20.dp)
                 ) {
-                    SearchBar { TODO() }
+                    SearchBar(
+                        text = searchText,
+                        onTextChange = { searchText = it }
+                    ) {
+                        //onSearch 함수
+                    }
                 }
                 Column(modifier = Modifier.fillMaxSize()) {
                     if (searchActionDone) {
@@ -98,9 +107,9 @@ fun AddMenuSearchScreen(modifier: Modifier = Modifier) {
                                     tint = Color.Unspecified
                                 )
                                 Text(
-                                    text = "검색 결과가 없어요!",
-                                    fontSize = 14.sp,
-                                    color = Color(0xFF666668),
+                                    text = stringResource(R.string.no_result),
+                                    style = ourMenuTypography().pretendard_600_14,
+                                    color = Neutral500,
                                     modifier = Modifier.padding(top = 8.dp)
                                 )
                             }
@@ -114,9 +123,9 @@ fun AddMenuSearchScreen(modifier: Modifier = Modifier) {
                     } else {
                         //검색을 하지 않은 경우
                         Text(
-                            text = "최근 검색",
-                            fontSize = 14.sp,
-                            color = Color(0xFF666668),
+                            text = stringResource(R.string.recent_search),
+                            style = ourMenuTypography().pretendard_600_14,
+                            color = Neutral700,
                             modifier = Modifier.padding(start = 28.dp)
                         )
                         if (dummyRecentSearchList.isEmpty()) {
