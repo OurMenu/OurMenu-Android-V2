@@ -16,18 +16,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.kuit.ourmenu.R
+import com.kuit.ourmenu.ui.theme.Neutral400
+import com.kuit.ourmenu.ui.theme.NeutralWhite
+import com.kuit.ourmenu.ui.theme.Primary500Main
+import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
 fun BottomHalfWidthButton(
-    onClick: () -> Unit,
     containerColor: Color,
     contentColor: Color,
-    text: String
+    text: String,
+    onClick: () -> Unit
 ) {
     Button(
-        onClick = onClick,
         modifier = Modifier
             .size(154.dp, 52.dp)
             .shadow(elevation = 4.dp, shape = RoundedCornerShape(12.dp)),
@@ -36,8 +41,13 @@ fun BottomHalfWidthButton(
             containerColor = containerColor,
             contentColor = contentColor
         ),
+        onClick = onClick
     ) {
-        Text(text = text)
+        Text(
+            text = text,
+            style = ourMenuTypography().pretendard_700_14,
+            color = contentColor
+        )
     }
 }
 
@@ -52,8 +62,12 @@ private fun BottomHalfWidthButtonPreview() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            BottomHalfWidthButton({}, Color(0xFFC2C2C4), Color.White, "취소")
-            BottomHalfWidthButton({}, Color(0xFFFF5420), Color.White, "적용하기")
+            BottomHalfWidthButton(Neutral400, NeutralWhite, stringResource(R.string.cancel)) {
+
+            }
+            BottomHalfWidthButton(Primary500Main, NeutralWhite, stringResource(R.string.apply)) {
+
+            }
         }
     }
 }
