@@ -16,57 +16,74 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.ui.theme.Neutral300
+import com.kuit.ourmenu.ui.theme.Neutral700
+import com.kuit.ourmenu.ui.theme.NeutralWhite
+import com.kuit.ourmenu.ui.theme.Primary500Main
+import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
 fun SelectMenuItem(isSelected: Boolean = false) {
     HorizontalDivider(
         thickness = 1.dp,
-        color = Color.LightGray,
+        color = Neutral300,
         modifier = Modifier.fillMaxWidth()
     )
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 18.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Column {
-            Text(text = "메뉴 이름", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-            Text(text = "14,000원", fontSize = 14.sp, color = Color.Gray)
+            Text(
+                text = "메뉴 이름",
+                style = ourMenuTypography().pretendard_700_16
+            )
+            Text(
+                text = "14,000원",
+                style = ourMenuTypography().pretendard_500_14,
+                color = Neutral700,
+            )
         }
-        if(isSelected){
+        if (isSelected) {
             Button(
                 onClick = {},
                 shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFFF5420)
+                    containerColor = Primary500Main
                 ),
                 modifier = Modifier.size(44.dp, 28.dp),
                 contentPadding = PaddingValues(0.dp)
             ) {
-                Icon(painter = painterResource(R.drawable.ic_btn_check_white), contentDescription = "selected button")
+                Icon(
+                    painter = painterResource(R.drawable.ic_btn_check_white),
+                    contentDescription = "selected button"
+                )
             }
-        }else{
+        } else {
             Button(
                 onClick = {},
                 shape = RoundedCornerShape(16.dp),
-                border = BorderStroke(1.dp, Color(0xFFFF5420)),
+                border = BorderStroke(1.dp, Primary500Main),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                    contentColor = Color(0xFFFF5420)
+                    containerColor = NeutralWhite,
+                    contentColor = Primary500Main
                 ),
                 modifier = Modifier.size(44.dp, 28.dp),
                 contentPadding = PaddingValues(0.dp)
             ) {
-                Icon(painter = painterResource(R.drawable.ic_btn_plus_orange), contentDescription = "unselected button")
+                Icon(
+                    painter = painterResource(R.drawable.ic_btn_plus_orange),
+                    contentDescription = "unselected button"
+                )
             }
         }
     }
