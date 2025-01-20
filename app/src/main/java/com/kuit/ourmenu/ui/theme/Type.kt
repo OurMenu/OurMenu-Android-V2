@@ -16,6 +16,11 @@ data class OurMenuTypography(
             fontFamily = PretendardBold,
             fontSize = 48.sp,
         ),
+    val pretendard_700_32: TextStyle =
+        TextStyle(
+            fontFamily = PretendardBold,
+            fontSize = 32.sp,
+        ),
     val pretendard_700_24: TextStyle =
         TextStyle(
             fontFamily = PretendardBold,
