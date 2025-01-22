@@ -79,7 +79,7 @@ fun LandingScreen(modifier: Modifier = Modifier) {
         modifier =
             Modifier
                 .fillMaxSize()
-                .padding(bottom = 64.dp),
+                .padding(bottom = 18.dp),
         contentAlignment = Alignment.BottomCenter,
     ) {
         Row {
