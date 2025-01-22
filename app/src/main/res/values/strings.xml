@@ -37,4 +37,9 @@
     <string name="login">로그인</string>
     <string name="make_account">계정 만들기</string>
     <string name="copy_right">Copyright © OURMENU Corp. All Rights Reserved.</string>
+    <string name="email">E-mail</string>
+    <string name="password">Password</string>
+    <string name="see_password">비밀번호 보기</string>
+    <string name="forgot_password">비밀번호 찾기</string>
+    <string name="have_account">계정이 없으신가요?</string>
 </resources>
