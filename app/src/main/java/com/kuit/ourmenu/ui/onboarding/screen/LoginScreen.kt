@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
@@ -56,7 +57,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                     Modifier
                         .fillMaxSize()
                         .padding(innerPadding)
-                        .padding(20.dp),
+                        .padding(20.dp, 48.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Box(
@@ -84,6 +85,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                     placeholder = stringResource(R.string.password),
                     input = password,
                     onTextChange = { password = it },
+                    visualTransformation = PasswordVisualTransformation(),
                 )
 
                 Row(
@@ -121,15 +123,20 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                         text = stringResource(R.string.forgot_password),
                         style = ourMenuTypography().pretendard_500_12,
                         color = Neutral500,
-                        modifier = Modifier.clickable {
-                            // TODO: 비밀번호 찾기 동작 구현
-                        }
+                        modifier =
+                            Modifier.clickable {
+                                // TODO: 비밀번호 찾기 동작 구현
+                            },
                     )
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                BottomFullWidthButton(Primary500Main, NeutralWhite, stringResource(R.string.login)) {
+                BottomFullWidthButton(
+                    Primary500Main,
+                    NeutralWhite,
+                    stringResource(R.string.login),
+                ) {
                     // TODO: onClick 작성
                 }
 
@@ -150,9 +157,9 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
             Box(
                 modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(bottom = 18.dp),
+                    Modifier
+                        .fillMaxSize()
+                        .padding(bottom = 18.dp),
                 contentAlignment = Alignment.BottomCenter,
             ) {
                 Row {
