@@ -1,26 +1,25 @@
-package com.kuit.ourmenu.ui.addmenu.component
+package com.kuit.ourmenu.ui.addmenu.component.item
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
@@ -33,12 +32,9 @@ import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun AddMenuInfoTextFieldItem(
-    fieldName: String,
+fun AddMenuInfoMenuBoardFieldItem(
     text: String,
     onTextChange: (String) -> Unit,
-    placeholder: String,
-    isPriceInfo: Boolean = false,
 ) {
     Column(
         modifier = Modifier
@@ -52,7 +48,7 @@ fun AddMenuInfoTextFieldItem(
                 .padding(bottom = 4.dp)
         ) {
             Text(
-                text = fieldName,
+                text = stringResource(R.string.menuboard),
                 style = ourMenuTypography().pretendard_600_14
             )
             Text(
@@ -61,6 +57,7 @@ fun AddMenuInfoTextFieldItem(
                 color = Primary500Main
             )
         }
+        //드롭다운으로 수정할 예정
         CustomTextField(
             modifier = Modifier
                 .fillMaxWidth()
@@ -73,18 +70,18 @@ fun AddMenuInfoTextFieldItem(
             containerColor = Neutral100,
             placeHolder = {
                 Text(
-                    text = placeholder,
+                    text = stringResource(R.string.save_menuboard),
                     style = ourMenuTypography().pretendard_500_14,
                     color = Neutral500
                 )
             },
             textStyle = ourMenuTypography().pretendard_700_14.copy(color = Neutral700),
-            keyboardOptions = if(isPriceInfo) {
-                KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    )
-            }else{
-                KeyboardOptions.Default
+            trailingIcon = {
+                Icon(
+                    painter = painterResource(R.drawable.ic_searchbar_search),
+                    contentDescription = "search icon",
+                    tint = Color.Unspecified
+                )
             }
         )
 
@@ -93,28 +90,10 @@ fun AddMenuInfoTextFieldItem(
 
 @Preview(showBackground = true)
 @Composable
-private fun AddMenuInfoTextFieldItemPreview() {
-    var priceText by rememberSaveable { mutableStateOf("") }
-    var restaurantNameText by rememberSaveable { mutableStateOf("") }
-
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        AddMenuInfoTextFieldItem(
-            fieldName = stringResource(R.string.menu_price),
-            text = priceText,
-            onTextChange = { priceText = it },
-            placeholder = stringResource(R.string.type_menu_price),
-            isPriceInfo = true
-        )
-        AddMenuInfoTextFieldItem(
-            fieldName = stringResource(R.string.restaurant_name),
-            text = restaurantNameText,
-            onTextChange = { restaurantNameText = it },
-            placeholder = stringResource(R.string.type_restaurant_name)
-        )
-    }
-
+private fun AddMenuInfoMenuBoardFieldItemPreview() {
+    var text by rememberSaveable { mutableStateOf("") }
+    AddMenuInfoMenuBoardFieldItem(
+        text = text,
+        onTextChange = { text = it }
+    )
 }

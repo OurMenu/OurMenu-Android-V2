@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.addmenu.component.AddMenuTopAppBar
-import com.kuit.ourmenu.ui.addmenu.component.RestaurantSearchItem
+import com.kuit.ourmenu.ui.addmenu.component.item.RestaurantSearchItem
 import com.kuit.ourmenu.ui.common.BottomFullWidthButton
 import com.kuit.ourmenu.ui.common.SearchBar
 import com.kuit.ourmenu.ui.theme.Neutral100
