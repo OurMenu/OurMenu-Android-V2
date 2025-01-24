@@ -33,88 +33,9 @@ fun AddMenuSearchBackground(
     modifier: Modifier = Modifier,
     searchActionDone: Boolean,
     recentSearchResults: MutableList<Boolean>, //이후에 타입 변경
-    searchResults: MutableList<Boolean> //이후에 타입 변경
+    searchResults: MutableList<Boolean>, //이후에 타입 변경
+    onItemClick: () -> Unit
 ) {
-
-//    Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
-//        },
-//        bottomBar = {
-//            //Button
-//            Column(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(bottom = 20.dp),
-//                horizontalAlignment = Alignment.CenterHorizontally,
-//                verticalArrangement = Arrangement.Center
-//            ) {
-//                BottomFullWidthButton(
-//                    onClick = { TODO() },
-//                    containerColor = Neutral100,
-//                    contentColor = Neutral500,
-//                    text = stringResource(R.string.add_restaurant_and_menu_by_myself)
-//                )
-//            }
-//        },
-//        content = {
-//            Column(
-//                modifier = Modifier
-//                    .padding(paddingValues)
-//                    .fillMaxWidth(),
-//                horizontalAlignment = Alignment.CenterHorizontally
-//            ) {
-//                Column(modifier = Modifier.fillMaxSize()) {
-//                    if (searchActionDone) {
-//                        //검색을 한 경우
-//                        if (searchResults.isEmpty()) {
-//                            Column(
-//                                modifier = Modifier
-//                                    .fillMaxWidth()
-//                                    .padding(top = 116.dp),
-//                                horizontalAlignment = Alignment.CenterHorizontally
-//                            ) {
-//                                Icon(
-//                                    painter = painterResource(R.drawable.ic_addmenu_noresult),
-//                                    contentDescription = "no result",
-//                                    tint = Color.Unspecified
-//                                )
-//                                Text(
-//                                    text = stringResource(R.string.no_result),
-//                                    style = ourMenuTypography().pretendard_600_14,
-//                                    color = Neutral500,
-//                                    modifier = Modifier.padding(top = 8.dp)
-//                                )
-//                            }
-//                        } else {
-//                            LazyColumn {
-//                                items(searchResults) { item ->
-//                                    RestaurantSearchItem(item)
-//                                }
-//                            }
-//                        }
-//                    } else {
-//                        //검색을 하지 않은 경우
-//                        Text(
-//                            text = stringResource(R.string.recent_search),
-//                            style = ourMenuTypography().pretendard_600_14,
-//                            color = Neutral700,
-//                            modifier = Modifier.padding(start = 28.dp, top = 12.dp)
-//                        )
-//                        if (recentSearchResults.isEmpty()) {
-//                            Column(modifier = Modifier.fillMaxSize()) { /*empty view*/ }
-//                        } else {
-//                            LazyColumn {
-//                                items(recentSearchResults) { item ->
-//                                    RestaurantSearchItem(item)
-//                                }
-//                            }
-//                        }
-//                    }
-//
-//                }
-//            }
-//        }
-//    )
-
     Box(
         modifier = Modifier
             .fillMaxSize(),
@@ -148,7 +69,11 @@ fun AddMenuSearchBackground(
                 } else {
                     LazyColumn(modifier = Modifier.padding(top = 68.dp)) {
                         items(searchResults) { item ->
-                            RestaurantSearchItem(item)
+                            RestaurantSearchItem(
+                                isLastItem = item,
+                            ){
+                                onItemClick()
+                            }
                         }
                     }
                 }
@@ -165,7 +90,11 @@ fun AddMenuSearchBackground(
                 } else {
                     LazyColumn() {
                         items(recentSearchResults) { item ->
-                            RestaurantSearchItem(item)
+                            RestaurantSearchItem(
+                                isLastItem = item,
+                            ){
+                                onItemClick()
+                            }
                         }
                     }
                 }
@@ -200,6 +129,8 @@ private fun AddMenuSearchBackgroundPreview() {
     AddMenuSearchBackground(
         searchActionDone = searchActionDone,
         recentSearchResults = recentSearchResults,
-        searchResults = searchResults
-    )
+        searchResults = searchResults,
+    ){
+        //onItemClick
+    }
 }
