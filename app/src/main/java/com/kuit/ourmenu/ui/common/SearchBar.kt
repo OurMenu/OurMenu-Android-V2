@@ -2,6 +2,7 @@ package com.kuit.ourmenu.ui.common
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -36,6 +38,7 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 fun SearchBar(
     modifier : Modifier = Modifier,
     text: String,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     onTextChange: (String) -> Unit,
     onSearch: () -> Unit,
 ) {
@@ -70,7 +73,8 @@ fun SearchBar(
                 )
             },
             paddingValues = PaddingValues(start = 28.dp, top = 0.dp, bottom = 0.dp),
-            cursorColor = Primary500Main
+            cursorColor = Primary500Main,
+            interactionSource = interactionSource
         )
     }
 

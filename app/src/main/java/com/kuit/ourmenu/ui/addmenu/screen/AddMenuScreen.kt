@@ -1,6 +1,8 @@
 package com.kuit.ourmenu.ui.addmenu.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +19,7 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -38,9 +41,12 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 @Composable
 fun AddMenuScreen(modifier: Modifier = Modifier) {
     var scaffoldState = rememberBottomSheetScaffoldState()
-    var showBottomSheet by rememberSaveable { mutableStateOf(true) }
+    var showBottomSheet by rememberSaveable { mutableStateOf(false) }
+    var showSearchBackground by rememberSaveable { mutableStateOf(false) }
     var searchText by rememberSaveable { mutableStateOf("") }
     var searchActionDone by rememberSaveable { mutableStateOf(false) }
+    val interactionSource = remember { MutableInteractionSource() }
+    val searchBarFocused by interactionSource.collectIsFocusedAsState()
     var dummyRecentSearchResults = mutableListOf(
         false,
         false,
@@ -88,7 +94,7 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
         }
     ) {
         Box(modifier = Modifier.fillMaxWidth()) {
-            if (showBottomSheet) {
+            if (!showSearchBackground) {
                 //지도 컴포넌트
                 Column(
                     modifier = Modifier.fillMaxSize(),
@@ -103,7 +109,10 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
                     searchActionDone = searchActionDone,
                     recentSearchResults = dummyRecentSearchResults,
                     searchResults = dummySearchResults
-                )
+                ){
+                    //검색된 아이템 클릭시 작동할 함수
+                    showBottomSheet = true
+                }
             }
 
             SearchBar(
@@ -112,8 +121,7 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
                 onTextChange = { searchText = it },
             ) {
                 //onSearch 함수
-//                searchActionDone = true
-                showBottomSheet = true
+                searchActionDone = true
             }
 
         }
