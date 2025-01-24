@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
@@ -45,7 +46,7 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 fun LoginScreen(modifier: Modifier = Modifier) {
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
-    var isChecked by rememberSaveable { mutableStateOf(false) }
+    var isPasswordVisible by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -85,7 +86,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                     placeholder = stringResource(R.string.password),
                     input = password,
                     onTextChange = { password = it },
-                    visualTransformation = PasswordVisualTransformation(),
+                    visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 )
 
                 Row(
@@ -97,8 +98,8 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Checkbox(
-                            checked = isChecked,
-                            onCheckedChange = { isChecked = it },
+                            checked = isPasswordVisible,
+                            onCheckedChange = { isPasswordVisible = it },
                             modifier =
                                 Modifier
                                     .border(1.dp, Neutral300, RoundedCornerShape(4.dp))
