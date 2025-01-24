@@ -34,12 +34,13 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
 fun SearchBar(
+    modifier : Modifier = Modifier,
     text: String,
     onTextChange: (String) -> Unit,
     onSearch: () -> Unit,
 ) {
     Card(
-        modifier = Modifier
+        modifier
             .shadow(elevation = 2.dp, shape = RoundedCornerShape(8.dp))
             .fillMaxWidth(),
         shape = RoundedCornerShape(8.dp)
