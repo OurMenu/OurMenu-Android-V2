@@ -27,6 +27,7 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
 fun BottomFullWidthButton(
+    modifier : Modifier = Modifier,
     containerColor: Color,
     contentColor: Color,
     text: String,
@@ -34,7 +35,7 @@ fun BottomFullWidthButton(
 ) {
     Button(
         onClick = onClick,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .size(320.dp, 52.dp)
             .shadow(elevation = 4.dp, shape = RoundedCornerShape(12.dp)),
@@ -55,11 +56,11 @@ fun BottomFullWidthButton(
 @Composable
 private fun BottomFullWidthButtonPreview() {
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
-        BottomFullWidthButton(Neutral100, Neutral500, stringResource(R.string.add_restaurant_and_menu_by_myself)){
+        BottomFullWidthButton(containerColor = Neutral100, contentColor = Neutral500, text = stringResource(R.string.add_restaurant_and_menu_by_myself)){
             //onClick 작성
         }
         Spacer(modifier = Modifier.height(16.dp))
-        BottomFullWidthButton(Primary500Main, NeutralWhite, stringResource(R.string.add_menu)){
+        BottomFullWidthButton(containerColor = Primary500Main, contentColor = NeutralWhite, text = stringResource(R.string.add_menu)){
             //onClick 작성
         }
     }
