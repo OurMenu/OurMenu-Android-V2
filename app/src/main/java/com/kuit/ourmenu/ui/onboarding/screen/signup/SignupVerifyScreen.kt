@@ -1,4 +1,4 @@
-package com.kuit.ourmenu.ui.onboarding.screen
+package com.kuit.ourmenu.ui.onboarding.screen.signup
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
