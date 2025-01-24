@@ -17,7 +17,6 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -38,9 +37,19 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddMenuScreen(modifier: Modifier = Modifier) {
-    val scaffoldState = rememberBottomSheetScaffoldState()
-    val showBottomSheet by remember { mutableStateOf(false) }
+    var scaffoldState = rememberBottomSheetScaffoldState()
+    var showBottomSheet by rememberSaveable { mutableStateOf(true) }
     var searchText by rememberSaveable { mutableStateOf("") }
+    var searchActionDone by rememberSaveable { mutableStateOf(false) }
+    var dummyRecentSearchResults = mutableListOf(
+        false,
+        false,
+        false,
+        false,
+        true,
+    )
+    val dummySearchResults : MutableList<Boolean> = mutableListOf(
+    )
 
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
@@ -78,7 +87,7 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
             }
         }
     ) {
-        Box(modifier = Modifier.padding(horizontal = 20.dp)) {
+        Box(modifier = Modifier.fillMaxWidth()) {
             if (showBottomSheet) {
                 //지도 컴포넌트
                 Column(
@@ -90,22 +99,21 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
                 }
             } else {
                 //검색 컴포넌트
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text("검색 배경 컴포넌트")
-                }
-
+                AddMenuSearchBackground(
+                    searchActionDone = searchActionDone,
+                    recentSearchResults = dummyRecentSearchResults,
+                    searchResults = dummySearchResults
+                )
             }
 
             SearchBar(
-                modifier = Modifier.padding(top = 20.dp),
+                modifier = Modifier.padding(top = 12.dp, start = 20.dp, end = 20.dp),
                 text = searchText,
                 onTextChange = { searchText = it },
             ) {
                 //onSearch 함수
+//                searchActionDone = true
+                showBottomSheet = true
             }
 
         }

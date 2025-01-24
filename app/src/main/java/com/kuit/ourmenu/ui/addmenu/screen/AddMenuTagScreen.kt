@@ -40,7 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.addmenu.component.AddMenuTopAppBar
-import com.kuit.ourmenu.ui.addmenu.component.IconSelectBottomSheet
+import com.kuit.ourmenu.ui.addmenu.component.bottomsheet.IconSelectBottomSheet
 import com.kuit.ourmenu.ui.addmenu.component.bottomsheet.TagSelectBottomSheet
 import com.kuit.ourmenu.ui.common.CustomTextField
 import com.kuit.ourmenu.ui.theme.Neutral100

@@ -34,7 +34,7 @@ fun BottomHalfWidthButton(
     onClick: () -> Unit
 ) {
     Button(
-        modifier = Modifier
+        modifier = modifier
             .size(154.dp, 52.dp)
             .shadow(elevation = 4.dp, shape = RoundedCornerShape(12.dp)),
         shape = RoundedCornerShape(12.dp),
