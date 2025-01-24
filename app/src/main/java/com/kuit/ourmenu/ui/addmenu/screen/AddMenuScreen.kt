@@ -71,6 +71,7 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
 
     BackHandler(enabled = showSearchBackground) {
         if(searchBarFocused) focusManager.clearFocus()
+        searchActionDone = false
         showSearchBackground = false
         searchText = ""
     }
