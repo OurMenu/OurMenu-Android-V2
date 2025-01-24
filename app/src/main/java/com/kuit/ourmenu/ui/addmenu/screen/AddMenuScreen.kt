@@ -1,8 +1,10 @@
 package com.kuit.ourmenu.ui.addmenu.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -37,7 +39,7 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 @Composable
 fun AddMenuScreen(modifier: Modifier = Modifier) {
     val scaffoldState = rememberBottomSheetScaffoldState()
-    val showBottomSheet by remember { mutableStateOf(true) }
+    val showBottomSheet by remember { mutableStateOf(false) }
     var searchText by rememberSaveable { mutableStateOf("") }
 
     BottomSheetScaffold(
@@ -76,27 +78,35 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
             }
         }
     ) {
-        //전체 화면 구성, 지도는 추가 예정
-//        Column(modifier = Modifier.padding(horizontal = 20.dp)) {
-//            Spacer(modifier = Modifier.height(12.dp))
-//            SearchBar(
-//                text = searchText,
-//                onTextChange = { searchText = it },
-//            ){
-//                //onSearch 함수
-//            }
-//        }
-        Box(modifier = Modifier.padding(horizontal = 20.dp)){
+        Box(modifier = Modifier.padding(horizontal = 20.dp)) {
+            if (showBottomSheet) {
+                //지도 컴포넌트
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text("지도 컴포넌트")
+                }
+            } else {
+                //검색 컴포넌트
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text("검색 배경 컴포넌트")
+                }
+
+            }
 
             SearchBar(
                 modifier = Modifier.padding(top = 20.dp),
                 text = searchText,
                 onTextChange = { searchText = it },
-            ){
+            ) {
                 //onSearch 함수
             }
-
-            Text("asdfasfasdfasdf")
 
         }
     }
