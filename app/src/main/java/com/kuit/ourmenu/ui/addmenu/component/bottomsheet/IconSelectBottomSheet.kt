@@ -1,4 +1,4 @@
-package com.kuit.ourmenu.ui.addmenu.component
+package com.kuit.ourmenu.ui.addmenu.component.bottomsheet
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
