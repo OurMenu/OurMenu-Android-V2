@@ -41,6 +41,7 @@ import com.kuit.ourmenu.ui.theme.Neutral400
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.NeutralWhite
+import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 import kotlinx.coroutines.launch
 
@@ -120,7 +121,7 @@ fun AddMenuBottomSheetContent(scaffoldState: BottomSheetScaffoldState) {
                     .padding(vertical = 12.dp)
             )
             BottomFullWidthButton(
-                containerColor = Neutral400,
+                containerColor = Primary500Main,
                 contentColor = NeutralWhite,
                 text = stringResource(R.string.next)
             ) {
