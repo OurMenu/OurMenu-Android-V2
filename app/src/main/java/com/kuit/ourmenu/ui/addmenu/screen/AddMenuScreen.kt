@@ -28,8 +28,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
-import com.kuit.ourmenu.ui.addmenu.component.AddMenuBottomSheetContent
 import com.kuit.ourmenu.ui.addmenu.component.AddMenuTopAppBar
+import com.kuit.ourmenu.ui.addmenu.component.bottomsheet.AddMenuBottomSheetContent
 import com.kuit.ourmenu.ui.common.SearchBar
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Primary500Main

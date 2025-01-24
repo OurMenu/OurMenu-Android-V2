@@ -1,4 +1,4 @@
-package com.kuit.ourmenu.ui.addmenu.component
+package com.kuit.ourmenu.ui.addmenu.component.item
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
