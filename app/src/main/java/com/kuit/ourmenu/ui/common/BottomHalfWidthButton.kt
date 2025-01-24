@@ -27,6 +27,7 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
 fun BottomHalfWidthButton(
+    modifier: Modifier = Modifier,
     containerColor: Color,
     contentColor: Color,
     text: String,
@@ -62,10 +63,10 @@ private fun BottomHalfWidthButtonPreview() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            BottomHalfWidthButton(Neutral400, NeutralWhite, stringResource(R.string.cancel)) {
+            BottomHalfWidthButton(containerColor = Neutral400, contentColor = NeutralWhite, text = stringResource(R.string.cancel)) {
 
             }
-            BottomHalfWidthButton(Primary500Main, NeutralWhite, stringResource(R.string.apply)) {
+            BottomHalfWidthButton(containerColor = Primary500Main, contentColor = NeutralWhite, text = stringResource(R.string.apply)) {
 
             }
         }
