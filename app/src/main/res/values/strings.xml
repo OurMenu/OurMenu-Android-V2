@@ -42,4 +42,14 @@
     <string name="see_password">비밀번호 보기</string>
     <string name="forgot_password">비밀번호 찾기</string>
     <string name="have_account">계정이 없으신가요?</string>
+
+    <!--menu info-->
+    <string name="menu_folder">Menu Folder</string>
+    <string name="tag_eng">Tag</string>
+    <string name="info">Info</string>
+    <string name="memo_eng">Memo</string>
+    <string name="memo_title">매운 맛 선택 가능!</string>
+    <string name="memo_content">* 덕유산 / ㅇㅇ산 / 한라산\n기본도 정말 매우니 조심하기</string>
+    <string name="menu_info_goto_map">지도보기</string>
+
 </resources>

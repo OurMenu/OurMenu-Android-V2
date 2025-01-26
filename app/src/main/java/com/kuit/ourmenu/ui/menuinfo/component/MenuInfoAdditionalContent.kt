@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,7 +38,7 @@ fun MenuInfoAdditionalContent(
             .padding(top = 12.dp)
     ) {
         Text(
-            text = "Info",
+            text = stringResource(R.string.info),
             style = ourMenuTypography().pretendard_600_32.copy(
                 fontSize = 12.sp,
                 lineHeight = 12.sp,
@@ -65,7 +66,7 @@ fun MenuInfoAdditionalContent(
         }
 
         Text(
-            text = "Memo",
+            text = stringResource(R.string.memo_eng),
             style = ourMenuTypography().pretendard_600_32.copy(
                 fontSize = 12.sp,
                 lineHeight = 12.sp,
@@ -109,8 +110,6 @@ fun MenuInfoAdditionalContent(
                     )
                 }
             }
-
-
         }
     }
 }

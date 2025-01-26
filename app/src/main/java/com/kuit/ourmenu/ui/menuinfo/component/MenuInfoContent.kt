@@ -22,7 +22,6 @@ fun MenuInfoContent(
     menuInfoData: MenuInfoDummyData
 ) {
     Column {
-
         Box(
             modifier = Modifier
                 .fillMaxWidth()

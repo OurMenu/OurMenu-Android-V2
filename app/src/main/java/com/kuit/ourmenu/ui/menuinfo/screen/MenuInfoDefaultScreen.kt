@@ -31,14 +31,11 @@ fun MenuInfoDefaultScreen() {
             modifier = Modifier
                 .fillMaxSize()
         ) {
-
             Box {
-
                 MenuInfoImagePager(
                     pagerState = pagerState,
                     pageItems = MenuInfoDummyData.dummyData
                 )
-
                 MenuInfoTopIcons(
                     onBackClick = { },
                     onVertClick = { }
