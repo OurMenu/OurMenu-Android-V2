@@ -20,11 +20,12 @@ fun MenuInfoMapScreen(modifier: Modifier = Modifier) {
 
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
-        sheetContent = { },
         sheetContainerColor = NeutralWhite,
         sheetPeekHeight = 264.dp,
         sheetSwipeEnabled = false,
         topBar = { },
+        sheetContent = { },
+        sheetDragHandle = { }
     ) { }
 
 }

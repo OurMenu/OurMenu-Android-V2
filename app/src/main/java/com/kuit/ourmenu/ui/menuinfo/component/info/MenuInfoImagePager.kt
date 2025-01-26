@@ -1,4 +1,4 @@
-package com.kuit.ourmenu.ui.menuinfo.component
+package com.kuit.ourmenu.ui.menuinfo.component.info
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
