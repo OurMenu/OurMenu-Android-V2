@@ -1,5 +1,8 @@
 package com.kuit.ourmenu.ui.menuinfo.screen
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberBottomSheetScaffoldState
@@ -8,11 +11,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.kuit.ourmenu.ui.common.GoToMapButton
 import com.kuit.ourmenu.ui.common.bottomsheet.BottomSheetDragHandle
 import com.kuit.ourmenu.ui.common.topappbar.OurMenuAddButtonTopAppBar
 import com.kuit.ourmenu.ui.menuinfo.component.map.MenuInfoMapBottomSheetContent
@@ -50,8 +55,19 @@ fun MenuInfoMapScreen(modifier: Modifier = Modifier) {
             )
         },
         sheetPeekHeight = bottomSheetContentHeight,
-    ) {
-        // TODO : Map SDK
+    ) { innerPaddings ->
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(bottom = 16.dp, end = 20.dp)
+                .padding(innerPaddings)
+        ) {
+            // TODO : Map SDK
+            GoToMapButton(
+                modifier = Modifier.align(Alignment.BottomEnd),
+                onClick = { /* TODO : Go To Map Button Click Event */ },
+            )
+        }
     }
 
 }
