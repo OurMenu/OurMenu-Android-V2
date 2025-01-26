@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -15,6 +16,7 @@ import com.kuit.ourmenu.ui.menuinfo.component.MenuInfoAdditionalContent
 import com.kuit.ourmenu.ui.menuinfo.component.MenuInfoChipContent
 import com.kuit.ourmenu.ui.menuinfo.component.MenuInfoContent
 import com.kuit.ourmenu.ui.menuinfo.component.MenuInfoImagePager
+import com.kuit.ourmenu.ui.menuinfo.component.MenuInfoMapButton
 import com.kuit.ourmenu.ui.menuinfo.component.MenuInfoTopIcons
 import com.kuit.ourmenu.ui.menuinfo.dummy.MenuInfoDummyData
 import com.kuit.ourmenu.ui.theme.Neutral300
@@ -24,44 +26,51 @@ fun MenuInfoDefaultScreen() {
 
     val pagerState = rememberPagerState { 3 }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
+    Box {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
 
-        Box {
+            Box {
 
-            MenuInfoImagePager(
-                pagerState = pagerState,
-                pageItems = MenuInfoDummyData.dummyData
+                MenuInfoImagePager(
+                    pagerState = pagerState,
+                    pageItems = MenuInfoDummyData.dummyData
+                )
+
+                MenuInfoTopIcons(
+                    onBackClick = { },
+                    onVertClick = { }
+                )
+            }
+
+            MenuInfoContent(
+                MenuInfoDummyData.dummyData
             )
 
-            MenuInfoTopIcons(
-                onBackClick = {},
-                onVertClick = {}
+            HorizontalDivider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp),
+                color = Neutral300
+            )
+
+            MenuInfoChipContent(
+                menuInfoData = MenuInfoDummyData.dummyData
+            )
+
+            MenuInfoAdditionalContent(
+                address = MenuInfoDummyData.dummyData.address,
+                memoTitle = MenuInfoDummyData.dummyData.memoTitle,
+                memoContent = MenuInfoDummyData.dummyData.memoContent
             )
         }
-
-        MenuInfoContent(
-            MenuInfoDummyData.dummyData
-        )
-
-        HorizontalDivider(
+        MenuInfoMapButton(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp),
-            color = Neutral300
-        )
-
-        MenuInfoChipContent(
-            menuInfoData = MenuInfoDummyData.dummyData
-        )
-
-        MenuInfoAdditionalContent(
-            address = MenuInfoDummyData.dummyData.address,
-            memoTitle = MenuInfoDummyData.dummyData.memoTitle,
-            memoContent = MenuInfoDummyData.dummyData.memoContent
-        )
+                .align(Alignment.BottomEnd)
+                .padding(end = 20.dp, bottom = 28.dp),
+            ) { }
     }
 }
 
