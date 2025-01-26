@@ -8,6 +8,7 @@ import com.kuit.ourmenu.R
 
 val PretendardBold = FontFamily(Font(R.font.bold))
 val PretendardSemiBold = FontFamily(Font(R.font.semibold))
+val PretendardMedium = FontFamily(Font(R.font.medium))
 val PretendardRegular = FontFamily(Font(R.font.regular))
 
 data class OurMenuTypography(
@@ -15,6 +16,11 @@ data class OurMenuTypography(
         TextStyle(
             fontFamily = PretendardBold,
             fontSize = 48.sp,
+        ),
+    val pretendard_700_32: TextStyle =
+        TextStyle(
+            fontFamily = PretendardBold,
+            fontSize = 32.sp,
         ),
     val pretendard_700_24: TextStyle =
         TextStyle(
@@ -40,6 +46,11 @@ data class OurMenuTypography(
         TextStyle(
             fontFamily = PretendardBold,
             fontSize = 14.sp,
+        ),
+    val pretendard_700_12: TextStyle =
+        TextStyle(
+            fontFamily = PretendardBold,
+            fontSize = 12.sp,
         ),
     val pretendard_600_32: TextStyle =
         TextStyle(
@@ -68,35 +79,45 @@ data class OurMenuTypography(
         ),
     val pretendard_500_28: TextStyle =
         TextStyle(
-            fontFamily = PretendardRegular,
+            fontFamily = PretendardMedium,
             fontSize = 28.sp,
         ),
     val pretendard_500_24: TextStyle =
         TextStyle(
-            fontFamily = PretendardRegular,
+            fontFamily = PretendardMedium,
             fontSize = 24.sp,
         ),
     val pretendard_500_20: TextStyle =
         TextStyle(
-            fontFamily = PretendardRegular,
+            fontFamily = PretendardMedium,
             fontSize = 20.sp,
         ),
     val pretendard_500_18: TextStyle =
         TextStyle(
-            fontFamily = PretendardRegular,
+            fontFamily = PretendardMedium,
             fontSize = 18.sp,
         ),
     val pretendard_500_16: TextStyle =
         TextStyle(
-            fontFamily = PretendardRegular,
+            fontFamily = PretendardMedium,
             fontSize = 16.sp,
         ),
     val pretendard_500_14: TextStyle =
         TextStyle(
-            fontFamily = PretendardRegular,
+            fontFamily = PretendardMedium,
             fontSize = 14.sp,
         ),
     val pretendard_500_12: TextStyle =
+        TextStyle(
+            fontFamily = PretendardMedium,
+            fontSize = 12.sp,
+        ),
+    val pretendard_400_14: TextStyle =
+        TextStyle(
+            fontFamily = PretendardRegular,
+            fontSize = 14.sp,
+        ),
+    val pretendard_400_12: TextStyle =
         TextStyle(
             fontFamily = PretendardRegular,
             fontSize = 12.sp,

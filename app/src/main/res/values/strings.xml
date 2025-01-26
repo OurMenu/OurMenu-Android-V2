@@ -32,4 +32,14 @@
     <string name="type_body">본문을 입력해주세요.</string>
     <string name="food_tag">음식 태그</string>
     <string name="multiple_choice_available">중복 선택 가능</string>
+    <string name="landing_introduce_title">아워메뉴에 온 걸 환영해요!</string>
+    <string name="landing_introduce_content">저희와 함께 매일 먹을 한 끼를 고민해요.</string>
+    <string name="login">로그인</string>
+    <string name="make_account">계정 만들기</string>
+    <string name="copy_right">Copyright © OURMENU Corp. All Rights Reserved.</string>
+    <string name="email">E-mail</string>
+    <string name="password">Password</string>
+    <string name="see_password">비밀번호 보기</string>
+    <string name="forgot_password">비밀번호 찾기</string>
+    <string name="have_account">계정이 없으신가요?</string>
 </resources>
