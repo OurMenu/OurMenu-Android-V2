@@ -10,8 +10,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.BaselineShift
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -21,6 +19,7 @@ import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
+import com.kuit.ourmenu.utils.ExtensionUtils.toWon
 
 @Composable
 fun MenuInfoMapContent(
@@ -52,7 +51,7 @@ fun MenuInfoMapContent(
                     ),
                 )
                 Text(
-                    text = menuInfoData.menuPrice.toString(),
+                    text = menuInfoData.menuPrice.toWon(),
                     style = ourMenuTypography().pretendard_600_32.copy(
                         fontSize = 16.sp,
                         lineHeight = 22.sp,
