@@ -15,8 +15,7 @@ fun MenuInfoMapBottomSheetContent(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(horizontal = 20.dp)
     ) {
         MenuInfoMapContent(
             modifier = Modifier
@@ -29,8 +28,16 @@ fun MenuInfoMapBottomSheetContent(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.CenterHorizontally)
-                .padding(bottom = 12.dp),
+                .padding(bottom = 8.dp),
             menuInfoData = MenuInfoDummyData.dummyData
+        )
+
+        MenuInfoMapTagContent(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 20.dp),
+            defaultTagList = MenuInfoDummyData.dummyData.defaultTagList,
+            customTagList = MenuInfoDummyData.dummyData.customTagList
         )
     }
 }
