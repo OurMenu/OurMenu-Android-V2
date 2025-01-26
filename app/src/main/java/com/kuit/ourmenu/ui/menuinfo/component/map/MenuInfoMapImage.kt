@@ -24,7 +24,7 @@ fun MenuInfoMapImage(
 ) {
     val imgRes = menuInfoData.imgRes
 
-    Row {
+    Row(modifier = modifier) {
         for (i in 0 until 3) {
             Image(
                 painter = // 이 부분은 추후에 int == 0 대신 url.isNullOrEmpty()로 변경해야 함
@@ -32,11 +32,10 @@ fun MenuInfoMapImage(
                 else painterResource(imgRes[i]),
                 contentDescription = null,
                 modifier = Modifier
-                    .width(104.dp)
-                    .height(80.dp)
+                    .weight(104f)
                     .clip(shape = RoundedCornerShape(8.dp))
             )
-            Spacer(modifier = Modifier.padding(start = 4.dp))
+            if (i != 2) Spacer(modifier = Modifier.padding(end = 4.dp))
         }
     }
 }

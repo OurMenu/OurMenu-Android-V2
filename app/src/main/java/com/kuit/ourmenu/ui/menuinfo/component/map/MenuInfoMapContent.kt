@@ -27,12 +27,14 @@ fun MenuInfoMapContent(
     modifier: Modifier = Modifier,
     menuInfoData: MenuInfoDummyData
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp)
-            .padding(bottom = 20.dp)
-    ) {
+    val menuFolderTitle =
+        when (menuInfoData.menuFolderList.size) {
+            0 -> "기본 메뉴판"
+            1 -> menuInfoData.menuFolderList[0]
+            else -> "${menuInfoData.menuFolderList[0]} +${menuInfoData.menuFolderList.size - 1}"
+        }
+
+    Column(modifier = modifier) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -64,7 +66,7 @@ fun MenuInfoMapContent(
             MenuFolderChip(
                 modifier = Modifier
                     .align(Alignment.CenterEnd),
-                menuFolderTitle = ""
+                menuFolderTitle = menuFolderTitle
             )
         }
         Text(
