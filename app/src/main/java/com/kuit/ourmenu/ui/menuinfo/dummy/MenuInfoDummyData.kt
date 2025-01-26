@@ -1,14 +1,21 @@
 package com.kuit.ourmenu.ui.menuinfo.dummy
 
 import androidx.annotation.DrawableRes
+import androidx.compose.ui.graphics.Color
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.ui.theme.Neutral300
+import com.kuit.ourmenu.ui.theme.Neutral700
+import com.kuit.ourmenu.ui.theme.NeutralWhite
+import com.kuit.ourmenu.ui.theme.Primary500Main
 
 data class MenuInfoDummyData(
     @DrawableRes val imgRes: List<Int>,
     val menuTitle: String,
     val menuPrice: Int,
     val store: String,
-    val menuFolderList: List<String>
+    val menuFolderList: List<String>,
+    val defaultTagList: List<MenuInfoTag> = listOf(),
+    val customTagList: List<MenuInfoTag> = listOf()
 ) {
     companion object {
         val dummyData = MenuInfoDummyData(
@@ -32,5 +39,23 @@ data class MenuInfoDummyData(
                 "메뉴판999999999"
             )
         )
+    }
+}
+
+data class MenuInfoTag(
+    val tagName: String,
+    @DrawableRes val tagIcon: Int,
+    var containerColor: Color,
+    var contentColor: Color,
+    val isCustom: Boolean,
+) {
+    init {
+        if (isCustom) {
+            contentColor = NeutralWhite
+            containerColor = Primary500Main
+        } else {
+            contentColor = Neutral700
+            containerColor = Neutral300
+        }
     }
 }
