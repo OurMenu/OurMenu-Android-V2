@@ -1,6 +1,5 @@
 package com.kuit.ourmenu.ui.menuinfo.screen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.kuit.ourmenu.ui.menuinfo.component.MenuInfoAdditionalContent
+import com.kuit.ourmenu.ui.menuinfo.component.MenuInfoChipContent
 import com.kuit.ourmenu.ui.menuinfo.component.MenuInfoContent
 import com.kuit.ourmenu.ui.menuinfo.component.MenuInfoImagePager
 import com.kuit.ourmenu.ui.menuinfo.component.MenuInfoTopIcons
@@ -53,7 +52,7 @@ fun MenuInfoDefaultScreen() {
             color = Neutral300
         )
 
-        MenuInfoAdditionalContent(
+        MenuInfoChipContent(
             menuInfoData = MenuInfoDummyData.dummyData
         )
     }

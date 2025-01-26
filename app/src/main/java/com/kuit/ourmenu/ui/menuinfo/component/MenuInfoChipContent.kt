@@ -14,7 +14,7 @@ import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun MenuInfoAdditionalContent(
+fun MenuInfoChipContent(
     menuInfoData: MenuInfoDummyData
 ) {
     Column(
@@ -55,8 +55,8 @@ fun MenuInfoAdditionalContent(
 
 @Preview(showBackground = true)
 @Composable
-private fun MenuInfoAdditionalContentPreview() {
-    MenuInfoAdditionalContent(
+private fun MenuInfoChipContentPreview() {
+    MenuInfoChipContent(
         menuInfoData = MenuInfoDummyData.dummyData
     )
 }
