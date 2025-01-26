@@ -32,10 +32,13 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.addmenu.component.AddMenuSearchBackground
 import com.kuit.ourmenu.ui.addmenu.component.AddMenuTopAppBar
 import com.kuit.ourmenu.ui.addmenu.component.bottomsheet.AddMenuBottomSheetContent
+import com.kuit.ourmenu.ui.addmenu.viewmodel.AddMenuSearchViewModel
 import com.kuit.ourmenu.ui.common.SearchBar
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Primary500Main
@@ -52,6 +55,9 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
     val interactionSource = remember { MutableInteractionSource() }
     val searchBarFocused by interactionSource.collectIsFocusedAsState()
     val focusManager = LocalFocusManager.current
+
+    val viewModel : AddMenuSearchViewModel = viewModel()
+    val recentSearchList by viewModel.recentSearchResults.collectAsStateWithLifecycle()
 
     var dummyRecentSearchResults = mutableListOf(
         false,
