@@ -16,6 +16,7 @@ import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
+import com.kuit.ourmenu.utils.ExtensionUtils.toWon
 
 @Composable
 fun MenuInfoContent(
@@ -38,7 +39,7 @@ fun MenuInfoContent(
                     .padding(start = 20.dp, top = 1.dp)
             )
             Text(
-                text = menuInfoData.menuPrice.toString(),
+                text = menuInfoData.menuPrice.toWon(),
                 style = ourMenuTypography().pretendard_600_32.copy(
                     fontSize = 16.sp,
                     lineHeight = 22.sp,
