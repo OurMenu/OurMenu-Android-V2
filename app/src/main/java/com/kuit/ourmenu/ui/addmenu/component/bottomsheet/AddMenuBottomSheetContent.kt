@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,8 +33,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.addmenu.component.item.SelectMenuItem
+import com.kuit.ourmenu.ui.addmenu.viewmodel.AddMenuDummyRestaurantInfo
+import com.kuit.ourmenu.ui.addmenu.viewmodel.AddMenuSearchViewModel
 import com.kuit.ourmenu.ui.common.BottomFullWidthButton
 import com.kuit.ourmenu.ui.theme.Neutral100
 import com.kuit.ourmenu.ui.theme.Neutral300
@@ -47,11 +52,9 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddMenuBottomSheetContent(scaffoldState: BottomSheetScaffoldState) {
+fun AddMenuBottomSheetContent(scaffoldState: BottomSheetScaffoldState, restaurantInfo: AddMenuDummyRestaurantInfo) {
     val coroutineScope = rememberCoroutineScope()
-    val dummyMenuItemList = listOf(
-        false, false, true, false, false, false, false, false
-    )
+    val dummyMenuItemList = restaurantInfo.menuList
 
     Column(
         modifier = Modifier
@@ -168,9 +171,11 @@ fun AddMenuBottomSheetContent(scaffoldState: BottomSheetScaffoldState) {
 @Composable
 private fun AddMenuBottomSheetContentPreview() {
     val scaffoldState = rememberBottomSheetScaffoldState()
+    val viewModel : AddMenuSearchViewModel = viewModel()
+    val restaurantInfo by viewModel.restaurantInfo.collectAsStateWithLifecycle()
     LaunchedEffect(Unit) {
         //아래 주석 해제하면 bottom sheet 확장된 상태 확인 가능
-//       scaffoldState.bottomSheetState.expand()
+       scaffoldState.bottomSheetState.expand()
     }
-    AddMenuBottomSheetContent(scaffoldState)
+    AddMenuBottomSheetContent(scaffoldState, restaurantInfo)
 }

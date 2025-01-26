@@ -59,6 +59,7 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
     val viewModel : AddMenuSearchViewModel = viewModel()
     val recentSearchResults by viewModel.recentSearchResults.collectAsStateWithLifecycle()
     val searchResults by viewModel.searchResults.collectAsStateWithLifecycle()
+    val restaurantInfo by viewModel.restaurantInfo.collectAsStateWithLifecycle()
 
     LaunchedEffect(searchBarFocused){
         if(searchBarFocused){
@@ -88,7 +89,7 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
         sheetContainerColor = Color.White,
         sheetContent = {
             //bottom sheet 구성
-            AddMenuBottomSheetContent(scaffoldState)
+            AddMenuBottomSheetContent(scaffoldState = scaffoldState, restaurantInfo = restaurantInfo)
         },
         //조건 만족하면 bottom sheet 보여주고, 아니면 화면에 안보이도록 처리
         sheetPeekHeight = if (showBottomSheet) 254.dp else 0.dp,
