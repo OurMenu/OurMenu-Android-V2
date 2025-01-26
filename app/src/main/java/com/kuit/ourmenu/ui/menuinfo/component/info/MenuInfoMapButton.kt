@@ -1,6 +1,5 @@
-package com.kuit.ourmenu.ui.menuinfo.component
+package com.kuit.ourmenu.ui.menuinfo.component.info
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
