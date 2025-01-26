@@ -2,6 +2,7 @@ package com.kuit.ourmenu.ui.menuinfo.component
 
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,10 +25,12 @@ fun MenuInfoFolderChipGrid(
             MenuFolderChip(
                 modifier = Modifier.padding(
                     top = 4.dp,
-                    end = 4.dp
                 ),
                 menuFolderTitle = title
             )
+            if (title != menuFolderList.last()) {
+                Spacer(modifier = Modifier.padding(end = 4.dp))
+            }
         }
     }
 }
