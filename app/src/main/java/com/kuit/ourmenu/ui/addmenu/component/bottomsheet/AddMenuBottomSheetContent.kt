@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -52,9 +52,12 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddMenuBottomSheetContent(scaffoldState: BottomSheetScaffoldState, restaurantInfo: AddMenuDummyRestaurantInfo) {
+fun AddMenuBottomSheetContent(
+    scaffoldState: BottomSheetScaffoldState,
+    restaurantInfo: AddMenuDummyRestaurantInfo,
+    onItemClick: (Int) -> Unit
+) {
     val coroutineScope = rememberCoroutineScope()
-    val dummyMenuItemList = restaurantInfo.menuList
 
     Column(
         modifier = Modifier
@@ -64,7 +67,7 @@ fun AddMenuBottomSheetContent(scaffoldState: BottomSheetScaffoldState, restauran
         Text(
             text = "식당 이름",
             style = ourMenuTypography().pretendard_700_20
-            )
+        )
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_location_info),
@@ -139,8 +142,12 @@ fun AddMenuBottomSheetContent(scaffoldState: BottomSheetScaffoldState, restauran
                     .weight(1f)
                     .padding(top = 12.dp)
             ) {
-                items(dummyMenuItemList) { items ->
-                    SelectMenuItem(items)
+                itemsIndexed(restaurantInfo.menuList) { index, isSelected ->
+//                    Log.d("AddMenuBottomSheetContent", "Item: $index, $isSelected")
+                    SelectMenuItem(
+                        isSelected = isSelected,
+                        onClick = { onItemClick(index) }
+                    )
                 }
             }
 
@@ -150,7 +157,7 @@ fun AddMenuBottomSheetContent(scaffoldState: BottomSheetScaffoldState, restauran
                     contentColor = Neutral500,
                     text = stringResource(R.string.add_menu_by_myself)
                 ) {
-
+                    //메뉴 추가화면으로 이동하는 로직
                 }
                 Spacer(modifier = Modifier.padding(10.dp))
                 BottomFullWidthButton(
@@ -158,7 +165,7 @@ fun AddMenuBottomSheetContent(scaffoldState: BottomSheetScaffoldState, restauran
                     contentColor = NeutralWhite,
                     text = stringResource(R.string.next)
                 ) {
-
+                    //정보 자동 입력된 메뉴 추가 화면
                 }
 
             }
@@ -171,11 +178,13 @@ fun AddMenuBottomSheetContent(scaffoldState: BottomSheetScaffoldState, restauran
 @Composable
 private fun AddMenuBottomSheetContentPreview() {
     val scaffoldState = rememberBottomSheetScaffoldState()
-    val viewModel : AddMenuSearchViewModel = viewModel()
+    val viewModel: AddMenuSearchViewModel = viewModel()
     val restaurantInfo by viewModel.restaurantInfo.collectAsStateWithLifecycle()
     LaunchedEffect(Unit) {
         //아래 주석 해제하면 bottom sheet 확장된 상태 확인 가능
-       scaffoldState.bottomSheetState.expand()
+        scaffoldState.bottomSheetState.expand()
     }
-    AddMenuBottomSheetContent(scaffoldState, restaurantInfo)
+    AddMenuBottomSheetContent(scaffoldState, restaurantInfo) { index ->
+        viewModel.updateSelectedMenu(index = index)
+    }
 }

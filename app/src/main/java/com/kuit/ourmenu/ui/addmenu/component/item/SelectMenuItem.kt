@@ -29,7 +29,7 @@ import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun SelectMenuItem(isSelected: Boolean = false) {
+fun SelectMenuItem(isSelected: Boolean = false, onClick: () -> Unit) {
     HorizontalDivider(
         thickness = 1.dp,
         color = Neutral300,
@@ -55,7 +55,7 @@ fun SelectMenuItem(isSelected: Boolean = false) {
         }
         if (isSelected) {
             Button(
-                onClick = {},
+                onClick = onClick,
                 shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Primary500Main
@@ -70,7 +70,7 @@ fun SelectMenuItem(isSelected: Boolean = false) {
             }
         } else {
             Button(
-                onClick = {},
+                onClick = onClick,
                 shape = RoundedCornerShape(16.dp),
                 border = BorderStroke(1.dp, Primary500Main),
                 colors = ButtonDefaults.buttonColors(
@@ -93,7 +93,7 @@ fun SelectMenuItem(isSelected: Boolean = false) {
 @Composable
 private fun SelectedMenuItemPreview() {
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
-        SelectMenuItem(false)
-        SelectMenuItem(true)
+        SelectMenuItem(false, onClick = {})
+        SelectMenuItem(true, onClick = {})
     }
 }

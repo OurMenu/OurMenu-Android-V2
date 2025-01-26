@@ -56,20 +56,20 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
     val searchBarFocused by interactionSource.collectIsFocusedAsState()
     val focusManager = LocalFocusManager.current
 
-    val viewModel : AddMenuSearchViewModel = viewModel()
+    val viewModel: AddMenuSearchViewModel = viewModel()
     val recentSearchResults by viewModel.recentSearchResults.collectAsStateWithLifecycle()
     val searchResults by viewModel.searchResults.collectAsStateWithLifecycle()
     val restaurantInfo by viewModel.restaurantInfo.collectAsStateWithLifecycle()
 
-    LaunchedEffect(searchBarFocused){
-        if(searchBarFocused){
+    LaunchedEffect(searchBarFocused) {
+        if (searchBarFocused) {
             showSearchBackground = true
             showBottomSheet = false
         }
     }
 
     BackHandler(enabled = showSearchBackground) {
-        if(searchBarFocused) focusManager.clearFocus()
+        if (searchBarFocused) focusManager.clearFocus()
         searchActionDone = false
         showSearchBackground = false
         searchText = ""
@@ -89,7 +89,10 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
         sheetContainerColor = Color.White,
         sheetContent = {
             //bottom sheet 구성
-            AddMenuBottomSheetContent(scaffoldState = scaffoldState, restaurantInfo = restaurantInfo)
+            AddMenuBottomSheetContent(
+                scaffoldState = scaffoldState,
+                restaurantInfo = restaurantInfo,
+                onItemClick = { index -> viewModel.updateSelectedMenu(index) })
         },
         //조건 만족하면 bottom sheet 보여주고, 아니면 화면에 안보이도록 처리
         sheetPeekHeight = if (showBottomSheet) 254.dp else 0.dp,
@@ -129,7 +132,7 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
                     searchResults = searchResults
                 ) {
                     //검색된 아이템 클릭시 작동할 함수
-                    if(searchBarFocused) focusManager.clearFocus()
+                    if (searchBarFocused) focusManager.clearFocus()
                     showSearchBackground = false
                     showBottomSheet = true
                     searchText = ""
@@ -147,7 +150,7 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
                 interactionSource = interactionSource
             ) {
                 //onSearch 함수
-                if(searchBarFocused) focusManager.clearFocus()
+                if (searchBarFocused) focusManager.clearFocus()
                 searchActionDone = true
 
             }
