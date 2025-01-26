@@ -42,6 +42,7 @@
     <string name="see_password">비밀번호 보기</string>
     <string name="forgot_password">비밀번호 찾기</string>
     <string name="have_account">계정이 없으신가요?</string>
+    <string name="go_to_map">지도 앱으로 이동</string>
 
     <!--menu info-->
     <string name="menu_folder">Menu Folder</string>
