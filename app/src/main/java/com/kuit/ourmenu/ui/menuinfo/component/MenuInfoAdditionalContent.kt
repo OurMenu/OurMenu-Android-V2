@@ -9,14 +9,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kuit.ourmenu.ui.menuinfo.dummy.MenuInfoDummyData
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun MenuInfoChipContent(
-    menuInfoData: MenuInfoDummyData
-) {
+fun MenuInfoAdditionalContent(modifier: Modifier = Modifier) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -29,34 +26,13 @@ fun MenuInfoChipContent(
                 lineHeight = 12.sp,
                 color = Neutral500
             ),
+            modifier = Modifier.padding(bottom = 6.dp)
         )
-
-        MenuInfoFolderChipGrid(
-            menuFolderList = menuInfoData.menuFolderList
-        )
-
-        Text(
-            text = "Tag",
-            style = ourMenuTypography().pretendard_600_32.copy(
-                fontSize = 12.sp,
-                lineHeight = 12.sp,
-                color = Neutral500
-            ),
-            modifier = Modifier.padding(top = 12.dp)
-        )
-        MenuInfoTagChipGrid(
-            defaultTagList = menuInfoData.defaultTagList,
-            customTagList = menuInfoData.customTagList
-        )
-
-
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
-private fun MenuInfoChipContentPreview() {
-    MenuInfoChipContent(
-        menuInfoData = MenuInfoDummyData.dummyData
-    )
+private fun MenuInfoAdditionalContentPreview() {
+    MenuInfoAdditionalContent()
 }

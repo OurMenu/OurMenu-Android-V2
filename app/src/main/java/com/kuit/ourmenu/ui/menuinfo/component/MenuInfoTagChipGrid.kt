@@ -1,5 +1,6 @@
 package com.kuit.ourmenu.ui.menuinfo.component
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
@@ -20,35 +21,42 @@ fun MenuInfoTagChipGrid(
     customTagList: List<MenuInfoTag> = listOf(),
 ) {
 
-    FlowRow(
-        modifier = Modifier
-            .padding(top = 2.dp)
-    ) {
-        defaultTagList.forEach { tag ->
-            TagChip(
-                modifier = Modifier.padding(
-                    top = 4.dp,
-                ),
-                tagIcon = tag.tagIcon,
-                tagName = tag.tagName,
-                enabled = false,
-                selected = true
-            ) { }
-            if (tag != defaultTagList.last()) {
-                Spacer(modifier = Modifier.padding(end = 4.dp))
+    Column {
+
+        FlowRow(
+            modifier = Modifier
+                .padding(top = 2.dp)
+        ) {
+            defaultTagList.forEachIndexed { index, tag ->
+                TagChip(
+                    modifier = Modifier.padding(
+                        top = 4.dp,
+                    ),
+                    tagIcon = tag.tagIcon,
+                    tagName = tag.tagName,
+                    enabled = false,
+                    selected = true,
+                    onClick = { }
+                )
+                if (index != defaultTagList.lastIndex) {
+                    Spacer(modifier = Modifier.padding(end = 4.dp))
+                }
             }
         }
-    }
-    FlowRow {
-        customTagList.forEach { tag ->
-            TagChip(
-                modifier = Modifier.padding(
-                    top = 4.dp,
-                    end = 4.dp
-                ),
-                tagIcon = tag.tagIcon,
-                tagName = tag.tagName,
-            ) { }
+        FlowRow {
+            customTagList.forEachIndexed { index, tag ->
+                TagChip(
+                    modifier = Modifier.padding(
+                        top = 4.dp,
+                    ),
+                    tagIcon = tag.tagIcon,
+                    tagName = tag.tagName,
+                    onClick = { }
+                )
+                if (index != customTagList.lastIndex) {
+                    Spacer(modifier = Modifier.padding(end = 4.dp))
+                }
+            }
         }
     }
 }
