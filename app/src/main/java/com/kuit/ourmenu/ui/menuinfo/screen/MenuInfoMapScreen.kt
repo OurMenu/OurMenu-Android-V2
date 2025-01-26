@@ -12,6 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.ui.common.bottomsheet.BottomSheetDragHandle
 import com.kuit.ourmenu.ui.common.topappbar.OurMenuAddButtonTopAppBar
+import com.kuit.ourmenu.ui.menuinfo.component.map.MenuInfoMapBottomSheetContent
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,7 +28,7 @@ fun MenuInfoMapScreen(modifier: Modifier = Modifier) {
         sheetSwipeEnabled = false,
         topBar = { OurMenuAddButtonTopAppBar() },
         sheetDragHandle = { BottomSheetDragHandle() },
-        sheetContent = { }
+        sheetContent = { MenuInfoMapBottomSheetContent() },
     ) { }
 
 }
