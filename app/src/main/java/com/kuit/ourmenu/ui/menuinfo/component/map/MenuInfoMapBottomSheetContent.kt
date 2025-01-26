@@ -8,9 +8,11 @@ import com.kuit.ourmenu.ui.menuinfo.dummy.MenuInfoDummyData
 @Composable
 fun MenuInfoMapBottomSheetContent(modifier: Modifier = Modifier) {
     MenuInfoMapContent(menuInfoData = MenuInfoDummyData.dummyData)
+
+    MenuInfoMapImage(menuInfoData = MenuInfoDummyData.dummyData)
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun MenuInfoMapBottomSheetContentPreview() {
     MenuInfoMapBottomSheetContent()
