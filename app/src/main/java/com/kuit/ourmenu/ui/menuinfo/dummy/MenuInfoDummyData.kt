@@ -15,7 +15,10 @@ data class MenuInfoDummyData(
     val store: String,
     val menuFolderList: List<String>,
     val defaultTagList: List<MenuInfoTag> = listOf(),
-    val customTagList: List<MenuInfoTag> = listOf()
+    val customTagList: List<MenuInfoTag> = listOf(),
+    val address: String,
+    val memoTitle: String,
+    val memoContent: String
 ) {
     companion object {
         val dummyData = MenuInfoDummyData(
@@ -83,7 +86,11 @@ data class MenuInfoDummyData(
                     containerColor = Neutral300,
                     contentColor = Neutral700
                 ),
-            )
+            ),
+            address = "서울 마포구 와우산로 112",
+            memoTitle = "매운 맛 선택 가능!",
+            memoContent = "* 덕유산 / ㅇㅇ산 / 한라산 \n" +
+                    "기본도 정말 매우니 조심하기"
 
         )
     }

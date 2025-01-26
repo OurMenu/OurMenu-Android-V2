@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.kuit.ourmenu.ui.menuinfo.component.MenuInfoAdditionalContent
 import com.kuit.ourmenu.ui.menuinfo.component.MenuInfoChipContent
 import com.kuit.ourmenu.ui.menuinfo.component.MenuInfoContent
 import com.kuit.ourmenu.ui.menuinfo.component.MenuInfoImagePager
@@ -54,6 +55,12 @@ fun MenuInfoDefaultScreen() {
 
         MenuInfoChipContent(
             menuInfoData = MenuInfoDummyData.dummyData
+        )
+
+        MenuInfoAdditionalContent(
+            address = MenuInfoDummyData.dummyData.address,
+            memoTitle = MenuInfoDummyData.dummyData.memoTitle,
+            memoContent = MenuInfoDummyData.dummyData.memoContent
         )
     }
 }
