@@ -16,7 +16,7 @@ import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
-import com.kuit.ourmenu.utils.ExtensionUtils.toWon
+import com.kuit.ourmenu.utils.ExtensionUtil.toWon
 
 @Composable
 fun MenuInfoContent(
