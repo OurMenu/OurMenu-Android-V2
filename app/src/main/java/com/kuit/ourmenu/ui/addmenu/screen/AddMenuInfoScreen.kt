@@ -30,7 +30,7 @@ import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.addmenu.component.AddMenuInfoAddressFieldItem
 import com.kuit.ourmenu.ui.addmenu.component.AddMenuInfoMenuBoardFieldItem
 import com.kuit.ourmenu.ui.addmenu.component.AddMenuInfoTextFieldItem
-import com.kuit.ourmenu.ui.addmenu.component.AddMenuTopAppBar
+import com.kuit.ourmenu.ui.common.topappbar.OurMenuBackButtonTopAppBar
 import com.kuit.ourmenu.ui.common.BottomFullWidthButton
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral400
@@ -51,7 +51,7 @@ fun AddMenuInfoScreen(autoInput: Boolean = true) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            AddMenuTopAppBar {
+            OurMenuBackButtonTopAppBar {
                 Text(
                     text = stringResource(R.string.add_menu),
                     style = ourMenuTypography().pretendard_600_18
