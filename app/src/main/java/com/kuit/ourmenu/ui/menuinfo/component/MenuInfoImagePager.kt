@@ -29,7 +29,6 @@ fun MenuInfoImagePager(
     pagerState: PagerState,
     pageItems: MenuInfoDummyData
 ) {
-
     val pagerCount = pageItems.imgRes.size
 
     Box(
@@ -67,7 +66,6 @@ fun MenuInfoImagePager(
             dotSpacing = 6.dp
         )
     }
-
 }
 
 
