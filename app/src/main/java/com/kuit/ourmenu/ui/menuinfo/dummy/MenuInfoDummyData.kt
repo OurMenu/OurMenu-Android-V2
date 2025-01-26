@@ -19,15 +19,15 @@ data class MenuInfoDummyData(
 ) {
     companion object {
         val dummyData = MenuInfoDummyData(
-            listOf(
+            imgRes = listOf(
                 R.drawable.img_dummy_pizza,
                 R.drawable.img_dummy_pizza,
                 R.drawable.img_dummy_pizza,
             ),
-            "화산라멘",
-            14000,
-            "화산라멘 멘야마쯔리 홍대점",
-            listOf(
+            menuTitle = "화산라멘",
+            menuPrice = 14000,
+            store = "화산라멘 멘야마쯔리 홍대점",
+            menuFolderList = listOf(
                 "메뉴판1",
                 "메뉴판22",
                 "메뉴판333",
@@ -37,7 +37,54 @@ data class MenuInfoDummyData(
                 "메뉴판7777777",
                 "메뉴판88888888",
                 "메뉴판999999999"
+            ),
+            defaultTagList = listOf(
+                MenuInfoTag(
+                    tagName = "밥",
+                    tagIcon = R.drawable.ic_tag_rice,
+                    isCustom = false,
+                    containerColor = Neutral300,
+                    contentColor = Neutral700
+                ),
+                MenuInfoTag(
+                    tagName = "밥",
+                    tagIcon = R.drawable.ic_tag_rice,
+                    isCustom = false,
+                    containerColor = Neutral300,
+                    contentColor = Neutral700
+                ),
+                MenuInfoTag(
+                    tagName = "밥",
+                    tagIcon = R.drawable.ic_tag_rice,
+                    isCustom = false,
+                    containerColor = Neutral300,
+                    contentColor = Neutral700
+                ),
+            ),
+            customTagList = listOf(
+                MenuInfoTag(
+                    tagName = "밥",
+                    tagIcon = R.drawable.ic_tag_rice,
+                    isCustom = false,
+                    containerColor = Neutral300,
+                    contentColor = Neutral700
+                ),
+                MenuInfoTag(
+                    tagName = "밥",
+                    tagIcon = R.drawable.ic_tag_rice,
+                    isCustom = false,
+                    containerColor = Neutral300,
+                    contentColor = Neutral700
+                ),
+                MenuInfoTag(
+                    tagName = "밥",
+                    tagIcon = R.drawable.ic_tag_rice,
+                    isCustom = false,
+                    containerColor = Neutral300,
+                    contentColor = Neutral700
+                ),
             )
+
         )
     }
 }
