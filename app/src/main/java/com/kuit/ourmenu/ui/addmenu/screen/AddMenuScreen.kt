@@ -57,17 +57,8 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
     val focusManager = LocalFocusManager.current
 
     val viewModel : AddMenuSearchViewModel = viewModel()
-    val recentSearchList by viewModel.recentSearchResults.collectAsStateWithLifecycle()
-
-    var dummyRecentSearchResults = mutableListOf(
-        false,
-        false,
-        false,
-        false,
-        true,
-    )
-    val dummySearchResults: MutableList<Boolean> = mutableListOf(
-    )
+    val recentSearchResults by viewModel.recentSearchResults.collectAsStateWithLifecycle()
+    val searchResults by viewModel.searchResults.collectAsStateWithLifecycle()
 
     LaunchedEffect(searchBarFocused){
         if(searchBarFocused){
@@ -133,8 +124,8 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
                 //검색 컴포넌트
                 AddMenuSearchBackground(
                     searchActionDone = searchActionDone,
-                    recentSearchResults = dummyRecentSearchResults,
-                    searchResults = dummySearchResults
+                    recentSearchResults = recentSearchResults,
+                    searchResults = searchResults
                 ) {
                     //검색된 아이템 클릭시 작동할 함수
                     if(searchBarFocused) focusManager.clearFocus()

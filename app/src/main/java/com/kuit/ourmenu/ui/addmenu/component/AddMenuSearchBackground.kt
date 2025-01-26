@@ -32,8 +32,8 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 fun AddMenuSearchBackground(
     modifier: Modifier = Modifier,
     searchActionDone: Boolean,
-    recentSearchResults: MutableList<Boolean>, //이후에 타입 변경
-    searchResults: MutableList<Boolean>, //이후에 타입 변경
+    recentSearchResults: List<Boolean>, //이후에 타입 변경
+    searchResults: List<Boolean>, //이후에 타입 변경
     onItemClick: () -> Unit
 ) {
     Box(
