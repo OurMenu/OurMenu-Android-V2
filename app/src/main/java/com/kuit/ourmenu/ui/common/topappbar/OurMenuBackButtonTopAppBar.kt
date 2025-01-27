@@ -1,4 +1,4 @@
-package com.kuit.ourmenu.ui.addmenu.component
+package com.kuit.ourmenu.ui.common.topappbar
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -20,7 +20,7 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddMenuTopAppBar(topAppbarText: @Composable (() -> Unit)) {
+fun OurMenuBackButtonTopAppBar(topAppbarText: @Composable (() -> Unit)) {
     TopAppBar(
         title = {
             topAppbarText()
@@ -46,7 +46,7 @@ fun AddMenuTopAppBar(topAppbarText: @Composable (() -> Unit)) {
 @Preview(showBackground = true)
 @Composable
 private fun AddMenuTopAppBarPreview() {
-    AddMenuTopAppBar {
+    OurMenuBackButtonTopAppBar {
         Text(
             stringResource(R.string.ourmenu),
             style = ourMenuTypography().pretendard_600_18,
