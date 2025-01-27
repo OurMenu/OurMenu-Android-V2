@@ -39,9 +39,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
-import com.kuit.ourmenu.ui.addmenu.component.AddMenuTopAppBar
 import com.kuit.ourmenu.ui.addmenu.component.bottomsheet.IconSelectBottomSheet
 import com.kuit.ourmenu.ui.addmenu.component.bottomsheet.TagSelectBottomSheet
+import com.kuit.ourmenu.ui.common.topappbar.OurMenuBackButtonTopAppBar
 import com.kuit.ourmenu.ui.common.CustomTextField
 import com.kuit.ourmenu.ui.theme.Neutral100
 import com.kuit.ourmenu.ui.theme.Neutral300
@@ -65,7 +65,7 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            AddMenuTopAppBar {
+            OurMenuBackButtonTopAppBar {
                 Text(
                     text = stringResource(R.string.add_menu),
                     style = ourMenuTypography().pretendard_600_18,
