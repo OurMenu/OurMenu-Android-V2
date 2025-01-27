@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
@@ -123,7 +124,8 @@ fun CustomTextField(
         singleLine = singleLine,
         textStyle = textStyle,
         keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions
+        keyboardActions = keyboardActions,
+        cursorBrush = SolidColor(cursorColor)
     ) { innerTextField ->
 
         TextFieldDefaults.DecorationBox(
@@ -146,7 +148,8 @@ fun CustomTextField(
                 unfocusedContainerColor = containerColor,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
-                cursorColor = cursorColor
+                disabledContainerColor = containerColor,
+                disabledIndicatorColor = containerColor,
             )
 
         )
@@ -168,9 +171,10 @@ private fun CustomTextFieldPreview() {
         CustomTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .border(0.8.dp, Color.Black),
+                .border(0.8.dp, Color.Black, RoundedCornerShape(8.dp)),
             text = textForSimple,
-            onTextChange = { textForSimple = it }
+            onTextChange = { textForSimple = it },
+            enabled = false
         )
         Spacer(modifier = Modifier.height(20.dp))
         //추가 기능이 있는 버전
@@ -194,7 +198,8 @@ private fun CustomTextFieldPreview() {
                     contentDescription = "SearchIcon"
                 )
             },
-            paddingValues = PaddingValues(20.dp, 0.dp)
+            paddingValues = PaddingValues(20.dp, 0.dp),
+            cursorColor = Color.Red,
         )
     }
 }
