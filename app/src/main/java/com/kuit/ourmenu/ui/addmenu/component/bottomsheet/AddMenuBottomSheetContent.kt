@@ -58,6 +58,7 @@ fun AddMenuBottomSheetContent(
     onItemClick: (Int) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val enableNextButton = restaurantInfo.menuList.any { it }
 
     Column(
         modifier = Modifier
@@ -161,11 +162,13 @@ fun AddMenuBottomSheetContent(
                 }
                 Spacer(modifier = Modifier.padding(10.dp))
                 BottomFullWidthButton(
-                    containerColor = Neutral400,
+                    containerColor = if (enableNextButton) Primary500Main else Neutral400,
                     contentColor = NeutralWhite,
                     text = stringResource(R.string.next)
                 ) {
-                    //정보 자동 입력된 메뉴 추가 화면
+                    if (enableNextButton){
+                        //버튼 활성화 된 경우의 동작
+                    }
                 }
 
             }
