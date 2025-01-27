@@ -36,9 +36,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.addmenu.component.AddMenuSearchBackground
-import com.kuit.ourmenu.ui.addmenu.component.AddMenuTopAppBar
 import com.kuit.ourmenu.ui.addmenu.component.bottomsheet.AddMenuBottomSheetContent
 import com.kuit.ourmenu.ui.addmenu.viewmodel.AddMenuSearchViewModel
+import com.kuit.ourmenu.ui.common.topappbar.OurMenuBackButtonTopAppBar
 import com.kuit.ourmenu.ui.common.SearchBar
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Primary500Main
@@ -78,7 +78,7 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            AddMenuTopAppBar {
+            OurMenuBackButtonTopAppBar {
                 Text(
                     text = stringResource(R.string.ourmenu),
                     style = ourMenuTypography().pretendard_600_18,
