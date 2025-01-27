@@ -23,7 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
-import com.kuit.ourmenu.ui.addmenu.component.AddMenuTopAppBar
+import com.kuit.ourmenu.ui.common.topappbar.OurMenuBackButtonTopAppBar
 import com.kuit.ourmenu.ui.addmenu.component.RestaurantSearchItem
 import com.kuit.ourmenu.ui.common.BottomFullWidthButton
 import com.kuit.ourmenu.ui.common.SearchBar
@@ -48,7 +48,7 @@ fun AddMenuSearchScreen(modifier: Modifier = Modifier) {
 
     Scaffold(modifier = Modifier.fillMaxSize(),
         topBar = {
-            AddMenuTopAppBar {
+            OurMenuBackButtonTopAppBar {
                 Text(
                     text = stringResource(R.string.ourmenu),
                     color = Primary500Main,

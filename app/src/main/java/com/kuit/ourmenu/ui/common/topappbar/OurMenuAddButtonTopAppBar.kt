@@ -1,4 +1,4 @@
-package com.kuit.ourmenu.ui.common
+package com.kuit.ourmenu.ui.common.topappbar
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,7 +16,7 @@ import com.kuit.ourmenu.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OurMenuLogoTopAppBarWithAddButton(modifier: Modifier = Modifier) {
+fun OurMenuAddButtonTopAppBar(modifier: Modifier = Modifier) {
     // 기본
     TopAppBar(
         modifier = Modifier
@@ -47,5 +47,5 @@ fun OurMenuLogoTopAppBarWithAddButton(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun HomeTopAppBarPreview() {
-    OurMenuLogoTopAppBarWithAddButton()
+    OurMenuAddButtonTopAppBar()
 }
