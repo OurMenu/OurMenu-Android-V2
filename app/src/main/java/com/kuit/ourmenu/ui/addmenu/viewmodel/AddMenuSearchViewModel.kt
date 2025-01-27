@@ -58,9 +58,18 @@ class AddMenuSearchViewModel : ViewModel() {
     fun updateSelectedMenu(index: Int) {
         Log.d("AddMenuViewModel", "index: $index")
         viewModelScope.launch {
-            val updatedMenuList = _restaurantInfo.value.menuList.mapIndexed { i, _ ->
-                //클릭된 인덱스만 true, 나머지는 false
-                i == index
+            val currentState = _restaurantInfo.value.menuList[index]
+            val updatedMenuList =
+                if (currentState){
+                    //선택된 아이템 클릭시 false로 다시 변경
+                    _restaurantInfo.value.menuList.map {
+                        false
+                    }
+                }else{
+                    //클릭된 인덱스만 true, 나머지는 false
+                    _restaurantInfo.value.menuList.mapIndexed { i, _ ->
+                        i == index
+                }
             }
 //            Log.d("AddMenuViewModel", "updatedMenuList: $updatedMenuList")
             _restaurantInfo.value = _restaurantInfo.value.copy(menuList = updatedMenuList)
