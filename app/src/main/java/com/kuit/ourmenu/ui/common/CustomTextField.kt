@@ -88,6 +88,9 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
  * @param cursorColor 커서에 대한 색상을 Color 객체를 통해 지정한다
  * 기본 값으로는 Color.Black으로 지정
  *
+ * @param isError 에러 처리에 필요한 조건문에 사용할 변수, 기본값은 false로 초기화되어 있다
+ * ex) 비밀번호 오류시 container 색상 변경 등
+ *
  * @param keyboardOptions 키보드에 대한 설정을 KeyboardOptions를 통해 지정한다
  *
  * @param keyboardActions 키보드에서 특정 버튼을 눌렀을 때의 작업을 keyboardActions를 통해 지정한다
@@ -110,6 +113,7 @@ fun CustomTextField(
     paddingValues: PaddingValues = PaddingValues(0.dp),
     containerColor: Color = Color.White,
     cursorColor: Color = Color.Black,
+    isError: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
@@ -144,7 +148,7 @@ fun CustomTextField(
                 /*
                 * 이곳에서 enabled 여부, focus 여부 등에 따른 색상, indicator(밑줄)의 색상 등을 따로 지정할 수 있다.
                 * */
-                focusedContainerColor = containerColor,
+                focusedContainerColor = if(isError) Color.Red else containerColor,
                 unfocusedContainerColor = containerColor,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
@@ -172,9 +176,10 @@ private fun CustomTextFieldPreview() {
             modifier = Modifier
                 .fillMaxWidth()
                 .border(0.8.dp, Color.Black, RoundedCornerShape(8.dp)),
+            shape = RoundedCornerShape(8.dp),
             text = textForSimple,
             onTextChange = { textForSimple = it },
-            enabled = false
+            isError = true
         )
         Spacer(modifier = Modifier.height(20.dp))
         //추가 기능이 있는 버전
