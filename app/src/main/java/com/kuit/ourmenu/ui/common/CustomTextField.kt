@@ -69,7 +69,7 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
  *
  * @param singleLine 입력된 텍스트를 한 줄로만 표시할지의 여부를 나타낸다. 기본값은 true
  *
- * @param shape  배경, 내부영역을 포함한 컴포넌트의 전체적인 모양 처리
+ * @param shape  컴포넌트의 내부 영역의 모양 처리, modifier에 RoundedCornerShape를 적용하면 여기에도 적용해야 동일해진다
  * ex) RoundedCornerShape(8.dp) 등
  *
  * @param trailingIcon 컴포넌트의 우측 끝에 위치하게 할 Icon 객체를 lambda를 통해 넘겨준다
