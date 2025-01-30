@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
@@ -68,7 +69,7 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
  *
  * @param singleLine 입력된 텍스트를 한 줄로만 표시할지의 여부를 나타낸다. 기본값은 true
  *
- * @param shape  배경, 내부영역을 포함한 컴포넌트의 전체적인 모양 처리
+ * @param shape  컴포넌트의 내부 영역의 모양 처리, modifier에 RoundedCornerShape를 적용하면 여기에도 적용해야 동일해진다
  * ex) RoundedCornerShape(8.dp) 등
  *
  * @param trailingIcon 컴포넌트의 우측 끝에 위치하게 할 Icon 객체를 lambda를 통해 넘겨준다
@@ -86,6 +87,9 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
  *
  * @param cursorColor 커서에 대한 색상을 Color 객체를 통해 지정한다
  * 기본 값으로는 Color.Black으로 지정
+ *
+ * @param isError 에러 처리에 필요한 조건문에 사용할 변수, 기본값은 false로 초기화되어 있다
+ * ex) 비밀번호 오류시 container 색상 변경 등
  *
  * @param keyboardOptions 키보드에 대한 설정을 KeyboardOptions를 통해 지정한다
  *
@@ -109,6 +113,7 @@ fun CustomTextField(
     paddingValues: PaddingValues = PaddingValues(0.dp),
     containerColor: Color = Color.White,
     cursorColor: Color = Color.Black,
+    isError: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
@@ -123,7 +128,8 @@ fun CustomTextField(
         singleLine = singleLine,
         textStyle = textStyle,
         keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions
+        keyboardActions = keyboardActions,
+        cursorBrush = SolidColor(cursorColor)
     ) { innerTextField ->
 
         TextFieldDefaults.DecorationBox(
@@ -142,11 +148,12 @@ fun CustomTextField(
                 /*
                 * 이곳에서 enabled 여부, focus 여부 등에 따른 색상, indicator(밑줄)의 색상 등을 따로 지정할 수 있다.
                 * */
-                focusedContainerColor = containerColor,
+                focusedContainerColor = if(isError) Color.Red else containerColor,
                 unfocusedContainerColor = containerColor,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
-                cursorColor = cursorColor
+                disabledContainerColor = containerColor,
+                disabledIndicatorColor = containerColor,
             )
 
         )
@@ -168,9 +175,11 @@ private fun CustomTextFieldPreview() {
         CustomTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .border(0.8.dp, Color.Black),
+                .border(0.8.dp, Color.Black, RoundedCornerShape(8.dp)),
+            shape = RoundedCornerShape(8.dp),
             text = textForSimple,
-            onTextChange = { textForSimple = it }
+            onTextChange = { textForSimple = it },
+            isError = true
         )
         Spacer(modifier = Modifier.height(20.dp))
         //추가 기능이 있는 버전
@@ -194,7 +203,8 @@ private fun CustomTextFieldPreview() {
                     contentDescription = "SearchIcon"
                 )
             },
-            paddingValues = PaddingValues(20.dp, 0.dp)
+            paddingValues = PaddingValues(20.dp, 0.dp),
+            cursorColor = Color.Red,
         )
     }
 }

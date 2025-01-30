@@ -69,7 +69,7 @@ fun AddMenuInfoAddressFieldItem(
             containerColor = Neutral100,
             placeHolder = {
                 Text(
-                    text = stringResource(R.string.type_restaurant_address),
+                    text = stringResource(R.string.type_store_address),
                     style = ourMenuTypography().pretendard_500_14,
                     color = Neutral500
                 )

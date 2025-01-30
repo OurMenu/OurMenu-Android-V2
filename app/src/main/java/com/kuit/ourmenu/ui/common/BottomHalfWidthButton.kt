@@ -63,10 +63,18 @@ private fun BottomHalfWidthButtonPreview() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            BottomHalfWidthButton(containerColor = Neutral400, contentColor = NeutralWhite, text = stringResource(R.string.cancel)) {
+            BottomHalfWidthButton(
+                containerColor = Neutral400,
+                contentColor = NeutralWhite,
+                text = stringResource(R.string.cancel)
+            ) {
 
             }
-            BottomHalfWidthButton(containerColor = Primary500Main, contentColor = NeutralWhite, text = stringResource(R.string.apply)) {
+            BottomHalfWidthButton(
+                containerColor = Primary500Main,
+                contentColor = NeutralWhite,
+                text = stringResource(R.string.apply)
+            ) {
 
             }
         }

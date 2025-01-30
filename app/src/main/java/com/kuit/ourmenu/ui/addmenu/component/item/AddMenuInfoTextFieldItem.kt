@@ -95,7 +95,7 @@ fun AddMenuInfoTextFieldItem(
 @Composable
 private fun AddMenuInfoTextFieldItemPreview() {
     var priceText by rememberSaveable { mutableStateOf("") }
-    var restaurantNameText by rememberSaveable { mutableStateOf("") }
+    var storeNameText by rememberSaveable { mutableStateOf("") }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -110,10 +110,10 @@ private fun AddMenuInfoTextFieldItemPreview() {
             isPriceInfo = true
         )
         AddMenuInfoTextFieldItem(
-            fieldName = stringResource(R.string.restaurant_name),
-            text = restaurantNameText,
-            onTextChange = { restaurantNameText = it },
-            placeholder = stringResource(R.string.type_restaurant_name)
+            fieldName = stringResource(R.string.store_name),
+            text = storeNameText,
+            onTextChange = { storeNameText = it },
+            placeholder = stringResource(R.string.type_store_name)
         )
     }
 
