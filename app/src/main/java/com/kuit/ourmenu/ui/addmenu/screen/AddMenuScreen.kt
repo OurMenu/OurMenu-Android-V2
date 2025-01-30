@@ -38,8 +38,8 @@ import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.addmenu.component.AddMenuSearchBackground
 import com.kuit.ourmenu.ui.addmenu.component.bottomsheet.AddMenuBottomSheetContent
 import com.kuit.ourmenu.ui.addmenu.viewmodel.AddMenuSearchViewModel
-import com.kuit.ourmenu.ui.common.topappbar.OurMenuBackButtonTopAppBar
 import com.kuit.ourmenu.ui.common.SearchBar
+import com.kuit.ourmenu.ui.common.topappbar.OurMenuBackButtonTopAppBar
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
@@ -59,7 +59,7 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
     val viewModel: AddMenuSearchViewModel = viewModel()
     val recentSearchResults by viewModel.recentSearchResults.collectAsStateWithLifecycle()
     val searchResults by viewModel.searchResults.collectAsStateWithLifecycle()
-    val restaurantInfo by viewModel.restaurantInfo.collectAsStateWithLifecycle()
+    val storeInfo by viewModel.storeInfo.collectAsStateWithLifecycle()
 
     LaunchedEffect(searchBarFocused) {
         if (searchBarFocused) {
@@ -91,7 +91,7 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
             //bottom sheet 구성
             AddMenuBottomSheetContent(
                 scaffoldState = scaffoldState,
-                restaurantInfo = restaurantInfo,
+                storeInfo = storeInfo,
                 onItemClick = { index -> viewModel.updateSelectedMenu(index) })
         },
         //조건 만족하면 bottom sheet 보여주고, 아니면 화면에 안보이도록 처리

@@ -24,7 +24,7 @@ import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun RestaurantSearchItem(
+fun StoreSearchItem(
     isLastItem: Boolean = false,
     onClick: () -> Unit = {}
 ) {
@@ -68,8 +68,8 @@ fun RestaurantSearchItem(
 @Composable
 private fun RestaurantSearchItemPreview() {
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
-        RestaurantSearchItem()
-        RestaurantSearchItem()
-        RestaurantSearchItem(true)
+        StoreSearchItem()
+        StoreSearchItem()
+        StoreSearchItem(true)
     }
 }

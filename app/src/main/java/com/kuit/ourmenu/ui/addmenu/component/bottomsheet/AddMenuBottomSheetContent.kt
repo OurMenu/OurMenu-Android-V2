@@ -37,7 +37,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.addmenu.component.item.SelectMenuItem
-import com.kuit.ourmenu.ui.addmenu.viewmodel.AddMenuDummyRestaurantInfo
+import com.kuit.ourmenu.ui.addmenu.viewmodel.AddMenuDummyStoreInfo
 import com.kuit.ourmenu.ui.addmenu.viewmodel.AddMenuSearchViewModel
 import com.kuit.ourmenu.ui.common.BottomFullWidthButton
 import com.kuit.ourmenu.ui.theme.Neutral100
@@ -54,11 +54,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun AddMenuBottomSheetContent(
     scaffoldState: BottomSheetScaffoldState,
-    restaurantInfo: AddMenuDummyRestaurantInfo,
+    storeInfo: AddMenuDummyStoreInfo,
     onItemClick: (Int) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val enableNextButton = restaurantInfo.menuList.any { it }
+    val enableNextButton = storeInfo.menuList.any { it }
 
     Column(
         modifier = Modifier
@@ -143,7 +143,7 @@ fun AddMenuBottomSheetContent(
                     .weight(1f)
                     .padding(top = 12.dp)
             ) {
-                itemsIndexed(restaurantInfo.menuList) { index, isSelected ->
+                itemsIndexed(storeInfo.menuList) { index, isSelected ->
 //                    Log.d("AddMenuBottomSheetContent", "Item: $index, $isSelected")
                     SelectMenuItem(
                         isSelected = isSelected,
@@ -182,12 +182,12 @@ fun AddMenuBottomSheetContent(
 private fun AddMenuBottomSheetContentPreview() {
     val scaffoldState = rememberBottomSheetScaffoldState()
     val viewModel: AddMenuSearchViewModel = viewModel()
-    val restaurantInfo by viewModel.restaurantInfo.collectAsStateWithLifecycle()
+    val storeInfo by viewModel.storeInfo.collectAsStateWithLifecycle()
     LaunchedEffect(Unit) {
         //아래 주석 해제하면 bottom sheet 확장된 상태 확인 가능
         scaffoldState.bottomSheetState.expand()
     }
-    AddMenuBottomSheetContent(scaffoldState, restaurantInfo) { index ->
+    AddMenuBottomSheetContent(scaffoldState, storeInfo) { index ->
         viewModel.updateSelectedMenu(index = index)
     }
 }

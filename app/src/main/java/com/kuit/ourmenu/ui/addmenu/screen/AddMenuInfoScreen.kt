@@ -30,8 +30,8 @@ import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.addmenu.component.item.AddMenuInfoAddressFieldItem
 import com.kuit.ourmenu.ui.addmenu.component.item.AddMenuInfoMenuBoardFieldItem
 import com.kuit.ourmenu.ui.addmenu.component.item.AddMenuInfoTextFieldItem
-import com.kuit.ourmenu.ui.common.topappbar.OurMenuBackButtonTopAppBar
 import com.kuit.ourmenu.ui.common.BottomFullWidthButton
+import com.kuit.ourmenu.ui.common.topappbar.OurMenuBackButtonTopAppBar
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral400
 import com.kuit.ourmenu.ui.theme.Neutral500
@@ -44,7 +44,7 @@ fun AddMenuInfoScreen(autoInput: Boolean = true) {
     var menuBoardText by rememberSaveable { mutableStateOf("") }
     var menuNameText by rememberSaveable { mutableStateOf("") }
     var priceText by rememberSaveable { mutableStateOf("") }
-    var restaurantNameText by rememberSaveable { mutableStateOf("") }
+    var storeNameText by rememberSaveable { mutableStateOf("") }
     var mainAddressText by rememberSaveable { mutableStateOf("") }
     var detailedAddressText by rememberSaveable { mutableStateOf("") }
 
@@ -134,10 +134,10 @@ fun AddMenuInfoScreen(autoInput: Boolean = true) {
                         isPriceInfo = true
                     )
                     AddMenuInfoTextFieldItem(
-                        fieldName = stringResource(R.string.restaurant_name),
-                        text = restaurantNameText,
-                        onTextChange = { restaurantNameText = it },
-                        placeholder = stringResource(R.string.type_restaurant_name)
+                        fieldName = stringResource(R.string.store_name),
+                        text = storeNameText,
+                        onTextChange = { storeNameText = it },
+                        placeholder = stringResource(R.string.type_store_name)
                     )
 
                     AddMenuInfoAddressFieldItem(
