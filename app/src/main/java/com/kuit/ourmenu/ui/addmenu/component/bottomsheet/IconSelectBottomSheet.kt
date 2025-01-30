@@ -1,4 +1,4 @@
-package com.kuit.ourmenu.ui.addmenu.component
+package com.kuit.ourmenu.ui.addmenu.component.bottomsheet
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.ui.addmenu.component.item.IconItem
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable

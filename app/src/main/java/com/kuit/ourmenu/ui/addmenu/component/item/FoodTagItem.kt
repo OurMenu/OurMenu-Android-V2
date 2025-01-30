@@ -1,4 +1,4 @@
-package com.kuit.ourmenu.ui.addmenu.component
+package com.kuit.ourmenu.ui.addmenu.component.item
 
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
