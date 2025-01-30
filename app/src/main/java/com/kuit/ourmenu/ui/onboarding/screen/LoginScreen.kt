@@ -133,9 +133,10 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                 Spacer(modifier = Modifier.height(24.dp))
 
                 BottomFullWidthButton(
-                    Primary500Main,
-                    NeutralWhite,
-                    stringResource(R.string.login),
+                    modifier = Modifier,
+                    containerColor = Primary500Main,
+                    contentColor = NeutralWhite,
+                    text = stringResource(R.string.login),
                 ) {
                     // TODO: onClick 작성
                 }

@@ -27,9 +27,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
-import com.kuit.ourmenu.ui.addmenu.component.AddMenuInfoAddressFieldItem
-import com.kuit.ourmenu.ui.addmenu.component.AddMenuInfoMenuBoardFieldItem
-import com.kuit.ourmenu.ui.addmenu.component.AddMenuInfoTextFieldItem
+import com.kuit.ourmenu.ui.addmenu.component.item.AddMenuInfoAddressFieldItem
+import com.kuit.ourmenu.ui.addmenu.component.item.AddMenuInfoMenuBoardFieldItem
+import com.kuit.ourmenu.ui.addmenu.component.item.AddMenuInfoTextFieldItem
 import com.kuit.ourmenu.ui.common.topappbar.OurMenuBackButtonTopAppBar
 import com.kuit.ourmenu.ui.common.BottomFullWidthButton
 import com.kuit.ourmenu.ui.theme.Neutral300

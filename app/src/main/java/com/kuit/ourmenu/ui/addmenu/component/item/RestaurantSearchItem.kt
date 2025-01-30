@@ -1,5 +1,6 @@
-package com.kuit.ourmenu.ui.addmenu.component
+package com.kuit.ourmenu.ui.addmenu.component.item
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,11 +24,15 @@ import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun RestaurantSearchItem(isLastItem: Boolean = false) {
+fun RestaurantSearchItem(
+    isLastItem: Boolean = false,
+    onClick: () -> Unit = {}
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 20.dp, horizontal = 20.dp),
+            .padding(vertical = 20.dp, horizontal = 20.dp)
+            .clickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(

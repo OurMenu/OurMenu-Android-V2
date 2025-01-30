@@ -64,7 +64,7 @@ fun LandingScreen(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(44.dp))
 
-        BottomFullWidthButton(Primary500Main, NeutralWhite, stringResource(R.string.login)) {
+        BottomFullWidthButton(modifier = Modifier, containerColor = Primary500Main, contentColor = NeutralWhite, text = stringResource(R.string.login)) {
             // TODO: onClick 작성
         }
 
