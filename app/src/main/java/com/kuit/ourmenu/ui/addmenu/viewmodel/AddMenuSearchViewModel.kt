@@ -9,17 +9,17 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class AddMenuSearchViewModel : ViewModel() {
-    // 최근 검색 결과를 저장하는 StateFlow
+    // 최근 검색 결과를 저장
     private val _recentSearchResults = MutableStateFlow<List<Boolean>>(emptyList())
     val recentSearchResults: StateFlow<List<Boolean>> = _recentSearchResults
 
-    //실제 검색 결과를 저장하는 StateFlow
+    //실제 검색 결과를 저장
     private val _searchResulst = MutableStateFlow<List<Boolean>>(emptyList())
     val searchResults: StateFlow<List<Boolean>> = _searchResulst
 
-    //식당 정보들
-    private val _restaurantInfo = MutableStateFlow(AddMenuDummyRestaurantInfo())
-    val restaurantInfo: StateFlow<AddMenuDummyRestaurantInfo> = _restaurantInfo
+    //식당 정보
+    private val _storeInfo = MutableStateFlow(AddMenuDummyStoreInfo())
+    val storeInfo: StateFlow<AddMenuDummyStoreInfo> = _storeInfo
 
     init {
         getRecentSearchResults()
@@ -42,7 +42,7 @@ class AddMenuSearchViewModel : ViewModel() {
 
     fun getRestaurantInfo() {
         viewModelScope.launch {
-            _restaurantInfo.value = AddMenuDummyRestaurantInfo(
+            _storeInfo.value = AddMenuDummyStoreInfo(
                 imgList = listOf(
                     R.drawable.img_dummy_pizza,
                     R.drawable.img_dummy_pizza,
@@ -58,27 +58,27 @@ class AddMenuSearchViewModel : ViewModel() {
     fun updateSelectedMenu(index: Int) {
         Log.d("AddMenuViewModel", "index: $index")
         viewModelScope.launch {
-            val currentState = _restaurantInfo.value.menuList[index]
+            val currentState = _storeInfo.value.menuList[index]
             val updatedMenuList =
                 if (currentState){
                     //선택된 아이템 클릭시 false로 다시 변경
-                    _restaurantInfo.value.menuList.map {
+                    _storeInfo.value.menuList.map {
                         false
                     }
                 }else{
                     //클릭된 인덱스만 true, 나머지는 false
-                    _restaurantInfo.value.menuList.mapIndexed { i, _ ->
+                    _storeInfo.value.menuList.mapIndexed { i, _ ->
                         i == index
                 }
             }
 //            Log.d("AddMenuViewModel", "updatedMenuList: $updatedMenuList")
-            _restaurantInfo.value = _restaurantInfo.value.copy(menuList = updatedMenuList)
+            _storeInfo.value = _storeInfo.value.copy(menuList = updatedMenuList)
         }
     }
 }
 
 //이후에 dto 반영시 삭제 예정
-data class AddMenuDummyRestaurantInfo(
+data class AddMenuDummyStoreInfo(
     val imgList: List<Int> = emptyList(),
     val name: String = "",
     val address: String = "",

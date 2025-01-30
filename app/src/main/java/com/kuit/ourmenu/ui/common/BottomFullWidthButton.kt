@@ -60,7 +60,7 @@ private fun BottomFullWidthButtonPreview() {
         BottomFullWidthButton(
             containerColor = Neutral100,
             contentColor = Neutral500,
-            text = stringResource(R.string.add_restaurant_and_menu_by_myself)
+            text = stringResource(R.string.add_store_and_menu_by_myself)
         ) {
             //onClick 작성
         }

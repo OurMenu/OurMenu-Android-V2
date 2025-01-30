@@ -21,7 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
-import com.kuit.ourmenu.ui.addmenu.component.item.RestaurantSearchItem
+import com.kuit.ourmenu.ui.addmenu.component.item.StoreSearchItem
 import com.kuit.ourmenu.ui.common.BottomFullWidthButton
 import com.kuit.ourmenu.ui.theme.Neutral100
 import com.kuit.ourmenu.ui.theme.Neutral500
@@ -69,7 +69,7 @@ fun AddMenuSearchBackground(
                 } else {
                     LazyColumn(modifier = Modifier.padding(top = 68.dp)) {
                         items(searchResults) { item ->
-                            RestaurantSearchItem(
+                            StoreSearchItem(
                                 isLastItem = item,
                             ){
                                 onItemClick()
@@ -90,7 +90,7 @@ fun AddMenuSearchBackground(
                 } else {
                     LazyColumn() {
                         items(recentSearchResults) { item ->
-                            RestaurantSearchItem(
+                            StoreSearchItem(
                                 isLastItem = item,
                             ){
                                 onItemClick()
@@ -109,7 +109,7 @@ fun AddMenuSearchBackground(
             onClick = { TODO() },
             containerColor = Neutral100,
             contentColor = Neutral500,
-            text = stringResource(R.string.add_restaurant_and_menu_by_myself)
+            text = stringResource(R.string.add_store_and_menu_by_myself)
         )
     }
 }
