@@ -4,9 +4,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -20,12 +22,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.ui.addmenu.component.item.AddMenuAddedImageItem
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun AddMenuAddImageComponent(modifier: Modifier = Modifier, imgList: List<Int>) {
+fun AddMenuAddImageComponent(modifier: Modifier = Modifier, imgList: List<Int>, onDelete: () -> Unit) {
     Row(modifier = modifier
         .fillMaxWidth()
     ) {
@@ -55,8 +58,20 @@ fun AddMenuAddImageComponent(modifier: Modifier = Modifier, imgList: List<Int>) 
                 )
             }
         }
-        //메뉴 이미지 LazyRow 작성 예정
+        Spacer(modifier = modifier.size(8.dp))
         LazyRow(modifier = modifier.fillMaxWidth()) {
+            itemsIndexed(imgList) { index, item ->
+                if (index == 0){
+                    AddMenuAddedImageItem(img = item, isFirstItem = true) {
+                        //onDelete
+                    }
+                }else{
+                    AddMenuAddedImageItem(img = item, isFirstItem = false) {
+                        //onDelete
+                    }
+                }
+                Spacer(modifier = modifier.size(8.dp))
+            }
 
         }
 
@@ -73,5 +88,7 @@ private fun AddMenuAddImageComponentPreview() {
         R.drawable.img_dummy_pizza,
         R.drawable.img_dummy_pizza,
     )
-    AddMenuAddImageComponent(imgList = imgList)
+    AddMenuAddImageComponent(imgList = imgList){
+        //onDelete
+    }
 }
