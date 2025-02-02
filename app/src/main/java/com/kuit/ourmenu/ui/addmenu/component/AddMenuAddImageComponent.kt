@@ -28,12 +28,17 @@ import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun AddMenuAddImageComponent(modifier: Modifier = Modifier, imgList: List<Int>, onDelete: () -> Unit) {
-    Row(modifier = modifier
-        .fillMaxWidth()
+fun AddMenuAddImageComponent(
+    modifier: Modifier = Modifier,
+    imgList: List<Int>,
+    onDelete: (Int) -> Unit
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
     ) {
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { /*TODO: 이미지 추가*/ },
             modifier = modifier.size(88.dp, 72.dp),
             shape = RoundedCornerShape(12.dp),
             contentPadding = PaddingValues(0.dp),
@@ -52,7 +57,7 @@ fun AddMenuAddImageComponent(modifier: Modifier = Modifier, imgList: List<Int>, 
                     tint = Color.Unspecified
                 )
                 Text(
-                    text = "0/5",
+                    text = "${imgList.size}/5",
                     style = ourMenuTypography().pretendard_500_12,
                     color = Neutral500
                 )
@@ -61,20 +66,18 @@ fun AddMenuAddImageComponent(modifier: Modifier = Modifier, imgList: List<Int>, 
         Spacer(modifier = modifier.size(8.dp))
         LazyRow(modifier = modifier.fillMaxWidth()) {
             itemsIndexed(imgList) { index, item ->
-                if (index == 0){
+                if (index == 0) {
                     AddMenuAddedImageItem(img = item, isFirstItem = true) {
-                        //onDelete
+                        onDelete(index)
                     }
-                }else{
+                } else {
                     AddMenuAddedImageItem(img = item, isFirstItem = false) {
-                        //onDelete
+                        onDelete(index)
                     }
                 }
                 Spacer(modifier = modifier.size(8.dp))
             }
-
         }
-
     }
 }
 
@@ -86,9 +89,8 @@ private fun AddMenuAddImageComponentPreview() {
         R.drawable.img_dummy_pizza,
         R.drawable.img_dummy_pizza,
         R.drawable.img_dummy_pizza,
-        R.drawable.img_dummy_pizza,
     )
-    AddMenuAddImageComponent(imgList = imgList){
+    AddMenuAddImageComponent(imgList = imgList) {
         //onDelete
     }
 }

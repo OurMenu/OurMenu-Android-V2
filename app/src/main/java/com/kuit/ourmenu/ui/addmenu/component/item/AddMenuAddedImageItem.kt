@@ -1,6 +1,7 @@
 package com.kuit.ourmenu.ui.addmenu.component.item
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -45,7 +46,7 @@ fun AddMenuAddedImageItem(
                 contentScale = ContentScale.Crop
             )
 
-            if (isFirstItem){
+            if (isFirstItem) {
                 Surface(
                     modifier = modifier
                         .align(Alignment.TopStart)
@@ -68,7 +69,10 @@ fun AddMenuAddedImageItem(
             Image(
                 modifier = modifier
                     .align(Alignment.TopEnd)
-                    .padding(top = 7.dp, end = 6.dp),
+                    .padding(top = 7.dp, end = 6.dp)
+                    .clickable {
+                        onDelete()
+                    },
                 painter = painterResource(R.drawable.ic_addmenu_x),
                 contentDescription = "menu image",
                 contentScale = ContentScale.Crop
