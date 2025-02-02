@@ -122,12 +122,14 @@ fun AddMenuInfoScreen(autoInput: Boolean = true) {
 
                     AddMenuInfoTextFieldItem(
                         fieldName = stringResource(R.string.menu_name),
+                        autoInput = autoInput,
                         text = menuNameText,
                         onTextChange = { menuNameText = it },
                         placeholder = stringResource(R.string.type_menu_name)
                     )
                     AddMenuInfoTextFieldItem(
                         fieldName = stringResource(R.string.menu_price),
+                        autoInput = autoInput,
                         text = priceText,
                         onTextChange = { priceText = it },
                         placeholder = stringResource(R.string.type_menu_price),
@@ -136,11 +138,13 @@ fun AddMenuInfoScreen(autoInput: Boolean = true) {
                     AddMenuInfoTextFieldItem(
                         fieldName = stringResource(R.string.store_name),
                         text = storeNameText,
+                        autoInput = autoInput,
                         onTextChange = { storeNameText = it },
                         placeholder = stringResource(R.string.type_store_name)
                     )
 
                     AddMenuInfoAddressFieldItem(
+                        autoInput = autoInput,
                         mainAddressText = mainAddressText,
                         onMainAddressChange = { mainAddressText = it },
                         detailedAddressText = detailedAddressText,
@@ -156,6 +160,6 @@ fun AddMenuInfoScreen(autoInput: Boolean = true) {
 @Composable
 private fun AddMenuInfoScreenPreview() {
     //가게와 메뉴 직접 추가하기를 통해 해당 화면으로 오는 경우에는 인자로 false를 넘겨준다
-    AddMenuInfoScreen(true)
-//    AddMenuInfoScreen(false)
+//    AddMenuInfoScreen(true)
+    AddMenuInfoScreen(false)
 }
