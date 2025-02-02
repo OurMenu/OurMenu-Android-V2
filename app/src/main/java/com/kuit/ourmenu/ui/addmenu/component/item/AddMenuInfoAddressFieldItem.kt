@@ -31,6 +31,7 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
 fun AddMenuInfoAddressFieldItem(
+    autoInput: Boolean,
     mainAddressText: String,
     detailedAddressText: String,
     onMainAddressChange: (String) -> Unit,
@@ -107,6 +108,7 @@ private fun AddMenuInfoAddressFieldItemPreview() {
     var mainAddressText by rememberSaveable { mutableStateOf("") }
     var detailedAddressText by rememberSaveable { mutableStateOf("") }
     AddMenuInfoAddressFieldItem(
+        autoInput = true,
         mainAddressText = mainAddressText,
         detailedAddressText = detailedAddressText,
         onMainAddressChange = { mainAddressText = it },
