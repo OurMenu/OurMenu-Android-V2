@@ -41,56 +41,70 @@ fun TagSelectBottomSheet(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 20.dp)
+            .padding(horizontal = 20.dp),
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text(
-                text = stringResource(R.string.food_tag),
-                style = ourMenuTypography().pretendard_700_16
-            )
-            Text(
-                text = stringResource(R.string.multiple_choice_available),
-                style = ourMenuTypography().pretendard_600_14,
-                color = Neutral500
-            )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = stringResource(R.string.food_tag),
+                    style = ourMenuTypography().pretendard_700_16
+                )
+                Text(
+                    text = stringResource(R.string.multiple_choice_available),
+                    style = ourMenuTypography().pretendard_600_14,
+                    color = Neutral500
+                )
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            //종류
+            TagChipGroup(
+                groupLabel = "종류",
+                tags = categoryTagList,
+                selectedTags = selectedTagList,
+            ) { tag ->
+                onTagClick(tag)
+            }
+            //나라 별 음식
+            TagChipGroup(
+                groupLabel = "나라 별 음식",
+                tags = nationalityTagList,
+                selectedTags = selectedTagList,
+            ) { tag ->
+                onTagClick(tag)
+            }
+            //맛
+            TagChipGroup(
+                groupLabel = "맛",
+                tags = tasteTagList,
+                selectedTags = selectedTagList,
+            ) { tag ->
+                onTagClick(tag)
+            }
+            //상황
+            TagChipGroup(
+                groupLabel = "상황",
+                tags = occasionTagList,
+                selectedTags = selectedTagList,
+            ) { tag ->
+                onTagClick(tag)
+            }
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
-
-        //종류
-        TagChipGroup(
-            groupLabel = "종류",
-            tags = categoryTagList,
-            selectedTags = selectedTagList,
-        ) { tag ->
-            onTagClick(tag)
-        }
-        //나라 별 음식
-        TagChipGroup(
-            groupLabel = "나라 별 음식",
-            tags = nationalityTagList,
-            selectedTags = selectedTagList,
-        ) { tag ->
-            onTagClick(tag)
-        }
-        //맛
-        TagChipGroup(
-            groupLabel = "맛",
-            tags = tasteTagList,
-            selectedTags = selectedTagList,
-        ) { tag ->
-            onTagClick(tag)
-        }
-        //상황
-        TagChipGroup(
-            groupLabel = "상황",
-            tags = occasionTagList,
-            selectedTags = selectedTagList,
-        ) { tag ->
-            onTagClick(tag)
-        }
-
-        Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(bottom = 20.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
             BottomHalfWidthButton(
                 containerColor = Neutral400,
                 contentColor = NeutralWhite,
