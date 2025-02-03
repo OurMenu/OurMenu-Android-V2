@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.dagger.hilt.android") // Hilt 플러그인 추가
+    kotlin("kapt") // Hilt를 위한 kapt 추가
 }
 
 android {
@@ -61,4 +63,14 @@ dependencies {
 
     // Dots Indicator
     implementation("com.tbuonomo:dotsindicator:5.1.0")
+
+    // Hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+}
+
+// Hilt를 사용할 때 필요한 Annotation Processor
+kapt {
+    correctErrorTypes = true
 }
