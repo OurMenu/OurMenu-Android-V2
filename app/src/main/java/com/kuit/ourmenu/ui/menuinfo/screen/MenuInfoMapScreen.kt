@@ -3,6 +3,7 @@ package com.kuit.ourmenu.ui.menuinfo.screen
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberBottomSheetScaffoldState
@@ -44,6 +45,7 @@ fun MenuInfoMapScreen(modifier: Modifier = Modifier) {
                 }
             )
         },
+        sheetShape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
         sheetContent = {
             MenuInfoMapBottomSheetContent(
                 modifier = Modifier.onGloballyPositioned { coordinates ->
