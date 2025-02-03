@@ -32,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral700
@@ -42,8 +43,8 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 fun SearchTextField(
     modifier: Modifier = Modifier,
     text: String,
-    @StringRes placeHolder : Int  = R.string.placeholder,
-    borderColor : Color = Neutral500,
+    @StringRes placeHolder: Int = R.string.placeholder,
+    borderColor: Color = Neutral500,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     onTextChange: (String) -> Unit,
     onSearch: () -> Unit
@@ -66,10 +67,13 @@ fun SearchTextField(
             placeHolder = {
                 Text(
                     text = stringResource(placeHolder),
-                    style = ourMenuTypography().pretendard_600_18.copy(color = Neutral500)
+                    style = ourMenuTypography().pretendard_500_14.copy(
+                        lineHeight = 20.sp,
+                        color = Neutral500
+                    )
                 )
             },
-            textStyle = ourMenuTypography().pretendard_700_20.copy(color = Neutral700),
+            textStyle = ourMenuTypography().pretendard_700_14.copy(color = Neutral700),
             trailingIcon = {
                 Icon(
                     painter = painterResource(R.drawable.ic_searchbar_search),
