@@ -35,6 +35,7 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 @Composable
 fun AddMenuInfoTextFieldItem(
     fieldName: String,
+    autoInput: Boolean,
     text: String,
     onTextChange: (String) -> Unit,
     placeholder: String,
@@ -69,7 +70,7 @@ fun AddMenuInfoTextFieldItem(
             text = text,
             onTextChange = onTextChange,
             shape = RoundedCornerShape(8.dp),
-            paddingValues = PaddingValues(start = 28.dp, top = 12.dp, bottom = 12.dp),
+            paddingValues = PaddingValues(start = 28.dp, end = 28.dp, top = 12.dp, bottom = 12.dp),
             containerColor = Neutral100,
             placeHolder = {
                 Text(
@@ -104,6 +105,7 @@ private fun AddMenuInfoTextFieldItemPreview() {
     ) {
         AddMenuInfoTextFieldItem(
             fieldName = stringResource(R.string.menu_price),
+            autoInput = false,
             text = priceText,
             onTextChange = { priceText = it },
             placeholder = stringResource(R.string.type_menu_price),
@@ -111,6 +113,7 @@ private fun AddMenuInfoTextFieldItemPreview() {
         )
         AddMenuInfoTextFieldItem(
             fieldName = stringResource(R.string.store_name),
+            autoInput = true,
             text = storeNameText,
             onTextChange = { storeNameText = it },
             placeholder = stringResource(R.string.type_store_name)
