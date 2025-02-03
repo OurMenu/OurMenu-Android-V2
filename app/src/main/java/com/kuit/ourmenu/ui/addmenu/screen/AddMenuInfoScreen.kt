@@ -46,6 +46,8 @@ fun AddMenuInfoScreen(autoInput: Boolean = true) {
             )
         )
     }
+    var options = listOf("옵션1", "옵션2", "옵션3")
+    var selectedOption by rememberSaveable { mutableStateOf("") }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -93,9 +95,11 @@ fun AddMenuInfoScreen(autoInput: Boolean = true) {
 
                 Column(modifier = Modifier.fillMaxWidth()) {
                     AddMenuInfoMenuBoardFieldItem(
-                        text = menuBoardText,
-                        onTextChange = { menuBoardText = it }
-                    )
+                        options = options,
+                        selectedOption = selectedOption
+                    ){
+                        selectedOption = it
+                    }
 
                     AddMenuInfoTextFieldItem(
                         fieldName = stringResource(R.string.menu_name),
