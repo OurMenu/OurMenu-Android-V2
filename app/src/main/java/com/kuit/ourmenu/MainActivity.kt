@@ -8,6 +8,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.navigation.compose.rememberNavController
+import com.kuit.ourmenu.ui.navigator.MainNavGraph
 import com.kuit.ourmenu.ui.onboarding.screen.SplashScreen
 import com.kuit.ourmenu.ui.theme.OurMenuTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,6 +21,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             var showSplash by remember { mutableStateOf(true) }
+            val navController = rememberNavController()
 
             OurMenuTheme {
                 if (showSplash) {
@@ -27,6 +30,7 @@ class MainActivity : ComponentActivity() {
                     }
                 } else {
                     // TODO: MainNavigation 추가하기
+                    MainNavGraph(navController = navController)
                 }
             }
         }
