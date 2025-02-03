@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -30,9 +29,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -41,8 +38,9 @@ import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.addmenu.component.bottomsheet.IconSelectBottomSheet
 import com.kuit.ourmenu.ui.addmenu.component.bottomsheet.TagSelectBottomSheet
-import com.kuit.ourmenu.ui.common.topappbar.OurMenuBackButtonTopAppBar
 import com.kuit.ourmenu.ui.common.CustomTextField
+import com.kuit.ourmenu.ui.common.bottomsheet.BottomSheetDragHandle
+import com.kuit.ourmenu.ui.common.topappbar.OurMenuBackButtonTopAppBar
 import com.kuit.ourmenu.ui.theme.Neutral100
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral500
@@ -86,21 +84,7 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
         //태그 고르기 눌러야 보이도록
         sheetPeekHeight = if (showBottomSheet) 254.dp else 0.dp,
         sheetDragHandle = {
-            // 커스텀 핸들
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 12.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Box(
-                    modifier = Modifier
-                        .width(120.dp)
-                        .height(4.dp)
-                        .clip(RoundedCornerShape(6.dp))
-                        .background(Neutral300)
-                )
-            }
+            BottomSheetDragHandle()
         }
     ) {
         //전체 화면 구성
