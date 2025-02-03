@@ -15,7 +15,7 @@ import javax.inject.Singleton
 class DummyRepository @Inject constructor(
     private val dummyService: DummyService
 ) {
-    suspend fun getDummyData(): Flow<DummyData> = flow {
+    fun getDummyData(): Flow<DummyData> = flow {
         try {
             val response = dummyService.getDummyData()
             emit(response.toDummyData())
