@@ -61,12 +61,13 @@ fun MenuInfoMapScreen(modifier: Modifier = Modifier) {
         Box(
             modifier = modifier
                 .fillMaxSize()
-                .padding(bottom = 16.dp, end = 20.dp)
                 .padding(innerPaddings)
         ) {
             // TODO : Map SDK
             GoToMapButton(
-                modifier = Modifier.align(Alignment.BottomEnd),
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(bottom = 16.dp, end = 20.dp),
                 onClick = { /* TODO : Go To Map Button Click Event */ },
             )
         }
