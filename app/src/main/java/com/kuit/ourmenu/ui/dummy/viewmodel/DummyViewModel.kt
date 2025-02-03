@@ -20,7 +20,11 @@ class DummyViewModel @Inject constructor(
     private val _dummyData: MutableStateFlow<DummyData> = MutableStateFlow(DummyData())
     val dummyData: StateFlow<DummyData> = _dummyData.asStateFlow() // asStateFlow() 왜 달아야하는진 모름
 
-    fun fetchDummyData() {
+    init {
+        fetchDummyData()
+    }
+
+    private fun fetchDummyData() {
         viewModelScope.launch {
             dummyRepository.getDummyData()
                 .catch { e -> println("Error: $e") }
