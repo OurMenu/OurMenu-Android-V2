@@ -36,7 +36,7 @@ fun StoreSearchItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(R.drawable.ic_location_info),
+            painter = painterResource(R.drawable.ic_fill_map_20),
             contentDescription = "location info",
             tint = Color.Unspecified
         )
