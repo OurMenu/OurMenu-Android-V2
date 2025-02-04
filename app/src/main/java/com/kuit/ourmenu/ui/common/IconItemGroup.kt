@@ -29,9 +29,9 @@ fun IconItemGroup(
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
             text = groupLabel,
-            style = ourMenuTypography().pretendard_500_14,
+            style = ourMenuTypography().pretendard_700_16
         )
-        Spacer(modifier = modifier.height(8.dp))
+        Spacer(modifier = modifier.height(20.dp))
         FlowRow(
             modifier = modifier
                 .fillMaxWidth(),

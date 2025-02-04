@@ -100,6 +100,28 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
         R.drawable.ic_tag_rice to "밥약",
         R.drawable.ic_tag_rice to "단체",
     )
+    // 아이콘 bottom sheet에 사용할 list
+    val iconList = listOf(
+        R.drawable.ic_tag_rice,
+        R.drawable.ic_tag_rice,
+        R.drawable.ic_tag_rice,
+        R.drawable.ic_tag_rice,
+        R.drawable.ic_tag_rice,
+        R.drawable.ic_tag_rice,
+        R.drawable.ic_tag_rice,
+        R.drawable.ic_tag_rice,
+        R.drawable.ic_tag_rice,
+        R.drawable.ic_tag_rice,
+        R.drawable.ic_tag_rice,
+        R.drawable.ic_tag_rice,
+        R.drawable.ic_tag_rice,
+        R.drawable.ic_tag_rice,
+        R.drawable.ic_tag_rice,
+        R.drawable.ic_tag_rice,
+        R.drawable.ic_tag_rice,
+        R.drawable.ic_tag_rice,
+        R.drawable.ic_tag_rice,
+    )
 
     //메모가 비어있지 않고, 태그와 아이콘이 선택된 경우에 메뉴 등록하기 버튼 활성화
     enableAddButton = memoTitle.isNotBlank() && memoBody.isNotBlank() && tagSelected && iconSelected
@@ -135,7 +157,7 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
                 }
             } else {
                 //아이콘 선택하는 bottom sheet
-                IconSelectBottomSheet()
+                IconSelectBottomSheet(iconList = iconList)
             }
         },
         //태그 고르기 눌러야 보이도록
