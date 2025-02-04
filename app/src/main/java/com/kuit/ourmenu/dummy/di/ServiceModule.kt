@@ -1,6 +1,6 @@
-package com.kuit.ourmenu.ui.dummy.di
+package com.kuit.ourmenu.dummy.di
 
-import com.kuit.ourmenu.ui.dummy.service.DummyService
+import com.kuit.ourmenu.dummy.service.DummyService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

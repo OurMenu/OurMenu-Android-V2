@@ -1,4 +1,4 @@
-package com.kuit.ourmenu.ui.dummy.di
+package com.kuit.ourmenu.dummy.di
 
 import com.google.gson.Gson
 import dagger.Module
