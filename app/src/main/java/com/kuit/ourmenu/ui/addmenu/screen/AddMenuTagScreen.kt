@@ -124,7 +124,8 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
                     nationalityTagList = nationalityTags,
                     tasteTagList = tasteTags,
                     occasionTagList = occasionTags,
-                    selectedTagList = selectedTags
+                    selectedTagList = selectedTags,
+                    onSelectedTagsChange = { newSelectedTags -> selectedTags = newSelectedTags }
                 ) { tag ->
                     if (selectedTags.contains(tag)) {
                         selectedTags -= tag

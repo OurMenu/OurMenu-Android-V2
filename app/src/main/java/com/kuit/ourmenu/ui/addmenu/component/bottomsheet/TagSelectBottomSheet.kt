@@ -36,6 +36,7 @@ fun TagSelectBottomSheet(
     tasteTagList: List<Pair<Int, String>>,
     occasionTagList: List<Pair<Int, String>>,
     selectedTagList: List<String>,
+    onSelectedTagsChange: (List<String>) -> Unit,
     onTagClick: (String) -> Unit
 ) {
     Column(
@@ -108,9 +109,10 @@ fun TagSelectBottomSheet(
             BottomHalfWidthButton(
                 containerColor = Neutral400,
                 contentColor = NeutralWhite,
-                text = stringResource(R.string.cancel)
+                text = stringResource(R.string.reset)
             ) {
-                // TODO: 버튼 동작
+                // List 비우기
+                onSelectedTagsChange(emptyList())
             }
             Spacer(modifier = modifier.width(12.dp))
             BottomHalfWidthButton(
@@ -167,6 +169,7 @@ private fun TagSelectBottomSheetPreview() {
         tasteTagList = tasteTags,
         occasionTagList = occasionTags,
         selectedTagList = selectedTags,
+        onSelectedTagsChange = { newSelectedTags -> selectedTags = newSelectedTags }
     ) { tag ->
         if (selectedTags.contains(tag)) {
             selectedTags -= tag
