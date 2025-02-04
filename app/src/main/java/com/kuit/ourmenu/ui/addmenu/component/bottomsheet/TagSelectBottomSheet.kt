@@ -1,5 +1,6 @@
 package com.kuit.ourmenu.ui.addmenu.component.bottomsheet
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -39,6 +41,9 @@ fun TagSelectBottomSheet(
     onSelectedTagsChange: (List<String>) -> Unit,
     onTagClick: (String) -> Unit
 ) {
+    // toast를 위한 context
+    val context = LocalContext.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -72,7 +77,11 @@ fun TagSelectBottomSheet(
                 tags = categoryTagList,
                 selectedTags = selectedTagList,
             ) { tag ->
-                onTagClick(tag)
+                if(selectedTagList.size >= 12 && tag !in selectedTagList){
+                    Toast.makeText(context, R.string.tag_number_warning, Toast.LENGTH_LONG).show()
+                } else{
+                    onTagClick(tag)
+                }
             }
             //나라 별 음식
             TagChipGroup(
@@ -80,7 +89,11 @@ fun TagSelectBottomSheet(
                 tags = nationalityTagList,
                 selectedTags = selectedTagList,
             ) { tag ->
-                onTagClick(tag)
+                if(selectedTagList.size >= 12 && tag !in selectedTagList){
+                    Toast.makeText(context, R.string.tag_number_warning, Toast.LENGTH_LONG).show()
+                } else{
+                    onTagClick(tag)
+                }
             }
             //맛
             TagChipGroup(
@@ -88,7 +101,11 @@ fun TagSelectBottomSheet(
                 tags = tasteTagList,
                 selectedTags = selectedTagList,
             ) { tag ->
-                onTagClick(tag)
+                if(selectedTagList.size >= 12 && tag !in selectedTagList){
+                    Toast.makeText(context, R.string.tag_number_warning, Toast.LENGTH_LONG).show()
+                } else{
+                    onTagClick(tag)
+                }
             }
             //상황
             TagChipGroup(
@@ -96,7 +113,11 @@ fun TagSelectBottomSheet(
                 tags = occasionTagList,
                 selectedTags = selectedTagList,
             ) { tag ->
-                onTagClick(tag)
+                if(selectedTagList.size >= 12 && tag !in selectedTagList){
+                    Toast.makeText(context, R.string.tag_number_warning, Toast.LENGTH_LONG).show()
+                } else{
+                    onTagClick(tag)
+                }
             }
         }
 
@@ -120,7 +141,11 @@ fun TagSelectBottomSheet(
                 contentColor = NeutralWhite,
                 text = stringResource(R.string.apply)
             ) {
-                // TODO: 버튼 동작
+                if(selectedTagList.size >= 12){
+                    Toast.makeText(context, R.string.tag_number_warning, Toast.LENGTH_LONG).show()
+                } else{
+                    //아이콘 선택으로 이동
+                }
             }
         }
     }
