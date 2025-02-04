@@ -15,7 +15,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
-import com.kuit.ourmenu.ui.addmenu.component.item.IconItem
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
@@ -32,12 +31,6 @@ fun IconSelectBottomSheet(modifier: Modifier = Modifier) {
         }
         Spacer(modifier = Modifier.height(20.dp))
         //아이콘들 추가
-        IconItem(
-            iconId = R.drawable.ic_tag_rice,
-            isSelected = true
-        ) {
-
-        }
 
     }
 }
