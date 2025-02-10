@@ -1,6 +1,6 @@
-package com.kuit.ourmenu.ui.dummy.di
+package com.kuit.ourmenu.di
 
-import com.kuit.ourmenu.ui.dummy.repository.DummyRepository
+import com.kuit.ourmenu.dummy.repository.DummyRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

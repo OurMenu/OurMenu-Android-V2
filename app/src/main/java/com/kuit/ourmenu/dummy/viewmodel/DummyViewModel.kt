@@ -1,9 +1,9 @@
-package com.kuit.ourmenu.ui.dummy.viewmodel
+package com.kuit.ourmenu.dummy.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kuit.ourmenu.ui.dummy.data.DummyData
-import com.kuit.ourmenu.ui.dummy.repository.DummyRepository
+import com.kuit.ourmenu.dummy.data.DummyData
+import com.kuit.ourmenu.dummy.repository.DummyRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

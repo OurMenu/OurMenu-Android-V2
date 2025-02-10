@@ -1,9 +1,9 @@
-package com.kuit.ourmenu.ui.dummy.repository
+package com.kuit.ourmenu.dummy.repository
 
 import android.util.Log
-import com.kuit.ourmenu.ui.dummy.data.DummyData
-import com.kuit.ourmenu.ui.dummy.data.toDummyData
-import com.kuit.ourmenu.ui.dummy.service.DummyService
+import com.kuit.ourmenu.dummy.data.DummyData
+import com.kuit.ourmenu.dummy.data.toDummyData
+import com.kuit.ourmenu.dummy.service.DummyService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
