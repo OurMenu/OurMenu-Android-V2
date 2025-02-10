@@ -1,4 +1,4 @@
-package com.kuit.ourmenu.ui.dummy.data
+package com.kuit.ourmenu.dummy.data
 
 data class DummyResponse(
     val name: String = "",
