@@ -1,4 +1,4 @@
-package com.kuit.ourmenu.ui.dummy.di
+package com.kuit.ourmenu.di
 
 import com.google.gson.Gson
 import dagger.Module
@@ -20,7 +20,7 @@ object NetworkModule {
     fun providesRetrofit(
     ): Retrofit =
         Retrofit.Builder()
-            .baseUrl("")
+            .baseUrl("https://ourmenu-dev.shop/")
             .addConverterFactory(GsonConverterFactory.create(Gson()))
             .build()
 
