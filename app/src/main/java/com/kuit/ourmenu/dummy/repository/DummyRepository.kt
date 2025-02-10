@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 import javax.inject.Singleton
 
-class DummyRepository @Inject constructor(
+class DummyRepository(
     private val dummyService: DummyService
 ) {
     fun getDummyData(): Flow<DummyData> = flow {
