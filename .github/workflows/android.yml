@@ -23,6 +23,10 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: gradle
+          
+      # Android SDK 를 준비한다.
+      -   name: Setup Android SDK
+          uses: android-actions/setup-android@v2
 
       # gradlew 의 root 실행권한을 부여한다.
       - name: Grant execute permission for gradlew
