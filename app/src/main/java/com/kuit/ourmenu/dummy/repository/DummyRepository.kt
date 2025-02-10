@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
 class DummyRepository @Inject constructor(
     private val dummyService: DummyService
 ) {
