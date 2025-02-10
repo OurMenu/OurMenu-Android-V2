@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
     id("com.google.dagger.hilt.android") // Hilt 플러그인 추가
     kotlin("kapt") // Hilt를 위한 kapt 추가
 }
@@ -69,6 +70,8 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+
+    implementation(libs.kotlinx.serialization.json)
 
     // Retrofit
     implementation(libs.retrofit)
