@@ -20,7 +20,7 @@ object NetworkModule {
     fun providesRetrofit(
     ): Retrofit =
         Retrofit.Builder()
-            .baseUrl("")
+            .baseUrl("https://api.github.com/")
             .addConverterFactory(GsonConverterFactory.create(Gson()))
             .build()
 
