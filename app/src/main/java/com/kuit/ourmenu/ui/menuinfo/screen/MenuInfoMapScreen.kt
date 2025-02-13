@@ -3,6 +3,7 @@ package com.kuit.ourmenu.ui.menuinfo.screen
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberBottomSheetScaffoldState
@@ -20,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.ui.common.GoToMapButton
 import com.kuit.ourmenu.ui.common.bottomsheet.BottomSheetDragHandle
 import com.kuit.ourmenu.ui.common.topappbar.OurMenuAddButtonTopAppBar
-import com.kuit.ourmenu.ui.menuinfo.component.map.MenuInfoMapBottomSheetContent
+import com.kuit.ourmenu.ui.common.bottomsheet.MenuInfoBottomSheetContent
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,14 +45,16 @@ fun MenuInfoMapScreen(modifier: Modifier = Modifier) {
                 }
             )
         },
+        sheetShape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
         sheetContent = {
-            MenuInfoMapBottomSheetContent(
-                modifier = Modifier.onGloballyPositioned { coordinates ->
-                    val heightPx = coordinates.size.height
-                    bottomSheetContentHeight = density.run {
-                        heightPx.toDp() + dragHandleHeight
-                    }
-                }
+            MenuInfoBottomSheetContent(
+                modifier = Modifier
+                    .onGloballyPositioned { coordinates ->
+                        val heightPx = coordinates.size.height
+                        bottomSheetContentHeight = density.run {
+                            heightPx.toDp() + dragHandleHeight
+                        }
+                    }.padding(bottom = 20.dp)
             )
         },
         sheetPeekHeight = bottomSheetContentHeight,
@@ -59,12 +62,13 @@ fun MenuInfoMapScreen(modifier: Modifier = Modifier) {
         Box(
             modifier = modifier
                 .fillMaxSize()
-                .padding(bottom = 16.dp, end = 20.dp)
                 .padding(innerPaddings)
         ) {
             // TODO : Map SDK
             GoToMapButton(
-                modifier = Modifier.align(Alignment.BottomEnd),
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(bottom = 16.dp, end = 20.dp),
                 onClick = { /* TODO : Go To Map Button Click Event */ },
             )
         }

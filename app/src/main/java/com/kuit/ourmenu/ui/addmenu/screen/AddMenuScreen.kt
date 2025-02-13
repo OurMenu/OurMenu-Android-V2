@@ -38,7 +38,7 @@ import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.addmenu.component.AddMenuSearchBackground
 import com.kuit.ourmenu.ui.addmenu.component.bottomsheet.AddMenuBottomSheetContent
 import com.kuit.ourmenu.ui.addmenu.viewmodel.AddMenuSearchViewModel
-import com.kuit.ourmenu.ui.common.SearchBar
+import com.kuit.ourmenu.ui.common.SearchTextField
 import com.kuit.ourmenu.ui.common.topappbar.OurMenuBackButtonTopAppBar
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Primary500Main
@@ -139,7 +139,7 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
                 }
             }
 
-            SearchBar(
+            SearchTextField(
                 modifier = Modifier.padding(top = 12.dp, start = 20.dp, end = 20.dp),
                 text = searchText,
                 onTextChange = {

@@ -71,7 +71,7 @@ fun AddMenuBottomSheetContent(
         )
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_location_info),
+                painter = painterResource(id = R.drawable.ic_fill_map_20),
                 contentDescription = "location info icon",
                 //이 코드를 없애면 아이콘이 검은색으로 보여서 작성
                 tint = Color.Unspecified

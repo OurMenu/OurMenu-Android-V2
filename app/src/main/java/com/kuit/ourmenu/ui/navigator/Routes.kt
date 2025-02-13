@@ -2,7 +2,6 @@ package com.kuit.ourmenu.ui.navigator
 
 import kotlinx.serialization.Serializable
 
-
 sealed interface Routes{
     // Home
     @Serializable
