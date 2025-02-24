@@ -1,6 +1,6 @@
-package com.kuit.ourmenu.di
+package com.kuit.ourmenu.data.di
 
-import com.kuit.ourmenu.dummy.service.DummyService
+import com.kuit.ourmenu.data.service.DummyService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,9 +11,9 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object ServiceModule {
+
     @Provides
     @Singleton
-    fun provideDummyService(retrofit: Retrofit): DummyService =
+    fun providesService(retrofit: Retrofit): DummyService =
         retrofit.create(DummyService::class.java)
-
 }
