@@ -1,5 +1,6 @@
 package com.kuit.ourmenu.data.repository
 
+import com.kuit.ourmenu.data.model.account.request.LoginRequest
 import com.kuit.ourmenu.data.model.account.request.SignupRequest
 import com.kuit.ourmenu.data.model.base.handleBaseResponse
 import com.kuit.ourmenu.data.service.AccountService
@@ -9,7 +10,7 @@ import javax.inject.Singleton
 @Singleton
 class AccountRepository @Inject constructor(
     private val accountService: AccountService
-){
+) {
     suspend fun signup(
         email: String,
         mealTime: List<Int>,
@@ -20,6 +21,20 @@ class AccountRepository @Inject constructor(
             SignupRequest(
                 email = email,
                 mealTime = mealTime,
+                password = password,
+                signInType = name
+            )
+        ).handleBaseResponse().getOrThrow()
+    }
+
+    suspend fun login(
+        email: String,
+        password: String,
+        name: String
+    ) = runCatching {
+        accountService.login(
+            LoginRequest(
+                email = email,
                 password = password,
                 signInType = name
             )
