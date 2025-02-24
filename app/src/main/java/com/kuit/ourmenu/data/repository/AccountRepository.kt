@@ -40,4 +40,10 @@ class AccountRepository @Inject constructor(
             )
         ).handleBaseResponse().getOrThrow()
     }
+
+    suspend fun reissueToken(
+        refreshToken: String
+    ) = runCatching {
+        accountService.reissueToken(refreshToken).handleBaseResponse().getOrThrow()
+    }
 }
