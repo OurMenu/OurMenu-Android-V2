@@ -46,4 +46,10 @@ class AccountRepository @Inject constructor(
     ) = runCatching {
         accountService.reissueToken(refreshToken).handleBaseResponse().getOrThrow()
     }
+
+    suspend fun sendEmail(
+        email: String
+    ) = runCatching {
+        accountService.sendEmail(email).handleBaseResponse().getOrThrow()
+    }
 }
