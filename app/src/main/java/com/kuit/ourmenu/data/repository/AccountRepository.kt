@@ -1,5 +1,6 @@
 package com.kuit.ourmenu.data.repository
 
+import com.kuit.ourmenu.data.model.account.request.ConfirmCodeRequest
 import com.kuit.ourmenu.data.model.account.request.LoginRequest
 import com.kuit.ourmenu.data.model.account.request.SignupRequest
 import com.kuit.ourmenu.data.model.base.handleBaseResponse
@@ -57,5 +58,17 @@ class AccountRepository @Inject constructor(
         email: String
     ) = runCatching {
         accountService.sendTemporaryPassword(email).handleBaseResponse().getOrThrow()
+    }
+
+    suspend fun confirmCode(
+        confirmCode: String,
+        email: String
+    ) = runCatching {
+        accountService.confirmCode(
+            ConfirmCodeRequest(
+                confirmCode = confirmCode,
+                email = email
+            )
+        ).handleBaseResponse().getOrThrow()
     }
 }

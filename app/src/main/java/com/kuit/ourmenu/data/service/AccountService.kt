@@ -1,5 +1,6 @@
 package com.kuit.ourmenu.data.service
 
+import com.kuit.ourmenu.data.model.account.request.ConfirmCodeRequest
 import com.kuit.ourmenu.data.model.account.request.LoginRequest
 import com.kuit.ourmenu.data.model.account.request.SignupRequest
 import com.kuit.ourmenu.data.model.account.response.EmailResponse
@@ -35,4 +36,9 @@ interface AccountService {
     fun sendTemporaryPassword(
         @Body email: String
     ): BaseResponse<TemporaryPasswordResponse>
+
+    @POST("api/emails/confirm-code")
+    fun confirmCode(
+        @Body request: ConfirmCodeRequest
+    ): BaseResponse<Unit>
 }
