@@ -52,4 +52,10 @@ class AccountRepository @Inject constructor(
     ) = runCatching {
         accountService.sendEmail(email).handleBaseResponse().getOrThrow()
     }
+
+    suspend fun sendTemporaryPassword(
+        email: String
+    ) = runCatching {
+        accountService.sendTemporaryPassword(email).handleBaseResponse().getOrThrow()
+    }
 }
