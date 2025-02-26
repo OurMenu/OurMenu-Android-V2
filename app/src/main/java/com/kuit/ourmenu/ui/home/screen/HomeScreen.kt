@@ -12,19 +12,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.kuit.ourmenu.ui.home.component.recommendation.sub.HomeSubRecommendation
-import com.kuit.ourmenu.ui.common.OurMenuLogoTopAppBarWithAddButton
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.kuit.ourmenu.ui.common.topappbar.OurMenuAddButtonTopAppBar
 import com.kuit.ourmenu.ui.home.component.recommendation.main.HomeMainRecommendation
+import com.kuit.ourmenu.ui.home.component.recommendation.sub.HomeSubRecommendation
 import com.kuit.ourmenu.ui.home.dummy.HomeDummyData
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(modifier: Modifier = Modifier, navController: NavHostController) {
 
     val scrollState = rememberScrollState()
 
     Scaffold(
         topBar = {
-            OurMenuLogoTopAppBarWithAddButton()
+            OurMenuAddButtonTopAppBar()
         }
     ) { innerPadding ->
         Column(
@@ -66,5 +68,6 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 )
 @Composable
 private fun HomeScreenPreview() {
-    HomeScreen()
+    val navController = rememberNavController()
+    HomeScreen(navController = navController)
 }
