@@ -42,7 +42,7 @@ fun LoginTextField(
                 color = Neutral500,
             )
         },
-        textStyle = ourMenuTypography().pretendard_500_14.copy(color = Neutral700),
+        textStyle = ourMenuTypography().pretendard_700_14.copy(color = Neutral700),
         visualTransformation = visualTransformation,
     )
 }
