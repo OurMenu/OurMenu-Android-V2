@@ -124,7 +124,7 @@ fun EmailDropdown(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 private fun EmailDropdownPreview() {
     Column(
