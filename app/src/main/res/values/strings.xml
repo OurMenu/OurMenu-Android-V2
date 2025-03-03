@@ -73,5 +73,8 @@
     <string name="memo_title">매운 맛 선택 가능!</string>
     <string name="memo_content">* 덕유산 / ㅇㅇ산 / 한라산\n기본도 정말 매우니 조심하기</string>
     <string name="menu_info_goto_map">지도보기</string>
+    
+    <!--search menu-->
+    <string name="search_place_holder">가게, 메뉴 이름 검색</string>
 
 </resources>
