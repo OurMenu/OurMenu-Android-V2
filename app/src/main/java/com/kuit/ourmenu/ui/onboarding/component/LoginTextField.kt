@@ -15,6 +15,7 @@ import com.kuit.ourmenu.ui.theme.Neutral100
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral700
+import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
@@ -44,5 +45,6 @@ fun LoginTextField(
         },
         textStyle = ourMenuTypography().pretendard_700_14.copy(color = Neutral700),
         visualTransformation = visualTransformation,
+        cursorColor = Primary500Main
     )
 }
