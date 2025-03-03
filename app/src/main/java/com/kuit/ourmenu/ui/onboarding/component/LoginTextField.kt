@@ -20,17 +20,17 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
 fun LoginTextField(
+    modifier: Modifier = Modifier,
     placeholder: String,
     input: String,
     onTextChange: (String) -> Unit,
     visualTransformation: VisualTransformation = VisualTransformation.None,
 ) {
     CustomTextField(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .height(44.dp)
-                .border(1.dp, Neutral300, RoundedCornerShape(8.dp)),
+        modifier = modifier
+            .fillMaxWidth()
+            .height(44.dp)
+            .border(1.dp, Neutral300, RoundedCornerShape(8.dp)),
         text = input,
         onTextChange = onTextChange,
         shape = RoundedCornerShape(8.dp),
