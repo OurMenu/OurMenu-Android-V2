@@ -47,7 +47,7 @@ fun MenuInfoAdditionalContent(
         )
         Row {
             Icon(
-                painter = painterResource(id = R.drawable.ic_menu_info_info_20),
+                painter = painterResource(id = R.drawable.ic_fill_map_20),
                 contentDescription = null,
                 tint = Color.Unspecified,
                 modifier = Modifier.align(Alignment.CenterVertically)
