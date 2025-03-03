@@ -153,7 +153,7 @@ fun CustomTextField(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledContainerColor = containerColor,
-                disabledIndicatorColor = containerColor,
+                disabledIndicatorColor = Color.Transparent,
             )
 
         )
