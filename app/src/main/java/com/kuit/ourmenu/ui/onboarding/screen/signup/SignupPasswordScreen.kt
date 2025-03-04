@@ -1,6 +1,5 @@
 package com.kuit.ourmenu.ui.onboarding.screen.signup
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Scaffold
@@ -31,7 +29,6 @@ import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.BottomFullWidthButton
 import com.kuit.ourmenu.ui.onboarding.component.LoginTextField
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
-import com.kuit.ourmenu.ui.theme.Neutral100
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral400
 import com.kuit.ourmenu.ui.theme.Neutral500
@@ -103,13 +100,12 @@ fun SignupPasswordScreen(modifier: Modifier = Modifier) {
                         onCheckedChange = { isPasswordVisible = it },
                         modifier =
                             Modifier
-                                .border(1.dp, Neutral300, RoundedCornerShape(4.dp))
                                 .size(24.dp),
                         colors =
                             CheckboxDefaults.colors(
                                 checkmarkColor = NeutralWhite,
                                 checkedColor = Primary500Main,
-                                uncheckedColor = Neutral100,
+                                uncheckedColor = Neutral300,
                             ),
                     )
 
