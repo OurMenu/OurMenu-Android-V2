@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -115,7 +116,8 @@ fun CustomTextField(
     cursorColor: Color = Color.Black,
     isError: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions.Default
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    colors : TextFieldColors = TextFieldDefaults.colors()
 ) {
 
     BasicTextField(
@@ -144,7 +146,7 @@ fun CustomTextField(
             placeholder = placeHolder,
             leadingIcon = leadingIcon,
             shape = shape,
-            colors = TextFieldDefaults.colors(
+            colors = colors.copy(
                 /*
                 * 이곳에서 enabled 여부, focus 여부 등에 따른 색상, indicator(밑줄)의 색상 등을 따로 지정할 수 있다.
                 * */
