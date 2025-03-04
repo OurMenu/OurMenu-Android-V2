@@ -27,11 +27,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
-import com.kuit.ourmenu.ui.common.BottomFullWidthButton
+import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
 import com.kuit.ourmenu.ui.onboarding.component.VerifyCodeTextField
 import com.kuit.ourmenu.ui.theme.Neutral300
-import com.kuit.ourmenu.ui.theme.Neutral400
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.NeutralWhite
@@ -62,7 +61,7 @@ fun SignupVerifyScreen(modifier: Modifier = Modifier) {
                     text = stringResource(R.string.sent_mail),
                     style = ourMenuTypography().pretendard_600_24,
                     color = Neutral900,
-                    modifier = Modifier.padding(top = 104.dp),
+                    modifier = Modifier.padding(top = 92.dp),
                 )
 
                 Row {
@@ -133,7 +132,9 @@ fun SignupVerifyScreen(modifier: Modifier = Modifier) {
                 ) {
                     HorizontalDivider(
                         color = Neutral300,
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp),
                     )
 
                     Box(
@@ -156,19 +157,18 @@ fun SignupVerifyScreen(modifier: Modifier = Modifier) {
                     text = stringResource(R.string.resend),
                     style = ourMenuTypography().pretendard_600_14,
                     color = Primary500Main,
-                    modifier = Modifier.padding(bottom = 36.dp).clickable {
-                        // TODO
-                    },
+                    modifier = Modifier
+                        .padding(bottom = 36.dp)
+                        .clickable {
+                            // TODO
+                        },
                 )
 
-                BottomFullWidthButton(
-                    containerColor = if (isConfirmButtonEnabled) Primary500Main else Neutral400,
-                    contentColor = NeutralWhite,
+                DisableBottomFullWidthButton(
+                    enable = isConfirmButtonEnabled,
                     text = stringResource(R.string.confirm),
                     onClick = {
-                        if (isConfirmButtonEnabled) {
-                            // TODO: Confirm 버튼 동작 추가
-                        }
+                        // TODO: Confirm 버튼 동작 추가
                     },
                 )
             }
