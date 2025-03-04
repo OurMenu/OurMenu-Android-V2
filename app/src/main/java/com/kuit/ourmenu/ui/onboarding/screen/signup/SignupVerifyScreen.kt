@@ -98,6 +98,11 @@ fun SignupVerifyScreen(modifier: Modifier = Modifier) {
                                     focusRequesters[i + 1].requestFocus()
                                 }
                             },
+                            onPrevious = {
+                                if (i > 0) {
+                                    focusRequesters[i - 1].requestFocus()
+                                }
+                            },
                             modifier =
                             Modifier.then(
                                 if (i == 0 && codes[i].isEmpty()) {
