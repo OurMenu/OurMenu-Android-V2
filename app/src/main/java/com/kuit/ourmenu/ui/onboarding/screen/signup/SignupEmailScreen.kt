@@ -1,0 +1,132 @@
+package com.kuit.ourmenu.ui.onboarding.screen.signup
+
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.kuit.ourmenu.R
+import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
+import com.kuit.ourmenu.ui.onboarding.component.EmailSpinner
+import com.kuit.ourmenu.ui.onboarding.component.LoginTextField
+import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
+import com.kuit.ourmenu.ui.theme.Neutral500
+import com.kuit.ourmenu.ui.theme.Neutral900
+import com.kuit.ourmenu.ui.theme.ourMenuTypography
+
+@Composable
+fun SignupEmailScreen(modifier: Modifier = Modifier) {
+
+    var email by rememberSaveable { mutableStateOf("") }
+    var domain by rememberSaveable { mutableStateOf("") }
+    val enable by rememberSaveable { mutableStateOf(false) }
+
+    Scaffold(
+        topBar = { OnboardingTopAppBar() },
+        modifier = Modifier
+            .fillMaxSize()
+            .imePadding()
+    ) { innerPadding ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(horizontal = 20.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(top = 92.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.input_email),
+                    style = ourMenuTypography().pretendard_600_24,
+                    color = Neutral900,
+                    modifier = Modifier
+                )
+
+                Text(
+                    text = stringResource(R.string.input_email_description),
+                    style = ourMenuTypography().pretendard_500_14,
+                    color = Neutral500,
+                    modifier = Modifier.padding(top = 4.dp),
+                )
+
+                EmailInputField(
+                    modifier = Modifier.padding(top = 12.dp),
+                    email = email,
+                    onEmailChange = { email = it },
+                    domain = domain,
+                    onDomainChange = { domain = it }
+                )
+            }
+
+            DisableBottomFullWidthButton(
+                enable = enable,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 20.dp),
+                text = stringResource(R.string.send_auth_mail)
+            ) {
+                // TODO : 메일 인증 화면으로 이동
+            }
+
+        }
+    }
+}
+
+
+@Composable
+fun EmailInputField(
+    modifier: Modifier = Modifier,
+    email: String,
+    onEmailChange: (String) -> Unit,
+    domain: String,
+    onDomainChange: (String) -> Unit = {},
+) {
+
+
+    Row(
+        modifier = modifier,
+    ) {
+        LoginTextField(
+            modifier = Modifier.weight(1f),
+            placeholder = stringResource(R.string.placeholder_default),
+            input = email,
+            onTextChange = onEmailChange,
+        )
+
+        Text(
+            text = "@",
+            style = ourMenuTypography().pretendard_500_14,
+            color = Neutral500,
+            modifier = Modifier
+                .padding(horizontal = 6.dp)
+                .padding(top = 11.5.dp)
+                .align(Alignment.Top),
+        )
+
+        EmailSpinner(
+            domain = domain,
+            onDomainChange = onDomainChange
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun SignupEmailScreenPreview() {
+    SignupEmailScreen()
+}

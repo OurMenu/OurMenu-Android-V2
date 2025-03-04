@@ -43,7 +43,9 @@ import com.kuit.ourmenu.utils.ViewUtil.noRippleClickable
 
 @Composable
 fun EmailSpinner(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    domain : String = "",
+    onDomainChange : (String) -> Unit = {}
 ) {
     var expanded by remember { mutableStateOf(false) }
     var enable by remember { mutableStateOf(false) }
@@ -56,7 +58,6 @@ fun EmailSpinner(
             stringResource(R.string.email_nate),
             stringResource(R.string.email_naver),
         )
-    var domain by remember { mutableStateOf("") }
     var isFocused by remember { mutableStateOf(false) }
 
     Box(
@@ -84,9 +85,7 @@ fun EmailSpinner(
                 paddingValues = PaddingValues(start = 17.5.dp),
                 text = domain,
                 textStyle = ourMenuTypography().pretendard_700_12.copy(color = Neutral700),
-                onTextChange = {
-                    domain = it
-                },
+                onTextChange = onDomainChange,
                 shape = RoundedCornerShape(8.dp),
                 placeHolder = {
                     Text(
@@ -117,10 +116,10 @@ fun EmailSpinner(
                                     .clickable {
                                         if (index == 0) {
                                             enable = true
-                                            domain = ""
+                                            onDomainChange("")
                                         } else {
                                             enable = false
-                                            domain = domains[index]
+                                            onDomainChange(domains[index])
                                         }
                                         expanded = false
                                     }
