@@ -26,11 +26,10 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
-import com.kuit.ourmenu.ui.common.BottomFullWidthButton
+import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
 import com.kuit.ourmenu.ui.onboarding.component.LoginTextField
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
 import com.kuit.ourmenu.ui.theme.Neutral300
-import com.kuit.ourmenu.ui.theme.Neutral400
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.NeutralWhite
@@ -53,10 +52,10 @@ fun SignupPasswordScreen(modifier: Modifier = Modifier) {
         content = { innerPadding ->
             Column(
                 modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                        .padding(20.dp),
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(20.dp),
             ) {
                 Text(
                     text = stringResource(R.string.enter_password),
@@ -99,14 +98,14 @@ fun SignupPasswordScreen(modifier: Modifier = Modifier) {
                         checked = isPasswordVisible,
                         onCheckedChange = { isPasswordVisible = it },
                         modifier =
-                            Modifier
-                                .size(24.dp),
+                        Modifier
+                            .size(24.dp),
                         colors =
-                            CheckboxDefaults.colors(
-                                checkmarkColor = NeutralWhite,
-                                checkedColor = Primary500Main,
-                                uncheckedColor = Neutral300,
-                            ),
+                        CheckboxDefaults.colors(
+                            checkmarkColor = NeutralWhite,
+                            checkedColor = Primary500Main,
+                            uncheckedColor = Neutral300,
+                        ),
                     )
 
                     Text(
@@ -121,23 +120,19 @@ fun SignupPasswordScreen(modifier: Modifier = Modifier) {
         bottomBar = {
             Column(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(20.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Box(
                     contentAlignment = Alignment.Center,
                 ) {
-                    BottomFullWidthButton(
-                        containerColor =
-                            if (isConfirmButtonEnabled) Primary500Main else Neutral400,
-                        contentColor = NeutralWhite,
+                    DisableBottomFullWidthButton(
+                        enable = isConfirmButtonEnabled,
                         text = stringResource(R.string.confirm),
                         onClick = {
-                            if (isConfirmButtonEnabled) {
-                                // TODO: Confirm 버튼 동작 추가
-                            }
+                            // TODO: Confirm 버튼 동작 추가
                         },
                     )
                 }
