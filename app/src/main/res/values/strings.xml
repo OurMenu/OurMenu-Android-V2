@@ -65,6 +65,9 @@
     <string name="password_placeholder">강력한 비밀번호를 만들어주세요!</string>
     <string name="confirm_password_placeholder">비밀번호를 한 번 더 확인해주세요.</string>
     <string name="send_auth_mail">인증 메일 보내기</string>
+    <string name="input_nickname">사용하실 닉네임을 입력해주세요.</string>
+    <string name="input_nickname_description">나중에 수정할 수 있으니 걱정마세요!</string>
+    <string name="placeholder_nickname">최대 10자</string>
 
 
     <string name="go_to_map">지도 앱으로 이동</string>
