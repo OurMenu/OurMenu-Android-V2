@@ -18,7 +18,10 @@ import com.kuit.ourmenu.ui.theme.Neutral700
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OnboardingTopAppBar() {
+fun OnboardingTopAppBar(
+    modifier: Modifier = Modifier,
+    onBackClick: () -> Unit = {}
+) {
     CenterAlignedTopAppBar(
         title = {
             Icon(
@@ -29,7 +32,7 @@ fun OnboardingTopAppBar() {
             )
         },
         navigationIcon = {
-            IconButton(onClick = { TODO("뒤로가기 구현") }) {
+            IconButton(onClick = onBackClick) {
                 Icon(
                     painter = painterResource(R.drawable.ic_top_bar_back),
                     contentDescription = "뒤로가기 버튼",
