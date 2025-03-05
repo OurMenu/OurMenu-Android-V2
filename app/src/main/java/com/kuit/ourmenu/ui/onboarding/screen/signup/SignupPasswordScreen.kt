@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Checkbox
@@ -50,6 +51,9 @@ fun SignupPasswordScreen(
     val isConfirmButtonEnabled = password.isNotEmpty() && confirmPassword.isNotEmpty()
 
     Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .imePadding(),
         topBar = {
             OnboardingTopAppBar()
         },
@@ -136,7 +140,6 @@ fun SignupPasswordScreen(
                         enable = isConfirmButtonEnabled,
                         text = stringResource(R.string.confirm),
                         onClick = {
-                            // TODO: Confirm 버튼 동작 추가
                         },
                     )
                 }

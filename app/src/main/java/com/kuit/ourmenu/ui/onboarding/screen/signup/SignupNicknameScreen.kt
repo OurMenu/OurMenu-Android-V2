@@ -21,6 +21,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
+import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.onboarding.component.LoginTextField
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
 import com.kuit.ourmenu.ui.theme.Neutral500
@@ -66,12 +67,12 @@ fun SignupNicknameScreen(
                 )
 
                 LoginTextField(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.padding(top = 12.dp),
                     placeholder = stringResource(R.string.placeholder_nickname),
                     input = nickname,
                     onTextChange = { newValue ->
                         if (newValue.length <= 10) nickname = newValue
-                        if (newValue.isNotEmpty()) enable = true else enable = false
+                        enable = newValue.isNotEmpty()
                     },
                 )
             }
@@ -83,7 +84,7 @@ fun SignupNicknameScreen(
                     .padding(bottom = 20.dp),
                 text = stringResource(R.string.confirm)
             ) {
-                // TODO : 완료
+                navController.navigate(route = Routes.Login)
             }
 
         }
