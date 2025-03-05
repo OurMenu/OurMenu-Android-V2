@@ -22,6 +22,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.BottomFullWidthButton
+import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.onboarding.component.BottomFullWidthBorderButton
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral700
@@ -69,13 +70,13 @@ fun LandingScreen(
         Spacer(modifier = Modifier.height(44.dp))
 
         BottomFullWidthButton(modifier = Modifier, containerColor = Primary500Main, contentColor = NeutralWhite, text = stringResource(R.string.login)) {
-            // TODO: onClick 작성
+            navController.navigate(route = Routes.Login)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         BottomFullWidthBorderButton {
-            // TODO: onClick 작성
+            navController.navigate(route = Routes.SignupEmail)
         }
     }
 
