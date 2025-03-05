@@ -55,9 +55,11 @@ fun SignupPasswordScreen(
         modifier = Modifier
             .fillMaxSize()
             .imePadding(),
-        topBar = {
-            OnboardingTopAppBar()
-        },
+        topBar = { OnboardingTopAppBar(
+            onBackClick = {
+                navController.navigateUp()
+            }
+        ) },
         content = { innerPadding ->
             Column(
                 modifier =

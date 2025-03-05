@@ -40,7 +40,11 @@ fun SignupEmailScreen(
     var enable = email.isNotEmpty() && domain.isNotEmpty()
 
     Scaffold(
-        topBar = { OnboardingTopAppBar() },
+        topBar = { OnboardingTopAppBar(
+            onBackClick = {
+                navController.navigateUp()
+            }
+        ) },
         modifier = Modifier
             .fillMaxSize()
             .imePadding()

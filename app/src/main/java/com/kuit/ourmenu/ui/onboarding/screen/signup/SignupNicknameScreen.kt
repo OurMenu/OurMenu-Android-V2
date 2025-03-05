@@ -37,7 +37,11 @@ fun SignupNicknameScreen(
     var enable by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
-        topBar = { OnboardingTopAppBar() },
+        topBar = { OnboardingTopAppBar(
+            onBackClick = {
+                navController.navigateUp()
+            }
+        ) },
         modifier = Modifier
             .fillMaxSize()
             .imePadding()
