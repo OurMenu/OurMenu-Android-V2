@@ -18,6 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
 import com.kuit.ourmenu.ui.onboarding.component.EmailSpinner
@@ -28,7 +30,9 @@ import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun SignupEmailScreen(modifier: Modifier = Modifier) {
+fun SignupEmailScreen(
+    navController: NavController
+) {
 
     var email by rememberSaveable { mutableStateOf("") }
     var domain by rememberSaveable { mutableStateOf("") }
@@ -128,5 +132,7 @@ fun EmailInputField(
 @Preview
 @Composable
 private fun SignupEmailScreenPreview() {
-    SignupEmailScreen()
+    val navController = rememberNavController()
+
+    SignupEmailScreen(navController)
 }

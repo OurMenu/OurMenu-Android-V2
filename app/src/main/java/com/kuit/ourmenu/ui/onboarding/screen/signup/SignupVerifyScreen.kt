@@ -26,6 +26,8 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
@@ -38,7 +40,9 @@ import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun SignupVerifyScreen(modifier: Modifier = Modifier) {
+fun SignupVerifyScreen(
+    navController: NavController
+) {
     val focusRequesters = List(6) { FocusRequester() }
     val codes: SnapshotStateList<String> = remember { mutableStateListOf("", "", "", "", "", "") }
 
@@ -179,5 +183,7 @@ fun SignupVerifyScreen(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun SignupVerifyScreenPreview() {
-    SignupVerifyScreen()
+    val navController = rememberNavController()
+
+    SignupVerifyScreen(navController)
 }
