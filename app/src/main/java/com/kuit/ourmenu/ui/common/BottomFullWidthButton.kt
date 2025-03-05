@@ -38,8 +38,8 @@ fun BottomFullWidthButton(
         modifier = modifier
             .fillMaxWidth()
             .size(320.dp, 48.dp)
-            .shadow(elevation = 4.dp, shape = RoundedCornerShape(12.dp)),
-        shape = RoundedCornerShape(12.dp),
+            .shadow(elevation = 4.dp, shape = RoundedCornerShape(8.dp)),
+        shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = containerColor,
             contentColor = contentColor
