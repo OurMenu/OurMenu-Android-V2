@@ -78,16 +78,24 @@ fun VerifyCodeTextField(
             },
         text = input,
         onTextChange = { newText ->
-            if (newText.isDigitsOnly() && newText.length <= 1) {
-                onTextChange(newText)
-                if (newText.isNotEmpty()) {
-                    onNext() // 다음 칸으로 이동
-                } else {
-                    onPrevious() // 이전 칸으로 이동
+            if (newText.isDigitsOnly()) {
+                when (newText.length) {
+                    0 -> {
+                        onTextChange(newText)
+                        onPrevious()
+                    }
+
+                    1 -> {
+                        onTextChange(newText)
+                        onNext()
+                    }
+
+                    2 -> {
+                        onTextChange(newText.lastIndex.toString())
+                        onNext()
+                    }
+
                 }
-            } else {
-                onTextChange(newText.take(1))
-                onNext() // 다음 칸으로 이동
             }
         },
         shape = RoundedCornerShape(8.dp),
