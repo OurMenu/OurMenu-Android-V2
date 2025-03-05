@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -51,6 +52,9 @@ fun SignupVerifyScreen(
     val isConfirmButtonEnabled = codes.all { it.isNotEmpty() }
 
     Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .imePadding(),
         topBar = {
             OnboardingTopAppBar()
         },
@@ -60,7 +64,7 @@ fun SignupVerifyScreen(
                 Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
-                    .padding(20.dp),
+                    .padding(horizontal = 20.dp),
             ) {
                 Text(
                     text = stringResource(R.string.sent_mail),

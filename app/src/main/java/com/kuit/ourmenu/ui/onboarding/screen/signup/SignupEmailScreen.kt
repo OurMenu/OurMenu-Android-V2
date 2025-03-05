@@ -37,7 +37,7 @@ fun SignupEmailScreen(
 
     var email by rememberSaveable { mutableStateOf("") }
     var domain by rememberSaveable { mutableStateOf("") }
-    val enable by rememberSaveable { mutableStateOf(false) }
+    var enable = email.isNotEmpty() && domain.isNotEmpty()
 
     Scaffold(
         topBar = { OnboardingTopAppBar() },

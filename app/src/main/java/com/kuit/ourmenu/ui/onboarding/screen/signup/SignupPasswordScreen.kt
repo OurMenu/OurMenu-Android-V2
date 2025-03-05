@@ -30,6 +30,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
+import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.onboarding.component.LoginTextField
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
 import com.kuit.ourmenu.ui.theme.Neutral300
@@ -63,13 +64,13 @@ fun SignupPasswordScreen(
                 Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
-                    .padding(20.dp),
+                    .padding(horizontal = 20.dp),
             ) {
                 Text(
                     text = stringResource(R.string.enter_password),
                     style = ourMenuTypography().pretendard_600_24,
                     color = Neutral900,
-                    modifier = Modifier.padding(top = 104.dp),
+                    modifier = Modifier.padding(top = 92.dp),
                 )
 
                 Text(
@@ -140,6 +141,7 @@ fun SignupPasswordScreen(
                         enable = isConfirmButtonEnabled,
                         text = stringResource(R.string.confirm),
                         onClick = {
+                            navController.navigate(route = Routes.SignupNickname)
                         },
                     )
                 }
