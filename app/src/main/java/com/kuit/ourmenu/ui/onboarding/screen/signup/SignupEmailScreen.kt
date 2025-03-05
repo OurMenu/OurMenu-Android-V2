@@ -22,6 +22,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
+import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.onboarding.component.EmailSpinner
 import com.kuit.ourmenu.ui.onboarding.component.LoginTextField
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
@@ -84,7 +85,7 @@ fun SignupEmailScreen(
                     .padding(bottom = 20.dp),
                 text = stringResource(R.string.send_auth_mail)
             ) {
-                // TODO : 메일 인증 화면으로 이동
+                navController.navigate(route = Routes.SignupVerify)
             }
 
         }

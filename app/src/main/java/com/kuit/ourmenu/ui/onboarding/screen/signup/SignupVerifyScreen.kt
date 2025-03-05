@@ -30,6 +30,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
+import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
 import com.kuit.ourmenu.ui.onboarding.component.VerifyCodeTextField
 import com.kuit.ourmenu.ui.theme.Neutral300
@@ -172,7 +173,7 @@ fun SignupVerifyScreen(
                     enable = isConfirmButtonEnabled,
                     text = stringResource(R.string.confirm),
                     onClick = {
-                        // TODO: Confirm 버튼 동작 추가
+                        navController.navigate(route = Routes.SignupPassword)
                     },
                 )
             }
