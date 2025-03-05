@@ -55,7 +55,11 @@ fun LoginScreen(
 
     Scaffold(
         topBar = {
-            OnboardingTopAppBar()
+            OnboardingTopAppBar(
+                onBackClick = {
+                    navController.popBackStack()
+                },
+            )
         },
         content = { innerPadding ->
             Column(
