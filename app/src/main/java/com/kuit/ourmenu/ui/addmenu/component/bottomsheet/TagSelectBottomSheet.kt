@@ -39,6 +39,7 @@ fun TagSelectBottomSheet(
     occasionTagList: List<Pair<Int, String>>,
     selectedTagList: List<String>,
     onSelectedTagsChange: (List<String>) -> Unit,
+    onApplyButtonClick: () -> Unit,
     onTagClick: (String) -> Unit
 ) {
     // toast를 위한 context
@@ -145,6 +146,7 @@ fun TagSelectBottomSheet(
                     Toast.makeText(context, R.string.tag_number_warning, Toast.LENGTH_LONG).show()
                 } else{
                     //아이콘 선택으로 이동
+                    onApplyButtonClick()
                 }
             }
         }
@@ -194,7 +196,8 @@ private fun TagSelectBottomSheetPreview() {
         tasteTagList = tasteTags,
         occasionTagList = occasionTags,
         selectedTagList = selectedTags,
-        onSelectedTagsChange = { newSelectedTags -> selectedTags = newSelectedTags }
+        onSelectedTagsChange = { newSelectedTags -> selectedTags = newSelectedTags },
+        onApplyButtonClick = {}
     ) { tag ->
         if (selectedTags.contains(tag)) {
             selectedTags -= tag

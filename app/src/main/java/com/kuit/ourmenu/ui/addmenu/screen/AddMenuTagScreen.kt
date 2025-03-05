@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -51,6 +52,7 @@ import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -123,6 +125,8 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
         R.drawable.ic_tag_rice,
     )
 
+    val coroutineScope = rememberCoroutineScope()
+
     //메모가 비어있지 않고, 태그와 아이콘이 선택된 경우에 메뉴 등록하기 버튼 활성화
     enableAddButton = memoTitle.isNotBlank() && memoBody.isNotBlank() && tagSelected && iconSelected
 
@@ -147,7 +151,10 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
                     tasteTagList = tasteTags,
                     occasionTagList = occasionTags,
                     selectedTagList = selectedTags,
-                    onSelectedTagsChange = { newSelectedTags -> selectedTags = newSelectedTags }
+                    onSelectedTagsChange = { newSelectedTags -> selectedTags = newSelectedTags },
+                    onApplyButtonClick = {
+                        showTagBottomSheet = false
+                    }
                 ) { tag ->
                     if (selectedTags.contains(tag)) {
                         selectedTags -= tag
@@ -157,11 +164,25 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
                 }
             } else {
                 //아이콘 선택하는 bottom sheet
-                IconSelectBottomSheet(iconList = iconList)
+                IconSelectBottomSheet(
+                    iconList = iconList,
+                    onCancel = {
+                        showTagBottomSheet = true
+                        showBottomSheet = true
+                    },
+                    onConfirm = {
+                        showBottomSheet = false
+                        coroutineScope.launch {
+                             scaffoldState.bottomSheetState.hide()
+                        }
+                    }
+                )
             }
         },
         //태그 고르기 눌러야 보이도록
-        sheetPeekHeight = if (showBottomSheet) 254.dp else 0.dp,
+        sheetPeekHeight = if (showBottomSheet) {
+            if (showTagBottomSheet) 500.dp else 380.dp
+        } else 0.dp,
         sheetDragHandle = {
             BottomSheetDragHandle()
         }
@@ -218,6 +239,7 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
                         }
                     }
                 }
+                // TODO:선택된 태그 목록
 
                 //메모
                 Spacer(modifier = modifier.height(20.dp))

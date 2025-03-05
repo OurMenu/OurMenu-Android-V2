@@ -22,16 +22,22 @@ import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.Primary500Main
 
 @Composable
-fun IconSelectBottomSheet(modifier: Modifier = Modifier, iconList: List<Int>) {
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(horizontal = 20.dp)
+fun IconSelectBottomSheet(
+    modifier: Modifier = Modifier,
+    iconList: List<Int>,
+    onCancel: () -> Unit,
+    onConfirm: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 20.dp)
     ) {
         IconItemGroup(
             groupLabel = "아이콘",
             icons = iconList
         ) {
-            // TODO: Icon 선택시 동작
+            // TODO: Icon 선택시 동작 (api 연결 어떻게 될지 몰라서 일단 비워둠)
         }
 
         Spacer(modifier = modifier.height(28.dp))
@@ -47,7 +53,7 @@ fun IconSelectBottomSheet(modifier: Modifier = Modifier, iconList: List<Int>) {
                 contentColor = NeutralWhite,
                 text = stringResource(R.string.cancel)
             ) {
-                // TODO: 취소 눌렀을 때의 동작
+                onCancel()
             }
             Spacer(modifier = modifier.width(12.dp))
             BottomHalfWidthButton(
@@ -55,7 +61,7 @@ fun IconSelectBottomSheet(modifier: Modifier = Modifier, iconList: List<Int>) {
                 contentColor = NeutralWhite,
                 text = stringResource(R.string.apply)
             ) {
-
+                onConfirm()
             }
         }
     }
@@ -85,5 +91,9 @@ private fun IconSelectBottomSheetPreview() {
         R.drawable.ic_tag_rice,
         R.drawable.ic_tag_rice,
     )
-    IconSelectBottomSheet(iconList = iconList)
+    IconSelectBottomSheet(
+        iconList = iconList,
+        onCancel = {},
+        onConfirm = {}
+    )
 }
