@@ -1,9 +1,16 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
     id("com.google.dagger.hilt.android") // Hilt 플러그인 추가
     kotlin("kapt") // Hilt를 위한 kapt 추가
+}
+
+val properties = Properties().apply {
+    load(project.rootProject.file("local.properties").inputStream())
 }
 
 android {
@@ -18,6 +25,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "BASE_URL", properties["BASE_URL"].toString())
+
     }
 
     buildTypes {
@@ -38,6 +47,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -70,9 +80,14 @@ dependencies {
     kapt(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
-    // Retrofit
+
+    // Network
+    implementation(platform(libs.okhttp.bom))
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
     implementation(libs.retrofit)
-    implementation(libs.converter.gson)
+    implementation(libs.retrofit.kotlin.serialization.converter)
+    implementation(libs.kotlinx.serialization.json)
 }
 
 // Hilt를 사용할 때 필요한 Annotation Processor
