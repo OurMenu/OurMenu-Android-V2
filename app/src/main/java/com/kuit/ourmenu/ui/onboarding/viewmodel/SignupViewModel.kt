@@ -1,6 +1,8 @@
 package com.kuit.ourmenu.ui.onboarding.viewmodel
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
+import com.kuit.ourmenu.ui.onboarding.model.MealTimeState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,7 +24,19 @@ class SignupViewModel : ViewModel() {
     val confirmPassword = _confirmPassword.asStateFlow()
 
     private val _codes = MutableStateFlow(mutableListOf("", "", "", "", "", ""))
-    val codes: StateFlow<List<String>> = _codes
+    val codes: StateFlow<List<String>> = _codes.asStateFlow()
+
+    private val _mealTimes = MutableStateFlow(
+        mutableStateListOf(
+            *List(18) {
+                MealTimeState(mealTime = "${it + 6}:00")
+            }.toTypedArray()
+        )
+    )
+    val mealTimes: StateFlow<List<MealTimeState>> = _mealTimes.asStateFlow()
+
+    private val _selectedTimes = MutableStateFlow(mutableStateListOf<String>())
+    val selectedTimes: StateFlow<List<String>> = _selectedTimes.asStateFlow()
 
     fun updateEmail(email: String) {
         _email.value = email
@@ -42,6 +56,16 @@ class SignupViewModel : ViewModel() {
 
     fun updateConfirmPassword(confirmPassword: String) {
         _confirmPassword.value = confirmPassword
+    }
+
+    fun addSelectedTime(index: Int, selectedTime: String) {
+        _selectedTimes.value.add(selectedTime)
+        _mealTimes.value[index] = _mealTimes.value[index].copy(selected = true)
+    }
+
+    fun removeSelectedTime(index: Int, selectedTime: String) {
+        _selectedTimes.value.remove(selectedTime)
+        _mealTimes.value[index] = _mealTimes.value[index].copy(selected = false)
     }
 
 }

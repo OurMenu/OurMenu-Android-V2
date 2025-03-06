@@ -30,6 +30,8 @@ fun MealTimeGrid(
     modifier: Modifier = Modifier,
     mealTimes: SnapshotStateList<MealTimeState>,
     selectedTimes: SnapshotStateList<String>,
+    addTime: (Int, String) -> Unit,
+    removeTime: (Int, String) -> Unit
 ) {
     val state = rememberLazyGridState()
 
@@ -49,14 +51,9 @@ fun MealTimeGrid(
                 selected = mealTimes[index].selected,
                 updateSelected = { mealTime, selected ->
                     if (selected) {
-                        if (selectedTimes.size < 4) {
-                            selectedTimes.add(mealTime)
-                            mealTimes[index] = mealTimes[index].copy(selected = true)
-                        }
-                    } else {
-                        selectedTimes.remove(mealTime)
-                        mealTimes[index] = mealTimes[index].copy(selected = false)
-                    }
+                        if (selectedTimes.size < 4) addTime(index, mealTime)
+                    } else
+                        removeTime(index, mealTime)
                 }
             )
         }

@@ -84,7 +84,13 @@ fun SignupNicknameScreen(
                 MealTimeGrid(
                     modifier = Modifier.padding(top = 29.dp),
                     mealTimes = mealTimeList,
-                    selectedTimes = selectedTimes
+                    selectedTimes = selectedTimes,
+                    addTime = { index, mealTime ->
+                        viewModel.addSelectedTime(index, mealTime)
+                    },
+                    removeTime = { index, mealTime ->
+                        viewModel.removeSelectedTime(index, mealTime)
+                    }
                 )
             }
 
