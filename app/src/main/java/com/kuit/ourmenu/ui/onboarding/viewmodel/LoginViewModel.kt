@@ -1,19 +1,29 @@
 package com.kuit.ourmenu.ui.onboarding.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.kuit.ourmenu.data.repository.AuthRepository
+import com.kuit.ourmenu.ui.onboarding.state.LoginState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor() : ViewModel() {
+class LoginViewModel @Inject constructor(
+    private val authRepository: AuthRepository
+) : ViewModel() {
 
     private val _email = MutableStateFlow("")
     val email = _email.asStateFlow()
 
     private val _password = MutableStateFlow("")
     val password = _password.asStateFlow()
+
+    private val _loginState: MutableStateFlow<LoginState> = MutableStateFlow(LoginState.Default)
+    val loginState = _loginState.asStateFlow()
+
 
     fun updateEmail(email: String) {
         _email.value = email
@@ -22,4 +32,24 @@ class LoginViewModel @Inject constructor() : ViewModel() {
     fun updatePassword(password: String) {
         _password.value = password
     }
+
+    fun signIn() {
+        viewModelScope.launch {
+            _loginState.value = LoginState.Loading
+
+            authRepository.login(
+                email = email.value,
+                password = password.value
+            ).fold(
+                onSuccess = {
+                    _loginState.value = LoginState.Success
+                },
+                onFailure = {
+                    _loginState.value = LoginState.Error
+                }
+            )
+            _loginState.value = LoginState.Default
+        }
+    }
 }
+

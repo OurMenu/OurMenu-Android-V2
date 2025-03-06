@@ -35,13 +35,11 @@ class AuthRepository @Inject constructor(
     suspend fun login(
         email: String,
         password: String,
-        name: String
     ) = runCatching {
         authService.login(
             LoginRequest(
                 email = email,
                 password = password,
-                signInType = name
             )
         ).handleBaseResponse().getOrThrow()
     }
