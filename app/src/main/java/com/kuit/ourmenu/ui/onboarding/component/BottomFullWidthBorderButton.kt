@@ -32,9 +32,9 @@ fun BottomFullWidthBorderButton(
             .border(
                 width = (1.2).dp,
                 color = Primary500Main,
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(8.dp)
             ),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = NeutralWhite,
             contentColor = Primary500Main

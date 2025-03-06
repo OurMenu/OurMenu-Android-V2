@@ -1,6 +1,5 @@
 package com.kuit.ourmenu.ui.onboarding.screen.signup
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,9 +7,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Scaffold
@@ -27,13 +26,17 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
-import com.kuit.ourmenu.ui.common.BottomFullWidthButton
+import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
+import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.onboarding.component.LoginTextField
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
-import com.kuit.ourmenu.ui.theme.Neutral100
+import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.theme.Neutral300
-import com.kuit.ourmenu.ui.theme.Neutral400
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.NeutralWhite
@@ -41,31 +44,39 @@ import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun SignupPasswordScreen(modifier: Modifier = Modifier) {
-    var password by rememberSaveable { mutableStateOf("") }
-    var confirmPassword by rememberSaveable { mutableStateOf("") }
+fun SignupPasswordScreen(
+    navController: NavController,
+    viewModel: SignupViewModel = hiltViewModel()
+) {
+    val password by viewModel.password.collectAsStateWithLifecycle()
+    val confirmPassword by viewModel.confirmPassword.collectAsStateWithLifecycle()
     var isPasswordVisible by rememberSaveable { mutableStateOf(false) }
 
     // 모든 입력 칸이 채워졌는지 확인
     val isConfirmButtonEnabled = password.isNotEmpty() && confirmPassword.isNotEmpty()
 
     Scaffold(
-        topBar = {
-            OnboardingTopAppBar()
-        },
+        modifier = Modifier
+            .fillMaxSize()
+            .imePadding(),
+        topBar = { OnboardingTopAppBar(
+            onBackClick = {
+                navController.navigateUp()
+            }
+        ) },
         content = { innerPadding ->
             Column(
                 modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                        .padding(20.dp),
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(horizontal = 20.dp),
             ) {
                 Text(
                     text = stringResource(R.string.enter_password),
                     style = ourMenuTypography().pretendard_600_24,
                     color = Neutral900,
-                    modifier = Modifier.padding(top = 104.dp),
+                    modifier = Modifier.padding(top = 92.dp),
                 )
 
                 Text(
@@ -80,7 +91,7 @@ fun SignupPasswordScreen(modifier: Modifier = Modifier) {
                 LoginTextField(
                     placeholder = stringResource(R.string.password_placeholder),
                     input = password,
-                    onTextChange = { password = it },
+                    onTextChange = { viewModel.updatePassword(it) },
                     visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 )
 
@@ -89,7 +100,7 @@ fun SignupPasswordScreen(modifier: Modifier = Modifier) {
                 LoginTextField(
                     placeholder = stringResource(R.string.confirm_password_placeholder),
                     input = confirmPassword,
-                    onTextChange = { confirmPassword = it },
+                    onTextChange = { viewModel.updateConfirmPassword(it) },
                     visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 )
 
@@ -102,15 +113,14 @@ fun SignupPasswordScreen(modifier: Modifier = Modifier) {
                         checked = isPasswordVisible,
                         onCheckedChange = { isPasswordVisible = it },
                         modifier =
-                            Modifier
-                                .border(1.dp, Neutral300, RoundedCornerShape(4.dp))
-                                .size(24.dp),
+                        Modifier
+                            .size(24.dp),
                         colors =
-                            CheckboxDefaults.colors(
-                                checkmarkColor = NeutralWhite,
-                                checkedColor = Primary500Main,
-                                uncheckedColor = Neutral100,
-                            ),
+                        CheckboxDefaults.colors(
+                            checkmarkColor = NeutralWhite,
+                            checkedColor = Primary500Main,
+                            uncheckedColor = Neutral300,
+                        ),
                     )
 
                     Text(
@@ -125,23 +135,19 @@ fun SignupPasswordScreen(modifier: Modifier = Modifier) {
         bottomBar = {
             Column(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(20.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Box(
                     contentAlignment = Alignment.Center,
                 ) {
-                    BottomFullWidthButton(
-                        containerColor =
-                            if (isConfirmButtonEnabled) Primary500Main else Neutral400,
-                        contentColor = NeutralWhite,
+                    DisableBottomFullWidthButton(
+                        enable = isConfirmButtonEnabled,
                         text = stringResource(R.string.confirm),
                         onClick = {
-                            if (isConfirmButtonEnabled) {
-                                // TODO: Confirm 버튼 동작 추가
-                            }
+                            navController.navigate(route = Routes.SignupNickname)
                         },
                     )
                 }
@@ -153,5 +159,6 @@ fun SignupPasswordScreen(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun SignupPasswordScreenPreview() {
-    SignupPasswordScreen()
+    val navController = rememberNavController()
+    SignupPasswordScreen(navController)
 }
