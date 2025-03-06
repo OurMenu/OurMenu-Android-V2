@@ -35,7 +35,6 @@ fun OurSnackbarHost(
     isChecked: Boolean = false,
     message: String
 ) {
-//    Snackbar()
     SnackbarHost(
         hostState = hostState,
         modifier = modifier
