@@ -65,8 +65,7 @@ private fun OurSnackbar(
         Row(
             modifier = Modifier
                 .clip(shape = RoundedCornerShape(size = 8.dp))
-                .padding(horizontal = 40.dp)
-                .height(24.dp),
+                .padding(horizontal = 40.dp, vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
