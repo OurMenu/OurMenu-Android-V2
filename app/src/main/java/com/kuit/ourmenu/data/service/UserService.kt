@@ -1,6 +1,9 @@
 package com.kuit.ourmenu.data.service
 
+import com.kuit.ourmenu.data.model.auth.response.TemporaryPasswordResponse
 import com.kuit.ourmenu.data.model.base.BaseResponse
+import com.kuit.ourmenu.data.model.user.request.ChangePasswordRequest
+import com.kuit.ourmenu.data.model.user.response.UserInfoResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
