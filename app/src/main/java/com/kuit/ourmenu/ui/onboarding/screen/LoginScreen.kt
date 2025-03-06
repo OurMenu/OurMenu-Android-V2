@@ -35,6 +35,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -203,13 +204,13 @@ fun LoginScreen(
                 modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(bottom = 18.dp),
+                    .padding(bottom = 65.5.dp),
                 contentAlignment = Alignment.BottomCenter,
             ) {
                 Row {
                     Text(
                         text = stringResource(R.string.ourmenu),
-                        style = ourMenuTypography().pretendard_700_14,
+                        style = ourMenuTypography().pretendard_700_12,
                         color = Primary500Main,
                     )
 
@@ -217,7 +218,9 @@ fun LoginScreen(
 
                     Text(
                         text = stringResource(R.string.copy_right),
-                        style = ourMenuTypography().pretendard_400_12,
+                        style = ourMenuTypography().pretendard_400_12.copy(
+                            fontSize = 10.sp
+                        ),
                         color = Neutral500,
                     )
                 }

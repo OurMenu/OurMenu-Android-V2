@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -145,22 +146,30 @@ fun LandingScreen(
             )
         }
 
-        Row(
-            modifier = Modifier.align(Alignment.BottomCenter),
+        Box(
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 65.5.dp),
+            contentAlignment = Alignment.BottomCenter,
         ) {
-            Text(
-                text = stringResource(R.string.ourmenu),
-                style = ourMenuTypography().pretendard_700_14,
-                color = Primary500Main,
-            )
+            Row {
+                Text(
+                    text = stringResource(R.string.ourmenu),
+                    style = ourMenuTypography().pretendard_700_12,
+                    color = Primary500Main,
+                )
 
-            Spacer(modifier = Modifier.width(4.dp))
+                Spacer(modifier = Modifier.width(4.dp))
 
-            Text(
-                text = stringResource(R.string.copy_right),
-                style = ourMenuTypography().pretendard_400_12,
-                color = Neutral500,
-            )
+                Text(
+                    text = stringResource(R.string.copy_right),
+                    style = ourMenuTypography().pretendard_400_12.copy(
+                        fontSize = 10.sp
+                    ),
+                    color = Neutral500,
+                )
+            }
         }
     }
 }
