@@ -4,13 +4,13 @@ import com.kuit.ourmenu.data.model.account.request.ConfirmCodeRequest
 import com.kuit.ourmenu.data.model.account.request.LoginRequest
 import com.kuit.ourmenu.data.model.account.request.SignupRequest
 import com.kuit.ourmenu.data.model.base.handleBaseResponse
-import com.kuit.ourmenu.data.service.AccountService
+import com.kuit.ourmenu.data.service.AuthService
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AccountRepository @Inject constructor(
-    private val accountService: AccountService
+class AuthRepository @Inject constructor(
+    private val authService: AuthService
 ) {
     suspend fun signup(
         email: String,
@@ -18,7 +18,7 @@ class AccountRepository @Inject constructor(
         password: String,
         name: String
     ) = runCatching {
-        accountService.signup(
+        authService.signup(
             SignupRequest(
                 email = email,
                 mealTime = mealTime,
@@ -33,7 +33,7 @@ class AccountRepository @Inject constructor(
         password: String,
         name: String
     ) = runCatching {
-        accountService.login(
+        authService.login(
             LoginRequest(
                 email = email,
                 password = password,
@@ -45,26 +45,26 @@ class AccountRepository @Inject constructor(
     suspend fun reissueToken(
         refreshToken: String
     ) = runCatching {
-        accountService.reissueToken(refreshToken).handleBaseResponse().getOrThrow()
+        authService.reissueToken(refreshToken).handleBaseResponse().getOrThrow()
     }
 
     suspend fun sendEmail(
         email: String
     ) = runCatching {
-        accountService.sendEmail(email).handleBaseResponse().getOrThrow()
+        authService.sendEmail(email).handleBaseResponse().getOrThrow()
     }
 
     suspend fun sendTemporaryPassword(
         email: String
     ) = runCatching {
-        accountService.sendTemporaryPassword(email).handleBaseResponse().getOrThrow()
+        authService.sendTemporaryPassword(email).handleBaseResponse().getOrThrow()
     }
 
     suspend fun confirmCode(
         confirmCode: String,
         email: String
     ) = runCatching {
-        accountService.confirmCode(
+        authService.confirmCode(
             ConfirmCodeRequest(
                 confirmCode = confirmCode,
                 email = email

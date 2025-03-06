@@ -1,6 +1,6 @@
 package com.kuit.ourmenu.data.di
 
-import com.kuit.ourmenu.data.service.AccountService
+import com.kuit.ourmenu.data.service.AuthService
 import com.kuit.ourmenu.data.service.DummyService
 import dagger.Module
 import dagger.Provides
@@ -20,6 +20,6 @@ object ServiceModule {
 
     @Provides
     @Singleton
-    fun providesAccountService(retrofit: Retrofit): AccountService =
-        retrofit.create(AccountService::class.java)
+    fun providesAccountService(retrofit: Retrofit): AuthService =
+        retrofit.create(AuthService::class.java)
 }

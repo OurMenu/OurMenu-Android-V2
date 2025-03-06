@@ -11,7 +11,7 @@ import com.kuit.ourmenu.data.model.base.BaseResponse
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-interface AccountService {
+interface AuthService {
     @POST("api/users/sign-up")
     fun signup(
         @Body request: SignupRequest
