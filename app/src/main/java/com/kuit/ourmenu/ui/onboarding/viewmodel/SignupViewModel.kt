@@ -2,6 +2,7 @@ package com.kuit.ourmenu.ui.onboarding.viewmodel
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
+import com.kuit.ourmenu.data.repository.AuthRepository
 import com.kuit.ourmenu.ui.onboarding.model.MealTimeState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,7 +11,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class SignupViewModel @Inject constructor() : ViewModel() {
+class SignupViewModel @Inject constructor(
+    private val authRepository: AuthRepository
+) : ViewModel() {
 
     private val _email = MutableStateFlow("")
     val email = _email.asStateFlow()

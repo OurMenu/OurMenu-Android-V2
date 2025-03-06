@@ -1,12 +1,5 @@
 package com.kuit.ourmenu.data.service
 
-import com.kuit.ourmenu.data.model.account.request.ConfirmCodeRequest
-import com.kuit.ourmenu.data.model.account.request.LoginRequest
-import com.kuit.ourmenu.data.model.account.request.SignupRequest
-import com.kuit.ourmenu.data.model.account.response.EmailResponse
-import com.kuit.ourmenu.data.model.account.response.LoginResponse
-import com.kuit.ourmenu.data.model.account.response.ReissueTokenResponse
-import com.kuit.ourmenu.data.model.account.response.TemporaryPasswordResponse
 import com.kuit.ourmenu.data.model.base.BaseResponse
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -31,11 +24,6 @@ interface AuthService {
     fun sendEmail(
         @Body email: String
     ): BaseResponse<EmailResponse>
-
-    @POST("api/emails/temporary-password")
-    fun sendTemporaryPassword(
-        @Body email: String
-    ): BaseResponse<TemporaryPasswordResponse>
 
     @POST("api/emails/confirm-code")
     fun confirmCode(

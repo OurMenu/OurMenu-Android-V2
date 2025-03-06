@@ -1,4 +1,4 @@
-package com.kuit.ourmenu.data.model.account.request
+package com.kuit.ourmenu.data.model.auth.request
 
 
 import kotlinx.serialization.SerialName

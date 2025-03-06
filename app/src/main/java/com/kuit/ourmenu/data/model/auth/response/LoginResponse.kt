@@ -1,10 +1,10 @@
-package com.kuit.ourmenu.data.model.account.response
+package com.kuit.ourmenu.data.model.auth.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ReissueTokenResponse(
+data class LoginResponse(
     @SerialName("accessToken")
     val accessToken: String,
     @SerialName("grantType")
