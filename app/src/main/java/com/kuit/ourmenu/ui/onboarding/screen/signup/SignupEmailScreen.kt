@@ -1,5 +1,6 @@
 package com.kuit.ourmenu.ui.onboarding.screen.signup
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,8 +8,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,10 +28,13 @@ import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.onboarding.component.EmailSpinner
 import com.kuit.ourmenu.ui.onboarding.component.LoginTextField
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
+import com.kuit.ourmenu.ui.onboarding.state.LoginState
+import com.kuit.ourmenu.ui.onboarding.state.SignupState
 import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
+import kotlinx.coroutines.launch
 
 @Composable
 fun SignupEmailScreen(
@@ -39,13 +45,28 @@ fun SignupEmailScreen(
     val email by viewModel.email.collectAsStateWithLifecycle()
     val domain by viewModel.domain.collectAsStateWithLifecycle()
     val enable = email.isNotEmpty() && domain.isNotEmpty()
+    val signupState by viewModel.signupState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(signupState) {
+        when (signupState) {
+            is SignupState.Success ->
+                navController.navigate(route = Routes.SignupVerify)
+
+            is SignupState.Error ->
+                Log.e("SignupEmailScreen", viewModel.error.value.toString())
+
+            else -> {}
+        }
+    }
 
     Scaffold(
-        topBar = { OnboardingTopAppBar(
-            onBackClick = {
-                navController.navigateUp()
-            }
-        ) },
+        topBar = {
+            OnboardingTopAppBar(
+                onBackClick = {
+                    navController.navigateUp()
+                }
+            )
+        },
         modifier = Modifier
             .fillMaxSize()
             .imePadding()
@@ -89,9 +110,7 @@ fun SignupEmailScreen(
                     .align(Alignment.BottomCenter)
                     .padding(bottom = 20.dp),
                 text = stringResource(R.string.send_auth_mail)
-            ) {
-                navController.navigate(route = Routes.SignupVerify)
-            }
+            ) { viewModel.sendEmail() }
 
         }
     }
