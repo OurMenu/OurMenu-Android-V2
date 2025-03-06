@@ -28,6 +28,10 @@ class AuthRepository @Inject constructor(
         ).handleBaseResponse().getOrThrow()
     }
 
+    suspend fun logout() = runCatching {
+        authService.logout().handleBaseResponse().getOrThrow()
+    }
+
     suspend fun login(
         email: String,
         password: String,

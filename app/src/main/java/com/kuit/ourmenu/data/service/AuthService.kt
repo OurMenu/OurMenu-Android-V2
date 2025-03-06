@@ -16,6 +16,9 @@ interface AuthService {
         @Body request: SignupRequest
     ): BaseResponse<Unit>
 
+    @POST("api/users/sign-out")
+    fun logout(): BaseResponse<Unit>
+
     @POST("api/users/sign-in")
     fun login(
         @Body request: LoginRequest
