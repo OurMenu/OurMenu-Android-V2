@@ -1,5 +1,8 @@
 package com.kuit.ourmenu.data.repository
 
+import com.kuit.ourmenu.data.model.auth.request.ConfirmCodeRequest
+import com.kuit.ourmenu.data.model.auth.request.LoginRequest
+import com.kuit.ourmenu.data.model.auth.request.SignupRequest
 import com.kuit.ourmenu.data.model.base.handleBaseResponse
 import com.kuit.ourmenu.data.service.AuthService
 import javax.inject.Inject
@@ -49,12 +52,6 @@ class AuthRepository @Inject constructor(
         email: String
     ) = runCatching {
         authService.sendEmail(email).handleBaseResponse().getOrThrow()
-    }
-
-    suspend fun sendTemporaryPassword(
-        email: String
-    ) = runCatching {
-        authService.sendTemporaryPassword(email).handleBaseResponse().getOrThrow()
     }
 
     suspend fun confirmCode(
