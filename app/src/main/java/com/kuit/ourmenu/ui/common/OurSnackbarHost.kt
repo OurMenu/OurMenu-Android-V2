@@ -33,16 +33,15 @@ fun OurSnackbarHost(
     modifier: Modifier = Modifier,
     hostState: SnackbarHostState,
     isChecked: Boolean = false,
-    message: String
 ) {
     SnackbarHost(
         hostState = hostState,
         modifier = modifier
-    ) {
+    ) { data ->
         OurSnackbar(
             modifier = modifier,
             isChecked = isChecked,
-            message = message
+            message = data.visuals.message
         )
     }
 }

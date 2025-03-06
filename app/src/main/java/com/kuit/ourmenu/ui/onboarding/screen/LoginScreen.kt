@@ -17,10 +17,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -36,10 +41,12 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.BottomFullWidthButton
+import com.kuit.ourmenu.ui.common.OurSnackbarHost
 import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.onboarding.component.BottomFullWidthBorderButton
 import com.kuit.ourmenu.ui.onboarding.component.LoginTextField
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
+import com.kuit.ourmenu.ui.onboarding.state.LoginState
 import com.kuit.ourmenu.ui.onboarding.viewmodel.LoginViewModel
 import com.kuit.ourmenu.ui.theme.Neutral100
 import com.kuit.ourmenu.ui.theme.Neutral300
@@ -47,6 +54,7 @@ import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
@@ -56,6 +64,27 @@ fun LoginScreen(
     val email by viewModel.email.collectAsStateWithLifecycle()
     val password by viewModel.password.collectAsStateWithLifecycle()
     var isPasswordVisible by rememberSaveable { mutableStateOf(false) }
+    val loginState by viewModel.loginState.collectAsStateWithLifecycle()
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(loginState) {
+        when (loginState) {
+            is LoginState.Success -> navController.navigate(route = Routes.Home)
+            is LoginState.Error -> {
+                // 에러에 따라 snackbar 를 show 하면 됨
+                scope.launch {
+                    snackbarHostState.showSnackbar(
+                        message = viewModel.error.value ?: "",
+                        duration = SnackbarDuration.Short
+                    )
+                }
+            }
+
+            else -> {}
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -68,10 +97,10 @@ fun LoginScreen(
         content = { innerPadding ->
             Column(
                 modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                        .padding(20.dp, 48.dp),
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(20.dp, 48.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Box(
@@ -103,7 +132,9 @@ fun LoginScreen(
                 )
 
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -114,15 +145,15 @@ fun LoginScreen(
                             checked = isPasswordVisible,
                             onCheckedChange = { isPasswordVisible = it },
                             modifier =
-                                Modifier
-                                    .border(1.dp, Neutral300, RoundedCornerShape(4.dp))
-                                    .size(24.dp),
+                            Modifier
+                                .border(1.dp, Neutral300, RoundedCornerShape(4.dp))
+                                .size(24.dp),
                             colors =
-                                CheckboxDefaults.colors(
-                                    checkmarkColor = NeutralWhite,
-                                    checkedColor = Primary500Main,
-                                    uncheckedColor = Neutral100,
-                                ),
+                            CheckboxDefaults.colors(
+                                checkmarkColor = NeutralWhite,
+                                checkedColor = Primary500Main,
+                                uncheckedColor = Neutral100,
+                            ),
                         )
 
                         Text(
@@ -138,9 +169,9 @@ fun LoginScreen(
                         style = ourMenuTypography().pretendard_500_12,
                         color = Neutral500,
                         modifier =
-                            Modifier.clickable {
-                                // TODO: 비밀번호 찾기 동작 구현
-                            },
+                        Modifier.clickable {
+                            // TODO: 비밀번호 찾기 동작 구현
+                        },
                     )
                 }
 
@@ -151,9 +182,7 @@ fun LoginScreen(
                     containerColor = Primary500Main,
                     contentColor = NeutralWhite,
                     text = stringResource(R.string.login),
-                ) {
-                    navController.navigate(route = Routes.Home)
-                }
+                ) { viewModel.signIn() }
 
                 Spacer(modifier = Modifier.height(104.dp))
 
@@ -172,9 +201,9 @@ fun LoginScreen(
 
             Box(
                 modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(bottom = 18.dp),
+                Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 18.dp),
                 contentAlignment = Alignment.BottomCenter,
             ) {
                 Row {
@@ -192,6 +221,17 @@ fun LoginScreen(
                         color = Neutral500,
                     )
                 }
+            }
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(top = 44.dp),
+                contentAlignment = Alignment.TopCenter
+            ) {
+                OurSnackbarHost(
+                    hostState = snackbarHostState
+                )
             }
         },
     )

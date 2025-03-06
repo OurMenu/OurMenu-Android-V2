@@ -24,6 +24,9 @@ class LoginViewModel @Inject constructor(
     private val _loginState: MutableStateFlow<LoginState> = MutableStateFlow(LoginState.Default)
     val loginState = _loginState.asStateFlow()
 
+    private val _error: MutableStateFlow<String?> = MutableStateFlow(null)
+    val error = _error.asStateFlow()
+
 
     fun updateEmail(email: String) {
         _email.value = email
@@ -44,8 +47,9 @@ class LoginViewModel @Inject constructor(
                 onSuccess = {
                     _loginState.value = LoginState.Success
                 },
-                onFailure = {
+                onFailure = { error ->
                     _loginState.value = LoginState.Error
+                    _error.value = error.message
                 }
             )
             _loginState.value = LoginState.Default
