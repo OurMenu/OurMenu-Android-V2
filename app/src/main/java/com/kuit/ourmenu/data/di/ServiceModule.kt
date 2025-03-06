@@ -20,6 +20,11 @@ object ServiceModule {
 
     @Provides
     @Singleton
-    fun providesAccountService(retrofit: Retrofit): AuthService =
+    fun providesAuthService(retrofit: Retrofit): AuthService =
+        retrofit.create(AuthService::class.java)
+
+    @Provides
+    @Singleton
+    fun providesUserService(retrofit: Retrofit): AuthService =
         retrofit.create(AuthService::class.java)
 }
