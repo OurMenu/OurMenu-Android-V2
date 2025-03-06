@@ -27,6 +27,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
@@ -47,8 +48,8 @@ fun SignupPasswordScreen(
     navController: NavController,
     viewModel: SignupViewModel = hiltViewModel()
 ) {
-    var password by rememberSaveable { mutableStateOf("") }
-    var confirmPassword by rememberSaveable { mutableStateOf("") }
+    val password by viewModel.password.collectAsStateWithLifecycle()
+    val confirmPassword by viewModel.confirmPassword.collectAsStateWithLifecycle()
     var isPasswordVisible by rememberSaveable { mutableStateOf(false) }
 
     // 모든 입력 칸이 채워졌는지 확인
@@ -90,7 +91,7 @@ fun SignupPasswordScreen(
                 LoginTextField(
                     placeholder = stringResource(R.string.password_placeholder),
                     input = password,
-                    onTextChange = { password = it },
+                    onTextChange = { viewModel.updatePassword(it) },
                     visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 )
 
@@ -99,7 +100,7 @@ fun SignupPasswordScreen(
                 LoginTextField(
                     placeholder = stringResource(R.string.confirm_password_placeholder),
                     input = confirmPassword,
-                    onTextChange = { confirmPassword = it },
+                    onTextChange = { viewModel.updateConfirmPassword(it) },
                     visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 )
 

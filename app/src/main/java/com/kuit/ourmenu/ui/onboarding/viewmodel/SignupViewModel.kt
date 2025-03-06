@@ -18,6 +18,9 @@ class SignupViewModel : ViewModel() {
     private val _password = MutableStateFlow("")
     val password = _password.asStateFlow()
 
+    private val _confirmPassword = MutableStateFlow("")
+    val confirmPassword = _confirmPassword.asStateFlow()
+
     private val _codes = MutableStateFlow(mutableListOf("", "", "", "", "", ""))
     val codes: StateFlow<List<String>> = _codes
 
@@ -29,12 +32,16 @@ class SignupViewModel : ViewModel() {
         _domain.value = domain
     }
 
+    fun updateCode(index: Int, code: String) {
+        _codes.value[index] = code
+    }
+
     fun updatePassword(password: String) {
         _password.value = password
     }
 
-    fun updateCode(index: Int, code: String) {
-        _codes.value[index] = code
+    fun updateConfirmPassword(confirmPassword: String) {
+        _confirmPassword.value = confirmPassword
     }
 
 }
