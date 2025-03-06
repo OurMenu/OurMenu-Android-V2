@@ -31,6 +31,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
@@ -52,8 +53,8 @@ fun LoginScreen(
     navController: NavController,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
-    var email by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
+    val email by viewModel.email.collectAsStateWithLifecycle()
+    val password by viewModel.password.collectAsStateWithLifecycle()
     var isPasswordVisible by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
@@ -89,7 +90,7 @@ fun LoginScreen(
                 LoginTextField(
                     placeholder = stringResource(R.string.email),
                     input = email,
-                    onTextChange = { email = it },
+                    onTextChange = { viewModel.updateEmail(it) },
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -97,7 +98,7 @@ fun LoginScreen(
                 LoginTextField(
                     placeholder = stringResource(R.string.password),
                     input = password,
-                    onTextChange = { password = it },
+                    onTextChange = { viewModel.updatePassword(it) },
                     visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 )
 
