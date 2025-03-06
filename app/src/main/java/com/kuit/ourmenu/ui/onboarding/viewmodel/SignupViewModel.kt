@@ -121,5 +121,26 @@ class SignupViewModel @Inject constructor(
             _signupState.value = SignupState.Default
         }
     }
+    fun signup() {
+        viewModelScope.launch {
+            authRepository.signup(
+                email = email.value,
+                mealTime = selectedTimes.value.map { it.substringBefore(":").toInt() },
+                password = password.value,
+                name = domain.value
+            )
+                .fold(
+                    onSuccess = {
+                        _signupState.value = SignupState.Success
+                    },
+                    onFailure = { error ->
+                        _signupState.value = SignupState.Error
+                        _error.value = error.message
+                    }
+                )
+            delay(1000)
+            _signupState.value = SignupState.Default
+        }
+    }
 
 }
