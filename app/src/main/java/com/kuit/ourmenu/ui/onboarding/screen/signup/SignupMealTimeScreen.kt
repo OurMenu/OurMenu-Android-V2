@@ -1,5 +1,6 @@
 package com.kuit.ourmenu.ui.onboarding.screen.signup
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,6 +9,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -16,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
@@ -24,6 +28,7 @@ import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.onboarding.component.MealTimeGrid
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
 import com.kuit.ourmenu.ui.onboarding.model.MealTimeState
+import com.kuit.ourmenu.ui.onboarding.state.SignupState
 import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral900
@@ -44,6 +49,19 @@ fun SignupNicknameScreen(
     }
     val selectedTimes = remember { mutableStateListOf<String>() }
     val enable = selectedTimes.isNotEmpty()
+    val signupState by viewModel.signupState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(signupState) {
+        when (signupState) {
+            is SignupState.Success ->
+                navController.navigate(route = Routes.Login)
+
+            is SignupState.Error ->
+                Log.e("SignupVerifyScreen", viewModel.error.value.toString())
+
+            else -> {}
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -100,9 +118,7 @@ fun SignupNicknameScreen(
                     .align(Alignment.BottomCenter)
                     .padding(bottom = 20.dp),
                 text = stringResource(R.string.confirm)
-            ) {
-                navController.navigate(route = Routes.Login)
-            }
+            ) { viewModel.signup() }
 
         }
     }
