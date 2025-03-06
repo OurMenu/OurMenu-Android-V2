@@ -82,37 +82,47 @@ fun SignupPasswordScreen(
     val shakingModifier = Modifier.offset { IntOffset(shakeOffset.value.roundToInt(), 0) }
 
     LaunchedEffect(passwordState) {
-        if (passwordState is PasswordState.NotMeetCondition) {
-            scope.launch {
-                focusRequester.requestFocus()
-                delay(800)
-                passwordState = PasswordState.Default
-            }
-            shakeAnimation(
-                offset = shakeOffset,
-                coroutineScope = scope,
-            )
-            scope.launch {
-                snackbarHostState.showSnackbar(
-                    message = "비밀번호 조건을 다시 확인해주세요.",
-                    duration = SnackbarDuration.Short
+        when (passwordState) {
+            PasswordState.NotMeetCondition -> {
+                scope.launch {
+                    focusRequester.requestFocus()
+                    delay(800)
+                    passwordState = PasswordState.Default
+                }
+                shakeAnimation(
+                    offset = shakeOffset,
+                    coroutineScope = scope,
                 )
+                scope.launch {
+                    snackbarHostState.showSnackbar(
+                        message = "비밀번호 조건을 다시 확인해주세요.",
+                        duration = SnackbarDuration.Short
+                    )
+                }
             }
-        } else if (passwordState is PasswordState.DifferentPassword) {
-            shakeAnimation(
-                offset = shakeOffset,
-                coroutineScope = scope,
-            )
-            scope.launch {
-                snackbarHostState.showSnackbar(
-                    message = "비밀번호가 일치하지 않아요.",
-                    duration = SnackbarDuration.Short
+
+            PasswordState.DifferentPassword -> {
+                shakeAnimation(
+                    offset = shakeOffset,
+                    coroutineScope = scope,
                 )
+                scope.launch {
+                    snackbarHostState.showSnackbar(
+                        message = "비밀번호가 일치하지 않아요.",
+                        duration = SnackbarDuration.Short
+                    )
+                }
+                scope.launch {
+                    delay(800)
+                    passwordState = PasswordState.Default
+                }
             }
-            scope.launch {
-                delay(800)
-                passwordState = PasswordState.Default
+
+            PasswordState.Valid -> {
+                navController.navigate(route = Routes.SignupNickname)
             }
+
+            else -> {}
         }
     }
 
@@ -242,12 +252,10 @@ fun SignupPasswordScreen(
                         enable = isConfirmButtonEnabled,
                         text = stringResource(R.string.confirm),
                         onClick = {
-//                            navController.navigate(route = Routes.SignupNickname)
                             passwordState = checkPassword(
                                 password = password,
                                 confirmPassword = confirmPassword,
                             )
-                            Log.d("SignupPasswordScreen", "passwordState: $passwordState")
                         },
                     )
                 }
