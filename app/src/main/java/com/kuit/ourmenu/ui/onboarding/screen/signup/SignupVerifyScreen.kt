@@ -17,9 +17,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -28,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
@@ -49,7 +48,7 @@ fun SignupVerifyScreen(
     viewModel: SignupViewModel = hiltViewModel()
 ) {
     val focusRequesters = List(6) { FocusRequester() }
-    val codes: SnapshotStateList<String> = remember { mutableStateListOf("", "", "", "", "", "") }
+    val codes by viewModel.codes.collectAsStateWithLifecycle()
 
     // 모든 입력 칸이 채워졌는지 확인
     val isConfirmButtonEnabled = codes.all { it.isNotEmpty() }
@@ -103,7 +102,7 @@ fun SignupVerifyScreen(
                             input = codes[i],
                             onTextChange = { newText ->
                                 if (newText.length <= 1) {
-                                    codes[i] = newText // Compose에서 상태 변경 감지
+                                    viewModel.updateCode(i, newText) // Compose에서 상태 변경 감지
                                 }
                             },
                             onNext = {

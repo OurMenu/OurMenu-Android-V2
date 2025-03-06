@@ -3,6 +3,7 @@ package com.kuit.ourmenu.ui.onboarding.viewmodel
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 @HiltViewModel
@@ -17,6 +18,9 @@ class SignupViewModel : ViewModel() {
     private val _password = MutableStateFlow("")
     val password = _password.asStateFlow()
 
+    private val _codes = MutableStateFlow(mutableListOf("", "", "", "", "", ""))
+    val codes: StateFlow<List<String>> = _codes
+
     fun updateEmail(email: String) {
         _email.value = email
     }
@@ -27,6 +31,10 @@ class SignupViewModel : ViewModel() {
 
     fun updatePassword(password: String) {
         _password.value = password
+    }
+
+    fun updateCode(index: Int, code: String) {
+        _codes.value[index] = code
     }
 
 }
