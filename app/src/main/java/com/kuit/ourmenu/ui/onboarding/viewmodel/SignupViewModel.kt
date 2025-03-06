@@ -2,12 +2,17 @@ package com.kuit.ourmenu.ui.onboarding.viewmodel
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.kuit.ourmenu.data.repository.AuthRepository
 import com.kuit.ourmenu.ui.onboarding.model.MealTimeState
+import com.kuit.ourmenu.ui.onboarding.state.LoginState
+import com.kuit.ourmenu.ui.onboarding.state.SignupState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,6 +47,12 @@ class SignupViewModel @Inject constructor(
     private val _selectedTimes = MutableStateFlow(mutableStateListOf<String>())
     val selectedTimes: StateFlow<List<String>> = _selectedTimes.asStateFlow()
 
+    private val _signupState: MutableStateFlow<SignupState> = MutableStateFlow(SignupState.Default)
+    val signupState: StateFlow<SignupState> = _signupState.asStateFlow()
+
+    private val _error: MutableStateFlow<String?> = MutableStateFlow(null)
+    val error = _error.asStateFlow()
+
     fun updateEmail(email: String) {
         _email.value = email
     }
@@ -70,6 +81,25 @@ class SignupViewModel @Inject constructor(
     fun removeSelectedTime(index: Int, selectedTime: String) {
         _selectedTimes.value.remove(selectedTime)
         _mealTimes.value[index] = _mealTimes.value[index].copy(selected = false)
+    }
+
+    /* Api Section */
+    fun sendEmail() {
+        viewModelScope.launch {
+            authRepository.sendEmail(email.value)
+                .fold(
+                    onSuccess = {
+                        _signupState.value = SignupState.Success
+                    },
+                    onFailure = { error ->
+                        _signupState.value = SignupState.Error
+                        _error.value = error.message
+
+                        delay(1000)
+                        _signupState.value = SignupState.Default
+                    }
+                )
+        }
     }
 
 }
