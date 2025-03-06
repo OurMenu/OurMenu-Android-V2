@@ -1,5 +1,6 @@
 package com.kuit.ourmenu.ui.onboarding.screen.signup
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -17,6 +18,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +36,7 @@ import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
 import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
 import com.kuit.ourmenu.ui.onboarding.component.VerifyCodeTextField
+import com.kuit.ourmenu.ui.onboarding.state.SignupState
 import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral500
@@ -52,23 +55,38 @@ fun SignupVerifyScreen(
 
     // 모든 입력 칸이 채워졌는지 확인
     val isConfirmButtonEnabled = codes.all { it.isNotEmpty() }
+    val signupState by viewModel.signupState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(signupState) {
+        when (signupState) {
+            is SignupState.Success ->
+                navController.navigate(route = Routes.SignupPassword)
+
+            is SignupState.Error ->
+                Log.e("SignupVerifyScreen", viewModel.error.value.toString())
+
+            else -> {}
+        }
+    }
 
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
             .imePadding(),
-        topBar = { OnboardingTopAppBar(
-            onBackClick = {
-                navController.navigateUp()
-            }
-        ) },
+        topBar = {
+            OnboardingTopAppBar(
+                onBackClick = {
+                    navController.navigateUp()
+                }
+            )
+        },
         content = { innerPadding ->
             Column(
                 modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(horizontal = 20.dp),
+                    Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .padding(horizontal = 20.dp),
             ) {
                 Text(
                     text = stringResource(R.string.sent_mail),
@@ -116,13 +134,13 @@ fun SignupVerifyScreen(
                                 }
                             },
                             modifier =
-                            Modifier.then(
-                                if (i == 0 && codes[i].isEmpty()) {
-                                    Modifier.focusRequester(focusRequesters[i])
-                                } else {
-                                    Modifier
-                                },
-                            ),
+                                Modifier.then(
+                                    if (i == 0 && codes[i].isEmpty()) {
+                                        Modifier.focusRequester(focusRequesters[i])
+                                    } else {
+                                        Modifier
+                                    },
+                                ),
                             focusRequester = focusRequesters[i],
                         )
                         if (i < 5) {
@@ -135,9 +153,9 @@ fun SignupVerifyScreen(
         bottomBar = {
             Column(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Box(
@@ -153,10 +171,10 @@ fun SignupVerifyScreen(
                     Box(
                         contentAlignment = Alignment.Center, // 내용 중앙 정렬
                         modifier =
-                        Modifier
-                            .background(NeutralWhite)
-                            .height(36.dp)
-                            .width(124.dp),
+                            Modifier
+                                .background(NeutralWhite)
+                                .height(36.dp)
+                                .width(124.dp),
                     ) {
                         Text(
                             text = stringResource(R.string.didnt_receive),
@@ -180,9 +198,7 @@ fun SignupVerifyScreen(
                 DisableBottomFullWidthButton(
                     enable = isConfirmButtonEnabled,
                     text = stringResource(R.string.confirm),
-                    onClick = {
-                        navController.navigate(route = Routes.SignupPassword)
-                    },
+                    onClick = { viewModel.verifyCode() },
                 )
             }
         },
