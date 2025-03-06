@@ -9,25 +9,21 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 object AnimationUtil {
-    private val shakeKeyframes: AnimationSpec<Float> = keyframes {
-        durationMillis = 800
-        val easing = FastOutLinearInEasing
-
-        // generate 8 keyframes
-        for (i in 1..8) {
-            val x = when (i % 3) {
-                0 -> 4f
-                1 -> -4f
-                else -> 0f
-            }
-            x at durationMillis / 10 * i with easing
-        }
-    }
 
     fun shakeAnimation(
         offset: Animatable<Float, AnimationVector1D>,
         coroutineScope: CoroutineScope,
+        durationMillis: Int = 800
     ) {
+        val shakeKeyframes: AnimationSpec<Float> = keyframes {
+            val easing = FastOutLinearInEasing
+
+            // 좀 더 랜덤한 흔들림 값을 설정
+            listOf(-8f, 8f, -6f, 6f, -4f, 4f, -2f, 2f, 0f).forEachIndexed { index, x ->
+                x at (durationMillis / 9 * (index + 1)) using easing
+            }
+        }
+
         coroutineScope.launch {
             offset.animateTo(
                 targetValue = 0f,
