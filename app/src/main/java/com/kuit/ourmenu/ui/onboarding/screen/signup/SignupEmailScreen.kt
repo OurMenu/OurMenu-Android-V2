@@ -9,10 +9,13 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -24,6 +27,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
+import com.kuit.ourmenu.ui.common.OurSnackbarHost
 import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.onboarding.component.EmailSpinner
 import com.kuit.ourmenu.ui.onboarding.component.LoginTextField
@@ -47,13 +51,20 @@ fun SignupEmailScreen(
     val enable = email.isNotEmpty() && domain.isNotEmpty()
     val signupState by viewModel.signupState.collectAsStateWithLifecycle()
 
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
     LaunchedEffect(signupState) {
         when (signupState) {
-            is SignupState.Success ->
-                navController.navigate(route = Routes.SignupVerify)
-
-            is SignupState.Error ->
-                Log.e("SignupEmailScreen", viewModel.error.value.toString())
+            is SignupState.Success -> navController.navigate(route = Routes.SignupVerify)
+            is SignupState.Error -> {
+                scope.launch {
+                    snackbarHostState.showSnackbar(
+                        message = viewModel.error.value ?: "",
+                        duration = SnackbarDuration.Short
+                    )
+                }
+            }
 
             else -> {}
         }
@@ -112,6 +123,18 @@ fun SignupEmailScreen(
                 text = stringResource(R.string.send_auth_mail)
             ) { viewModel.sendEmail() }
 
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(top = 44.dp),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            OurSnackbarHost(
+                hostState = snackbarHostState
+            )
         }
     }
 }
