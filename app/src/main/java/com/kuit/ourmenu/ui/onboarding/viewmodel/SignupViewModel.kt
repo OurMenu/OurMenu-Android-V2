@@ -94,11 +94,31 @@ class SignupViewModel @Inject constructor(
                     onFailure = { error ->
                         _signupState.value = SignupState.Error
                         _error.value = error.message
+                    }
 
-                        delay(1000)
-                        _signupState.value = SignupState.Default
+                )
+            delay(1000)
+            _signupState.value = SignupState.Default
+        }
+    }
+
+    fun verifyCode() {
+        viewModelScope.launch {
+            authRepository.confirmCode(
+                confirmCode = codes.value.joinToString(""),
+                email = email.value
+            )
+                .fold(
+                    onSuccess = {
+                        _signupState.value = SignupState.Success
+                    },
+                    onFailure = { error ->
+                        _signupState.value = SignupState.Error
+                        _error.value = error.message
                     }
                 )
+            delay(1000)
+            _signupState.value = SignupState.Default
         }
     }
 
