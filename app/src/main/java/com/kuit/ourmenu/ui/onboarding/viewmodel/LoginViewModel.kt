@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.kuit.ourmenu.data.repository.AuthRepository
 import com.kuit.ourmenu.ui.onboarding.state.LoginState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -50,9 +51,13 @@ class LoginViewModel @Inject constructor(
                 onFailure = { error ->
                     _loginState.value = LoginState.Error
                     _error.value = error.message
+
+                    delay(1000)
+                    _loginState.value = LoginState.Default
                 }
             )
-            _loginState.value = LoginState.Default
+
+
         }
     }
 }
