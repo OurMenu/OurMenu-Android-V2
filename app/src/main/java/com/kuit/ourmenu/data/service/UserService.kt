@@ -12,20 +12,20 @@ import retrofit2.http.POST
 interface UserService {
 
     @POST("api/emails/temporary-password")
-    fun sendTemporaryPassword(
+    suspend fun sendTemporaryPassword(
         @Body email: String
     ): BaseResponse<TemporaryPasswordResponse>
 
     @PATCH("api/users/password")
-    fun changePassword(
+    suspend fun changePassword(
         @Body request: ChangePasswordRequest
     ): BaseResponse<Unit>
 
     @PATCH("api/users/meal-times")
-    fun updateMealTimes(
+    suspend fun updateMealTimes(
         @Body mealTimes: List<Int>
     ): BaseResponse<Unit>
 
     @GET("api/users")
-    fun getUserInfo(): BaseResponse<UserInfoResponse>
+    suspend fun getUserInfo(): BaseResponse<UserInfoResponse>
 }

@@ -12,30 +12,30 @@ import retrofit2.http.POST
 
 interface AuthService {
     @POST("api/users/sign-up")
-    fun signup(
+    suspend fun signup(
         @Body request: SignupRequest
     ): BaseResponse<Unit>
 
     @POST("api/users/sign-out")
-    fun logout(): BaseResponse<Unit>
+    suspend fun logout(): BaseResponse<Unit>
 
     @POST("api/users/sign-in")
-    fun login(
+    suspend fun login(
         @Body request: LoginRequest
     ): BaseResponse<LoginResponse>
 
     @POST("api/users/reissue-token")
-    fun reissueToken(
+    suspend fun reissueToken(
         @Body refreshToken: String
     ): BaseResponse<ReissueTokenResponse>
 
     @POST("api/emails")
-    fun sendEmail(
+    suspend fun sendEmail(
         @Body email: String
     ): BaseResponse<EmailResponse>
 
     @POST("api/emails/confirm-code")
-    fun confirmCode(
+    suspend fun confirmCode(
         @Body request: ConfirmCodeRequest
     ): BaseResponse<Unit>
 }
