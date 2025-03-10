@@ -33,6 +33,8 @@
     <string name="type_body">본문을 입력해주세요.</string>
     <string name="food_tag">음식 태그</string>
     <string name="multiple_choice_available">중복 선택 가능</string>
+
+    <!--  onboarding  -->
     <string name="landing_introduce_title">아워메뉴에 온 걸 환영해요!</string>
     <string name="landing_introduce_content">저희와 함께 매일 먹을 한 끼를 고민해요.</string>
     <string name="login">로그인</string>
@@ -43,26 +45,31 @@
     <string name="see_password">비밀번호 보기</string>
     <string name="forgot_password">비밀번호 찾기</string>
     <string name="have_account">계정이 없으신가요?</string>
-
+    <string name="input_email">이메일을 입력해주세요.</string>
+    <string name="input_email_description">로그인 및 회원가입, 본인확인에 필요합니다.</string>
     <string name="placeholder_default">default</string>
-    <string name="placeholder_text">텍스트</string>
+    <string name="placeholder_email_domain">직접 입력하기</string>
     <string name="email_custom">직접 입력하기</string>
     <string name="email_daum">daum.net</string>
     <string name="email_gmail">gmail.com</string>
     <string name="email_kakao">kakao.com</string>
     <string name="email_nate">nate.com</string>
     <string name="email_naver">naver.com</string>
-
     <string name="sent_mail">메일을 보냈습니다!</string>
     <string name="in_5_mins">5분 안에 </string>
     <string name="enter_code">인증 코드를 입력해주세요.</string>
     <string name="didnt_receive">메일이 오지 않았나요?</string>
     <string name="resend">메일 다시 보내기</string>
-
     <string name="enter_password">비밀번호를 입력해주세요.</string>
     <string name="password_hint">영문, 숫자 포함 8자 이상</string>
     <string name="password_placeholder">강력한 비밀번호를 만들어주세요!</string>
     <string name="confirm_password_placeholder">비밀번호를 한 번 더 확인해주세요.</string>
+    <string name="send_auth_mail">인증 메일 보내기</string>
+    <string name="input_meal_time">평소 식사시간을 입력해주세요.</string>
+    <string name="input_meal_time_description">나중에 수정할 수 있으니 걱정마세요!</string>
+    <string name="placeholder_nickname">최대 10자</string>
+
+
     <string name="go_to_map">지도 앱으로 이동</string>
 
     <!--menu info-->
@@ -73,7 +80,7 @@
     <string name="memo_title">매운 맛 선택 가능!</string>
     <string name="memo_content">* 덕유산 / ㅇㅇ산 / 한라산\n기본도 정말 매우니 조심하기</string>
     <string name="menu_info_goto_map">지도보기</string>
-    
+
     <!--search menu-->
     <string name="search_place_holder">가게, 메뉴 이름 검색</string>
 
