@@ -77,4 +77,8 @@
     <!--search menu-->
     <string name="search_place_holder">가게, 메뉴 이름 검색</string>
 
+    <!--menu folder-->
+    <string name="delete">삭제</string>
+    <string name="edit">수정</string>
+
 </resources>
