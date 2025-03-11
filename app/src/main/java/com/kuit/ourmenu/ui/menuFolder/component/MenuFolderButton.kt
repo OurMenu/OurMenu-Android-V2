@@ -143,6 +143,8 @@ fun MenuFolderDeleteButton() {
 
 @Composable
 fun MenuFolderContent() {
+    val menuCount = 5 // 임의로 정한 값
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -187,7 +189,7 @@ fun MenuFolderContent() {
                 }
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = "메뉴 0개",
+                    text = String.format(stringResource(R.string.menu_count), menuCount),
                     color = NeutralWhite,
                     style = ourMenuTypography().pretendard_500_14,
                 )
