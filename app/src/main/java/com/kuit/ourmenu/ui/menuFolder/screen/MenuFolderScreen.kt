@@ -13,6 +13,10 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,6 +37,9 @@ fun MenuFolderScreen(modifier: Modifier = Modifier) {
     val menuCount = 5 // 임의로 정한 값
     val menuFolderCount = 8 // 임의로 정한 값
 
+    // 현재 스와이프된 버튼의 인덱스를 관리 (한 번에 하나만 스와이프되도록)
+    var swipedIndex by remember { mutableIntStateOf(-1) }
+
     Scaffold(
         topBar = {
             MenuFolderTopAppBar()
@@ -44,7 +51,6 @@ fun MenuFolderScreen(modifier: Modifier = Modifier) {
                 .padding(horizontal = 20.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            // 상단 메뉴 개수를 표시하는 UI도 함께 스크롤되도록 포함
             item {
                 Column(
                     modifier = Modifier
@@ -70,9 +76,13 @@ fun MenuFolderScreen(modifier: Modifier = Modifier) {
                 }
             }
 
-            // 여러 개의 MenuFolderButton 추가
-            items(menuFolderCount) {
-                MenuFolderButton()
+            // 스와이프 제어
+            items(menuFolderCount) { index ->
+                MenuFolderButton(
+                    isSwiped = swipedIndex == index, // 현재 스와이프된 아이템인지 확인
+                    onSwipe = { swipedIndex = index }, // 새로운 버튼이 스와이프되면 상태 변경
+                    onReset = { if (swipedIndex == index) swipedIndex = -1 } // 닫히면 초기화
+                )
             }
 
             item {
