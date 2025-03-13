@@ -39,7 +39,7 @@ fun MenuFolderAllMenuScreen(modifier: Modifier = Modifier) {
 
     Scaffold(
         topBar = {
-            BackButtonTopAppBar(Neutral500)
+            BackButtonTopAppBar(Neutral500, false)
         }
     ) { innerPadding ->
         Column(
