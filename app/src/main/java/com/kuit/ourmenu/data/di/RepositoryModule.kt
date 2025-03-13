@@ -16,6 +16,7 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun providesDummyRepository(
+        // 각 Repository 에서 사용할 Service, TokenManager 를 주입
         dummyService: DummyService,
         tokenManager: TokenManager
     ): DummyRepository {

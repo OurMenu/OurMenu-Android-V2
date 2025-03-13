@@ -25,15 +25,28 @@ class TokenManager @Inject constructor(@ApplicationContext private val context: 
         }
     }
 
-    suspend fun saveAccessToken(token: String) {
+    fun getRefreshToken(): Flow<String?> {
+        return context.dataStore.data.map { preferences ->
+            preferences[REFRESH_TOKEN]
+        }
+    }
+
+    suspend fun saveAccessToken(accessToken: String) {
         context.dataStore.edit { preferences ->
-            preferences[ACCESS_TOKEN] = token
+            preferences[ACCESS_TOKEN] = accessToken
+        }
+    }
+
+    suspend fun saveRefreshToken(refreshToken: String) {
+        context.dataStore.edit { preferences ->
+            preferences[REFRESH_TOKEN] = refreshToken
         }
     }
 
     suspend fun clearToken() {
         context.dataStore.edit { preferences ->
             preferences.remove(ACCESS_TOKEN)
+            preferences.remove(REFRESH_TOKEN)
         }
     }
 }
