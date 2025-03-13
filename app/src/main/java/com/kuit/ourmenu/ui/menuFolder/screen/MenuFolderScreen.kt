@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,10 +22,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.ui.menuFolder.component.AddButton
 import com.kuit.ourmenu.ui.menuFolder.component.MenuFolderButton
 import com.kuit.ourmenu.ui.menuFolder.component.MenuFolderTopAppBar
-import com.kuit.ourmenu.ui.theme.Neutral100
-import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
@@ -86,25 +83,11 @@ fun MenuFolderScreen(modifier: Modifier = Modifier) {
             }
 
             item {
-                Card( // 그림자 적용 위해 Card 사용
-                    shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier.padding(bottom = 20.dp),
-                    colors = CardDefaults.cardColors(containerColor = Neutral100),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+                AddButton(
+                    stringResource(R.string.add_menu_folder),
+                    modifier = Modifier
                 ) {
-                    Column(
-                        modifier = Modifier
-                            .height(52.dp)
-                            .fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = stringResource(R.string.add_menu_folder),
-                            color = Neutral500,
-                            style = ourMenuTypography().pretendard_600_14
-                        )
-                    }
+                    // TODO: 버튼 누르면 메뉴판 추가 페이지로 이동
                 }
             }
         }

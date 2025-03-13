@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -24,8 +23,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.topappbar.BackButtonTopAppBar
+import com.kuit.ourmenu.ui.menuFolder.component.AddButton
 import com.kuit.ourmenu.ui.menuFolder.component.MenuFolderMenuButton
-import com.kuit.ourmenu.ui.theme.Neutral100
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.Neutral900
@@ -124,27 +123,12 @@ fun MenuFolderAllMenuScreen(modifier: Modifier = Modifier) {
                     MenuFolderMenuButton()
                 }
 
-                // TODO: 버튼 누르면 메뉴 추가 페이지로 이동
                 item {
-                    Card(
-                        shape = RoundedCornerShape(12.dp),
-                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
-                        colors = CardDefaults.cardColors(containerColor = Neutral100),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                    AddButton(
+                        stringResource(R.string.add_menu),
+                        modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 20.dp)
                     ) {
-                        Column(
-                            modifier = Modifier
-                                .height(52.dp)
-                                .fillMaxWidth(),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
-                        ) {
-                            Text(
-                                text = stringResource(R.string.add_menu),
-                                color = Neutral500,
-                                style = ourMenuTypography().pretendard_600_14
-                            )
-                        }
+                        // TODO: 버튼 누르면 메뉴 추가 페이지로 이동
                     }
                 }
             }
