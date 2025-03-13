@@ -35,19 +35,13 @@ import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun SignupNicknameScreen(
+fun SignupMealTimeScreen(
     navController: NavController,
     viewModel: SignupViewModel = hiltViewModel()
 ) {
 
-    val mealTimeList = remember {
-        mutableStateListOf(
-            *List(18) {
-                MealTimeState(mealTime = "${it + 6}:00")
-            }.toTypedArray()
-        )
-    }
-    val selectedTimes = remember { mutableStateListOf<String>() }
+    val mealTimeList by viewModel.mealTimes.collectAsStateWithLifecycle()
+    val selectedTimes by viewModel.selectedTimes.collectAsStateWithLifecycle()
     val enable = selectedTimes.isNotEmpty()
     val signupState by viewModel.signupState.collectAsStateWithLifecycle()
 
@@ -132,6 +126,6 @@ fun SignupNicknameScreen(
 private fun SignupNicknameScreenPreview() {
     val navController = rememberNavController()
 
-    SignupNicknameScreen(navController)
+    SignupMealTimeScreen(navController)
 
 }

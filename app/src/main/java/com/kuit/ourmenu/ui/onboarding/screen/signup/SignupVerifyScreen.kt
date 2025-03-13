@@ -44,7 +44,6 @@ import com.kuit.ourmenu.ui.common.OurSnackbarHost
 import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
 import com.kuit.ourmenu.ui.onboarding.component.VerifyCodeTextField
-import com.kuit.ourmenu.ui.onboarding.state.PasswordState
 import com.kuit.ourmenu.ui.onboarding.state.SignupState
 import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.theme.Neutral300
@@ -68,7 +67,7 @@ fun SignupVerifyScreen(
 
     // 모든 입력 칸이 채워졌는지 확인
     val isConfirmButtonEnabled = codes.all { it.isNotEmpty() }
-    val signupState by viewModel.signupState.collectAsStateWithLifecycle()
+    val verifyState by viewModel.verifyState.collectAsStateWithLifecycle()
 
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -76,8 +75,8 @@ fun SignupVerifyScreen(
     val shakingModifier = Modifier.offset { IntOffset(shakeOffset.value.roundToInt(), 0) }
 
 
-    LaunchedEffect(signupState) {
-        when (signupState) {
+    LaunchedEffect(verifyState) {
+        when (verifyState) {
             is SignupState.Success ->
                 navController.navigate(route = Routes.SignupPassword)
 
@@ -154,7 +153,6 @@ fun SignupVerifyScreen(
                             onTextChange = { newText ->
                                 if (newText.length <= 1) {
                                     viewModel.updateCode(i, newText) // Compose에서 상태 변경 감지
-                                    Log.d("SignupVerifyScreen", "codes: $codes")
                                 }
                             },
                             onNext = {

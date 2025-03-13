@@ -45,8 +45,14 @@ class SignupViewModel @Inject constructor(
     )
     val mealTimes: StateFlow<List<MealTimeState>> = _mealTimes.asStateFlow()
 
-    private val _selectedTimes = MutableStateFlow(mutableStateListOf<String>())
+    private val _selectedTimes = MutableStateFlow(listOf<String>())
     val selectedTimes: StateFlow<List<String>> = _selectedTimes.asStateFlow()
+
+    private val _emailState: MutableStateFlow<SignupState> = MutableStateFlow(SignupState.Default)
+    val emailState: StateFlow<SignupState> = _emailState.asStateFlow()
+
+    private val _verifyState: MutableStateFlow<SignupState> = MutableStateFlow(SignupState.Default)
+    val verifyState: StateFlow<SignupState> = _verifyState.asStateFlow()
 
     private val _signupState: MutableStateFlow<SignupState> = MutableStateFlow(SignupState.Default)
     val signupState: StateFlow<SignupState> = _signupState.asStateFlow()
@@ -65,7 +71,7 @@ class SignupViewModel @Inject constructor(
     fun updateCode(index: Int, code: String) {
         _codes.update {
             it.mapIndexed { i, item ->
-                if (i == index) code else item
+                if (i == index) code.uppercase() else item
             }
         }
     }
@@ -79,12 +85,16 @@ class SignupViewModel @Inject constructor(
     }
 
     fun addSelectedTime(index: Int, selectedTime: String) {
-        _selectedTimes.value.add(selectedTime)
+        _selectedTimes.update {
+            it + selectedTime
+        }
         _mealTimes.value[index] = _mealTimes.value[index].copy(selected = true)
     }
 
     fun removeSelectedTime(index: Int, selectedTime: String) {
-        _selectedTimes.value.remove(selectedTime)
+        _selectedTimes.update {
+            it - selectedTime
+        }
         _mealTimes.value[index] = _mealTimes.value[index].copy(selected = false)
     }
 
@@ -96,16 +106,16 @@ class SignupViewModel @Inject constructor(
             )
                 .fold(
                     onSuccess = {
-                        _signupState.value = SignupState.Success
+                        _emailState.value = SignupState.Success
                     },
                     onFailure = { error ->
-                        _signupState.value = SignupState.Error
+                        _emailState.value = SignupState.Error
                         _error.value = error.message
                     }
 
                 )
             delay(1000)
-            _signupState.value = SignupState.Default
+            _emailState.value = SignupState.Default
         }
     }
 
@@ -117,15 +127,15 @@ class SignupViewModel @Inject constructor(
             )
                 .fold(
                     onSuccess = {
-                        _signupState.value = SignupState.Success
+                        _verifyState.value = SignupState.Success
                     },
                     onFailure = { error ->
-                        _signupState.value = SignupState.Error
+                        _verifyState.value = SignupState.Error
                         _error.value = error.message
                     }
                 )
             delay(1000)
-            _signupState.value = SignupState.Default
+            _verifyState.value = SignupState.Default
         }
     }
 
@@ -135,7 +145,7 @@ class SignupViewModel @Inject constructor(
                 email = "${email.value}@${domain.value}",
                 mealTime = selectedTimes.value.map { it.substringBefore(":").toInt() },
                 password = password.value,
-                name = domain.value
+                name = "EMAIL"
             )
                 .fold(
                     onSuccess = {

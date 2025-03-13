@@ -1,6 +1,5 @@
 package com.kuit.ourmenu.ui.onboarding.screen.signup
 
-import android.util.Log
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -119,7 +118,7 @@ fun SignupPasswordScreen(
             }
 
             PasswordState.Valid -> {
-                navController.navigate(route = Routes.SignupNickname)
+                navController.navigate(route = Routes.SignupMealTime)
             }
 
             else -> {}

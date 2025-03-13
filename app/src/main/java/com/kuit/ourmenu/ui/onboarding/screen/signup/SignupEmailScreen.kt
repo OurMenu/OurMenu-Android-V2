@@ -1,6 +1,6 @@
 package com.kuit.ourmenu.ui.onboarding.screen.signup
 
-import android.util.Log
+import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,7 +32,6 @@ import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.onboarding.component.EmailSpinner
 import com.kuit.ourmenu.ui.onboarding.component.LoginTextField
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
-import com.kuit.ourmenu.ui.onboarding.state.LoginState
 import com.kuit.ourmenu.ui.onboarding.state.SignupState
 import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.theme.Neutral500
@@ -48,14 +47,15 @@ fun SignupEmailScreen(
 
     val email by viewModel.email.collectAsStateWithLifecycle()
     val domain by viewModel.domain.collectAsStateWithLifecycle()
-    val enable = email.isNotEmpty() && domain.isNotEmpty()
-    val signupState by viewModel.signupState.collectAsStateWithLifecycle()
+    val enable = /*email.isNotEmpty() && domain.isNotEmpty()*/ true
+    val emailState by viewModel.emailState.collectAsStateWithLifecycle()
 
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val shakeOffset = remember { Animatable(0f) }
 
-    LaunchedEffect(signupState) {
-        when (signupState) {
+    LaunchedEffect(emailState) {
+        when (emailState) {
             is SignupState.Success -> navController.navigate(route = Routes.SignupVerify)
             is SignupState.Error -> {
                 scope.launch {
@@ -64,6 +64,15 @@ fun SignupEmailScreen(
                         duration = SnackbarDuration.Short
                     )
                 }
+                /*
+                    TODO : Error Response 에 따라서 관리를 해야함.
+                    scope.launch {
+                        shakeAnimation(
+                            offset = shakeOffset,
+                            coroutineScope = scope
+                        )
+                    }
+                */
             }
 
             else -> {}
@@ -88,6 +97,14 @@ fun SignupEmailScreen(
                 .padding(innerPadding)
                 .padding(horizontal = 20.dp)
         ) {
+            DisableBottomFullWidthButton(
+                enable = enable,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 20.dp),
+                text = stringResource(R.string.send_auth_mail)
+            ) { viewModel.sendEmail() }
+
             Column(
                 modifier = Modifier
                     .padding(top = 92.dp)
@@ -107,7 +124,10 @@ fun SignupEmailScreen(
                 )
 
                 EmailInputField(
-                    modifier = Modifier.padding(top = 12.dp),
+                    modifier = Modifier
+                        .padding(top = 12.dp)
+//                        .offset { IntOffset(shakeOffset.value.roundToInt(), 0) }
+                    ,
                     email = email,
                     onEmailChange = { viewModel.updateEmail(it) },
                     domain = domain,
@@ -115,13 +135,6 @@ fun SignupEmailScreen(
                 )
             }
 
-            DisableBottomFullWidthButton(
-                enable = enable,
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 20.dp),
-                text = stringResource(R.string.send_auth_mail)
-            ) { viewModel.sendEmail() }
 
         }
 
