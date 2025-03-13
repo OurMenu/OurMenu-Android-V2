@@ -25,7 +25,8 @@ fun IconSelectBottomSheet(
     modifier: Modifier = Modifier,
     iconList: List<Int>,
     onCancel: () -> Unit,
-    onConfirm: () -> Unit
+    onConfirm: () -> Unit,
+    onIconClick: (Int) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -34,17 +35,15 @@ fun IconSelectBottomSheet(
     ) {
         IconItemGroup(
             groupLabel = "아이콘",
-            icons = iconList
-        ) {
-            // TODO: Icon 선택시 동작 (api 연결 어떻게 될지 몰라서 일단 비워둠)
-        }
+            icons = iconList,
+            onIconSelect = onIconClick
+        )
 
         Spacer(modifier = modifier.height(28.dp))
 
         Row(
             modifier = modifier
                 .fillMaxWidth()
-//                .padding(bottom = 20.dp)
             ,
             horizontalArrangement = Arrangement.Center
         ) {
@@ -95,5 +94,7 @@ private fun IconSelectBottomSheetPreview() {
         iconList = iconList,
         onCancel = {},
         onConfirm = {}
-    )
+    ){
+        // 아이콘 선택시 동작
+    }
 }

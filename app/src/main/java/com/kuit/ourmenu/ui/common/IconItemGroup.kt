@@ -24,7 +24,7 @@ fun IconItemGroup(
     modifier: Modifier = Modifier,
     groupLabel: String,
     icons: List<Int>,
-    onIconSelect: () -> Unit
+    onIconSelect: (Int) -> Unit
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
@@ -39,12 +39,11 @@ fun IconItemGroup(
             verticalArrangement = Arrangement.spacedBy(20.dp),
             maxItemsInEachRow = 6
         ) {
-            icons.forEach { img ->
+            icons.forEachIndexed { index, img ->
                 IconItem(
                     iconId = img,
                 ) {
-                    // 아이콘 클릭시 수행할 작업
-
+                    onIconSelect(index)
                 }
             }
         }

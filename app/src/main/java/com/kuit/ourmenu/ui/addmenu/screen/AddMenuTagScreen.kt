@@ -73,6 +73,7 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
 
     // 선택된 태그 개수를 위한 변수
     var selectedTags by rememberSaveable { mutableStateOf(listOf<String>()) }
+    var selectedIcon by rememberSaveable { mutableStateOf(0) }
     // 예시를 위한 dummy list들
     val categoryTags = listOf(
         R.drawable.ic_tag_rice to "밥",
@@ -188,7 +189,10 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
                             showTagBottomSheet = true
                         }
                     }
-                )
+                ){ index ->
+                    selectedIcon = index
+                    Log.d("AddMenuTagScreen", "Selected icon index: $index")
+                }
             }
         },
         //태그 고르기 눌러야 보이도록
@@ -313,10 +317,15 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
 
                 //아이콘
                 Spacer(modifier = modifier.height(20.dp))
-                Row(modifier = modifier.fillMaxWidth()) {
+                Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                     Text(
                         text = stringResource(R.string.icon),
                         style = ourMenuTypography().pretendard_600_14
+                    )
+                    Icon(
+                        painter = painterResource(iconList[selectedIcon]),
+                        contentDescription = "selected icon",
+                        tint = Color.Unspecified,
                     )
                 }
             }
@@ -326,7 +335,7 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
                 contentColor = if (enableAddButton) NeutralWhite else Neutral500,
                 text = "메뉴 등록하기"
             ) {
-                //등록
+                //등록 api 호출
             }
         }
     }
