@@ -2,7 +2,8 @@ package com.kuit.ourmenu.data.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.kuit.ourmenu.BuildConfig
-import com.kuit.ourmenu.utils.auth.AuthorizationInterceptor
+import com.kuit.ourmenu.utils.auth.AuthInterceptor
+import com.kuit.ourmenu.utils.auth.TokenAuthenticator
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,14 +37,16 @@ object NetworkModule {
     @Singleton
     fun providesOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
-        authorizationInterceptor: AuthorizationInterceptor
+        authInterceptor: AuthInterceptor,
+        authAuthenticator: TokenAuthenticator
     ): OkHttpClient =
         OkHttpClient.Builder().apply {
             connectTimeout(10, TimeUnit.SECONDS)
             writeTimeout(10, TimeUnit.SECONDS)
             readTimeout(10, TimeUnit.SECONDS)
             addInterceptor(loggingInterceptor)
-            addInterceptor(authorizationInterceptor)
+            addInterceptor(authInterceptor)
+            authenticator(authAuthenticator)
         }.build()
 
     @Provides
