@@ -1,51 +1,62 @@
 package com.kuit.ourmenu.utils.auth
 
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.kuit.ourmenu.BuildConfig
+import com.kuit.ourmenu.data.model.auth.response.TokenReIssueResponse
 import com.kuit.ourmenu.data.service.AuthService
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
 import okhttp3.Authenticator
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import javax.inject.Inject
 
-class TokenAuthenticator(
+class TokenAuthenticator @Inject constructor(
     private val tokenManager: TokenManager,
-    private val authService: AuthService
 ): Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
-        return runBlocking {
-            val refreshToken = tokenManager.getRefreshToken().first()
-
-            if (refreshToken.isNullOrEmpty()){
-                tokenManager.clearToken()
-                return@runBlocking null
-            }
-            val newTokenResponse = withContext(Dispatchers.IO) {
-                try {
-                    authService.reIssueToken(refreshToken)
-                } catch (e: Exception) {
-                    null
-                }
-            }
-
-            if (newTokenResponse == null || !newTokenResponse.isSuccess || newTokenResponse.response == null) {
-                tokenManager.clearToken()
-                // TODO: 로그아웃 처리
-                return@runBlocking null
-            }
-
-            val newAccessToken = newTokenResponse.response.accessToken
-            val newRefreshToken = newTokenResponse.response.refreshToken
-            tokenManager.saveAccessToken(newAccessToken) // 새 access token 저장
-            tokenManager.saveRefreshToken(newRefreshToken) // 새 refresh token 저장
-
-            // 기존 요청을 새로운 Access Token으로 다시 실행
-            return@runBlocking response.request.newBuilder()
-                .header("Authorization", "Bearer $newAccessToken")
-                .build()
+        val refreshToken = runBlocking {
+            tokenManager.getRefreshToken().first()
         }
+        return runBlocking {
+            if (refreshToken.isNullOrEmpty()){
+                return@runBlocking null
+            }
+            val newToken = getNewToken(refreshToken)
+
+            if (newToken == null) {
+                tokenManager.clearToken()
+            }
+
+            newToken?.let {
+                tokenManager.saveAccessToken(it.accessToken)
+                response.request.newBuilder()
+                    .header("Authorization", "Bearer ${it.accessToken}")
+                    .build()
+            }
+        }
+    }
+
+    private suspend fun getNewToken(refreshToken: String): TokenReIssueResponse? {
+        val loggingInterceptor = HttpLoggingInterceptor()
+        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        val okHttpClient = OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BuildConfig.BASE_URL)
+            .addConverterFactory(
+                Json.asConverterFactory(requireNotNull("application/json".toMediaType()))
+            )
+            .client(okHttpClient)
+            .build()
+        val service = retrofit.create(AuthService::class.java)
+        return service.reIssueToken(refreshToken).response
     }
 
 }

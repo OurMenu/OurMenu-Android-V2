@@ -1,6 +1,8 @@
 package com.kuit.ourmenu.data.di
 
+import com.kuit.ourmenu.data.repository.AuthRepository
 import com.kuit.ourmenu.data.repository.DummyRepository
+import com.kuit.ourmenu.data.service.AuthService
 import com.kuit.ourmenu.data.service.DummyService
 import com.kuit.ourmenu.utils.auth.TokenManager
 import dagger.Module
@@ -12,7 +14,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
-
     @Provides
     @Singleton
     fun providesDummyRepository(
@@ -21,5 +22,14 @@ object RepositoryModule {
         tokenManager: TokenManager
     ): DummyRepository {
         return DummyRepository(dummyService, tokenManager)
+    }
+
+    @Provides
+    @Singleton
+    fun providesAuthRepository(
+        authService: AuthService,
+        tokenManager: TokenManager
+    ): AuthRepository{
+        return AuthRepository(authService, tokenManager)
     }
 }
