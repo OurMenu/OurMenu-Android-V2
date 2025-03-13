@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,6 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.ui.addmenu.component.SelectedTagGroup
 import com.kuit.ourmenu.ui.addmenu.component.bottomsheet.IconSelectBottomSheet
 import com.kuit.ourmenu.ui.addmenu.component.bottomsheet.TagSelectBottomSheet
 import com.kuit.ourmenu.ui.common.BottomFullWidthButton
@@ -257,7 +259,15 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
                         }
                     }
                 }
-                // TODO:선택된 태그 목록
+                SelectedTagGroup(
+                    modifier = modifier
+                        .padding(
+                            vertical = if (selectedTags.isEmpty()) 0.dp else 20.dp,
+                        ),
+                    tags = selectedTags
+                ) {
+                    selectedTags -= it
+                }
 
                 //메모
                 Spacer(modifier = modifier.height(20.dp))
@@ -323,6 +333,10 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
                         style = ourMenuTypography().pretendard_600_14
                     )
                     Icon(
+                        modifier = modifier
+                            .clickable {
+                                // TODO: 아이콘 bottom sheet 표시
+                            },
                         painter = painterResource(iconList[selectedIcon]),
                         contentDescription = "selected icon",
                         tint = Color.Unspecified,

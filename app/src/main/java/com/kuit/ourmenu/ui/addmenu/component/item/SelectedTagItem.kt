@@ -1,6 +1,8 @@
 package com.kuit.ourmenu.ui.addmenu.component.item
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Icon
@@ -22,6 +24,8 @@ fun SelectedTagItem(
     onTagClick: (String) -> Unit
 ) {
     AssistChip(
+        modifier = modifier
+            .height(32.dp),
         onClick = {
             onTagClick(label)
         },
@@ -43,6 +47,7 @@ fun SelectedTagItem(
             labelColor = NeutralWhite,
         ),
         border = BorderStroke(0.dp, Primary500Main),
+        shape = RoundedCornerShape(8.dp)
     )
 }
 
