@@ -90,4 +90,5 @@
     <string name="see_all_menu">전체 메뉴 보기</string>
     <string name="menu_count">메뉴 %d개</string>
     <string name="add_menu_folder">메뉴판 추가하기</string>
+    <string name="menu_price_won">%d 원</string>
 </resources>
