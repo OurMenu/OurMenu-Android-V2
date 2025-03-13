@@ -30,11 +30,17 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.BottomFullWidthButton
+import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.onboarding.component.BottomFullWidthBorderButton
 import com.kuit.ourmenu.ui.onboarding.component.LoginTextField
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
+import com.kuit.ourmenu.ui.onboarding.viewmodel.LoginViewModel
 import com.kuit.ourmenu.ui.theme.Neutral100
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral500
@@ -43,14 +49,21 @@ import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier) {
-    var email by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
+fun LoginScreen(
+    navController: NavController,
+    viewModel: LoginViewModel = hiltViewModel()
+) {
+    val email by viewModel.email.collectAsStateWithLifecycle()
+    val password by viewModel.password.collectAsStateWithLifecycle()
     var isPasswordVisible by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
-            OnboardingTopAppBar()
+            OnboardingTopAppBar(
+                onBackClick = {
+                    navController.popBackStack()
+                },
+            )
         },
         content = { innerPadding ->
             Column(
@@ -77,7 +90,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                 LoginTextField(
                     placeholder = stringResource(R.string.email),
                     input = email,
-                    onTextChange = { email = it },
+                    onTextChange = { viewModel.updateEmail(it) },
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -85,7 +98,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                 LoginTextField(
                     placeholder = stringResource(R.string.password),
                     input = password,
-                    onTextChange = { password = it },
+                    onTextChange = { viewModel.updatePassword(it) },
                     visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 )
 
@@ -139,7 +152,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                     contentColor = NeutralWhite,
                     text = stringResource(R.string.login),
                 ) {
-                    // TODO: onClick 작성
+                    navController.navigate(route = Routes.Home)
                 }
 
                 Spacer(modifier = Modifier.height(104.dp))
@@ -153,7 +166,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                 Spacer(modifier = Modifier.height(24.dp))
 
                 BottomFullWidthBorderButton {
-                    // TODO: onClick 작성
+                    navController.navigate(route = Routes.SignupEmail)
                 }
             }
 
@@ -187,5 +200,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun LoginScreenPreview() {
-    LoginScreen()
+    val navController = rememberNavController()
+
+    LoginScreen(navController)
 }

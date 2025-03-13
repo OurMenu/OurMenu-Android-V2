@@ -12,4 +12,18 @@ sealed interface Routes{
     // 메뉴판
 
     // Mypage
+
+    // Onboarding
+    @Serializable
+    data object Landing: Routes
+    @Serializable
+    data object Login: Routes
+    @Serializable
+    data object SignupEmail: Routes
+    @Serializable
+    data object SignupPassword: Routes
+    @Serializable
+    data object SignupNickname: Routes
+    @Serializable
+    data object SignupVerify: Routes
 }
