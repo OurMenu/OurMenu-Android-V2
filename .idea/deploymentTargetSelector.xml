@@ -19,6 +19,9 @@
       <SelectionState runConfigName="AddMenuInfoMenuBoardFieldItemPreview">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+      <SelectionState runConfigName="TagSelectBottomSheetPreview">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
     </selectionStates>
   </component>
 </project>

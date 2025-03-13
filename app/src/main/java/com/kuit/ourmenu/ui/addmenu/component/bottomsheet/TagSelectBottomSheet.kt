@@ -10,10 +10,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -29,6 +34,7 @@ import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
+import kotlinx.coroutines.launch
 
 @Composable
 fun TagSelectBottomSheet(
@@ -44,112 +50,130 @@ fun TagSelectBottomSheet(
 ) {
     // toast를 위한 context
     val context = LocalContext.current
+    // snackbar
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 20.dp),
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
+    Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+    ) { innerPadding ->
         Column(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(horizontal = 20.dp),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = stringResource(R.string.food_tag),
+                        style = ourMenuTypography().pretendard_700_16
+                    )
+                    Text(
+                        text = stringResource(R.string.multiple_choice_available),
+                        style = ourMenuTypography().pretendard_600_14,
+                        color = Neutral500
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                //종류
+                TagChipGroup(
+                    groupLabel = "종류",
+                    tags = categoryTagList,
+                    selectedTags = selectedTagList,
+                ) { tag ->
+                    if (selectedTagList.size >= 12 && tag !in selectedTagList) {
+                        scope.launch {
+                            snackbarHostState.showSnackbar(context.getString(R.string.tag_number_warning))
+                        }
+                    } else {
+                        onTagClick(tag)
+                    }
+                }
+                //나라 별 음식
+                TagChipGroup(
+                    groupLabel = "나라 별 음식",
+                    tags = nationalityTagList,
+                    selectedTags = selectedTagList,
+                ) { tag ->
+                    if (selectedTagList.size >= 12 && tag !in selectedTagList) {
+                        scope.launch {
+                            snackbarHostState.showSnackbar(context.getString(R.string.tag_number_warning))
+                        }
+                    } else {
+                        onTagClick(tag)
+                    }
+                }
+                //맛
+                TagChipGroup(
+                    groupLabel = "맛",
+                    tags = tasteTagList,
+                    selectedTags = selectedTagList,
+                ) { tag ->
+                    if (selectedTagList.size >= 12 && tag !in selectedTagList) {
+                        scope.launch {
+                            snackbarHostState.showSnackbar(context.getString(R.string.tag_number_warning))
+                        }
+                    } else {
+                        onTagClick(tag)
+                    }
+                }
+                //상황
+                TagChipGroup(
+                    groupLabel = "상황",
+                    tags = occasionTagList,
+                    selectedTags = selectedTagList,
+                ) { tag ->
+                    if (selectedTagList.size >= 12 && tag !in selectedTagList) {
+                        scope.launch {
+                            snackbarHostState.showSnackbar(context.getString(R.string.tag_number_warning))
+                        }
+                    } else {
+                        onTagClick(tag)
+                    }
+                }
+            }
+
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 20.dp),
+                horizontalArrangement = Arrangement.Center
             ) {
-                Text(
-                    text = stringResource(R.string.food_tag),
-                    style = ourMenuTypography().pretendard_700_16
-                )
-                Text(
-                    text = stringResource(R.string.multiple_choice_available),
-                    style = ourMenuTypography().pretendard_600_14,
-                    color = Neutral500
-                )
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            //종류
-            TagChipGroup(
-                groupLabel = "종류",
-                tags = categoryTagList,
-                selectedTags = selectedTagList,
-            ) { tag ->
-                if(selectedTagList.size >= 12 && tag !in selectedTagList){
-                    Toast.makeText(context, R.string.tag_number_warning, Toast.LENGTH_LONG).show()
-                } else{
-                    onTagClick(tag)
+                BottomHalfWidthButton(
+                    containerColor = Neutral400,
+                    contentColor = NeutralWhite,
+                    text = stringResource(R.string.reset)
+                ) {
+                    // List 비우기
+                    onSelectedTagsChange(emptyList())
                 }
-            }
-            //나라 별 음식
-            TagChipGroup(
-                groupLabel = "나라 별 음식",
-                tags = nationalityTagList,
-                selectedTags = selectedTagList,
-            ) { tag ->
-                if(selectedTagList.size >= 12 && tag !in selectedTagList){
-                    Toast.makeText(context, R.string.tag_number_warning, Toast.LENGTH_LONG).show()
-                } else{
-                    onTagClick(tag)
-                }
-            }
-            //맛
-            TagChipGroup(
-                groupLabel = "맛",
-                tags = tasteTagList,
-                selectedTags = selectedTagList,
-            ) { tag ->
-                if(selectedTagList.size >= 12 && tag !in selectedTagList){
-                    Toast.makeText(context, R.string.tag_number_warning, Toast.LENGTH_LONG).show()
-                } else{
-                    onTagClick(tag)
-                }
-            }
-            //상황
-            TagChipGroup(
-                groupLabel = "상황",
-                tags = occasionTagList,
-                selectedTags = selectedTagList,
-            ) { tag ->
-                if(selectedTagList.size >= 12 && tag !in selectedTagList){
-                    Toast.makeText(context, R.string.tag_number_warning, Toast.LENGTH_LONG).show()
-                } else{
-                    onTagClick(tag)
+                Spacer(modifier = modifier.width(12.dp))
+                BottomHalfWidthButton(
+                    containerColor = Primary500Main,
+                    contentColor = NeutralWhite,
+                    text = stringResource(R.string.apply)
+                ) {
+                    if (selectedTagList.size >= 12) {
+                        Toast.makeText(context, R.string.tag_number_warning, Toast.LENGTH_LONG)
+                            .show()
+                    } else {
+                        //아이콘 선택으로 이동
+                        onApplyButtonClick()
+                    }
                 }
             }
         }
 
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(bottom = 20.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            BottomHalfWidthButton(
-                containerColor = Neutral400,
-                contentColor = NeutralWhite,
-                text = stringResource(R.string.reset)
-            ) {
-                // List 비우기
-                onSelectedTagsChange(emptyList())
-            }
-            Spacer(modifier = modifier.width(12.dp))
-            BottomHalfWidthButton(
-                containerColor = Primary500Main,
-                contentColor = NeutralWhite,
-                text = stringResource(R.string.apply)
-            ) {
-                if(selectedTagList.size >= 12){
-                    Toast.makeText(context, R.string.tag_number_warning, Toast.LENGTH_LONG).show()
-                } else{
-                    //아이콘 선택으로 이동
-                    onApplyButtonClick()
-                }
-            }
-        }
     }
 }
 
