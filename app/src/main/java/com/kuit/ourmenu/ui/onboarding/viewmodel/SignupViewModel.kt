@@ -12,6 +12,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,7 +33,7 @@ class SignupViewModel @Inject constructor(
     private val _confirmPassword = MutableStateFlow("")
     val confirmPassword = _confirmPassword.asStateFlow()
 
-    private val _codes = MutableStateFlow(mutableListOf("", "", "", "", "", ""))
+    private val _codes = MutableStateFlow(listOf("", "", "", "", "", ""))
     val codes: StateFlow<List<String>> = _codes.asStateFlow()
 
     private val _mealTimes = MutableStateFlow(
@@ -62,7 +63,11 @@ class SignupViewModel @Inject constructor(
     }
 
     fun updateCode(index: Int, code: String) {
-        _codes.value[index] = code
+        _codes.update {
+            it.mapIndexed { i, item ->
+                if (i == index) code else item
+            }
+        }
     }
 
     fun updatePassword(password: String) {

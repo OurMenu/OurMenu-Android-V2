@@ -1,6 +1,7 @@
 package com.kuit.ourmenu.ui.onboarding.screen.signup
 
 import android.util.Log
+import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -11,21 +12,27 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -33,9 +40,11 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
+import com.kuit.ourmenu.ui.common.OurSnackbarHost
 import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
 import com.kuit.ourmenu.ui.onboarding.component.VerifyCodeTextField
+import com.kuit.ourmenu.ui.onboarding.state.PasswordState
 import com.kuit.ourmenu.ui.onboarding.state.SignupState
 import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.theme.Neutral300
@@ -44,6 +53,10 @@ import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
+import com.kuit.ourmenu.utils.AnimationUtil.shakeAnimation
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 @Composable
 fun SignupVerifyScreen(
@@ -57,13 +70,33 @@ fun SignupVerifyScreen(
     val isConfirmButtonEnabled = codes.all { it.isNotEmpty() }
     val signupState by viewModel.signupState.collectAsStateWithLifecycle()
 
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val shakeOffset = remember { Animatable(0f) }
+    val shakingModifier = Modifier.offset { IntOffset(shakeOffset.value.roundToInt(), 0) }
+
+
     LaunchedEffect(signupState) {
         when (signupState) {
             is SignupState.Success ->
                 navController.navigate(route = Routes.SignupPassword)
 
-            is SignupState.Error ->
-                Log.e("SignupVerifyScreen", viewModel.error.value.toString())
+            is SignupState.Error -> {
+                scope.launch {
+                    delay(800)
+
+                }
+                shakeAnimation(
+                    offset = shakeOffset,
+                    coroutineScope = scope,
+                )
+                scope.launch {
+                    snackbarHostState.showSnackbar(
+                        message = "인증 코드가 일치하지 않습니다.",
+                        duration = SnackbarDuration.Short
+                    )
+                }
+            }
 
             else -> {}
         }
@@ -121,6 +154,7 @@ fun SignupVerifyScreen(
                             onTextChange = { newText ->
                                 if (newText.length <= 1) {
                                     viewModel.updateCode(i, newText) // Compose에서 상태 변경 감지
+                                    Log.d("SignupVerifyScreen", "codes: $codes")
                                 }
                             },
                             onNext = {
@@ -147,6 +181,17 @@ fun SignupVerifyScreen(
                             Spacer(modifier = Modifier.size(8.dp))
                         }
                     }
+                }
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .padding(top = 44.dp),
+                    contentAlignment = Alignment.TopCenter
+                ) {
+                    OurSnackbarHost(
+                        hostState = snackbarHostState
+                    )
                 }
             }
         },

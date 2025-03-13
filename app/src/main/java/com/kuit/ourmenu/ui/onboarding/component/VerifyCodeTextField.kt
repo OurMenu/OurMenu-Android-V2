@@ -78,7 +78,7 @@ fun VerifyCodeTextField(
             },
         text = input,
         onTextChange = { newText ->
-            if (newText.isDigitsOnly()) {
+//            if (newText.isDigitsOnly()) {
                 when (newText.length) {
                     0 -> {
                         onTextChange(newText)
@@ -91,12 +91,12 @@ fun VerifyCodeTextField(
                     }
 
                     2 -> {
-                        onTextChange(newText.lastIndex.toString())
+                        onTextChange(newText.last().toString())
                         onNext()
                     }
 
                 }
-            }
+//            }
         },
         shape = RoundedCornerShape(8.dp),
         paddingValues = PaddingValues(12.dp, 12.dp),
@@ -105,8 +105,8 @@ fun VerifyCodeTextField(
             color = Neutral900,
             textAlign = TextAlign.Center
         ),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        cursorColor = Primary500Main // TODO: 적용 안됨 왜지? 서치 더 해보기
+//        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        cursorColor = Primary500Main
     )
 }
 
