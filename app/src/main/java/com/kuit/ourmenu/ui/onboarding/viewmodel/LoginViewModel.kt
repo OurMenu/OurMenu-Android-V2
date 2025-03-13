@@ -43,7 +43,8 @@ class LoginViewModel @Inject constructor(
 
             authRepository.login(
                 email = email.value,
-                password = password.value
+                password = password.value,
+                signInType = "EMAIL"
             ).fold(
                 onSuccess = {
                     _loginState.value = LoginState.Success
