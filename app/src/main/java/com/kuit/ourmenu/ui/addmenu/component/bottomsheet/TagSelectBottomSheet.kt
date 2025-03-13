@@ -1,7 +1,7 @@
 package com.kuit.ourmenu.ui.addmenu.component.bottomsheet
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -28,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.BottomHalfWidthButton
+import com.kuit.ourmenu.ui.common.OurSnackbarHost
 import com.kuit.ourmenu.ui.common.chip.TagChipGroup
 import com.kuit.ourmenu.ui.theme.Neutral400
 import com.kuit.ourmenu.ui.theme.Neutral500
@@ -50,17 +50,13 @@ fun TagSelectBottomSheet(
 ) {
     // toast를 위한 context
     val context = LocalContext.current
-    // snackbar
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    Scaffold(
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
-    ) { innerPadding ->
+    Box(modifier = Modifier.fillMaxSize()){
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
                 .padding(horizontal = 20.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
@@ -164,8 +160,9 @@ fun TagSelectBottomSheet(
                     text = stringResource(R.string.apply)
                 ) {
                     if (selectedTagList.size >= 12) {
-                        Toast.makeText(context, R.string.tag_number_warning, Toast.LENGTH_LONG)
-                            .show()
+                        scope.launch {
+                            snackbarHostState.showSnackbar(context.getString(R.string.tag_number_warning))
+                        }
                     } else {
                         //아이콘 선택으로 이동
                         onApplyButtonClick()
@@ -174,6 +171,14 @@ fun TagSelectBottomSheet(
             }
         }
 
+        OurSnackbarHost(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 60.dp),
+            hostState = snackbarHostState,
+            isChecked = false,
+            message = stringResource(R.string.tag_number_warning)
+        )
     }
 }
 
