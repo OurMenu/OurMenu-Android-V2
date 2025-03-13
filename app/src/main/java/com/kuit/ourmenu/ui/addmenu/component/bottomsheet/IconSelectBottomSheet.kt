@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -30,8 +29,8 @@ fun IconSelectBottomSheet(
 ) {
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 20.dp)
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = 20.dp)
     ) {
         IconItemGroup(
             groupLabel = "아이콘",
@@ -45,7 +44,8 @@ fun IconSelectBottomSheet(
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(bottom = 20.dp),
+//                .padding(bottom = 20.dp)
+            ,
             horizontalArrangement = Arrangement.Center
         ) {
             BottomHalfWidthButton(

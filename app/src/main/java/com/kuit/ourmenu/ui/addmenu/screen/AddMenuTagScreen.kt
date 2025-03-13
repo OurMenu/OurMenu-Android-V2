@@ -1,5 +1,6 @@
 package com.kuit.ourmenu.ui.addmenu.screen
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -25,14 +26,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -57,7 +61,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddMenuTagScreen(modifier: Modifier = Modifier) {
-    val scaffoldState = rememberBottomSheetScaffoldState()
+    var scaffoldState = rememberBottomSheetScaffoldState()
     var showBottomSheet by remember { mutableStateOf(false) }
     var showTagBottomSheet by rememberSaveable { mutableStateOf(true) }
     var memoTitle by rememberSaveable { mutableStateOf("") }
@@ -127,6 +131,13 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
 
     val coroutineScope = rememberCoroutineScope()
 
+    LaunchedEffect(scaffoldState.bottomSheetState) {
+        snapshotFlow { scaffoldState.bottomSheetState.currentValue }
+            .collect { state ->
+                Log.d("AddMenuTagScreen", "BottomSheetState changed: $state")
+            }
+    }
+
     //메모가 비어있지 않고, 태그와 아이콘이 선택된 경우에 메뉴 등록하기 버튼 활성화
     enableAddButton = memoTitle.isNotBlank() && memoBody.isNotBlank() && tagSelected && iconSelected
 
@@ -171,9 +182,10 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
                         showBottomSheet = true
                     },
                     onConfirm = {
-                        showBottomSheet = false
                         coroutineScope.launch {
-                             scaffoldState.bottomSheetState.hide()
+                            scaffoldState.bottomSheetState.partialExpand()
+                            showBottomSheet = false
+                            showTagBottomSheet = true
                         }
                     }
                 )
@@ -181,7 +193,9 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
         },
         //태그 고르기 눌러야 보이도록
         sheetPeekHeight = if (showBottomSheet) {
-            if (showTagBottomSheet) 500.dp else 380.dp
+            if (showTagBottomSheet){
+                (LocalConfiguration.current.screenHeightDp - 20).dp
+            } else 400.dp
         } else 0.dp,
         sheetDragHandle = {
             BottomSheetDragHandle()
