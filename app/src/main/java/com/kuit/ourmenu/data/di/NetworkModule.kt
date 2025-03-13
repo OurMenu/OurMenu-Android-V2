@@ -2,6 +2,7 @@ package com.kuit.ourmenu.data.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.kuit.ourmenu.BuildConfig
+import com.kuit.ourmenu.utils.auth.AuthorizationInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,12 +36,14 @@ object NetworkModule {
     @Singleton
     fun providesOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
+        authorizationInterceptor: AuthorizationInterceptor
     ): OkHttpClient =
         OkHttpClient.Builder().apply {
             connectTimeout(10, TimeUnit.SECONDS)
             writeTimeout(10, TimeUnit.SECONDS)
             readTimeout(10, TimeUnit.SECONDS)
             addInterceptor(loggingInterceptor)
+            addInterceptor(authorizationInterceptor)
         }.build()
 
     @Provides
@@ -53,13 +56,15 @@ object NetworkModule {
     @Provides
     @Singleton
     fun providesRetrofit(
-        json: Json
+        json: Json,
+        okHttpClient: OkHttpClient
     ): Retrofit =
         Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(
                 json.asConverterFactory(requireNotNull("application/json".toMediaType()))
             )
+            .client(okHttpClient)
             .build()
 
 }

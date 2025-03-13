@@ -13,6 +13,7 @@ class AuthorizationInterceptor @Inject constructor(
         val request = chain.request().newBuilder()
 
         accessToken.let {
+            // header에 토큰을 추가
             request.addHeader("Authorization", "Bearer $it")
         }
         return chain.proceed(request.build())
