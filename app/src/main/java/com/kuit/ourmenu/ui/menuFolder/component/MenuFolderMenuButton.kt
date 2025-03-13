@@ -29,6 +29,7 @@ import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
+// TODO: 버튼 누르면 해당 페이지로 이동
 @Composable
 fun MenuFolderMenuButton(modifier: Modifier = Modifier) {
     val menuPrice = 12000
@@ -106,6 +107,7 @@ fun MenuFolderMenuButton(modifier: Modifier = Modifier) {
                     color = Neutral700
                 )
 
+                // TODO: 버튼 누르면 지도로 이동
                 Image(
                     painter = painterResource(id = R.drawable.ic_to_map),
                     contentDescription = "To Map",
