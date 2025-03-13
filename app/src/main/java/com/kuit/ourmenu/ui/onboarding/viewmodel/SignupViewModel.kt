@@ -86,7 +86,9 @@ class SignupViewModel @Inject constructor(
     /* Api Section */
     fun sendEmail() {
         viewModelScope.launch {
-            authRepository.sendEmail(email.value)
+            authRepository.sendEmail(
+                email = "${email.value}@${domain.value}"
+            )
                 .fold(
                     onSuccess = {
                         _signupState.value = SignupState.Success
@@ -106,7 +108,7 @@ class SignupViewModel @Inject constructor(
         viewModelScope.launch {
             authRepository.confirmCode(
                 confirmCode = codes.value.joinToString(""),
-                email = email.value
+                email = "${email.value}@${domain.value}"
             )
                 .fold(
                     onSuccess = {
@@ -121,10 +123,11 @@ class SignupViewModel @Inject constructor(
             _signupState.value = SignupState.Default
         }
     }
+
     fun signup() {
         viewModelScope.launch {
             authRepository.signup(
-                email = email.value,
+                email = "${email.value}@${domain.value}",
                 mealTime = selectedTimes.value.map { it.substringBefore(":").toInt() },
                 password = password.value,
                 name = domain.value
