@@ -1,6 +1,7 @@
 package com.kuit.ourmenu.data.service
 
 import com.kuit.ourmenu.data.model.auth.request.ConfirmCodeRequest
+import com.kuit.ourmenu.data.model.auth.request.EmailRequest
 import com.kuit.ourmenu.data.model.auth.request.LoginRequest
 import com.kuit.ourmenu.data.model.auth.request.SignupRequest
 import com.kuit.ourmenu.data.model.auth.response.EmailResponse
@@ -31,7 +32,7 @@ interface AuthService {
 
     @POST("api/emails")
     suspend fun sendEmail(
-        @Body email: String
+        @Body request: EmailRequest
     ): BaseResponse<EmailResponse>
 
     @POST("api/emails/confirm-code")

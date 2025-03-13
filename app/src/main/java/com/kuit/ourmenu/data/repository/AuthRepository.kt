@@ -1,6 +1,7 @@
 package com.kuit.ourmenu.data.repository
 
 import com.kuit.ourmenu.data.model.auth.request.ConfirmCodeRequest
+import com.kuit.ourmenu.data.model.auth.request.EmailRequest
 import com.kuit.ourmenu.data.model.auth.request.LoginRequest
 import com.kuit.ourmenu.data.model.auth.request.SignupRequest
 import com.kuit.ourmenu.data.model.base.handleBaseResponse
@@ -55,7 +56,11 @@ class AuthRepository @Inject constructor(
     suspend fun sendEmail(
         email: String
     ) = runCatching {
-        authService.sendEmail(email).handleBaseResponse().getOrThrow()
+        authService.sendEmail(
+            EmailRequest(
+                email = email
+            )
+        ).handleBaseResponse().getOrThrow()
     }
 
     suspend fun confirmCode(
