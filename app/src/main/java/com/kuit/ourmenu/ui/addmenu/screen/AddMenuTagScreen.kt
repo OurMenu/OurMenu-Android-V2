@@ -68,14 +68,13 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
     var showTagBottomSheet by rememberSaveable { mutableStateOf(true) }
     var memoTitle by rememberSaveable { mutableStateOf("") }
     var memoBody by rememberSaveable { mutableStateOf("") }
-    var tagSelected by rememberSaveable { mutableStateOf(false) }
-    var iconSelected by rememberSaveable { mutableStateOf(false) }
     val scrollState = rememberScrollState()
     var enableAddButton by rememberSaveable { mutableStateOf(false) }
 
     // 선택된 태그 개수를 위한 변수
     var selectedTags by rememberSaveable { mutableStateOf(listOf<String>()) }
     var selectedIcon by rememberSaveable { mutableStateOf(0) }
+
     // 예시를 위한 dummy list들
     val categoryTags = listOf(
         R.drawable.ic_tag_rice to "밥",
@@ -142,7 +141,7 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
     }
 
     //메모가 비어있지 않고, 태그와 아이콘이 선택된 경우에 메뉴 등록하기 버튼 활성화
-    enableAddButton = memoTitle.isNotBlank() && memoBody.isNotBlank() && tagSelected && iconSelected
+    enableAddButton = memoTitle.isNotBlank() && memoBody.isNotBlank() && selectedTags.isNotEmpty()
 
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
@@ -335,7 +334,8 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
                     Icon(
                         modifier = modifier
                             .clickable {
-                                // TODO: 아이콘 bottom sheet 표시
+                                showTagBottomSheet = false
+                                showBottomSheet = true
                             },
                         painter = painterResource(iconList[selectedIcon]),
                         contentDescription = "selected icon",
@@ -349,7 +349,7 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
                 contentColor = if (enableAddButton) NeutralWhite else Neutral500,
                 text = "메뉴 등록하기"
             ) {
-                //등록 api 호출
+                // TODO: 등록 api 호출
             }
         }
     }
