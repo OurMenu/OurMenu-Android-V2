@@ -4,6 +4,7 @@ import com.kuit.ourmenu.data.model.auth.request.ConfirmCodeRequest
 import com.kuit.ourmenu.data.model.auth.request.EmailRequest
 import com.kuit.ourmenu.data.model.auth.request.LoginRequest
 import com.kuit.ourmenu.data.model.auth.request.SignupRequest
+import com.kuit.ourmenu.data.model.auth.response.CheckKakaoEmailResponse
 import com.kuit.ourmenu.data.model.auth.response.EmailResponse
 import com.kuit.ourmenu.data.model.auth.response.LoginResponse
 import com.kuit.ourmenu.data.model.auth.response.ReissueTokenResponse
@@ -29,6 +30,11 @@ interface AuthService {
     suspend fun reissueToken(
         @Body refreshToken: String
     ): BaseResponse<ReissueTokenResponse>
+
+    @POST("/api/users/auth/kakao")
+    suspend fun checkKakaoEmail(
+        @Body request: EmailRequest
+    ): BaseResponse<CheckKakaoEmailResponse>
 
     @POST("api/emails")
     suspend fun sendEmail(
