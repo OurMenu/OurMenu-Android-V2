@@ -2,6 +2,7 @@ package com.kuit.ourmenu.ui.onboarding.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kuit.ourmenu.data.model.auth.SignInType
 import com.kuit.ourmenu.data.repository.AuthRepository
 import com.kuit.ourmenu.ui.onboarding.state.LoginState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
 
     private val _email = MutableStateFlow("")
@@ -28,7 +29,6 @@ class LoginViewModel @Inject constructor(
     private val _error: MutableStateFlow<String?> = MutableStateFlow(null)
     val error = _error.asStateFlow()
 
-
     fun updateEmail(email: String) {
         _email.value = email
     }
@@ -37,14 +37,24 @@ class LoginViewModel @Inject constructor(
         _password.value = password
     }
 
-    fun signIn() {
+    fun signInWithEmail() {
+        signIn(SignInType.EMAIL)
+    }
+
+    fun signInWithKakao() {
+        signIn(SignInType.KAKAO)
+    }
+
+    private fun signIn(
+        signInType: SignInType
+    ) {
         viewModelScope.launch {
             _loginState.value = LoginState.Loading
 
             authRepository.login(
                 email = email.value,
                 password = password.value,
-                signInType = "EMAIL"
+                signInType = signInType
             ).fold(
                 onSuccess = {
                     _loginState.value = LoginState.Success
