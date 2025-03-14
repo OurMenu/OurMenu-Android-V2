@@ -1,11 +1,13 @@
 package com.kuit.ourmenu.ui.onboarding.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kuit.ourmenu.data.model.auth.SignInType
 import com.kuit.ourmenu.data.repository.AuthRepository
+import com.kuit.ourmenu.ui.oauth.KakaoModule.getUserEmail
 import com.kuit.ourmenu.ui.onboarding.model.MealTimeState
-import com.kuit.ourmenu.ui.onboarding.state.LoginState
 import com.kuit.ourmenu.ui.onboarding.state.SignupState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -139,23 +141,51 @@ class SignupViewModel @Inject constructor(
         }
     }
 
-    fun signup() {
+    fun signupWithEmail() {
         viewModelScope.launch {
+            val completeEmail = "${email.value}@${domain.value}"
+
             authRepository.signup(
-                email = "${email.value}@${domain.value}",
+                email = completeEmail,
                 mealTime = selectedTimes.value.map { it.substringBefore(":").toInt() },
-                password = password.value,
-                name = "EMAIL"
+                password = password.value.takeIf { it.isNotEmpty() },
+                signInType = SignInType.EMAIL
+            ).fold(
+                onSuccess = {
+                    _signupState.value = SignupState.Success
+                    Log.d("okhttp2", _signupState.value.toString())
+                },
+                onFailure = { error ->
+                    _signupState.value = SignupState.Error
+                    _error.value = error.message
+                    Log.d("okhttp3", error.toString())
+                }
             )
-                .fold(
-                    onSuccess = {
-                        _signupState.value = SignupState.Success
-                    },
-                    onFailure = { error ->
-                        _signupState.value = SignupState.Error
-                        _error.value = error.message
-                    }
-                )
+            delay(1000)
+            _signupState.value = SignupState.Default
+        }
+    }
+
+    fun signupWithKakao() {
+        viewModelScope.launch {
+            val kakaoEmail = getUserEmail()
+
+            authRepository.signup(
+                email = kakaoEmail,
+                mealTime = selectedTimes.value.map { it.substringBefore(":").toInt() },
+                password = password.value.takeIf { it.isNotEmpty() },
+                signInType = SignInType.KAKAO
+            ).fold(
+                onSuccess = {
+                    _signupState.value = SignupState.Success
+                    Log.d("okhttp2", _signupState.value.toString())
+                },
+                onFailure = { error ->
+                    _signupState.value = SignupState.Error
+                    _error.value = error.message
+                    Log.d("okhttp3", error.toString())
+                }
+            )
             delay(1000)
             _signupState.value = SignupState.Default
         }

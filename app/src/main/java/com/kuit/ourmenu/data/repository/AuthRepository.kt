@@ -1,37 +1,36 @@
 package com.kuit.ourmenu.data.repository
 
-import android.content.Context
+import android.util.Log
 import com.kuit.ourmenu.data.model.auth.SignInType
 import com.kuit.ourmenu.data.model.auth.request.ConfirmCodeRequest
 import com.kuit.ourmenu.data.model.auth.request.EmailRequest
 import com.kuit.ourmenu.data.model.auth.request.LoginRequest
 import com.kuit.ourmenu.data.model.auth.request.SignupRequest
 import com.kuit.ourmenu.data.model.base.handleBaseResponse
-import com.kuit.ourmenu.data.oauth.KakaoModule.getKakaoLogin
-import com.kuit.ourmenu.data.oauth.KakaoModule.getUserEmail
 import com.kuit.ourmenu.data.service.AuthService
-import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class AuthRepository @Inject constructor(
     private val authService: AuthService,
-    @ApplicationContext private val context: Context
 ) {
     suspend fun signup(
-        email: String,
+        email: String?,
         mealTime: List<Int>,
-        password: String,
-        name: String
+        password: String?,
+        signInType: SignInType
     ) = runCatching {
+        Log.d("okhttp4", "sdf")
+        val request = SignupRequest(
+            email = email,
+            mealTime = mealTime,
+            password = password,
+            signInType = signInType.name
+        )
+        Log.d("okhttp5", request.toString())
         authService.signup(
-            SignupRequest(
-                email = email,
-                mealTime = mealTime,
-                password = password,
-                signInType = name
-            )
+            request
         ).handleBaseResponse().getOrThrow()
     }
 
@@ -40,24 +39,23 @@ class AuthRepository @Inject constructor(
     }
 
     suspend fun login(
-        email: String?,
+        email: String,
         password: String?,
         signInType: SignInType
     ) = runCatching {
-
+        // TODO : Set Token
         authService.login(
             LoginRequest(
-                email = if (email.isNullOrEmpty()) getUserEmail()!! else email,
+                email = email,
                 password = password,
                 signInType = signInType.name
             )
         ).handleBaseResponse().getOrThrow()
     }
 
-    suspend fun checkKakaoEmail() = runCatching {
-        getKakaoLogin(context)
-
-        val email = getUserEmail()
+    suspend fun checkKakaoEmail(
+        email: String?
+    ) = runCatching {
         authService.checkKakaoEmail(
             EmailRequest(
                 email = email
