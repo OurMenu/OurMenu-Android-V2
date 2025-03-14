@@ -2,6 +2,7 @@ package com.kuit.ourmenu.ui.onboarding.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -141,7 +142,9 @@ fun LandingScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .padding(top = 16.dp),
+                    .padding(top = 16.dp)
+                    .clickable { viewModel.signInWithKakao() }
+                ,
                 contentScale = ContentScale.FillWidth
             )
         }

@@ -37,24 +37,50 @@ class LoginViewModel @Inject constructor(
         _password.value = password
     }
 
-    fun signInWithEmail() {
-        signIn(SignInType.EMAIL)
-    }
-
     fun signInWithKakao() {
-        signIn(SignInType.KAKAO)
+        viewModelScope.launch {
+            _loginState.value = LoginState.Loading
+
+            if(checkKakaoEmail()) {
+                authRepository.login(
+                    email = null,
+                    password = null,
+                    signInType = SignInType.KAKAO
+                ).fold(
+                    onSuccess = {
+                        _loginState.value = LoginState.Success
+                    },
+                    onFailure = { error ->
+                        _loginState.value = LoginState.Error
+                        _error.value = error.message
+
+                        delay(1000)
+                        _loginState.value = LoginState.Default
+                    }
+                )
+            }else{
+                // 카카오 회원 X -> 회원가입
+            }
+
+        }
     }
 
-    private fun signIn(
-        signInType: SignInType
-    ) {
+    private suspend fun checkKakaoEmail(): Boolean {
+        authRepository.checkKakaoEmail().fold(
+            onSuccess = { response ->
+                return response?.existUser == true
+            },
+            onFailure = { return false })
+    }
+
+    fun signInWithEmail() {
         viewModelScope.launch {
             _loginState.value = LoginState.Loading
 
             authRepository.login(
                 email = email.value,
                 password = password.value,
-                signInType = signInType
+                signInType = SignInType.EMAIL
             ).fold(
                 onSuccess = {
                     _loginState.value = LoginState.Success
@@ -71,5 +97,6 @@ class LoginViewModel @Inject constructor(
 
         }
     }
+
 }
 
