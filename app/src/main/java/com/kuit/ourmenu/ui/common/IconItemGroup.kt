@@ -3,12 +3,13 @@ package com.kuit.ourmenu.ui.common
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -32,16 +33,15 @@ fun IconItemGroup(
             style = ourMenuTypography().pretendard_700_16
         )
         Spacer(modifier = modifier.height(20.dp))
-        FlowRow(
-            modifier = modifier
-                .fillMaxWidth(),
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(6), // 한 행에 6개씩 배치
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(20.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp),
-            maxItemsInEachRow = 6
+            verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            icons.forEachIndexed { index, img ->
+            items(icons.size) { index ->
                 IconItem(
-                    iconId = img,
+                    iconId = icons[index],
                 ) {
                     onIconSelect(index)
                 }
