@@ -146,6 +146,7 @@ fun TagSelectBottomSheet(
                 horizontalArrangement = Arrangement.Center
             ) {
                 BottomHalfWidthButton(
+                    modifier = modifier.weight(1f),
                     containerColor = Neutral400,
                     contentColor = NeutralWhite,
                     text = stringResource(R.string.reset)
@@ -155,6 +156,7 @@ fun TagSelectBottomSheet(
                 }
                 Spacer(modifier = modifier.width(12.dp))
                 BottomHalfWidthButton(
+                    modifier = modifier.weight(1f),
                     containerColor = Primary500Main,
                     contentColor = NeutralWhite,
                     text = stringResource(R.string.apply)

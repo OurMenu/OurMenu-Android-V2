@@ -343,8 +343,10 @@ fun AddMenuTagScreen(modifier: Modifier = Modifier) {
                     )
                 }
             }
+            // TODO: 넓이 늘이기
             BottomFullWidthButton(
-                modifier = modifier.padding(bottom = 20.dp),
+                modifier = modifier
+                    .padding(bottom = 20.dp),
                 containerColor = if (enableAddButton) Primary500Main else Neutral100,
                 contentColor = if (enableAddButton) NeutralWhite else Neutral500,
                 text = "메뉴 등록하기"
