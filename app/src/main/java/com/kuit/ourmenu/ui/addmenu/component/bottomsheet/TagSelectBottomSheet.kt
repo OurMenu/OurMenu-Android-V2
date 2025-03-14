@@ -53,7 +53,7 @@ fun TagSelectBottomSheet(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    Box(modifier = Modifier.fillMaxSize()){
+    Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -159,14 +159,8 @@ fun TagSelectBottomSheet(
                     contentColor = NeutralWhite,
                     text = stringResource(R.string.apply)
                 ) {
-                    if (selectedTagList.size >= 12) {
-                        scope.launch {
-                            snackbarHostState.showSnackbar(context.getString(R.string.tag_number_warning))
-                        }
-                    } else {
-                        //아이콘 선택으로 이동
-                        onApplyButtonClick()
-                    }
+                    // TODO: 아이콘 선택으로 이동
+                    onApplyButtonClick()
                 }
             }
         }
