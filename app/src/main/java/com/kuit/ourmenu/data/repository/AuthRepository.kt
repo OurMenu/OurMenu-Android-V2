@@ -8,12 +8,14 @@ import com.kuit.ourmenu.data.model.auth.request.LoginRequest
 import com.kuit.ourmenu.data.model.auth.request.SignupRequest
 import com.kuit.ourmenu.data.model.base.handleBaseResponse
 import com.kuit.ourmenu.data.service.AuthService
+import com.kuit.ourmenu.utils.auth.TokenManager
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class AuthRepository @Inject constructor(
     private val authService: AuthService,
+    private val tokenManager: TokenManager
 ) {
     suspend fun signup(
         email: String?,
@@ -43,15 +45,20 @@ class AuthRepository @Inject constructor(
         password: String?,
         signInType: SignInType
     ) = runCatching {
-        // TODO : Set Token
-        authService.login(
+        val response = authService.login(
             LoginRequest(
                 email = email,
                 password = password,
                 signInType = signInType.name
             )
         ).handleBaseResponse().getOrThrow()
+
+        response?.let {
+            tokenManager.saveAccessToken(it.accessToken)
+            tokenManager.saveRefreshToken(it.refreshToken)
+        }
     }
+
 
     suspend fun checkKakaoEmail(
         email: String?

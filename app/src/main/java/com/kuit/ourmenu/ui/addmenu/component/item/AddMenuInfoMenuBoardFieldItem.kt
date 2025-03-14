@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -26,6 +27,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -134,13 +136,17 @@ fun AddMenuInfoMenuBoardFieldItem(
                                 shape = RoundedCornerShape(8.dp)
                             ),
                         text = {
-                            Row(modifier = modifier.fillMaxWidth()) {
+                            Row(
+                                modifier = modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Spacer(modifier = Modifier.size(28.dp))
                                 Icon(
                                     painter = painterResource(if (isSelected) R.drawable.ic_dropdown_checked else R.drawable.ic_dropdown_unchecked),
                                     contentDescription = "check icon",
                                     tint = Color.Unspecified
                                 )
-
+                                Spacer(modifier = Modifier.size(10.dp))
                                 Text(
                                     text = option,
                                     style = ourMenuTypography().pretendard_700_14.copy(

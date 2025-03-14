@@ -25,15 +25,6 @@ class LoginViewModel @Inject constructor(
     private val _password = MutableStateFlow("")
     val password = _password.asStateFlow()
 
-    private val _loginState: MutableStateFlow<LoginState> = MutableStateFlow(LoginState.Default)
-    val loginState = _loginState.asStateFlow()
-
-    private val _kakaoState = MutableStateFlow<KakaoState>(KakaoState.Default)
-    val kakaoState = _kakaoState.asStateFlow()
-
-    private val _error: MutableStateFlow<String?> = MutableStateFlow(null)
-    val error = _error.asStateFlow()
-
     fun updateEmail(email: String) {
         _email.value = email
     }
