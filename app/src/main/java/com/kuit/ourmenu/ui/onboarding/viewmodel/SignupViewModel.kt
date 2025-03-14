@@ -141,7 +141,15 @@ class SignupViewModel @Inject constructor(
         }
     }
 
-    fun signupWithEmail() {
+    fun signup() {
+        if (email.value == "" || domain.value == "") {
+            signupWithEmail()
+        } else {
+            signupWithKakao()
+        }
+    }
+
+    private fun signupWithEmail() {
         viewModelScope.launch {
             val completeEmail = "${email.value}@${domain.value}"
 
@@ -166,7 +174,7 @@ class SignupViewModel @Inject constructor(
         }
     }
 
-    fun signupWithKakao() {
+    private fun signupWithKakao() {
         viewModelScope.launch {
             val kakaoEmail = getUserEmail()
 
