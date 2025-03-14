@@ -183,7 +183,7 @@ fun LoginScreen(
                     containerColor = Primary500Main,
                     contentColor = NeutralWhite,
                     text = stringResource(R.string.login),
-                ) { viewModel.signIn() }
+                ) { viewModel.signInWithEmail() }
 
                 Spacer(modifier = Modifier.height(104.dp))
 

@@ -1,5 +1,6 @@
 package com.kuit.ourmenu.ui.onboarding.screen
 
+import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,11 +16,18 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -27,12 +35,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.BottomFullWidthButton
 import com.kuit.ourmenu.ui.navigator.Routes
+import com.kuit.ourmenu.ui.oauth.KakaoModule.getKakaoLogin
 import com.kuit.ourmenu.ui.onboarding.component.BottomFullWidthBorderButton
+import com.kuit.ourmenu.ui.onboarding.state.KakaoState
 import com.kuit.ourmenu.ui.onboarding.viewmodel.LoginViewModel
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral500
@@ -41,12 +52,37 @@ import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
+import kotlinx.coroutines.launch
 
 @Composable
 fun LandingScreen(
     navController: NavController,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
+    val kakaoState by viewModel.kakaoState.collectAsStateWithLifecycle()
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current as Activity
+
+    LaunchedEffect(kakaoState) {
+        when (kakaoState) {
+            is KakaoState.Login -> navController.navigate(route = Routes.Home)
+            is KakaoState.Signup -> navController.navigate(route = Routes.SignupMealTime)
+            is KakaoState.Error -> {
+                // 에러에 따라 snackbar 를 show 하면 됨
+                scope.launch {
+                    snackbarHostState.showSnackbar(
+                        message = viewModel.error.value ?: "",
+                        duration = SnackbarDuration.Short
+                    )
+                }
+            }
+
+            else -> {}
+        }
+    }
+
     Box(
         modifier =
         Modifier
@@ -143,7 +179,10 @@ fun LandingScreen(
                     .fillMaxWidth()
                     .wrapContentHeight()
                     .padding(top = 16.dp)
-                    .clickable { viewModel.signInWithKakao() }
+                    .clickable {
+                        getKakaoLogin(context)
+                        viewModel.signInWithKakao()
+                    }
                 ,
                 contentScale = ContentScale.FillWidth
             )

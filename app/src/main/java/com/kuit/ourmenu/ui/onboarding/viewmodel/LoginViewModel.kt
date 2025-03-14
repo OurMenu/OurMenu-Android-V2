@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kuit.ourmenu.data.model.auth.SignInType
 import com.kuit.ourmenu.data.repository.AuthRepository
+import com.kuit.ourmenu.ui.oauth.KakaoModule.getUserEmail
+import com.kuit.ourmenu.ui.onboarding.state.KakaoState
 import com.kuit.ourmenu.ui.onboarding.state.LoginState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -26,6 +28,9 @@ class LoginViewModel @Inject constructor(
     private val _loginState: MutableStateFlow<LoginState> = MutableStateFlow(LoginState.Default)
     val loginState = _loginState.asStateFlow()
 
+    private val _kakaoState = MutableStateFlow<KakaoState>(KakaoState.Default)
+    val kakaoState = _kakaoState.asStateFlow()
+
     private val _error: MutableStateFlow<String?> = MutableStateFlow(null)
     val error = _error.asStateFlow()
 
@@ -39,38 +44,46 @@ class LoginViewModel @Inject constructor(
 
     fun signInWithKakao() {
         viewModelScope.launch {
-            _loginState.value = LoginState.Loading
+            val email = getUserEmail()
+            email ?: run {
+                _error.value = "이메일을 가져오는데 실패했습니다."
+                return@launch
+            }
+            _kakaoState.value = KakaoState.Loading
 
-            if(checkKakaoEmail()) {
+            if (checkKakaoEmail()) {
                 authRepository.login(
-                    email = null,
+                    email = email,
                     password = null,
                     signInType = SignInType.KAKAO
                 ).fold(
                     onSuccess = {
-                        _loginState.value = LoginState.Success
+                        _kakaoState.value = KakaoState.Login
                     },
                     onFailure = { error ->
-                        _loginState.value = LoginState.Error
+                        _kakaoState.value = KakaoState.Error
                         _error.value = error.message
 
                         delay(1000)
-                        _loginState.value = LoginState.Default
                     }
                 )
-            }else{
+            } else {
                 // 카카오 회원 X -> 회원가입
+                _kakaoState.value = KakaoState.Signup
             }
 
         }
     }
 
     private suspend fun checkKakaoEmail(): Boolean {
-        authRepository.checkKakaoEmail().fold(
+        val email = getUserEmail()
+
+        authRepository.checkKakaoEmail(email).fold(
             onSuccess = { response ->
                 return response?.existUser == true
             },
-            onFailure = { return false })
+            onFailure = { return false }
+        )
     }
 
     fun signInWithEmail() {
@@ -83,6 +96,7 @@ class LoginViewModel @Inject constructor(
                 signInType = SignInType.EMAIL
             ).fold(
                 onSuccess = {
+                    // TODO : Set Token
                     _loginState.value = LoginState.Success
                 },
                 onFailure = { error ->

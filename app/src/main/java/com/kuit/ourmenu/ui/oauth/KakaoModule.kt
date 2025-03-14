@@ -1,4 +1,4 @@
-package com.kuit.ourmenu.data.oauth
+package com.kuit.ourmenu.ui.oauth
 
 import android.content.Context
 import android.util.Log
@@ -7,6 +7,8 @@ import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
 
 object KakaoModule {
 
@@ -39,18 +41,26 @@ object KakaoModule {
         }
     }
 
-    fun getUserEmail(): String? {
+    suspend fun getUserEmail(): String? {
         if (AuthApiClient.instance.hasToken()) {
-            var userEmail: String? = null
-            UserApiClient.instance.me { user, error ->
-                if (error != null)
-                    Log.e("KakaoModule", "사용자 정보 요청 실패", error)
-                else if (user != null)
-                    userEmail = user.kakaoAccount?.email
+            return suspendCancellableCoroutine { continuation ->
+                UserApiClient.instance.me { user, error ->
+                    if (error != null) {
+                        Log.e("KakaoModule", "사용자 정보 요청 실패", error)
+                        continuation.resume(null)
+                    } else if (user != null) {
+                        val email = user.kakaoAccount?.email
+                        Log.e("KakaoModule2", email.toString())
+                        continuation.resume(email)
+                    } else {
+                        continuation.resume(null)
+                    }
+                }
             }
-            return userEmail
-        } else // has no token
+        } else {// has no token
+            Log.e("KakaoModule", "토큰 실패")
             return null
+        }
     }
 
     fun logout() {
