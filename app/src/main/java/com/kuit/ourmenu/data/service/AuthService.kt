@@ -8,6 +8,7 @@ import com.kuit.ourmenu.data.model.auth.response.CheckKakaoEmailResponse
 import com.kuit.ourmenu.data.model.auth.response.EmailResponse
 import com.kuit.ourmenu.data.model.auth.response.LoginResponse
 import com.kuit.ourmenu.data.model.auth.response.ReissueTokenResponse
+import com.kuit.ourmenu.data.model.auth.response.SignupResponse
 import com.kuit.ourmenu.data.model.base.BaseResponse
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -16,7 +17,7 @@ interface AuthService {
     @POST("api/users/sign-up")
     suspend fun signup(
         @Body request: SignupRequest
-    ): BaseResponse<Unit>
+    ): BaseResponse<SignupResponse>
 
     @POST("api/users/sign-out")
     suspend fun logout(): BaseResponse<Unit>

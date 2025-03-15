@@ -23,17 +23,19 @@ class AuthRepository @Inject constructor(
         password: String?,
         signInType: SignInType
     ) = runCatching {
-        Log.d("okhttp4", "sdf")
-        val request = SignupRequest(
-            email = email,
-            mealTime = mealTime,
-            password = password,
-            signInType = signInType.name
-        )
-        Log.d("okhttp5", request.toString())
-        authService.signup(
-            request
+        val response = authService.signup(
+            SignupRequest(
+                email = email,
+                mealTime = mealTime,
+                password = password,
+                signInType = signInType.name
+            )
         ).handleBaseResponse().getOrThrow()
+
+        response?.let {
+            tokenManager.saveAccessToken(it.accessToken)
+            tokenManager.saveRefreshToken(it.refreshToken)
+        }
     }
 
     suspend fun logout() = runCatching {
