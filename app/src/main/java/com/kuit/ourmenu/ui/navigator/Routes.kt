@@ -15,7 +15,7 @@ sealed interface Routes{
 
     // Onboarding
     @Serializable
-    data object Signup: Routes
+    data object Onboarding: Routes
     @Serializable
     data object Landing: Routes
     @Serializable

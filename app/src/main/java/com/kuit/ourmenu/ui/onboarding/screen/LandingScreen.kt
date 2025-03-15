@@ -70,7 +70,7 @@ fun LandingScreen(
         Log.d("KakaoModule", kakaoState.toString())
         when (kakaoState) {
             is KakaoState.Login -> navController.navigate(route = Routes.Home) {
-                popUpTo(Routes.Landing) { inclusive = true }
+                popUpTo(Routes.Onboarding) { inclusive = true }
             }
 
             is KakaoState.Loading -> viewModel.signInWithKakao()

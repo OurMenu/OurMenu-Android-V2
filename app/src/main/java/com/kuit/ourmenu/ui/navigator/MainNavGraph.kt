@@ -17,39 +17,31 @@ import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
 
 @Composable
 fun MainNavGraph(navController: NavHostController) {
-    NavHost(navController, startDestination = Routes.Landing) {
+    val viewModel = hiltViewModel<SignupViewModel>()
+
+    NavHost(navController, startDestination = Routes.Onboarding) {
         composable<Routes.Home> {
             HomeScreen(navController = navController)
         }
-        composable<Routes.Landing> {
-            LandingScreen(navController = navController)
-        }
-        composable<Routes.Login> {
-            LoginScreen(navController = navController)
-        }
-        navigation<Routes.Signup>(startDestination = Routes.SignupEmail) {
+
+        navigation<Routes.Onboarding>(startDestination = Routes.Landing) {
+
+            composable<Routes.Landing> {
+                LandingScreen(navController = navController)
+            }
+            composable<Routes.Login> {
+                LoginScreen(navController = navController)
+            }
             composable<Routes.SignupEmail> {
-                val viewModel = hiltViewModel<SignupViewModel>(
-                    navController.getBackStackEntry(Routes.Signup)
-                )
                 SignupEmailScreen(navController = navController, viewModel = viewModel)
             }
             composable<Routes.SignupPassword> {
-                val viewModel = hiltViewModel<SignupViewModel>(
-                    navController.getBackStackEntry(Routes.Signup)
-                )
                 SignupPasswordScreen(navController = navController, viewModel = viewModel)
             }
             composable<Routes.SignupMealTime> {
-                val viewModel = hiltViewModel<SignupViewModel>(
-                    navController.getBackStackEntry(Routes.Signup)
-                )
                 SignupMealTimeScreen(navController = navController, viewModel = viewModel)
             }
             composable<Routes.SignupVerify> {
-                val viewModel = hiltViewModel<SignupViewModel>(
-                    navController.getBackStackEntry(Routes.Signup)
-                )
                 SignupVerifyScreen(navController = navController, viewModel = viewModel)
             }
         }

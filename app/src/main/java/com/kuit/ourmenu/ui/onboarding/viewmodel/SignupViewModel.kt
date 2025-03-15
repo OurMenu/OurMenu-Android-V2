@@ -169,8 +169,6 @@ class SignupViewModel @Inject constructor(
                     Log.d("okhttp3", error.toString())
                 }
             )
-            delay(1000)
-            _signupState.value = SignupState.Default
         }
     }
 
@@ -194,8 +192,6 @@ class SignupViewModel @Inject constructor(
                     Log.d("okhttp3", error.toString())
                 }
             )
-            delay(1000)
-            _signupState.value = SignupState.Default
         }
     }
 
