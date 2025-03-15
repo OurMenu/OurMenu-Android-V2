@@ -1,5 +1,6 @@
 package com.kuit.ourmenu.ui.onboarding.screen
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -30,10 +32,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -48,6 +53,7 @@ import com.kuit.ourmenu.ui.onboarding.component.BottomFullWidthBorderButton
 import com.kuit.ourmenu.ui.onboarding.component.LoginTextField
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
 import com.kuit.ourmenu.ui.onboarding.state.LoginState
+import com.kuit.ourmenu.ui.onboarding.state.PasswordState
 import com.kuit.ourmenu.ui.onboarding.viewmodel.LoginViewModel
 import com.kuit.ourmenu.ui.theme.Neutral100
 import com.kuit.ourmenu.ui.theme.Neutral300
@@ -55,7 +61,10 @@ import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
+import com.kuit.ourmenu.utils.AnimationUtil.shakeAnimation
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 @Composable
 fun LoginScreen(
@@ -69,6 +78,10 @@ fun LoginScreen(
 
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val shakeOffset = remember { Animatable(0f) }
+    val emailFocusRequester = remember { FocusRequester() }
+    val passwordFocusRequester = remember { FocusRequester() }
+    val shakingModifier = Modifier.offset { IntOffset(shakeOffset.value.roundToInt(), 0) }
 
     LaunchedEffect(loginState) {
         when (loginState) {
@@ -81,7 +94,43 @@ fun LoginScreen(
                         duration = SnackbarDuration.Short
                     )
                 }
+
             }
+
+            is LoginState.NotFoundUser -> {
+                scope.launch {
+                    emailFocusRequester.requestFocus()
+                    delay(800)
+                }
+                shakeAnimation(
+                    offset = shakeOffset,
+                    coroutineScope = scope,
+                )
+                scope.launch {
+                    snackbarHostState.showSnackbar(
+                        message = "존재하지 않는 이메일입니다.",
+                        duration = SnackbarDuration.Short
+                    )
+                }
+            }
+
+            is LoginState.DifferentPassword -> {
+                scope.launch {
+                    passwordFocusRequester.requestFocus()
+                    delay(800)
+                }
+                shakeAnimation(
+                    offset = shakeOffset,
+                    coroutineScope = scope,
+                )
+                scope.launch {
+                    snackbarHostState.showSnackbar(
+                        message = "비밀번호가 일치하지 않아요.",
+                        duration = SnackbarDuration.Short
+                    )
+                }
+            }
+
 
             else -> {}
         }
@@ -98,10 +147,10 @@ fun LoginScreen(
         content = { innerPadding ->
             Column(
                 modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(20.dp, 48.dp),
+                    Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .padding(20.dp, 48.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Box(
@@ -118,6 +167,14 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(56.dp))
 
                 LoginTextField(
+                    modifier = when (loginState) {
+                        LoginState.NotFoundUser -> shakingModifier.focusRequester(
+                            emailFocusRequester
+                        )
+
+                        else -> Modifier
+                    },
+                    error = loginState == LoginState.NotFoundUser,
                     placeholder = stringResource(R.string.email),
                     input = email,
                     onTextChange = { viewModel.updateEmail(it) },
@@ -126,6 +183,14 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 LoginTextField(
+                    modifier = when (loginState) {
+                        LoginState.DifferentPassword -> shakingModifier.focusRequester(
+                            passwordFocusRequester
+                        )
+
+                        else -> Modifier
+                    },
+                    error = loginState == LoginState.DifferentPassword,
                     placeholder = stringResource(R.string.password),
                     input = password,
                     onTextChange = { viewModel.updatePassword(it) },
@@ -146,15 +211,15 @@ fun LoginScreen(
                             checked = isPasswordVisible,
                             onCheckedChange = { isPasswordVisible = it },
                             modifier =
-                            Modifier
-                                .border(1.dp, Neutral300, RoundedCornerShape(4.dp))
-                                .size(24.dp),
+                                Modifier
+                                    .border(1.dp, Neutral300, RoundedCornerShape(4.dp))
+                                    .size(24.dp),
                             colors =
-                            CheckboxDefaults.colors(
-                                checkmarkColor = NeutralWhite,
-                                checkedColor = Primary500Main,
-                                uncheckedColor = Neutral100,
-                            ),
+                                CheckboxDefaults.colors(
+                                    checkmarkColor = NeutralWhite,
+                                    checkedColor = Primary500Main,
+                                    uncheckedColor = Neutral100,
+                                ),
                         )
 
                         Text(
@@ -170,9 +235,9 @@ fun LoginScreen(
                         style = ourMenuTypography().pretendard_500_12,
                         color = Neutral500,
                         modifier =
-                        Modifier.clickable {
-                            // TODO: 비밀번호 찾기 동작 구현
-                        },
+                            Modifier.clickable {
+                                // TODO: 비밀번호 찾기 동작 구현
+                            },
                     )
                 }
 
@@ -202,9 +267,9 @@ fun LoginScreen(
 
             Box(
                 modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(bottom = 65.5.dp),
+                    Modifier
+                        .fillMaxSize()
+                        .padding(bottom = 65.5.dp),
                 contentAlignment = Alignment.BottomCenter,
             ) {
                 Row {

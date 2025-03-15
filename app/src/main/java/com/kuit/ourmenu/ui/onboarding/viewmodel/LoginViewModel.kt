@@ -3,6 +3,7 @@ package com.kuit.ourmenu.ui.onboarding.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kuit.ourmenu.data.model.auth.SignInType
+import com.kuit.ourmenu.data.model.base.OurMenuApiFailureException
 import com.kuit.ourmenu.data.repository.AuthRepository
 import com.kuit.ourmenu.ui.onboarding.state.LoginState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -47,12 +48,21 @@ class LoginViewModel @Inject constructor(
                 signInType = SignInType.EMAIL
             ).fold(
                 onSuccess = {
-                    // TODO : Set Token
                     _loginState.value = LoginState.Success
                 },
                 onFailure = { error ->
                     _loginState.value = LoginState.Error
-                    _error.value = error.message
+                    when (error) {
+                        is OurMenuApiFailureException -> {
+                            _error.value = error.message
+                            when (error.status) {
+                                401 -> _loginState.value = LoginState.DifferentPassword
+                                404 -> _loginState.value = LoginState.NotFoundUser
+                            }
+                        }
+
+                        else -> _error.value = error.message
+                    }
 
                     delay(1000)
                     _loginState.value = LoginState.Default
