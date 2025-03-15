@@ -73,7 +73,6 @@ fun SignupPasswordScreen(
     val isConfirmButtonEnabled = password.isNotEmpty() && confirmPassword.isNotEmpty()
 
     val focusRequester = remember { FocusRequester() }
-    val confirmFocusRequester = remember { FocusRequester() }
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val shakeOffset = remember { Animatable(0f) }
@@ -187,9 +186,9 @@ fun SignupPasswordScreen(
                     },
                     modifier = when (passwordState) {
                         PasswordState.NotMeetCondition, PasswordState.DifferentPassword ->
-                            shakingModifier.focusRequester(confirmFocusRequester)
+                            shakingModifier
 
-                        else -> Modifier.focusRequester(confirmFocusRequester)
+                        else -> Modifier
                     },
                     placeholder = stringResource(R.string.confirm_password_placeholder),
                     input = confirmPassword,
