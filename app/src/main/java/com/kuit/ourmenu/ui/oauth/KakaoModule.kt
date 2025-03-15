@@ -14,6 +14,7 @@ object KakaoModule {
 
     fun getKakaoLogin(
         context: Context,
+        successLogin: () -> Unit,
     ) {
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
             if (error != null) {
@@ -35,9 +36,11 @@ object KakaoModule {
                 } else if (token != null) {
                     Log.i("KakaoModule", "카카오톡으로 로그인 성공 ${token.accessToken}")
                 }
+                successLogin()
             }
         } else {
             UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
+            successLogin()
         }
     }
 
