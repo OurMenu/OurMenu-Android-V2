@@ -183,32 +183,6 @@ class SignupViewModel @Inject constructor(
                 signInType = SignInType.KAKAO
             ).fold(
                 onSuccess = {
-                    kakaoLogin()
-                    Log.d("okhttp2", _signupState.value.toString())
-                },
-                onFailure = { error ->
-                    _signupState.value = SignupState.Error
-                    _error.value = error.message
-                    Log.d("okhttp3", error.toString())
-                }
-            )
-        }
-    }
-
-    private fun kakaoLogin() {
-        viewModelScope.launch {
-            val kakaoEmail = getUserEmail()
-            kakaoEmail ?: run {
-                _error.value = "이메일을 가져오는데 실패했습니다."
-                return@launch
-            }
-
-            authRepository.login(
-                email = kakaoEmail,
-                password = null,
-                signInType = SignInType.KAKAO
-            ).fold(
-                onSuccess = {
                     _signupState.value = SignupState.Success
                     Log.d("okhttp2", _signupState.value.toString())
                 },
@@ -218,8 +192,6 @@ class SignupViewModel @Inject constructor(
                     Log.d("okhttp3", error.toString())
                 }
             )
-            delay(1000)
-            _signupState.value = SignupState.Default
         }
     }
 
