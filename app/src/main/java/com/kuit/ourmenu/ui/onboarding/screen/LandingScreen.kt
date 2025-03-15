@@ -1,6 +1,7 @@
 package com.kuit.ourmenu.ui.onboarding.screen
 
 import android.app.Activity
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -44,7 +45,7 @@ import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.oauth.KakaoModule.getKakaoLogin
 import com.kuit.ourmenu.ui.onboarding.component.BottomFullWidthBorderButton
 import com.kuit.ourmenu.ui.onboarding.state.KakaoState
-import com.kuit.ourmenu.ui.onboarding.viewmodel.LoginViewModel
+import com.kuit.ourmenu.ui.onboarding.viewmodel.LandingViewModel
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral700
@@ -57,7 +58,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun LandingScreen(
     navController: NavController,
-    viewModel: LoginViewModel = hiltViewModel()
+    viewModel: LandingViewModel = hiltViewModel()
 ) {
     val kakaoState by viewModel.kakaoState.collectAsStateWithLifecycle()
 
@@ -66,8 +67,14 @@ fun LandingScreen(
     val context = LocalContext.current as Activity
 
     LaunchedEffect(kakaoState) {
+        Log.d("KakaoModule", kakaoState.toString())
         when (kakaoState) {
-            is KakaoState.Login -> navController.navigate(route = Routes.Home)
+            is KakaoState.Login -> navController.navigate(route = Routes.Home) {
+                popUpTo(Routes.Landing) { inclusive = true }
+            }
+
+            is KakaoState.Loading -> viewModel.signInWithKakao()
+
             is KakaoState.Signup -> navController.navigate(route = Routes.SignupMealTime)
             is KakaoState.Error -> {
                 // 에러에 따라 snackbar 를 show 하면 됨
@@ -85,15 +92,15 @@ fun LandingScreen(
 
     Box(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .padding(bottom = 18.dp),
+            Modifier
+                .fillMaxSize()
+                .padding(bottom = 18.dp),
     ) {
         Column(
             modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(horizontal = 20.dp),
+                Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Image(
@@ -180,10 +187,11 @@ fun LandingScreen(
                     .wrapContentHeight()
                     .padding(top = 16.dp)
                     .clickable {
-                        getKakaoLogin(context)
-                        viewModel.signInWithKakao()
-                    }
-                ,
+                        getKakaoLogin(
+                            context = context,
+                            successLogin = { viewModel.updateKakaoState(KakaoState.Loading) }
+                        )
+                    },
                 contentScale = ContentScale.FillWidth
             )
         }
