@@ -45,7 +45,11 @@ fun SignupMealTimeScreen(
     LaunchedEffect(signupState) {
         when (signupState) {
             is SignupState.Success ->
-                navController.navigate(route = Routes.Login)
+                navController.navigate(route = Routes.Login) {
+                    popUpTo(Routes.Landing) {
+                        inclusive = true
+                    }
+                }
 
             is SignupState.Error ->
                 Log.e("SignupVerifyScreen", viewModel.error.value.toString())
