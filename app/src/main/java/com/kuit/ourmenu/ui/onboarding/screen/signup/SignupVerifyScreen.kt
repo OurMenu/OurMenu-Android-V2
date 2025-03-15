@@ -1,6 +1,5 @@
 package com.kuit.ourmenu.ui.onboarding.screen.signup
 
-import android.util.Log
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -44,6 +43,7 @@ import com.kuit.ourmenu.ui.common.OurSnackbarHost
 import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
 import com.kuit.ourmenu.ui.onboarding.component.VerifyCodeTextField
+import com.kuit.ourmenu.ui.onboarding.state.PasswordState
 import com.kuit.ourmenu.ui.onboarding.state.SignupState
 import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.theme.Neutral300
@@ -81,10 +81,6 @@ fun SignupVerifyScreen(
                 navController.navigate(route = Routes.SignupPassword)
 
             is SignupState.Error -> {
-                scope.launch {
-                    delay(800)
-
-                }
                 shakeAnimation(
                     offset = shakeOffset,
                     coroutineScope = scope,
@@ -149,6 +145,20 @@ fun SignupVerifyScreen(
                 Row {
                     for (i in 0 until 6) {
                         VerifyCodeTextField(
+                            modifier = when (verifyState) {
+                                SignupState.Error -> shakingModifier
+                                else -> Modifier
+                            }.then(
+                                if (i == 0 && codes[i].isEmpty()) {
+                                    Modifier.focusRequester(focusRequesters[i])
+                                } else {
+                                    Modifier
+                                }
+                            ),
+                            error = when (verifyState) {
+                                SignupState.Error -> true
+                                else -> false
+                            },
                             input = codes[i],
                             onTextChange = { newText ->
                                 if (newText.length <= 1) {
@@ -165,14 +175,6 @@ fun SignupVerifyScreen(
                                     focusRequesters[i - 1].requestFocus()
                                 }
                             },
-                            modifier =
-                                Modifier.then(
-                                    if (i == 0 && codes[i].isEmpty()) {
-                                        Modifier.focusRequester(focusRequesters[i])
-                                    } else {
-                                        Modifier
-                                    },
-                                ),
                             focusRequester = focusRequesters[i],
                         )
                         if (i < 5) {
@@ -180,17 +182,17 @@ fun SignupVerifyScreen(
                         }
                     }
                 }
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                        .padding(top = 44.dp),
-                    contentAlignment = Alignment.TopCenter
-                ) {
-                    OurSnackbarHost(
-                        hostState = snackbarHostState
-                    )
-                }
+            }
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(top = 44.dp),
+                contentAlignment = Alignment.TopCenter
+            ) {
+                OurSnackbarHost(
+                    hostState = snackbarHostState
+                )
             }
         },
         bottomBar = {
@@ -234,7 +236,7 @@ fun SignupVerifyScreen(
                     modifier = Modifier
                         .padding(bottom = 36.dp)
                         .clickable {
-                            // TODO
+                            viewModel.sendEmail()
                         },
                 )
 

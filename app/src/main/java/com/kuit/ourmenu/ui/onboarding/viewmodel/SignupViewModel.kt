@@ -143,9 +143,9 @@ class SignupViewModel @Inject constructor(
 
     fun signup() {
         if (email.value == "" || domain.value == "") {
-            signupWithEmail()
-        } else {
             signupWithKakao()
+        } else {
+            signupWithEmail()
         }
     }
 
