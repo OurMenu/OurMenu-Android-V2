@@ -85,7 +85,10 @@ fun LoginScreen(
 
     LaunchedEffect(loginState) {
         when (loginState) {
-            is LoginState.Success -> navController.navigate(route = Routes.Home)
+            is LoginState.Success -> navController.navigate(route = Routes.Home) {
+                popUpTo(route = Routes.Onboarding) { inclusive = true }
+            }
+
             is LoginState.Error -> {
                 // 에러에 따라 snackbar 를 show 하면 됨
                 scope.launch {
