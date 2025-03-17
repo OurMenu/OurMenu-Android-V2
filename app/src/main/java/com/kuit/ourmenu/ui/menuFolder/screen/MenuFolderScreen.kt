@@ -1,0 +1,102 @@
+package com.kuit.ourmenu.ui.menuFolder.screen
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.kuit.ourmenu.R
+import com.kuit.ourmenu.ui.menuFolder.component.AddButton
+import com.kuit.ourmenu.ui.menuFolder.component.MenuFolderButton
+import com.kuit.ourmenu.ui.menuFolder.component.MenuFolderTopAppBar
+import com.kuit.ourmenu.ui.theme.NeutralWhite
+import com.kuit.ourmenu.ui.theme.Primary500Main
+import com.kuit.ourmenu.ui.theme.ourMenuTypography
+
+@Composable
+fun MenuFolderScreen(modifier: Modifier = Modifier) {
+    val menuCount = 5 // 임의로 정한 값
+    val menuFolderCount = 8 // 임의로 정한 값
+
+    // 현재 스와이프된 버튼의 인덱스를 관리 (한 번에 하나만 스와이프되도록)
+    var swipedIndex by remember { mutableIntStateOf(-1) }
+
+    Scaffold(
+        topBar = {
+            MenuFolderTopAppBar()
+        }
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .padding(innerPadding)
+                .padding(horizontal = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            item {
+                Column(
+                    modifier = Modifier
+                        .padding(top = 24.dp)
+                        .height(64.dp)
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(Primary500Main),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = stringResource(R.string.see_all_menu),
+                        color = NeutralWhite,
+                        style = ourMenuTypography().pretendard_700_18
+                    )
+
+                    Text(
+                        text = String.format(stringResource(R.string.menu_count), menuCount),
+                        color = NeutralWhite,
+                        style = ourMenuTypography().pretendard_500_14,
+                    )
+                }
+            }
+
+            // 스와이프 제어
+            // TODO: 드래그 앤 드롭 구현
+            items(menuFolderCount) { index ->
+                MenuFolderButton(
+                    isSwiped = swipedIndex == index, // 현재 스와이프된 아이템인지 확인
+                    onSwipe = { swipedIndex = index }, // 새로운 버튼이 스와이프되면 상태 변경
+                    onReset = { if (swipedIndex == index) swipedIndex = -1 } // 닫히면 초기화
+                )
+            }
+
+            item {
+                AddButton(
+                    stringResource(R.string.add_menu_folder),
+                    modifier = Modifier
+                ) {
+                    // TODO: 버튼 누르면 메뉴판 추가 페이지로 이동
+                }
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MenuFolderScreenPreview() {
+    MenuFolderScreen()
+}
