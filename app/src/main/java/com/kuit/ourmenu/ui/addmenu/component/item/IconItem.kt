@@ -21,7 +21,6 @@ import com.kuit.ourmenu.ui.theme.NeutralWhite
 @Composable
 fun IconItem(
     iconId: Int,
-    isSelected: Boolean,
     onSelected: () -> Unit
 ) {
     Box(
@@ -49,7 +48,6 @@ private fun IconItemPreview() {
     var isSelected by rememberSaveable { mutableStateOf(false) }
     IconItem(
         iconId = R.drawable.ic_tag_rice,
-        isSelected = isSelected,
         onSelected = {
             isSelected = !isSelected
         }

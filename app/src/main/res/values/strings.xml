@@ -83,6 +83,8 @@
 
     <!--search menu-->
     <string name="search_place_holder">가게, 메뉴 이름 검색</string>
+    <string name="tag_number_warning">태그는 최대 12개까지 등록할 수 있어요</string>
+    <string name="reset">초기화</string>
 
     <!--menu folder-->
     <string name="delete">삭제</string>
