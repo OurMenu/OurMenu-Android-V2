@@ -116,7 +116,6 @@ fun MenuFolderAllMenuScreen(modifier: Modifier = Modifier) {
 
             LazyColumn(
                 modifier = Modifier,
-                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 // TODO: 버튼 누르면 해당 페이지로 이동
                 items(menuCount) { index ->

@@ -74,6 +74,7 @@ fun MenuFolderScreen(modifier: Modifier = Modifier) {
             }
 
             // 스와이프 제어
+            // TODO: 드래그 앤 드롭 구현
             items(menuFolderCount) { index ->
                 MenuFolderButton(
                     isSwiped = swipedIndex == index, // 현재 스와이프된 아이템인지 확인

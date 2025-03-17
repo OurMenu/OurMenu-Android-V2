@@ -185,7 +185,7 @@ fun MenuFolderContent() {
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = "한강 뷰 맛집",
+                        text = stringResource(R.string.menu_folder_name),
                         color = NeutralWhite,
                         style = ourMenuTypography().pretendard_500_24,
                     )
