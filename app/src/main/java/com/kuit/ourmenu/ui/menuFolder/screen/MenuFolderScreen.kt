@@ -87,6 +87,9 @@ fun MenuFolderScreen(navController: NavController) {
                     isSwiped = swipedIndex == index, // 현재 스와이프된 아이템인지 확인
                     onSwipe = { swipedIndex = index }, // 새로운 버튼이 스와이프되면 상태 변경
                     onReset = { if (swipedIndex == index) swipedIndex = -1 }, // 닫히면 초기화
+                    onButtonClick = {
+                        navController.navigate(route = Routes.MenuFolderDetail)
+                    }
                 )
             }
 
