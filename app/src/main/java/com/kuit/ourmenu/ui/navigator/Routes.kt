@@ -10,6 +10,12 @@ sealed interface Routes{
     // 지도
 
     // 메뉴판
+    @Serializable
+    data object MenuFolder: Routes
+
+    // 메뉴 추가
+    @Serializable
+    data object AddMenu: Routes
 
     // Mypage
 

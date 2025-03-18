@@ -4,7 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.kuit.ourmenu.ui.addmenu.screen.AddMenuScreen
 import com.kuit.ourmenu.ui.home.screen.HomeScreen
+import com.kuit.ourmenu.ui.menuFolder.screen.MenuFolderScreen
 import com.kuit.ourmenu.ui.onboarding.screen.LandingScreen
 import com.kuit.ourmenu.ui.onboarding.screen.LoginScreen
 import com.kuit.ourmenu.ui.onboarding.screen.signup.SignupEmailScreen
@@ -35,6 +37,16 @@ fun MainNavGraph(navController: NavHostController) {
         }
         composable<Routes.SignupVerify> {
             SignupVerifyScreen(navController = navController)
+        }
+
+        // 메뉴판
+        composable<Routes.MenuFolder> {
+            MenuFolderScreen(navController = navController)
+        }
+
+        // 메뉴 추가
+        composable<Routes.AddMenu> {
+            AddMenuScreen(navController = navController)
         }
     }
 }

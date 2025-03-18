@@ -21,16 +21,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.menuFolder.component.AddButton
 import com.kuit.ourmenu.ui.menuFolder.component.MenuFolderButton
 import com.kuit.ourmenu.ui.menuFolder.component.MenuFolderTopAppBar
+import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun MenuFolderScreen(modifier: Modifier = Modifier) {
+fun MenuFolderScreen(navController: NavController) {
     val menuCount = 5 // 임의로 정한 값
     val menuFolderCount = 8 // 임의로 정한 값
 
@@ -39,7 +42,11 @@ fun MenuFolderScreen(modifier: Modifier = Modifier) {
 
     Scaffold(
         topBar = {
-            MenuFolderTopAppBar()
+            MenuFolderTopAppBar(
+                onClick = {
+                    navController.navigate(route = Routes.AddMenu)
+                }
+            )
         }
     ) { innerPadding ->
         LazyColumn(
@@ -79,7 +86,7 @@ fun MenuFolderScreen(modifier: Modifier = Modifier) {
                 MenuFolderButton(
                     isSwiped = swipedIndex == index, // 현재 스와이프된 아이템인지 확인
                     onSwipe = { swipedIndex = index }, // 새로운 버튼이 스와이프되면 상태 변경
-                    onReset = { if (swipedIndex == index) swipedIndex = -1 } // 닫히면 초기화
+                    onReset = { if (swipedIndex == index) swipedIndex = -1 }, // 닫히면 초기화
                 )
             }
 
@@ -98,5 +105,7 @@ fun MenuFolderScreen(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun MenuFolderScreenPreview() {
-    MenuFolderScreen()
+    val navController = rememberNavController()
+
+    MenuFolderScreen(navController)
 }

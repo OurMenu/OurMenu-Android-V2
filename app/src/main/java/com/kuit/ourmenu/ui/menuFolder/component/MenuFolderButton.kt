@@ -2,6 +2,7 @@ package com.kuit.ourmenu.ui.menuFolder.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,7 +48,10 @@ import kotlinx.coroutines.launch
 fun MenuFolderButton(
     isSwiped: Boolean, // 현재 버튼이 스와이프된 상태인지 확인
     onSwipe: () -> Unit, // 새로운 버튼이 스와이프될 때 호출
-    onReset: () -> Unit // 버튼이 닫히면 호출
+    onReset: () -> Unit, // 버튼이 닫히면 호출
+    onButtonClick: () -> Unit = {},
+    onEditClick: () -> Unit = {},
+    onDeleteClick: () -> Unit = {}
 ) {
     var offsetX by remember { mutableFloatStateOf(0f) }
     val scope = rememberCoroutineScope()
@@ -80,26 +84,30 @@ fun MenuFolderButton(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.CenterEnd
         ) {
-            MenuFolderDeleteButton()
-            MenuFolderEditButton()
+            MenuFolderDeleteButton(onDeleteClick)
+            MenuFolderEditButton(onEditClick)
         }
 
         // 스와이프 상태일 때만 offset 적용
-        Box(modifier = Modifier.offset(x = if (isSwiped) offsetX.dp else 0.dp)) {
+        Box(modifier = Modifier
+            .offset(x = if (isSwiped) offsetX.dp else 0.dp)
+            .clickable(onClick = onButtonClick)
+        ) {
             MenuFolderContent()
         }
     }
 }
 
 @Composable
-fun MenuFolderEditButton() {
+fun MenuFolderEditButton(onEditClick: () -> Unit = {}) {
     Box(
         modifier = Modifier
             .padding(end = 64.dp)
             .width(80.dp)
             .fillMaxHeight()
             .clip(RoundedCornerShape(topEnd = 12.dp, bottomEnd = 12.dp))
-            .background(color = Neutral300),
+            .background(color = Neutral300)
+            .clickable(onClick = onEditClick),
         contentAlignment = Alignment.CenterEnd
     ) {
         Column(modifier = Modifier.padding(end = 20.dp)) {
@@ -119,14 +127,15 @@ fun MenuFolderEditButton() {
 }
 
 @Composable
-fun MenuFolderDeleteButton() {
+fun MenuFolderDeleteButton(onDeleteClick: () -> Unit = {}) {
     Box(
         modifier = Modifier
             .width(80.dp)
             .fillMaxHeight()
             .clip(RoundedCornerShape(topEnd = 12.dp, bottomEnd = 12.dp))
-            .background(color = Primary500Main),
-        contentAlignment = Alignment.CenterEnd
+            .background(color = Primary500Main)
+            .clickable(onClick = onDeleteClick),
+        contentAlignment = Alignment.CenterEnd,
     ) {
         Column(modifier = Modifier.padding(end = 20.dp)) {
             Image(
