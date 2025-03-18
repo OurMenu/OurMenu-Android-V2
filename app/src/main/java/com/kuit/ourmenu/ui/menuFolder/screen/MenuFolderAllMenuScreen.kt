@@ -21,10 +21,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.topappbar.BackButtonTopAppBar
 import com.kuit.ourmenu.ui.menuFolder.component.AddButton
 import com.kuit.ourmenu.ui.menuFolder.component.MenuFolderMenuButton
+import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.Neutral900
@@ -33,17 +36,19 @@ import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun MenuFolderAllMenuScreen(modifier: Modifier = Modifier) {
+fun MenuFolderAllMenuScreen(navController: NavController) {
     val menuCount = 13
     val filterCount = 1
 
     Scaffold(
         topBar = {
-            BackButtonTopAppBar(Neutral500, false)
+            BackButtonTopAppBar(Neutral500, false) {
+                navController.popBackStack()
+            }
         }
     ) { innerPadding ->
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .padding(innerPadding)
         ) {
             Row(
@@ -117,9 +122,15 @@ fun MenuFolderAllMenuScreen(modifier: Modifier = Modifier) {
             LazyColumn(
                 modifier = Modifier,
             ) {
-                // TODO: 버튼 누르면 해당 페이지로 이동
                 items(menuCount) { index ->
-                    MenuFolderMenuButton()
+                    MenuFolderMenuButton(
+                        onMenuClick = {
+                            navController.navigate(route = Routes.MenuInfo)
+                        },
+                        onMapClick = {
+                            navController.navigate(route = Routes.MenuInfoMap)
+                        }
+                    )
                 }
 
                 item {
@@ -140,5 +151,7 @@ fun MenuFolderAllMenuScreen(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun MenuFolderAllMenuScreenPreview() {
-    MenuFolderAllMenuScreen()
+    val navController = rememberNavController()
+
+    MenuFolderAllMenuScreen(navController)
 }

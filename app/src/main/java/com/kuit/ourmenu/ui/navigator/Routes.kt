@@ -15,6 +15,12 @@ sealed interface Routes{
     @Serializable
     data object MenuFolderDetail: Routes
 
+    // 메뉴
+    @Serializable
+    data object MenuInfo: Routes
+    @Serializable
+    data object MenuInfoMap: Routes
+
     // 메뉴 추가
     @Serializable
     data object AddMenu: Routes

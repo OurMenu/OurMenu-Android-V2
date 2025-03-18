@@ -1,6 +1,7 @@
 package com.kuit.ourmenu.ui.menuFolder.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,16 +30,16 @@ import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
-// TODO: 버튼 누르면 해당 페이지로 이동
 @Composable
-fun MenuFolderMenuButton(modifier: Modifier = Modifier) {
+fun MenuFolderMenuButton(onMenuClick: () -> Unit = {}, onMapClick: () -> Unit = {}) {
     val menuPrice = 12000
 
     Row(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .height(114.dp)
             .padding(horizontal = 20.dp, vertical = 12.dp)
+            .clickable(onClick = onMenuClick)
     ) {
         Image(
             painter = painterResource(id = R.drawable.img_dummy_pizza),
@@ -111,6 +112,7 @@ fun MenuFolderMenuButton(modifier: Modifier = Modifier) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_to_map),
                     contentDescription = "To Map",
+                    modifier = Modifier.clickable(onClick = onMapClick)
                 )
             }
         }

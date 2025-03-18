@@ -8,6 +8,8 @@ import com.kuit.ourmenu.ui.addmenu.screen.AddMenuScreen
 import com.kuit.ourmenu.ui.home.screen.HomeScreen
 import com.kuit.ourmenu.ui.menuFolder.screen.MenuFolderDetailScreen
 import com.kuit.ourmenu.ui.menuFolder.screen.MenuFolderScreen
+import com.kuit.ourmenu.ui.menuinfo.screen.MenuInfoDefaultScreen
+import com.kuit.ourmenu.ui.menuinfo.screen.MenuInfoMapScreen
 import com.kuit.ourmenu.ui.onboarding.screen.LandingScreen
 import com.kuit.ourmenu.ui.onboarding.screen.LoginScreen
 import com.kuit.ourmenu.ui.onboarding.screen.signup.SignupEmailScreen
@@ -46,6 +48,14 @@ fun MainNavGraph(navController: NavHostController) {
         }
         composable<Routes.MenuFolderDetail> {
             MenuFolderDetailScreen(navController = navController)
+        }
+
+        // 메뉴
+         composable<Routes.MenuInfo> {
+             MenuInfoDefaultScreen(navController = navController)
+         }
+        composable<Routes.MenuInfoMap> {
+            MenuInfoMapScreen(navController = navController)
         }
 
         // 메뉴 추가
