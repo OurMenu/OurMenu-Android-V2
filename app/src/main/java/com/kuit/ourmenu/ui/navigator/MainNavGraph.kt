@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.kuit.ourmenu.ui.addmenu.screen.AddMenuScreen
 import com.kuit.ourmenu.ui.home.screen.HomeScreen
+import com.kuit.ourmenu.ui.menuFolder.screen.MenuFolderAllMenuScreen
 import com.kuit.ourmenu.ui.menuFolder.screen.MenuFolderDetailScreen
 import com.kuit.ourmenu.ui.menuFolder.screen.MenuFolderScreen
 import com.kuit.ourmenu.ui.menuinfo.screen.MenuInfoDefaultScreen
@@ -19,7 +20,7 @@ import com.kuit.ourmenu.ui.onboarding.screen.signup.SignupVerifyScreen
 
 @Composable
 fun MainNavGraph(navController: NavHostController) {
-    NavHost(navController, startDestination = Routes.MenuFolder) {
+    NavHost(navController, startDestination = Routes.Home) {
         composable<Routes.Home> {
             HomeScreen(navController = navController)
         }
@@ -49,11 +50,14 @@ fun MainNavGraph(navController: NavHostController) {
         composable<Routes.MenuFolderDetail> {
             MenuFolderDetailScreen(navController = navController)
         }
+        composable<Routes.MenuFolderAllMenu> {
+            MenuFolderAllMenuScreen(navController = navController)
+        }
 
         // 메뉴
-         composable<Routes.MenuInfo> {
-             MenuInfoDefaultScreen(navController = navController)
-         }
+        composable<Routes.MenuInfo> {
+            MenuInfoDefaultScreen(navController = navController)
+        }
         composable<Routes.MenuInfoMap> {
             MenuInfoMapScreen(navController = navController)
         }

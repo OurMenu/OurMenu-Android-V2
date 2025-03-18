@@ -1,6 +1,7 @@
 package com.kuit.ourmenu.ui.menuFolder.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -62,7 +63,10 @@ fun MenuFolderScreen(navController: NavController) {
                         .height(64.dp)
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(12.dp))
-                        .background(Primary500Main),
+                        .background(Primary500Main)
+                        .clickable(onClick = {
+                            navController.navigate(route = Routes.MenuFolderAllMenu)
+                        }),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
