@@ -138,7 +138,7 @@ fun MenuFolderAllMenuScreen(navController: NavController) {
                         stringResource(R.string.add_menu),
                         modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 20.dp)
                     ) {
-                        // TODO: 버튼 누르면 메뉴 추가 페이지로 이동
+                        navController.navigate(route = Routes.AddMenu)
                     }
                 }
             }
