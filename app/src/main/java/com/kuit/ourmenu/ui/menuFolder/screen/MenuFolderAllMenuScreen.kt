@@ -1,6 +1,8 @@
 package com.kuit.ourmenu.ui.menuFolder.screen
 
+import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,11 +12,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -24,8 +37,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.ui.common.bottomsheet.BottomSheetDragHandle
 import com.kuit.ourmenu.ui.common.topappbar.BackButtonTopAppBar
 import com.kuit.ourmenu.ui.menuFolder.component.AddButton
+import com.kuit.ourmenu.ui.menuFolder.component.FilterBottomSheet
 import com.kuit.ourmenu.ui.menuFolder.component.MenuFolderMenuButton
 import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.theme.Neutral500
@@ -34,17 +49,64 @@ import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MenuFolderAllMenuScreen(navController: NavController) {
     val menuCount = 13
-    val filterCount = 1
+    val filterCount by rememberSaveable { mutableIntStateOf(0) } // ✅ 선택된 필터 개수 상태 관리
+    var selectedFilters by rememberSaveable { mutableStateOf(listOf<String>()) } // ✅ 선택된 필터 리스트
 
-    Scaffold(
+    val scaffoldState = rememberBottomSheetScaffoldState()
+    var showBottomSheet by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+    LaunchedEffect(scaffoldState.bottomSheetState) {
+        snapshotFlow { scaffoldState.bottomSheetState.currentValue }
+            .collect { state ->
+                Log.d("AddMenuTagScreen", "BottomSheetState changed: $state")
+            }
+    }
+
+    BottomSheetScaffold(
+        scaffoldState = scaffoldState,
         topBar = {
             BackButtonTopAppBar(Neutral500, false) {
                 navController.popBackStack()
             }
+        },
+        sheetContainerColor = NeutralWhite,
+        sheetPeekHeight = 0.dp,
+        sheetContent = {
+            FilterBottomSheet(
+                categoryTagList = listOf(
+                    R.drawable.ic_tag_rice to "밥",
+                    R.drawable.ic_tag_rice to "빵",
+                    R.drawable.ic_tag_rice to "면"
+                ),
+                nationalityTagList = listOf(
+                    R.drawable.ic_tag_rice to "한식",
+                    R.drawable.ic_tag_rice to "중식",
+                    R.drawable.ic_tag_rice to "일식"
+                ),
+                tasteTagList = listOf(
+                    R.drawable.ic_tag_rice to "매콤함",
+                    R.drawable.ic_tag_rice to "달달함",
+                    R.drawable.ic_tag_rice to "시원함"
+                ),
+                occasionTagList = listOf(
+                    R.drawable.ic_tag_rice to "혼밥",
+                    R.drawable.ic_tag_rice to "친구 약속",
+                    R.drawable.ic_tag_rice to "데이트"
+                ),
+                onApplyButtonClick = {
+                    showBottomSheet = false
+                },
+                onSelectedTagsChange = { newSelectedTags -> selectedFilters = newSelectedTags },
+            )
+        },
+        sheetDragHandle = {
+            BottomSheetDragHandle()
         }
     ) { innerPadding ->
         Column(
@@ -76,7 +138,6 @@ fun MenuFolderAllMenuScreen(navController: NavController) {
                     )
                 }
 
-                // TODO: 드롭다운 만들기
                 Row {
                     Text(
                         text = stringResource(R.string.sort_type),
@@ -93,10 +154,16 @@ fun MenuFolderAllMenuScreen(navController: NavController) {
                 }
             }
 
-            // TODO: 버튼 누르면 필터 적용
+            // ✅ 필터 버튼 (필터 개수 반영)
             Card(
                 shape = RoundedCornerShape(12.dp),
-                modifier = Modifier.padding(top = 24.dp, bottom = 16.dp, start = 20.dp),
+                modifier = Modifier
+                    .padding(top = 24.dp, bottom = 16.dp, start = 20.dp)
+                    .clickable {
+                        coroutineScope.launch {
+                            scaffoldState.bottomSheetState.expand() // ✅ 버튼 클릭 시 BottomSheet 열기
+                        }
+                    },
                 colors = CardDefaults.cardColors(containerColor = Primary500Main),
                 elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
             ) {
@@ -112,7 +179,7 @@ fun MenuFolderAllMenuScreen(navController: NavController) {
                     Spacer(modifier = Modifier.width(8.dp))
 
                     Text(
-                        text = "$filterCount",
+                        text = "$filterCount", // ✅ 선택된 필터 개수 반영
                         color = NeutralWhite,
                         style = ourMenuTypography().pretendard_700_16
                     )
@@ -142,8 +209,6 @@ fun MenuFolderAllMenuScreen(navController: NavController) {
                     }
                 }
             }
-
-
         }
     }
 }
