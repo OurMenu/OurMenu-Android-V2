@@ -107,7 +107,7 @@ fun FilterBottomSheet(
                     modifier = Modifier
                         .padding(horizontal = 20.dp),
                 ) {
-                    // ✅ 종류 (한 개만 선택 가능)
+                    // 종류
                     item {
                         TagChipGroup(
                             groupLabel = stringResource(R.string.type),
@@ -124,7 +124,7 @@ fun FilterBottomSheet(
                         }
                     }
 
-                    // ✅ 나라 별 음식 (한 개만 선택 가능)
+                    // 나라 별 음식
                     item {
                         TagChipGroup(
                             groupLabel = stringResource(R.string.nationality),
@@ -142,7 +142,7 @@ fun FilterBottomSheet(
                         }
                     }
 
-                    // ✅ 맛 (한 개만 선택 가능)
+                    // 맛
                     item {
                         TagChipGroup(
                             groupLabel = stringResource(R.string.taste),
@@ -159,7 +159,7 @@ fun FilterBottomSheet(
                         }
                     }
 
-                    // ✅ 상황 (한 개만 선택 가능)
+                    // 상황
                     item {
                         TagChipGroup(
                             groupLabel = stringResource(R.string.occasion),
@@ -178,7 +178,7 @@ fun FilterBottomSheet(
 
                     item { Spacer(modifier = Modifier.height(12.dp)) }
 
-                    // ✅ 가격 슬라이더
+                    // 가격 슬라이더
                     item {
                         Text(
                             text = stringResource(R.string.price_range_title),
@@ -265,8 +265,12 @@ fun FilterBottomSheet(
                     contentColor = NeutralWhite,
                     text = stringResource(R.string.reset)
                 ) {
-                    // List 비우기
-                    onSelectedTagsChange(emptyList())
+                    // 모든 선택된 필터 초기화
+                    selectedCategoryTag = null
+                    selectedNationalityTag = null
+                    selectedTasteTag = null
+                    selectedOccasionTag = null
+                    priceRange = minPrice..maxPrice
                 }
                 Spacer(modifier = modifier.width(12.dp))
                 BottomHalfWidthButton(
@@ -275,7 +279,6 @@ fun FilterBottomSheet(
                     contentColor = NeutralWhite,
                     text = stringResource(R.string.apply)
                 ) {
-                    // TODO: 아이콘 선택으로 이동
                     onApplyButtonClick()
                 }
             }
