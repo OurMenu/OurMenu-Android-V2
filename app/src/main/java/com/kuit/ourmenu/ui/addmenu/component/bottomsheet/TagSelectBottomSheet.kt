@@ -83,7 +83,7 @@ fun TagSelectBottomSheet(
 
                 //종류
                 TagChipGroup(
-                    groupLabel = "종류",
+                    groupLabel = stringResource(R.string.type),
                     tags = categoryTagList,
                     selectedTags = selectedTagList,
                 ) { tag ->
@@ -97,7 +97,7 @@ fun TagSelectBottomSheet(
                 }
                 //나라 별 음식
                 TagChipGroup(
-                    groupLabel = "나라 별 음식",
+                    groupLabel = stringResource(R.string.nationality),
                     tags = nationalityTagList,
                     selectedTags = selectedTagList,
                 ) { tag ->
@@ -111,7 +111,7 @@ fun TagSelectBottomSheet(
                 }
                 //맛
                 TagChipGroup(
-                    groupLabel = "맛",
+                    groupLabel = stringResource(R.string.taste),
                     tags = tasteTagList,
                     selectedTags = selectedTagList,
                 ) { tag ->
@@ -125,7 +125,7 @@ fun TagSelectBottomSheet(
                 }
                 //상황
                 TagChipGroup(
-                    groupLabel = "상황",
+                    groupLabel = stringResource(R.string.occasion),
                     tags = occasionTagList,
                     selectedTags = selectedTagList,
                 ) { tag ->
