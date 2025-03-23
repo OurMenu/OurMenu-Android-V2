@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -28,8 +27,8 @@ import com.kuit.ourmenu.utils.ViewUtil.noRippleClickable
 @Composable
 fun MealTimeGrid(
     modifier: Modifier = Modifier,
-    mealTimes: SnapshotStateList<MealTimeState>,
-    selectedTimes: SnapshotStateList<String>,
+    mealTimes: List<MealTimeState>,
+    selectedTimes: List<String>,
     addTime: (Int, String) -> Unit,
     removeTime: (Int, String) -> Unit
 ) {

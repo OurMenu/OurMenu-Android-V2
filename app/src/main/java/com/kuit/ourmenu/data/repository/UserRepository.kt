@@ -1,0 +1,39 @@
+package com.kuit.ourmenu.data.repository
+
+import com.kuit.ourmenu.data.model.base.handleBaseResponse
+import com.kuit.ourmenu.data.model.user.request.ChangePasswordRequest
+import com.kuit.ourmenu.data.service.UserService
+import javax.inject.Inject
+import javax.inject.Singleton
+
+@Singleton
+class UserRepository @Inject constructor(
+    private val userService: UserService
+) {
+
+    suspend fun sendTemporaryPassword(
+        email: String
+    ) = runCatching {
+        userService.sendTemporaryPassword(email).handleBaseResponse().getOrThrow()
+    }
+
+    suspend fun changePassword(
+        currentPassword: String,
+        newPassword: String
+    ) = runCatching {
+        userService.changePassword(
+            ChangePasswordRequest(currentPassword, newPassword)
+        ).handleBaseResponse().getOrThrow()
+    }
+
+    suspend fun updateMealTimes(
+        mealTimes: List<Int>
+    ) = runCatching {
+        userService.updateMealTimes(mealTimes).handleBaseResponse().getOrThrow()
+    }
+
+    suspend fun getUserInfo() = runCatching {
+        userService.getUserInfo().handleBaseResponse().getOrThrow()
+    }
+
+}

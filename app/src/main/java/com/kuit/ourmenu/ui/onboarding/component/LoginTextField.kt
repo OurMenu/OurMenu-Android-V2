@@ -29,9 +29,10 @@ import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
+// TODO : 나중에 에러 여부에 관계없이 외부에서 전체적인 modifier 를 쥐어주는 형태로 설계하면 좋을 듯
 fun LoginTextField(
-    error: Boolean = false,
     modifier: Modifier = Modifier,
+    error: Boolean = false,
     placeholder: String,
     input: String,
     onTextChange: (String) -> Unit,
@@ -46,9 +47,9 @@ fun LoginTextField(
             .border(
                 width = 1.dp,
                 color =
-                if (isFocused) Neutral500
-                else if (error) Primary500Main
-                else Neutral300,
+                    if (error) Primary500Main
+                    else if (isFocused) Neutral500
+                    else Neutral300,
                 shape = RoundedCornerShape(8.dp)
             )
             .onFocusChanged { focusState ->

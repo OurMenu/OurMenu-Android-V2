@@ -1,15 +1,12 @@
 package com.kuit.ourmenu.data.model.auth.request
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LoginRequest(
+data class ConfirmCodeRequest(
+    @SerialName("confirmCode")
+    val confirmCode: String,
     @SerialName("email")
-    val email: String,
-    @SerialName("password")
-    val password: String?,
-    @SerialName("signInType")
-    val signInType: String
+    val email: String
 )

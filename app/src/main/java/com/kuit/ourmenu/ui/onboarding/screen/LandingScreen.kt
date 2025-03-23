@@ -1,7 +1,10 @@
 package com.kuit.ourmenu.ui.onboarding.screen
 
+import android.app.Activity
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,24 +17,35 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.BottomFullWidthButton
 import com.kuit.ourmenu.ui.navigator.Routes
+import com.kuit.ourmenu.ui.oauth.KakaoModule.getKakaoLogin
 import com.kuit.ourmenu.ui.onboarding.component.BottomFullWidthBorderButton
-import com.kuit.ourmenu.ui.onboarding.viewmodel.LoginViewModel
+import com.kuit.ourmenu.ui.onboarding.state.KakaoState
+import com.kuit.ourmenu.ui.onboarding.viewmodel.LandingViewModel
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral700
@@ -39,23 +53,54 @@ import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
+import kotlinx.coroutines.launch
 
 @Composable
 fun LandingScreen(
     navController: NavController,
-    viewModel: LoginViewModel = hiltViewModel()
+    viewModel: LandingViewModel = hiltViewModel()
 ) {
+    val kakaoState by viewModel.kakaoState.collectAsStateWithLifecycle()
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current as Activity
+
+    LaunchedEffect(kakaoState) {
+        Log.d("KakaoModule", kakaoState.toString())
+        when (kakaoState) {
+            is KakaoState.Login -> navController.navigate(route = Routes.Home) {
+                popUpTo(Routes.Onboarding) { inclusive = true }
+            }
+
+            is KakaoState.Loading -> viewModel.signInWithKakao()
+
+            is KakaoState.Signup -> navController.navigate(route = Routes.SignupMealTime)
+            is KakaoState.Error -> {
+                // 에러에 따라 snackbar 를 show 하면 됨
+                scope.launch {
+                    snackbarHostState.showSnackbar(
+                        message = viewModel.error.value ?: "",
+                        duration = SnackbarDuration.Short
+                    )
+                }
+            }
+
+            else -> {}
+        }
+    }
+
     Box(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .padding(bottom = 18.dp),
+            Modifier
+                .fillMaxSize()
+                .padding(bottom = 18.dp),
     ) {
         Column(
             modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(horizontal = 20.dp),
+                Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Image(
@@ -140,27 +185,41 @@ fun LandingScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .padding(top = 16.dp),
+                    .padding(top = 16.dp)
+                    .clickable {
+                        getKakaoLogin(
+                            context = context,
+                            successLogin = { viewModel.updateKakaoState(KakaoState.Loading) }
+                        )
+                    },
                 contentScale = ContentScale.FillWidth
             )
         }
 
-        Row(
-            modifier = Modifier.align(Alignment.BottomCenter),
+        Box(
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 65.5.dp),
+            contentAlignment = Alignment.BottomCenter,
         ) {
-            Text(
-                text = stringResource(R.string.ourmenu),
-                style = ourMenuTypography().pretendard_700_14,
-                color = Primary500Main,
-            )
+            Row {
+                Text(
+                    text = stringResource(R.string.ourmenu),
+                    style = ourMenuTypography().pretendard_700_12,
+                    color = Primary500Main,
+                )
 
-            Spacer(modifier = Modifier.width(4.dp))
+                Spacer(modifier = Modifier.width(4.dp))
 
-            Text(
-                text = stringResource(R.string.copy_right),
-                style = ourMenuTypography().pretendard_400_12,
-                color = Neutral500,
-            )
+                Text(
+                    text = stringResource(R.string.copy_right),
+                    style = ourMenuTypography().pretendard_400_12.copy(
+                        fontSize = 10.sp
+                    ),
+                    color = Neutral500,
+                )
+            }
         }
     }
 }
