@@ -10,31 +10,46 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import coil3.ImageLoader
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.ui.onboarding.viewmodel.SplashViewModel
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
+import com.kuit.ourmenu.utils.CacheUtil.preloadData
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(toHome: () -> Unit) {
+fun SplashScreen(
+    imageLoader: ImageLoader,
+    viewModel: SplashViewModel = hiltViewModel(),
+    toHome: () -> Unit
+) {
+    val cacheInfoData by viewModel.cacheInfoData.collectAsState()
+
+    preloadData(LocalContext.current, imageLoader, cacheInfoData)
     LaunchedEffect(Unit) {
         delay(2000)
         toHome()
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().background(Primary500Main),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Primary500Main),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -59,5 +74,7 @@ fun SplashScreen(toHome: () -> Unit) {
 @Preview(showBackground = true)
 private fun SplashScreenPreview() {
     var showSplash by remember { mutableStateOf(true) }
-    SplashScreen { showSplash = true }
+    SplashScreen(
+        imageLoader = ImageLoader.Builder(LocalContext.current).build(),
+    ) { showSplash = true }
 }

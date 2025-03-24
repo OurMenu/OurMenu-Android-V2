@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.navigation.compose.rememberNavController
+import coil3.imageLoader
 import com.kuit.ourmenu.ui.navigator.MainNavGraph
 import com.kuit.ourmenu.ui.onboarding.screen.SplashScreen
 import com.kuit.ourmenu.ui.theme.OurMenuTheme
@@ -22,10 +23,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             var showSplash by remember { mutableStateOf(true) }
             val navController = rememberNavController()
-
             OurMenuTheme {
                 if (showSplash) {
-                    SplashScreen {
+                    SplashScreen(
+                        imageLoader = imageLoader,
+                    ) {
                         showSplash = false
                     }
                 } else {
