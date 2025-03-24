@@ -38,9 +38,9 @@ data class CacheInfoResponse(
         @SerialName("menuPinAddDisableImgUrl")
         val menuPinAddDisableImgUrl: String?,
         @SerialName("menuPinAddImgUrl")
-        val menuPinAddImgUrl: String,
+        val menuPinAddImgUrl: String?,
         @SerialName("menuPinMapImgUrl")
-        val menuPinMapImgUrl: String?
+        val menuPinMapImgUrl: String
     )
 
     @Serializable

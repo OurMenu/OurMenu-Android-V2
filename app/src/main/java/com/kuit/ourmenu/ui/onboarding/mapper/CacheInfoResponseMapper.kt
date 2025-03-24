@@ -6,6 +6,9 @@ import com.kuit.ourmenu.ui.onboarding.state.CacheState
 fun CacheInfoResponse.toState() = CacheState(
     homeImgs = homeImgs.map { it.homeImgUrl },
     menuFolderIcons = menuFolderIcons.map { it.menuFolderIconUrl },
-    menuPins = menuPins.map { it.menuPinAddImgUrl },
-    tags = tags.map { it.tag }
+    menuAdds = menuPins.mapNotNull { it.menuPinAddImgUrl },
+    menuPinMaps = menuPins.map { it.menuPinMapImgUrl },
+    menuPinAddDisables = menuPins.mapNotNull { it.menuPinAddDisableImgUrl },
+    orangeTags = tags.map { it.orangeTagImgUrl },
+    whiteTags = tags.map { it.whiteTagImgUrl }
 )
