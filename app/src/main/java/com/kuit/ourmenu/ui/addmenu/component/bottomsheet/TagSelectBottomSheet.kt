@@ -173,7 +173,6 @@ fun TagSelectBottomSheet(
                 .padding(bottom = 60.dp),
             hostState = snackbarHostState,
             isChecked = false,
-            message = stringResource(R.string.tag_number_warning)
         )
     }
 }

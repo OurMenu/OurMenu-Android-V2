@@ -223,7 +223,7 @@ fun FilterBottomSheet(
                                         maxPrice
                                     )
 
-                                priceRange = adjustedStart..adjustedEnd // ✅ 5000 단위 반올림 적용
+                                priceRange = adjustedStart..adjustedEnd // 5000 단위 반올림 적용
                             },
                             valueRange = minPrice..maxPrice,
                             steps = ((maxPrice - minPrice) / stepSize - 1).toInt(), // 5000원 단위로 이동
@@ -306,7 +306,6 @@ fun FilterBottomSheet(
                 .padding(bottom = 60.dp),
             hostState = snackbarHostState,
             isChecked = false,
-            message = stringResource(R.string.tag_max_one)
         )
     }
 }
