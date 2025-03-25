@@ -14,10 +14,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -33,6 +36,7 @@ import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.topappbar.BackButtonTopAppBar
 import com.kuit.ourmenu.ui.menuFolder.component.AddButton
 import com.kuit.ourmenu.ui.menuFolder.component.MenuFolderMenuButton
+import com.kuit.ourmenu.ui.menuFolder.component.SortDropdown
 import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.theme.Neutral50
 import com.kuit.ourmenu.ui.theme.NeutralWhite
@@ -41,6 +45,9 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 @Composable
 fun MenuFolderDetailScreen(navController: NavController) {
     val menuCount = 13 // 임의로 정한 값
+
+    val options = listOf("이름순", "등록순", "가격순")
+    var selectedOption by rememberSaveable { mutableStateOf("이름순") }
 
     Scaffold(
         topBar = {},
@@ -107,21 +114,12 @@ fun MenuFolderDetailScreen(navController: NavController) {
                             )
                         }
 
-                        // TODO: 드롭다운 만들기
-                        Row {
-                            Text(
-                                text = stringResource(R.string.sort_type),
-                                style = ourMenuTypography().pretendard_500_14,
-                                color = Neutral50
-                            )
-
-                            Spacer(modifier = Modifier.width(8.dp))
-
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_dropdown_btn),
-                                contentDescription = "Expand Down",
-                                tint = Neutral50
-                            )
+                        SortDropdown(
+                            options = options,
+                            selectedOption = selectedOption,
+                            color = NeutralWhite
+                        ) {
+                            selectedOption = it
                         }
                     }
                 }

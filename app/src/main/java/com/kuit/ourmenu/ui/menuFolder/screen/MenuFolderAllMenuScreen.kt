@@ -41,6 +41,7 @@ import com.kuit.ourmenu.ui.common.topappbar.BackButtonTopAppBar
 import com.kuit.ourmenu.ui.menuFolder.component.AddButton
 import com.kuit.ourmenu.ui.menuFolder.component.FilterBottomSheet
 import com.kuit.ourmenu.ui.menuFolder.component.MenuFolderMenuButton
+import com.kuit.ourmenu.ui.menuFolder.component.SortDropdown
 import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral700
@@ -54,8 +55,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun MenuFolderAllMenuScreen(navController: NavController) {
     val menuCount = 13
-    var filterCount by rememberSaveable { mutableIntStateOf(0) } // ✅ 선택된 필터 개수 상태 관리
-    var selectedFilters by rememberSaveable { mutableStateOf(listOf<String>()) } // ✅ 선택된 필터 리스트
+    var filterCount by rememberSaveable { mutableIntStateOf(0) } // 선택된 필터 개수 상태 관리
+    var selectedFilters by rememberSaveable { mutableStateOf(listOf<String>()) } // 선택된 필터 리스트
+
+    val options = listOf("이름순", "등록순", "가격순")
+    var selectedOption by rememberSaveable { mutableStateOf("이름순") }
 
     val scaffoldState = rememberBottomSheetScaffoldState()
     val coroutineScope = rememberCoroutineScope()
@@ -99,8 +103,8 @@ fun MenuFolderAllMenuScreen(navController: NavController) {
                 ),
                 onApplyButtonClick = {
                     coroutineScope.launch {
-                        filterCount = selectedFilters.size // ✅ 적용 버튼 클릭 시 선택된 필터 개수 반영
-                        scaffoldState.bottomSheetState.partialExpand() // ✅ 적용 버튼 클릭 시 BottomSheet 닫기
+                        filterCount = selectedFilters.size // 적용 버튼 클릭 시 선택된 필터 개수 반영
+                        scaffoldState.bottomSheetState.partialExpand() // 적용 버튼 클릭 시 BottomSheet 닫기
                     }
 
                 },
@@ -140,30 +144,22 @@ fun MenuFolderAllMenuScreen(navController: NavController) {
                     )
                 }
 
-                Row {
-                    Text(
-                        text = stringResource(R.string.sort_type),
-                        style = ourMenuTypography().pretendard_500_14,
-                        color = Neutral700
-                    )
-
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_dropdown_btn),
-                        contentDescription = "Expand Down"
-                    )
+                SortDropdown(
+                    options = options,
+                    selectedOption = selectedOption,
+                ) {
+                    selectedOption = it
                 }
             }
 
-            // ✅ 필터 버튼 (필터 개수 반영)
+            // 필터 버튼 (필터 개수 반영)
             Card(
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
                     .padding(top = 24.dp, bottom = 16.dp, start = 20.dp)
                     .clickable {
                         coroutineScope.launch {
-                            scaffoldState.bottomSheetState.expand() // ✅ 버튼 클릭 시 BottomSheet 열기
+                            scaffoldState.bottomSheetState.expand() // 버튼 클릭 시 BottomSheet 열기
                         }
                     },
                 colors = CardDefaults.cardColors(containerColor = Primary500Main),
@@ -181,7 +177,7 @@ fun MenuFolderAllMenuScreen(navController: NavController) {
                     Spacer(modifier = Modifier.width(8.dp))
 
                     Text(
-                        text = "$filterCount", // ✅ 선택된 필터 개수 반영
+                        text = "$filterCount", // 선택된 필터 개수 반영
                         color = NeutralWhite,
                         style = ourMenuTypography().pretendard_700_16
                     )
