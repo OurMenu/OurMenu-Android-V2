@@ -74,6 +74,16 @@ fun FilterBottomSheet(
     var selectedTasteTag by rememberSaveable { mutableStateOf<String?>(null) }
     var selectedOccasionTag by rememberSaveable { mutableStateOf<String?>(null) }
 
+    fun updateSelectedTags() {
+        val selectedTags = listOfNotNull(
+            selectedCategoryTag,
+            selectedNationalityTag,
+            selectedTasteTag,
+            selectedOccasionTag
+        )
+        onSelectedTagsChange(selectedTags)
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -120,6 +130,7 @@ fun FilterBottomSheet(
                                 }
                             } else {
                                 selectedCategoryTag = if (selectedCategoryTag == tag) null else tag
+                                updateSelectedTags()
                             }
                         }
                     }
@@ -138,6 +149,7 @@ fun FilterBottomSheet(
                             } else {
                                 selectedNationalityTag =
                                     if (selectedNationalityTag == tag) null else tag
+                                updateSelectedTags()
                             }
                         }
                     }
@@ -155,6 +167,7 @@ fun FilterBottomSheet(
                                 }
                             } else {
                                 selectedTasteTag = if (selectedTasteTag == tag) null else tag
+                                updateSelectedTags()
                             }
                         }
                     }
@@ -172,6 +185,7 @@ fun FilterBottomSheet(
                                 }
                             } else {
                                 selectedOccasionTag = if (selectedOccasionTag == tag) null else tag
+                                updateSelectedTags()
                             }
                         }
                     }
@@ -271,6 +285,8 @@ fun FilterBottomSheet(
                     selectedTasteTag = null
                     selectedOccasionTag = null
                     priceRange = minPrice..maxPrice
+
+                    onSelectedTagsChange(emptyList())
                 }
                 Spacer(modifier = modifier.width(12.dp))
                 BottomHalfWidthButton(

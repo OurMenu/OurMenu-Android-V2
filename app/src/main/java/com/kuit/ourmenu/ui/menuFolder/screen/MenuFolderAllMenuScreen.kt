@@ -99,6 +99,7 @@ fun MenuFolderAllMenuScreen(navController: NavController) {
                 ),
                 onApplyButtonClick = {
                     coroutineScope.launch {
+                        filterCount = selectedFilters.size // ✅ 적용 버튼 클릭 시 선택된 필터 개수 반영
                         scaffoldState.bottomSheetState.partialExpand() // ✅ 적용 버튼 클릭 시 BottomSheet 닫기
                     }
 
