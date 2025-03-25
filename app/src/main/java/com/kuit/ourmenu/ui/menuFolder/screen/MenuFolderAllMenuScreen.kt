@@ -23,7 +23,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -55,11 +54,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun MenuFolderAllMenuScreen(navController: NavController) {
     val menuCount = 13
-    val filterCount by rememberSaveable { mutableIntStateOf(0) } // ✅ 선택된 필터 개수 상태 관리
+    var filterCount by rememberSaveable { mutableIntStateOf(0) } // ✅ 선택된 필터 개수 상태 관리
     var selectedFilters by rememberSaveable { mutableStateOf(listOf<String>()) } // ✅ 선택된 필터 리스트
 
     val scaffoldState = rememberBottomSheetScaffoldState()
-    var showBottomSheet by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     LaunchedEffect(scaffoldState.bottomSheetState) {
         snapshotFlow { scaffoldState.bottomSheetState.currentValue }
@@ -100,7 +98,10 @@ fun MenuFolderAllMenuScreen(navController: NavController) {
                     R.drawable.ic_tag_rice to "데이트"
                 ),
                 onApplyButtonClick = {
-                    showBottomSheet = false
+                    coroutineScope.launch {
+                        scaffoldState.bottomSheetState.partialExpand() // ✅ 적용 버튼 클릭 시 BottomSheet 닫기
+                    }
+
                 },
                 onSelectedTagsChange = { newSelectedTags -> selectedFilters = newSelectedTags },
             )
