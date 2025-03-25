@@ -14,9 +14,9 @@ fun <T> BaseResponse<T>.handleBaseResponse(): Result<T?> =
     }
 
 class OurMenuApiFailureException(
-    status: Int?,
-    code: String?,
-    message: String?
+    val status: Int? = null,
+    private val code: String? = null,
+    override val message: String? = null
 ) : Exception(
     "OurMenu API failure: status = $status, code = $code, message = $message"
 )

@@ -1,24 +1,103 @@
 package com.kuit.ourmenu.data.repository
 
+import android.util.Log
+import com.kuit.ourmenu.data.model.auth.SignInType
+import com.kuit.ourmenu.data.model.auth.request.ConfirmCodeRequest
+import com.kuit.ourmenu.data.model.auth.request.EmailRequest
 import com.kuit.ourmenu.data.model.auth.request.LoginRequest
+import com.kuit.ourmenu.data.model.auth.request.SignupRequest
+import com.kuit.ourmenu.data.model.base.handleBaseResponse
 import com.kuit.ourmenu.data.service.AuthService
 import com.kuit.ourmenu.utils.auth.TokenManager
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class AuthRepository @Inject constructor(
     private val authService: AuthService,
     private val tokenManager: TokenManager
 ) {
-    suspend fun login(loginRequest: LoginRequest): Result<Boolean> {
-        return runCatching {
-            val response = authService.login(loginRequest)
-            if (response.isSuccess && response.response != null){
-                tokenManager.saveAccessToken(response.response.accessToken)
-                tokenManager.saveRefreshToken(response.response.refreshToken)
-                true
-            } else{
-                throw Exception("로그인 실패: ${response.errorResponse?.message}")
-            }
+    suspend fun signup(
+        email: String?,
+        mealTime: List<Int>,
+        password: String?,
+        signInType: SignInType
+    ) = runCatching {
+        val response = authService.signup(
+            SignupRequest(
+                email = email,
+                mealTime = mealTime,
+                password = password,
+                signInType = signInType.name
+            )
+        ).handleBaseResponse().getOrThrow()
+
+        response?.let {
+            tokenManager.saveAccessToken(it.accessToken)
+            tokenManager.saveRefreshToken(it.refreshToken)
         }
+    }
+
+    suspend fun logout() = runCatching {
+        authService.logout().handleBaseResponse().getOrThrow()
+    }
+
+    suspend fun login(
+        email: String,
+        password: String?,
+        signInType: SignInType
+    ) = runCatching {
+        val response = authService.login(
+            LoginRequest(
+                email = email,
+                password = password,
+                signInType = signInType.name
+            )
+        ).handleBaseResponse().getOrThrow()
+
+        response?.let {
+            tokenManager.saveAccessToken(it.accessToken)
+            tokenManager.saveRefreshToken(it.refreshToken)
+        }
+    }
+
+
+    suspend fun checkKakaoEmail(
+        email: String?
+    ) = runCatching {
+        authService.checkKakaoEmail(
+            EmailRequest(
+                email = email
+            )
+        ).handleBaseResponse().getOrThrow()
+    }
+
+
+    suspend fun reissueToken(
+        refreshToken: String
+    ) = runCatching {
+        authService.reissueToken(refreshToken).handleBaseResponse().getOrThrow()
+    }
+
+    suspend fun sendEmail(
+        email: String
+    ) = runCatching {
+        authService.sendEmail(
+            EmailRequest(
+                email = email
+            )
+        ).handleBaseResponse().getOrThrow()
+    }
+
+    suspend fun confirmCode(
+        confirmCode: String,
+        email: String
+    ) = runCatching {
+        authService.confirmCode(
+            ConfirmCodeRequest(
+                confirmCode = confirmCode,
+                email = email
+            )
+        ).handleBaseResponse().getOrThrow()
     }
 }

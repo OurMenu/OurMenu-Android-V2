@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -23,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
@@ -38,16 +40,18 @@ import com.kuit.ourmenu.ui.theme.Neutral100
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral900
+import com.kuit.ourmenu.ui.theme.Primary100
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
 fun VerifyCodeTextField(
+    modifier: Modifier = Modifier,
+    error: Boolean = false,
     input: String,
     onTextChange: (String) -> Unit,
     onNext: () -> Unit, // 다음 칸으로 이동하는 콜백
     onPrevious: () -> Unit = {}, // 이전 칸으로 이동하는 콜백
-    modifier: Modifier = Modifier,
     focusRequester: FocusRequester,
 ) {
 
@@ -61,8 +65,9 @@ fun VerifyCodeTextField(
             .border(
                 width = 1.dp,
                 color =
-                if (isFocused) Neutral500
-                else Neutral300,
+                    if (error) Primary500Main
+                    else if (isFocused) Neutral500
+                    else Neutral300,
                 shape = RoundedCornerShape(8.dp)
             )
             .onFocusChanged { focusState ->
@@ -78,7 +83,7 @@ fun VerifyCodeTextField(
             },
         text = input,
         onTextChange = { newText ->
-            if (newText.isDigitsOnly()) {
+//            if (newText.isDigitsOnly()) {
                 when (newText.length) {
                     0 -> {
                         onTextChange(newText)
@@ -91,22 +96,30 @@ fun VerifyCodeTextField(
                     }
 
                     2 -> {
-                        onTextChange(newText.lastIndex.toString())
+                        onTextChange(newText.last().toString())
                         onNext()
                     }
 
                 }
-            }
+//            }
         },
         shape = RoundedCornerShape(8.dp),
         paddingValues = PaddingValues(12.dp, 12.dp),
-        containerColor = Neutral100,
+        containerColor = if (error) Primary100 else Neutral100,
         textStyle = ourMenuTypography().pretendard_700_16.copy(
             color = Neutral900,
             textAlign = TextAlign.Center
         ),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        cursorColor = Primary500Main // TODO: 적용 안됨 왜지? 서치 더 해보기
+//        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        cursorColor = Primary500Main,
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = if (error) Primary100 else Neutral100,
+            unfocusedContainerColor = Neutral100,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledContainerColor = Neutral100,
+            disabledIndicatorColor = Color.Transparent,
+        )
     )
 }
 

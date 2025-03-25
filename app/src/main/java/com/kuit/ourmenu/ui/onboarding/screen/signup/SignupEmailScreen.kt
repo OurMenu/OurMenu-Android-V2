@@ -1,5 +1,6 @@
 package com.kuit.ourmenu.ui.onboarding.screen.signup
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,9 +8,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -21,14 +27,17 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
+import com.kuit.ourmenu.ui.common.OurSnackbarHost
 import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.onboarding.component.EmailSpinner
 import com.kuit.ourmenu.ui.onboarding.component.LoginTextField
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
+import com.kuit.ourmenu.ui.onboarding.state.SignupState
 import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
+import kotlinx.coroutines.launch
 
 @Composable
 fun SignupEmailScreen(
@@ -38,14 +47,46 @@ fun SignupEmailScreen(
 
     val email by viewModel.email.collectAsStateWithLifecycle()
     val domain by viewModel.domain.collectAsStateWithLifecycle()
-    val enable = email.isNotEmpty() && domain.isNotEmpty()
+    val enable = /*email.isNotEmpty() && domain.isNotEmpty()*/ true
+    val emailState by viewModel.emailState.collectAsStateWithLifecycle()
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val shakeOffset = remember { Animatable(0f) }
+
+    LaunchedEffect(emailState) {
+        when (emailState) {
+            is SignupState.Success -> navController.navigate(route = Routes.SignupVerify)
+            is SignupState.Error -> {
+                scope.launch {
+                    snackbarHostState.showSnackbar(
+                        message = viewModel.error.value ?: "",
+                        duration = SnackbarDuration.Short
+                    )
+                }
+                /*
+                    TODO : Error Response 에 따라서 관리를 해야함.
+                    scope.launch {
+                        shakeAnimation(
+                            offset = shakeOffset,
+                            coroutineScope = scope
+                        )
+                    }
+                */
+            }
+
+            else -> {}
+        }
+    }
 
     Scaffold(
-        topBar = { OnboardingTopAppBar(
-            onBackClick = {
-                navController.navigateUp()
-            }
-        ) },
+        topBar = {
+            OnboardingTopAppBar(
+                onBackClick = {
+                    navController.navigateUp()
+                }
+            )
+        },
         modifier = Modifier
             .fillMaxSize()
             .imePadding()
@@ -56,6 +97,14 @@ fun SignupEmailScreen(
                 .padding(innerPadding)
                 .padding(horizontal = 20.dp)
         ) {
+            DisableBottomFullWidthButton(
+                enable = enable,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 20.dp),
+                text = stringResource(R.string.send_auth_mail)
+            ) { viewModel.sendEmail() }
+
             Column(
                 modifier = Modifier
                     .padding(top = 92.dp)
@@ -75,7 +124,10 @@ fun SignupEmailScreen(
                 )
 
                 EmailInputField(
-                    modifier = Modifier.padding(top = 12.dp),
+                    modifier = Modifier
+                        .padding(top = 12.dp)
+//                        .offset { IntOffset(shakeOffset.value.roundToInt(), 0) }
+                    ,
                     email = email,
                     onEmailChange = { viewModel.updateEmail(it) },
                     domain = domain,
@@ -83,16 +135,19 @@ fun SignupEmailScreen(
                 )
             }
 
-            DisableBottomFullWidthButton(
-                enable = enable,
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 20.dp),
-                text = stringResource(R.string.send_auth_mail)
-            ) {
-                navController.navigate(route = Routes.SignupVerify)
-            }
 
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(top = 44.dp),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            OurSnackbarHost(
+                hostState = snackbarHostState
+            )
         }
     }
 }

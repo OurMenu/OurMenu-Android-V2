@@ -1,5 +1,6 @@
 package com.kuit.ourmenu.ui.onboarding.screen.signup
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,14 +9,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
@@ -23,27 +25,39 @@ import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
 import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.onboarding.component.MealTimeGrid
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
-import com.kuit.ourmenu.ui.onboarding.model.MealTimeState
+import com.kuit.ourmenu.ui.onboarding.state.SignupState
 import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun SignupNicknameScreen(
+fun SignupMealTimeScreen(
     navController: NavController,
     viewModel: SignupViewModel = hiltViewModel()
 ) {
 
-    val mealTimeList = remember {
-        mutableStateListOf(
-            *List(18) {
-                MealTimeState(mealTime = "${it + 6}:00")
-            }.toTypedArray()
-        )
-    }
-    val selectedTimes = remember { mutableStateListOf<String>() }
+    val mealTimeList by viewModel.mealTimes.collectAsStateWithLifecycle()
+    val selectedTimes by viewModel.selectedTimes.collectAsStateWithLifecycle()
     val enable = selectedTimes.isNotEmpty()
+    val signupState by viewModel.signupState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(signupState) {
+        when (signupState) {
+            is SignupState.Success ->{
+                navController.navigate(route = Routes.Home) {
+                    popUpTo(Routes.Onboarding) {
+                        inclusive = true
+                    }
+                }
+            }
+
+            is SignupState.Error ->
+                Log.e("SignupVerifyScreen", viewModel.error.value.toString())
+
+            else -> {}
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -101,7 +115,8 @@ fun SignupNicknameScreen(
                     .padding(bottom = 20.dp),
                 text = stringResource(R.string.confirm)
             ) {
-                navController.navigate(route = Routes.Login)
+                Log.d("okhttp", "SignupMealTimeScreen")
+                viewModel.signup()
             }
 
         }
@@ -116,6 +131,6 @@ fun SignupNicknameScreen(
 private fun SignupNicknameScreenPreview() {
     val navController = rememberNavController()
 
-    SignupNicknameScreen(navController)
+    SignupMealTimeScreen(navController)
 
 }

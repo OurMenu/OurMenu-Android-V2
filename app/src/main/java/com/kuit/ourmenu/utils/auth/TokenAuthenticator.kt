@@ -2,7 +2,7 @@ package com.kuit.ourmenu.utils.auth
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.kuit.ourmenu.BuildConfig
-import com.kuit.ourmenu.data.model.auth.response.TokenReIssueResponse
+import com.kuit.ourmenu.data.model.auth.response.ReissueTokenResponse
 import com.kuit.ourmenu.data.service.AuthService
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -43,7 +43,7 @@ class TokenAuthenticator @Inject constructor(
         }
     }
 
-    private suspend fun getNewToken(refreshToken: String): TokenReIssueResponse? {
+    private suspend fun getNewToken(refreshToken: String): ReissueTokenResponse? {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         val okHttpClient = OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
@@ -56,7 +56,7 @@ class TokenAuthenticator @Inject constructor(
             .client(okHttpClient)
             .build()
         val service = retrofit.create(AuthService::class.java)
-        return service.reIssueToken(refreshToken).response
+        return service.reissueToken(refreshToken).response
     }
 
 }
