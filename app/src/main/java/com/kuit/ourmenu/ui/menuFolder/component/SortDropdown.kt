@@ -1,6 +1,5 @@
 package com.kuit.ourmenu.ui.menuFolder.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -13,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,6 +22,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,6 +35,7 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
 fun SortDropdown(
+    color: Color = Neutral700,
     options: List<String>,
     selectedOption: String,
     onSelectedOptionChange: (String) -> Unit
@@ -50,15 +52,16 @@ fun SortDropdown(
             Text(
                 text = selectedOption,
                 style = ourMenuTypography().pretendard_500_14,
-                color = Neutral700
+                color = color
             )
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            Image(
+            Icon(
                 painter = if (expanded) painterResource(id = R.drawable.ic_dropdown_btn_up) else painterResource(
                     id = R.drawable.ic_dropdown_btn
                 ),
+                tint = color,
                 modifier = Modifier.size(16.dp),
                 contentDescription = "Expand Down"
             )
