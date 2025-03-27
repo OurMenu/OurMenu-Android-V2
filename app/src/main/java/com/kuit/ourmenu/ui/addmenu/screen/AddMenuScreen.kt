@@ -134,7 +134,8 @@ fun AddMenuScreen(
 //                    Text("지도 컴포넌트")
                     AndroidView(
                         modifier = Modifier,
-                        factory = { mapView }){ view ->
+                        factory = { mapView }
+                    ){ view ->
 
                     }
                 }
