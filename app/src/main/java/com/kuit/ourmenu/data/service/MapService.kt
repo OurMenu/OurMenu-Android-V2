@@ -33,5 +33,5 @@ interface MapService {
     ): BaseResponse<MapSearchResponse>
 
     @GET("api/users/menus/maps/search-history")
-    suspend fun  getMapSearchHistory(): BaseResponse<MapSearchHistoryResponse>
+    suspend fun getMapSearchHistory(): BaseResponse<MapSearchHistoryResponse>
 }
