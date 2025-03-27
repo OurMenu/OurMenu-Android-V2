@@ -34,6 +34,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.addmenu.component.AddMenuSearchBackground
 import com.kuit.ourmenu.ui.addmenu.component.bottomsheet.AddMenuBottomSheetContent
@@ -46,7 +48,10 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddMenuScreen(modifier: Modifier = Modifier) {
+fun AddMenuScreen(
+    modifier: Modifier = Modifier,
+    navController: NavController
+) {
     var scaffoldState = rememberBottomSheetScaffoldState()
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
     var showSearchBackground by rememberSaveable { mutableStateOf(false) }
@@ -162,5 +167,6 @@ fun AddMenuScreen(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun AddMenuScreenPreview() {
-    AddMenuScreen()
+    val navController = rememberNavController()
+    AddMenuScreen(navController = navController)
 }

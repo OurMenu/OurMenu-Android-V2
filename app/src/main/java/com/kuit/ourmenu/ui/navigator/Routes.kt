@@ -7,6 +7,10 @@ sealed interface Routes{
     @Serializable
     data object Home: Routes
 
+    // AddMenu
+    @Serializable
+    data object AddMenu: Routes
+
     // 지도
 
     // 메뉴판

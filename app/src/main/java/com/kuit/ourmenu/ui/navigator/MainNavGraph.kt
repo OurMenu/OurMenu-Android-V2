@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import com.kuit.ourmenu.ui.addmenu.screen.AddMenuScreen
 import com.kuit.ourmenu.ui.home.screen.HomeScreen
 import com.kuit.ourmenu.ui.onboarding.screen.LandingScreen
 import com.kuit.ourmenu.ui.onboarding.screen.LoginScreen
@@ -22,6 +23,10 @@ fun MainNavGraph(navController: NavHostController) {
     NavHost(navController, startDestination = Routes.Onboarding) {
         composable<Routes.Home> {
             HomeScreen(navController = navController)
+        }
+
+        composable<Routes.AddMenu> {
+            AddMenuScreen(navController = navController)
         }
 
         navigation<Routes.Onboarding>(startDestination = Routes.Landing) {
