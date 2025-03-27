@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -41,6 +42,7 @@ import com.kuit.ourmenu.ui.addmenu.component.AddMenuSearchBackground
 import com.kuit.ourmenu.ui.addmenu.component.bottomsheet.AddMenuBottomSheetContent
 import com.kuit.ourmenu.ui.addmenu.viewmodel.AddMenuSearchViewModel
 import com.kuit.ourmenu.ui.common.SearchTextField
+import com.kuit.ourmenu.ui.common.map.MapViewWithLifecycle
 import com.kuit.ourmenu.ui.common.topappbar.OurMenuBackButtonTopAppBar
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Primary500Main
@@ -65,6 +67,8 @@ fun AddMenuScreen(
     val recentSearchResults by viewModel.recentSearchResults.collectAsStateWithLifecycle()
     val searchResults by viewModel.searchResults.collectAsStateWithLifecycle()
     val storeInfo by viewModel.storeInfo.collectAsStateWithLifecycle()
+
+    val mapView = MapViewWithLifecycle()
 
     LaunchedEffect(searchBarFocused) {
         if (searchBarFocused) {
@@ -127,7 +131,12 @@ fun AddMenuScreen(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text("지도 컴포넌트")
+//                    Text("지도 컴포넌트")
+                    AndroidView(
+                        modifier = Modifier,
+                        factory = { mapView }){ view ->
+
+                    }
                 }
             } else {
                 //검색 컴포넌트
