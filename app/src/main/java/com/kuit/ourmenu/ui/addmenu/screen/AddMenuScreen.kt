@@ -37,6 +37,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.kakao.vectormap.LatLng
+import com.kakao.vectormap.camera.CameraUpdateFactory
+import com.kakao.vectormap.label.LabelOptions
+import com.kakao.vectormap.label.LabelStyle
+import com.kakao.vectormap.label.LabelStyles
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.addmenu.component.AddMenuSearchBackground
 import com.kuit.ourmenu.ui.addmenu.component.bottomsheet.AddMenuBottomSheetContent
@@ -68,7 +73,21 @@ fun AddMenuScreen(
     val searchResults by viewModel.searchResults.collectAsStateWithLifecycle()
     val storeInfo by viewModel.storeInfo.collectAsStateWithLifecycle()
 
-    val mapView = MapViewWithLifecycle()
+    val mapView = MapViewWithLifecycle() { kakaoMap ->
+        // 카메라 이동
+        val cameraUpdate = CameraUpdateFactory.newCenterPosition(LatLng.from(37.5416, 127.0793))
+        // 라벨 아이콘 설정
+        val style = kakaoMap.labelManager?.addLabelStyles(
+            // R.drawable에서 vector를 가져오면 화면에 보이지 않는 이슈 존재
+            LabelStyles.from(LabelStyle.from(R.drawable.img_popup_dice))
+        )
+        // 라벨 아이콘 적용
+        val options = LabelOptions.from(LatLng.from(37.5406, 127.0763)).setStyles(style)
+        // 레이어
+        val layer = kakaoMap.labelManager?.layer
+        layer?.addLabel(options)
+        kakaoMap.moveCamera(cameraUpdate)
+    }
 
     LaunchedEffect(searchBarFocused) {
         if (searchBarFocused) {
@@ -135,7 +154,7 @@ fun AddMenuScreen(
                     AndroidView(
                         modifier = Modifier,
                         factory = { mapView }
-                    ){ view ->
+                    ) { view ->
 
                     }
                 }

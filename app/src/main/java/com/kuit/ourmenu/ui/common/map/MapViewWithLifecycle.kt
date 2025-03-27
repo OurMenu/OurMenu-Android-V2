@@ -21,7 +21,9 @@ import com.kakao.vectormap.label.LabelStyles
 import com.kuit.ourmenu.R
 
 @Composable
-fun MapViewWithLifecycle(): View {
+fun MapViewWithLifecycle(
+    mapSettings: (kakaoMap : KakaoMap) -> Unit
+): View {
     val context = LocalContext.current
     val mapView = remember { MapView(context) }
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -49,6 +51,7 @@ fun MapViewWithLifecycle(): View {
                         override fun onMapReady(kakaoMap: KakaoMap) {
                             // 지도 초기화 및 설정 작업
                             Log.d("MapViewWithLifecycle", "onMapReady")
+                            mapSettings(kakaoMap)
                             // 카메라 이동
                             val cameraUpdate = CameraUpdateFactory.newCenterPosition(LatLng.from(37.5416, 127.0793))
                             // 라벨 아이콘 설정
