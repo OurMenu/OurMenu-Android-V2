@@ -42,7 +42,7 @@ fun SplashScreen(
 
     preloadData(LocalContext.current, imageLoader, cacheInfoData)
     LaunchedEffect(Unit) {
-        delay(2000)
+        delay(1000) // TODO : 추후 수정
         toHome()
     }
 
