@@ -100,6 +100,7 @@ dependencies {
     // image
     implementation("io.coil-kt.coil3:coil-compose:3.1.0")
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.1.0")
+    implementation("io.coil-kt.coil3:coil-svg:3.1.0")
 }
 
 // Hilt를 사용할 때 필요한 Annotation Processor
