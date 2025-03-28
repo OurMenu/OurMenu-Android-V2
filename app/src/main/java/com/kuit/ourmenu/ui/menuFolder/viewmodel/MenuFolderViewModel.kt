@@ -1,5 +1,6 @@
 package com.kuit.ourmenu.ui.menuFolder.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kuit.ourmenu.data.model.menuFolder.response.MenuFolderResponse
@@ -13,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MenuFolderViewModel @Inject constructor(
     private val menuFolderRepository: MenuFolderRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val _menuFolders = MutableStateFlow<List<MenuFolderResponse>>(emptyList())
     val menuFolders = _menuFolders.asStateFlow()
@@ -23,9 +24,6 @@ class MenuFolderViewModel @Inject constructor(
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
-//    val menuFolders = mutableStateListOf<MenuFolder>()
-//    private val isLoading = mutableStateOf(false)
-//    private val errorMessage = mutableStateOf<String?>(null)
 
     init {
         getMenuFolders()
@@ -37,14 +35,18 @@ class MenuFolderViewModel @Inject constructor(
             _error.value = null
 
             menuFolderRepository.getMenuFolders()
-                .onSuccess { response ->
-                    if (response != null) {
-                        _menuFolders.value = response.sortedBy { it.index }
+                .fold(
+                    onSuccess = { response ->
+                        if (response != null) {
+                            _menuFolders.value = response.sortedBy { it.index }
+                            Log.d("test", _menuFolders.value.toString())
+                        }
+                    },
+                    onFailure = { throwable ->
+                        _error.value = throwable.message ?: "메뉴 폴더를 불러오는 중 오류가 발생했습니다."
+                        Log.d("test2", _error.value.toString())
                     }
-                }
-                .onFailure { throwable ->
-                    _error.value = throwable.message ?: "메뉴 폴더를 불러오는 중 오류가 발생했습니다."
-                }
+                )
 
             _isLoading.value = false
         }

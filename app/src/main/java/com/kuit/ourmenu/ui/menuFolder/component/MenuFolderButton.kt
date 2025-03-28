@@ -170,7 +170,6 @@ fun MenuFolderContent(
             .fillMaxSize()
     ) {
         AsyncImage(
-//            painter = painterResource(id = R.drawable.img_dummy_pizza),
             model = menuFolder.menuFolderUrl,
             contentDescription = "Folder Image",
             contentScale = ContentScale.FillWidth,

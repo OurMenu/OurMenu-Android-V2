@@ -43,16 +43,11 @@ fun MenuFolderScreen(
     navController: NavController,
     viewModel: MenuFolderViewModel = hiltViewModel()
 ) {
-    val menuCount = 5 // 임의로 정한 값
-    val menuFolderCount = 8 // 임의로 정한 값
-
     // 현재 스와이프된 버튼의 인덱스를 관리 (한 번에 하나만 스와이프되도록)
     var swipedIndex by remember { mutableIntStateOf(-1) }
 
     val menuFolders by viewModel.menuFolders.collectAsStateWithLifecycle()
-    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
-    val error by viewModel.error.collectAsStateWithLifecycle()
-    val totalMenuCount = menuFolders.sumOf { it.menuIds.size }
+    val totalMenuCount = menuFolders.sumOf { it.menuIds.size } // 전체 메뉴 개수 - 서버에서 받아오도록 수정
 
     Log.d("MenuFolderScreen", "menuFolders: $menuFolders")
 
@@ -65,99 +60,63 @@ fun MenuFolderScreen(
             )
         }
     ) { innerPadding ->
-//        if (isLoading) {
-//            // 로딩 상태 표시
-//            Column(
-//                modifier = Modifier
-//                    .padding(innerPadding)
-//                    .fillMaxWidth()
-//                    .padding(top = 100.dp),
-//                horizontalAlignment = Alignment.CenterHorizontally
-//            ) {
-//                Text(text = "로딩 중...", style = ourMenuTypography().pretendard_500_16)
-//            }
-//        } else if (error != null) {
-//            // 에러 상태 표시
-//            Column(
-//                modifier = Modifier
-//                    .padding(innerPadding)
-//                    .fillMaxWidth()
-//                    .padding(top = 100.dp),
-//                horizontalAlignment = Alignment.CenterHorizontally
-//            ) {
-//                Text(text = error ?: "에러 발생", color = MaterialTheme.colorScheme.error)
-//            }
-//        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .padding(horizontal = 20.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                item {
-                    Column(
-                        modifier = Modifier
-                            .padding(top = 24.dp)
-                            .height(64.dp)
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(Primary500Main)
-                            .clickable(onClick = {
-                                navController.navigate(route = Routes.MenuFolderAllMenu)
-                            }),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = stringResource(R.string.see_all_menu),
-                            color = NeutralWhite,
-                            style = ourMenuTypography().pretendard_700_18
-                        )
+        LazyColumn(
+            modifier = Modifier
+                .padding(innerPadding)
+                .padding(horizontal = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            item {
+                Column(
+                    modifier = Modifier
+                        .padding(top = 24.dp)
+                        .height(64.dp)
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(Primary500Main)
+                        .clickable(onClick = {
+                            navController.navigate(route = Routes.MenuFolderAllMenu)
+                        }),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = stringResource(R.string.see_all_menu),
+                        color = NeutralWhite,
+                        style = ourMenuTypography().pretendard_700_18
+                    )
 
-                        Text(
-                            text = String.format(stringResource(R.string.menu_count), totalMenuCount),
-                            color = NeutralWhite,
-                            style = ourMenuTypography().pretendard_500_14,
-                        )
-                    }
-                }
-
-                // 스와이프 제어
-                // TODO: 드래그 앤 드롭 구현
-//                items(menuFolderCount) { index ->
-//                    MenuFolderButton(
-//                        isSwiped = swipedIndex == index, // 현재 스와이프된 아이템인지 확인
-//                        onSwipe = { swipedIndex = index }, // 새로운 버튼이 스와이프되면 상태 변경
-//                        onReset = { if (swipedIndex == index) swipedIndex = -1 }, // 닫히면 초기화
-//                        onButtonClick = {
-//                            navController.navigate(route = Routes.MenuFolderDetail)
-//                        }
-//                    )
-//                }
-                // 서버에서 받아온 menuFolders 기준으로 출력
-                itemsIndexed(menuFolders) { index, folder ->
-                    MenuFolderButton(
-                        menuFolder = folder,
-                        isSwiped = swipedIndex == index,
-                        onSwipe = { swipedIndex = index },
-                        onReset = { if (swipedIndex == index) swipedIndex = -1 },
-                        onButtonClick = {
-                            navController.navigate(route = Routes.MenuFolderDetail)
-                        }
+                    Text(
+                        text = String.format(stringResource(R.string.menu_count), totalMenuCount),
+                        color = NeutralWhite,
+                        style = ourMenuTypography().pretendard_500_14,
                     )
                 }
+            }
 
-                item {
-                    AddButton(
-                        stringResource(R.string.add_menu_folder),
-                        modifier = Modifier
-                    ) {
-                        // TODO: 버튼 누르면 메뉴판 추가 페이지로 이동
+            // TODO: 드래그 앤 드롭 구현
+            itemsIndexed(menuFolders) { index, folder ->
+                MenuFolderButton(
+                    menuFolder = folder,
+                    isSwiped = swipedIndex == index,
+                    onSwipe = { swipedIndex = index },
+                    onReset = { if (swipedIndex == index) swipedIndex = -1 },
+                    onButtonClick = {
+                        navController.navigate(route = Routes.MenuFolderDetail)
                     }
+                )
+            }
+
+            item {
+                AddButton(
+                    stringResource(R.string.add_menu_folder),
+                    modifier = Modifier
+                ) {
+                    // TODO: 버튼 누르면 메뉴판 추가 페이지로 이동
                 }
             }
         }
-//    }
+    }
 }
 
 @Preview(showBackground = true)
