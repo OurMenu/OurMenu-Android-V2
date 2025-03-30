@@ -85,7 +85,11 @@ fun NavGraphBuilder.onboardingNavGraph(
         )
     }
     composable<Routes.SignupMealTime> {
-        SignupMealTimeScreen(navController = navController, viewModel = viewModel)
+        SignupMealTimeScreen(
+            navigateToHome = navigateToSignupVerify,
+            navigateBack = navigateBack,
+            viewModel = viewModel
+        )
     }
     composable<Routes.SignupVerify> {
         SignupVerifyScreen(navController = navController, viewModel = viewModel)
