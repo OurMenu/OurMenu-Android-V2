@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.kuit.ourmenu.ui.home.navigation.navigateToHome
 import com.kuit.ourmenu.ui.menuFolder.navigation.navigateToMenuFolder
+import com.kuit.ourmenu.ui.my.navigation.navigateToMy
 import com.kuit.ourmenu.ui.onboarding.navigation.navigateOnboardingToHome
 import com.kuit.ourmenu.ui.onboarding.navigation.navigateToLogin
 import com.kuit.ourmenu.ui.onboarding.navigation.navigateToSignupEmail
@@ -44,7 +45,7 @@ class MainNavController(
             MainTab.HOME -> navController.navigateToHome(navOptions)
             MainTab.MAP -> navController.navigateToSearchMenu(navOptions)
             MainTab.MENU_FOLDER -> navController.navigateToMenuFolder(navOptions)
-            MainTab.MY -> navController.navigateToMenuFolder(navOptions)
+            MainTab.MY -> navController.navigateToMy(navOptions)
         }
     }
 
