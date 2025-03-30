@@ -8,10 +8,16 @@ sealed interface Routes{
     data object Home: Routes
 
     // 지도
+    @Serializable
+    data object Map: Routes
 
     // 메뉴판
+    @Serializable
+    data object MenuFolder: Routes
 
     // Mypage
+    @Serializable
+    data object My: Routes
 
     // Onboarding
     @Serializable
