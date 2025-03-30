@@ -13,6 +13,27 @@ import com.kuit.ourmenu.ui.onboarding.screen.signup.SignupPasswordScreen
 import com.kuit.ourmenu.ui.onboarding.screen.signup.SignupVerifyScreen
 import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
 
+fun NavController.navigateToLogin() {
+    navigate(Routes.Login)
+}
+
+fun NavController.navigateToSignupEmail() {
+    navigate(Routes.SignupEmail)
+}
+
+fun NavController.navigateToSignupPassword() {
+    navigate(Routes.SignupPassword)
+}
+
+fun NavController.navigateToSignupMealTime() {
+    navigate(Routes.SignupMealTime)
+}
+
+fun NavController.navigateToSignupVerify() {
+    navigate(Routes.SignupVerify)
+}
+
+
 fun NavGraphBuilder.onboardingNavGraph(
     padding: PaddingValues,
     viewModel : SignupViewModel,
