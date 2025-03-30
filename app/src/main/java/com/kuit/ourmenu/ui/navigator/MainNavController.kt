@@ -4,16 +4,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.kuit.ourmenu.ui.home.navigation.navigateToHome
+import com.kuit.ourmenu.ui.menuFolder.navigation.navigateToMenuFolder
 import com.kuit.ourmenu.ui.onboarding.navigation.navigateOnboardingToHome
 import com.kuit.ourmenu.ui.onboarding.navigation.navigateToLogin
 import com.kuit.ourmenu.ui.onboarding.navigation.navigateToSignupEmail
 import com.kuit.ourmenu.ui.onboarding.navigation.navigateToSignupMealTime
 import com.kuit.ourmenu.ui.onboarding.navigation.navigateToSignupPassword
 import com.kuit.ourmenu.ui.onboarding.navigation.navigateToSignupVerify
+import com.kuit.ourmenu.ui.searchmenu.navigation.navigateToSearchMenu
 
 class MainNavController(
     val navController: NavHostController,
@@ -39,31 +41,16 @@ class MainNavController(
         }
 
         when (tab) {
-            MainTab.HOME -> navController.navigate(Routes.Home)
-            MainTab.MAP -> navController.navigate(Routes.Map)
-            MainTab.MENU_FOLDER -> navController.navigate(Routes.MenuFolder)
-            MainTab.MY -> navController.navigate(Routes.My)
+            MainTab.HOME -> navController.navigateToHome(navOptions)
+            MainTab.MAP -> navController.navigateToSearchMenu(navOptions)
+            MainTab.MENU_FOLDER -> navController.navigateToMenuFolder(navOptions)
+            MainTab.MY -> navController.navigateToMenuFolder(navOptions)
         }
     }
 
+    // Back Pressed
     fun navigateUp() {
         navController.navigateUp()
-    }
-
-    fun navigateToHome(navOptions: NavOptions) {
-        navController.navigate(Routes.Home, navOptions)
-    }
-
-    fun navigateToMap(navOptions: NavOptions) {
-        navController.navigate(Routes.Map, navOptions)
-    }
-
-    fun navigateToMenuFolder(navOptions: NavOptions) {
-        navController.navigate(Routes.MenuFolder, navOptions)
-    }
-
-    fun navigateToMy(navOptions: NavOptions) {
-        navController.navigate(Routes.My, navOptions)
     }
 
     // Onboarding
@@ -90,6 +77,7 @@ class MainNavController(
     fun navigateOnboardingToHome() {
         navController.navigateOnboardingToHome()
     }
+
     fun popBackStack() {
         navController.popBackStack()
     }
