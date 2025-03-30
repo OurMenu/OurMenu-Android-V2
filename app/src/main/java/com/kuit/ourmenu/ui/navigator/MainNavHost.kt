@@ -19,7 +19,7 @@ fun MainNavHost(
     modifier: Modifier = Modifier,
     navController: MainNavController,
 ) {
-    val viewModel = hiltViewModel<SignupViewModel>()
+    val signupViewModel = hiltViewModel<SignupViewModel>()
 
     NavHost(
         navController = navController.navController,
@@ -31,6 +31,7 @@ fun MainNavHost(
 
         onboardingNavGraph(
             padding = androidx.compose.foundation.layout.PaddingValues(0.dp),
+            viewModel = signupViewModel,
             navigateBack = navController::navigateUp,
             navigateOnboardingToHome = navController::navigateOnboardingToHome,
             navigateToLogin = navController::navigateToLogin,
@@ -38,11 +39,7 @@ fun MainNavHost(
             navigateToSignupVerify = navController::navigateToSignupVerify,
             navigateToSignupPassword = navController::navigateToSignupPassword,
             navigateToSignupMealTime = navController::navigateToSignupMealTime,
-            getBackStackSignupViewModel = { navBackStackEntry ->
-                navController.navController.previousBackStackEntry?.let { previousEntry ->
-                    hiltViewModel<SignupViewModel>(previousEntry)
-                } ?: hiltViewModel(navBackStackEntry)
-            })
+        )
 
         homeNavGraph()
 
