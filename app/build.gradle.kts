@@ -25,7 +25,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "BASE_URL", properties["BASE_URL"].toString())
+        buildConfigField("String", "BASE_URL", "\"${properties["BASE_URL"]}\"")
 
         manifestPlaceholders["KAKAO_APP_KEY"] = properties["KAKAO_APP_KEY"].toString()
         buildConfigField("String", "KAKAO_APP_KEY", properties["KAKAO_APP_KEY"].toString())
@@ -96,6 +96,11 @@ dependencies {
     // Kakao SDK
     implementation("com.kakao.sdk:v2-all:2.20.6")
     implementation("com.kakao.sdk:v2-user:2.20.6") // 카카오 로그인 API 모듈
+
+    // image
+    implementation("io.coil-kt.coil3:coil-compose:3.1.0")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.1.0")
+    implementation("io.coil-kt.coil3:coil-svg:3.1.0")
 }
 
 // Hilt를 사용할 때 필요한 Annotation Processor

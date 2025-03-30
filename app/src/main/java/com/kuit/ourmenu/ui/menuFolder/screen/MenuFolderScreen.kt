@@ -1,12 +1,15 @@
 package com.kuit.ourmenu.ui.menuFolder.screen
 
+import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -21,25 +24,40 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.menuFolder.component.AddButton
 import com.kuit.ourmenu.ui.menuFolder.component.MenuFolderButton
 import com.kuit.ourmenu.ui.menuFolder.component.MenuFolderTopAppBar
+import com.kuit.ourmenu.ui.menuFolder.viewmodel.MenuFolderViewModel
+import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun MenuFolderScreen(modifier: Modifier = Modifier) {
-    val menuCount = 5 // 임의로 정한 값
-    val menuFolderCount = 8 // 임의로 정한 값
-
+fun MenuFolderScreen(
+    navController: NavController,
+    viewModel: MenuFolderViewModel = hiltViewModel()
+) {
     // 현재 스와이프된 버튼의 인덱스를 관리 (한 번에 하나만 스와이프되도록)
     var swipedIndex by remember { mutableIntStateOf(-1) }
 
+    val menuFolders by viewModel.menuFolders.collectAsStateWithLifecycle()
+    val totalMenuCount = menuFolders.sumOf { it.menuIds.size } // 전체 메뉴 개수 - 서버에서 받아오도록 수정
+
+    Log.d("MenuFolderScreen", "menuFolders: $menuFolders")
+
     Scaffold(
         topBar = {
-            MenuFolderTopAppBar()
+            MenuFolderTopAppBar(
+                onClick = {
+                    navController.navigate(route = Routes.AddMenu)
+                }
+            )
         }
     ) { innerPadding ->
         LazyColumn(
@@ -55,7 +73,10 @@ fun MenuFolderScreen(modifier: Modifier = Modifier) {
                         .height(64.dp)
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(12.dp))
-                        .background(Primary500Main),
+                        .background(Primary500Main)
+                        .clickable(onClick = {
+                            navController.navigate(route = Routes.MenuFolderAllMenu)
+                        }),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
@@ -66,20 +87,23 @@ fun MenuFolderScreen(modifier: Modifier = Modifier) {
                     )
 
                     Text(
-                        text = String.format(stringResource(R.string.menu_count), menuCount),
+                        text = String.format(stringResource(R.string.menu_count), totalMenuCount),
                         color = NeutralWhite,
                         style = ourMenuTypography().pretendard_500_14,
                     )
                 }
             }
 
-            // 스와이프 제어
             // TODO: 드래그 앤 드롭 구현
-            items(menuFolderCount) { index ->
+            itemsIndexed(menuFolders) { index, folder ->
                 MenuFolderButton(
-                    isSwiped = swipedIndex == index, // 현재 스와이프된 아이템인지 확인
-                    onSwipe = { swipedIndex = index }, // 새로운 버튼이 스와이프되면 상태 변경
-                    onReset = { if (swipedIndex == index) swipedIndex = -1 } // 닫히면 초기화
+                    menuFolder = folder,
+                    isSwiped = swipedIndex == index,
+                    onSwipe = { swipedIndex = index },
+                    onReset = { if (swipedIndex == index) swipedIndex = -1 },
+                    onButtonClick = {
+                        navController.navigate(route = Routes.MenuFolderDetail)
+                    }
                 )
             }
 
@@ -98,5 +122,7 @@ fun MenuFolderScreen(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun MenuFolderScreenPreview() {
-    MenuFolderScreen()
+    val navController = rememberNavController()
+
+    MenuFolderScreen(navController)
 }

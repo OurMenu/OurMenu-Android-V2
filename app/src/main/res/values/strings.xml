@@ -95,6 +95,15 @@
     <string name="menu_price_won">%d 원</string>
     <string name="all_menu">전체 메뉴</string>
     <string name="count">%d 개</string>
-    <string name="sort_type">이름순</string>
     <string name="menu_folder_name">한강 뷰 맛집</string>
+    <string name="filtering">필터링</string>
+    <string name="select_one">각 항목 당 1개 선택</string>
+    <string name="price_range_title">가격대</string>
+    <string name="price_range">%d원 ~ %d원</string>
+    <string name="tag_max_one">태그는 항목 당 1개만 선택할 수 있어요</string>
+
+    <string name="type">종류</string>
+    <string name="nationality">나라 별 음식</string>
+    <string name="taste">맛</string>
+    <string name="occasion">상황</string>
 </resources>
