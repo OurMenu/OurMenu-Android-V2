@@ -12,6 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.ui.menuinfo.component.info.MenuInfoAdditionalContent
 import com.kuit.ourmenu.ui.menuinfo.component.info.MenuInfoChipContent
 import com.kuit.ourmenu.ui.menuinfo.component.info.MenuInfoContent
@@ -22,7 +24,7 @@ import com.kuit.ourmenu.ui.menuinfo.dummy.MenuInfoDummyData
 import com.kuit.ourmenu.ui.theme.Neutral300
 
 @Composable
-fun MenuInfoDefaultScreen() {
+fun MenuInfoDefaultScreen(navController: NavController) {
 
     val pagerState = rememberPagerState { 3 }
 
@@ -67,7 +69,7 @@ fun MenuInfoDefaultScreen() {
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(end = 20.dp, bottom = 28.dp),
-            ) { }
+        ) { }
     }
 }
 
@@ -75,5 +77,7 @@ fun MenuInfoDefaultScreen() {
 @Preview(showBackground = true)
 @Composable
 private fun MenuInfoDefaultPreview() {
-    MenuInfoDefaultScreen()
+    val navController = rememberNavController()
+
+    MenuInfoDefaultScreen(navController)
 }

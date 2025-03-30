@@ -15,9 +15,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -32,7 +34,8 @@ fun TagChipGroup(
     Column(modifier = modifier.fillMaxWidth()){
         Text(
             text = groupLabel,
-            style = ourMenuTypography().pretendard_500_14,
+            style = ourMenuTypography().pretendard_400_14,
+            color = Neutral900
         )
         Spacer(modifier = modifier.height(8.dp))
         FlowRow(
@@ -73,7 +76,7 @@ private fun TagChipGroupPreview() {
     var selectedTags by rememberSaveable { mutableStateOf(listOf<String>()) }
 
     TagChipGroup(
-        groupLabel = "종류",
+        groupLabel = stringResource(R.string.type),
         tags = tags,
         selectedTags = selectedTags,
     ){ tag ->

@@ -5,8 +5,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import com.kuit.ourmenu.ui.addmenu.screen.AddMenuScreen
 import com.kuit.ourmenu.ui.home.navigation.homeNavGraph
 import com.kuit.ourmenu.ui.menuFolder.navigation.menuFolderNavGraph
+import com.kuit.ourmenu.ui.menuFolder.screen.MenuFolderAllMenuScreen
+import com.kuit.ourmenu.ui.menuFolder.screen.MenuFolderDetailScreen
+import com.kuit.ourmenu.ui.menuinfo.screen.MenuInfoDefaultScreen
+import com.kuit.ourmenu.ui.menuinfo.screen.MenuInfoMapScreen
 import com.kuit.ourmenu.ui.my.navigation.myNavGraph
 import com.kuit.ourmenu.ui.onboarding.navigation.onboardingNavGraph
 import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
@@ -51,5 +57,29 @@ fun MainNavHost(
         myNavGraph(
             padding = padding,
         )
+
+        // 메뉴판
+//        composable<Routes.MenuFolder> {
+//            MenuFolderScreen(navController = navController.navController)
+//        }
+        composable<Routes.MenuFolderDetail> {
+            MenuFolderDetailScreen(navController = navController.navController)
+        }
+        composable<Routes.MenuFolderAllMenu> {
+            MenuFolderAllMenuScreen(navController = navController.navController)
+        }
+
+        // 메뉴
+        composable<Routes.MenuInfo> {
+            MenuInfoDefaultScreen(navController = navController.navController)
+        }
+        composable<Routes.MenuInfoMap> {
+            MenuInfoMapScreen(navController = navController.navController)
+        }
+
+        // 메뉴 추가
+        composable<Routes.AddMenu> {
+            AddMenuScreen(navController = navController.navController)
+        }
     }
 }
