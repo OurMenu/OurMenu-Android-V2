@@ -11,6 +11,7 @@ import com.kuit.ourmenu.ui.onboarding.screen.signup.SignupEmailScreen
 import com.kuit.ourmenu.ui.onboarding.screen.signup.SignupMealTimeScreen
 import com.kuit.ourmenu.ui.onboarding.screen.signup.SignupPasswordScreen
 import com.kuit.ourmenu.ui.onboarding.screen.signup.SignupVerifyScreen
+import com.kuit.ourmenu.ui.onboarding.viewmodel.LandingViewModel
 import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
 
 fun NavController.navigateToLogin() {
@@ -33,15 +34,32 @@ fun NavController.navigateToSignupVerify() {
     navigate(Routes.SignupVerify)
 }
 
+fun NavController.navigateOnboardingToHome() {
+    navigate(Routes.Home) {
+        popUpTo(Routes.Onboarding) {
+            inclusive = true
+        }
+    }
+}
+
 
 fun NavGraphBuilder.onboardingNavGraph(
     padding: PaddingValues,
     viewModel : SignupViewModel,
-    navController: NavController
+    navigateOnboardingToHome: () -> Unit,
+    navigateToLogin: () -> Unit,
+    navigateToSignupEmail: () -> Unit,
+    navigateToSignupMealTime: () -> Unit,
 ) {
 
     composable<Routes.Landing> {
-        LandingScreen(navController = navController)
+        LandingScreen(
+            padding = padding,
+            navigateToHome = navigateOnboardingToHome,
+            navigateToLogin = navigateToLogin,
+            navigateToSignupEmail = navigateToSignupEmail,
+            navigateToSignupMealTime = navigateToSignupMealTime,
+        )
     }
     composable<Routes.Login> {
         LoginScreen(navController = navController)

@@ -1,18 +1,17 @@
 package com.kuit.ourmenu.ui.navigator
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
 import com.kuit.ourmenu.ui.home.screen.HomeScreen
-import com.kuit.ourmenu.ui.onboarding.screen.LandingScreen
-import com.kuit.ourmenu.ui.onboarding.screen.LoginScreen
-import com.kuit.ourmenu.ui.onboarding.screen.signup.SignupEmailScreen
-import com.kuit.ourmenu.ui.onboarding.screen.signup.SignupMealTimeScreen
-import com.kuit.ourmenu.ui.onboarding.screen.signup.SignupPasswordScreen
-import com.kuit.ourmenu.ui.onboarding.screen.signup.SignupVerifyScreen
+import com.kuit.ourmenu.ui.onboarding.navigation.navigateOnboardingToHome
+import com.kuit.ourmenu.ui.onboarding.navigation.navigateToLogin
+import com.kuit.ourmenu.ui.onboarding.navigation.navigateToSignupEmail
+import com.kuit.ourmenu.ui.onboarding.navigation.navigateToSignupMealTime
+import com.kuit.ourmenu.ui.onboarding.navigation.onboardingNavGraph
 import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
 
 @Composable
@@ -24,26 +23,13 @@ fun MainNavGraph(navController: NavHostController) {
             HomeScreen(navController = navController)
         }
 
-        navigation<Routes.Onboarding>(startDestination = Routes.Landing) {
-
-            composable<Routes.Landing> {
-                LandingScreen(navController = navController)
-            }
-            composable<Routes.Login> {
-                LoginScreen(navController = navController)
-            }
-            composable<Routes.SignupEmail> {
-                SignupEmailScreen(navController = navController, viewModel = viewModel)
-            }
-            composable<Routes.SignupPassword> {
-                SignupPasswordScreen(navController = navController, viewModel = viewModel)
-            }
-            composable<Routes.SignupMealTime> {
-                SignupMealTimeScreen(navController = navController, viewModel = viewModel)
-            }
-            composable<Routes.SignupVerify> {
-                SignupVerifyScreen(navController = navController, viewModel = viewModel)
-            }
-        }
+        onboardingNavGraph(
+            padding = androidx.compose.foundation.layout.PaddingValues(0.dp),
+            viewModel = viewModel,
+            navigateOnboardingToHome = navController::navigateOnboardingToHome,
+            navigateToLogin = navController::navigateToLogin,
+            navigateToSignupEmail = navController::navigateToSignupEmail,
+            navigateToSignupMealTime = navController::navigateToSignupMealTime,
+        )
     }
 }

@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,11 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.BottomFullWidthButton
-import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.oauth.KakaoModule.getKakaoLogin
 import com.kuit.ourmenu.ui.onboarding.component.BottomFullWidthBorderButton
 import com.kuit.ourmenu.ui.onboarding.state.KakaoState
@@ -57,7 +55,11 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun LandingScreen(
-    navController: NavController,
+    padding: PaddingValues = PaddingValues(0.dp),
+    navigateToHome: () -> Unit,
+    navigateToLogin: () -> Unit,
+    navigateToSignupEmail: () -> Unit,
+    navigateToSignupMealTime: () -> Unit,
     viewModel: LandingViewModel = hiltViewModel()
 ) {
     val kakaoState by viewModel.kakaoState.collectAsStateWithLifecycle()
@@ -69,13 +71,11 @@ fun LandingScreen(
     LaunchedEffect(kakaoState) {
         Log.d("KakaoModule", kakaoState.toString())
         when (kakaoState) {
-            is KakaoState.Login -> navController.navigate(route = Routes.Home) {
-                popUpTo(Routes.Onboarding) { inclusive = true }
-            }
+            is KakaoState.Login -> navigateToHome()
 
             is KakaoState.Loading -> viewModel.signInWithKakao()
 
-            is KakaoState.Signup -> navController.navigate(route = Routes.SignupMealTime)
+            is KakaoState.Signup -> navigateToSignupMealTime()
             is KakaoState.Error -> {
                 // 에러에 따라 snackbar 를 show 하면 됨
                 scope.launch {
@@ -92,15 +92,16 @@ fun LandingScreen(
 
     Box(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(bottom = 18.dp),
+        Modifier
+            .fillMaxSize()
+            .padding(padding)
+            .padding(bottom = 18.dp),
     ) {
         Column(
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 20.dp),
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Image(
@@ -139,13 +140,13 @@ fun LandingScreen(
                 contentColor = NeutralWhite,
                 text = stringResource(R.string.login)
             ) {
-                navController.navigate(route = Routes.Login)
+                navigateToLogin()
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             BottomFullWidthBorderButton {
-                navController.navigate(route = Routes.SignupEmail)
+                navigateToSignupEmail()
             }
 
             Box(
@@ -198,9 +199,9 @@ fun LandingScreen(
 
         Box(
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(bottom = 65.5.dp),
+            Modifier
+                .fillMaxSize()
+                .padding(bottom = 65.5.dp),
             contentAlignment = Alignment.BottomCenter,
         ) {
             Row {
@@ -227,7 +228,11 @@ fun LandingScreen(
 @Composable
 @Preview(showBackground = true)
 private fun LandingScreenPreview() {
-    val navController = rememberNavController()
-
-    LandingScreen(navController)
+    LandingScreen(
+        navigateToHome = {},
+        navigateToLogin = {},
+        navigateToSignupEmail = {},
+        navigateToSignupMealTime = {},
+        viewModel = hiltViewModel()
+    )
 }
