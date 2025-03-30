@@ -5,9 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import com.kuit.ourmenu.ui.home.navigation.homeNavGraph
-import com.kuit.ourmenu.ui.home.screen.HomeScreen
 import com.kuit.ourmenu.ui.menuFolder.navigation.menuFolderNavGraph
 import com.kuit.ourmenu.ui.my.navigation.myNavGraph
 import com.kuit.ourmenu.ui.onboarding.navigation.onboardingNavGraph
@@ -24,11 +22,8 @@ fun MainNavHost(
 
     NavHost(
         navController = navController.navController,
-        startDestination = Routes.Landing
+        startDestination = MainTabRoute.Home
     ) {
-        composable<Routes.Home> {
-            HomeScreen()
-        }
 
         onboardingNavGraph(
             viewModel = signupViewModel,
