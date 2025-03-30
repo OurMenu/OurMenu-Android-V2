@@ -1,7 +1,6 @@
 package com.kuit.ourmenu.ui.onboarding.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -36,7 +35,7 @@ fun NavController.navigateToSignupVerify() {
 
 fun NavController.navigateOnboardingToHome() {
     navigate(Routes.Home) {
-        popUpTo(Routes.Onboarding) {
+        popUpTo(Routes.Landing) {
             inclusive = true
         }
     }
@@ -75,7 +74,7 @@ fun NavGraphBuilder.onboardingNavGraph(
         SignupEmailScreen(
             navigateToVerify = navigateToSignupVerify,
             navigateBack = navigateBack,
-            viewModel = hiltViewModel()
+            viewModel = viewModel
         )
     }
     composable<Routes.SignupVerify> {
@@ -94,7 +93,7 @@ fun NavGraphBuilder.onboardingNavGraph(
     }
     composable<Routes.SignupMealTime> {
         SignupMealTimeScreen(
-            navigateToHome = navigateToSignupVerify,
+            navigateToHome = navigateOnboardingToHome,
             navigateBack = navigateBack,
             viewModel = viewModel
         )
