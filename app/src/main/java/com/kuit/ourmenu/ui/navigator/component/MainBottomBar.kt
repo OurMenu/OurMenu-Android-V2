@@ -23,6 +23,7 @@ import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 internal fun MainBottomBar(
+    modifier: Modifier = Modifier,
     visible: Boolean,
     tabs: ImmutableList<MainTab>,
     currentTab: MainTab?,
@@ -34,7 +35,7 @@ internal fun MainBottomBar(
         exit = fadeOut() + slideOut { IntOffset(0, it.height) },
     ) {
         Row(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)
                 .height(76.dp),
