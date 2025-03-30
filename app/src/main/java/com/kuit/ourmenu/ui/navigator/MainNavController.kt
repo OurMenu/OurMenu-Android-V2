@@ -46,6 +46,10 @@ class MainNavController(
         }
     }
 
+    fun navigateUp() {
+        navController.navigateUp()
+    }
+
     fun navigateToHome(navOptions: NavOptions) {
         navController.navigate(Routes.Home, navOptions)
     }

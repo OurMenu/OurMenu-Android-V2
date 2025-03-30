@@ -1,28 +1,28 @@
 package com.kuit.ourmenu.ui.navigator
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.kuit.ourmenu.ui.home.screen.HomeScreen
-import com.kuit.ourmenu.ui.onboarding.navigation.navigateOnboardingToHome
-import com.kuit.ourmenu.ui.onboarding.navigation.navigateToLogin
-import com.kuit.ourmenu.ui.onboarding.navigation.navigateToSignupEmail
-import com.kuit.ourmenu.ui.onboarding.navigation.navigateToSignupMealTime
-import com.kuit.ourmenu.ui.onboarding.navigation.navigateToSignupPassword
-import com.kuit.ourmenu.ui.onboarding.navigation.navigateToSignupVerify
 import com.kuit.ourmenu.ui.onboarding.navigation.onboardingNavGraph
 import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
 
 @Composable
-fun MainNavGraph(navController: NavHostController) {
+fun MainNavHost(
+    modifier: Modifier = Modifier,
+    navController: MainNavController,
+) {
     val viewModel = hiltViewModel<SignupViewModel>()
 
-    NavHost(navController, startDestination = Routes.Landing) {
+    NavHost(
+        navController = navController.navController,
+        startDestination = Routes.Landing
+    ) {
         composable<Routes.Home> {
-            HomeScreen(navController = navController)
+            HomeScreen()
         }
 
         onboardingNavGraph(
