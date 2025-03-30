@@ -1,25 +1,28 @@
-package com.kuit.ourmenu.ui.main.component
+package com.kuit.ourmenu.ui.navigator.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideOut
-import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.kuit.ourmenu.ui.navigator.MainTab
+import com.kuit.ourmenu.ui.theme.OurMenuTheme
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
-fun MainBottomBar(
-    modifier: Modifier = Modifier,
+internal fun MainBottomBar(
     visible: Boolean,
     tabs: ImmutableList<MainTab>,
     currentTab: MainTab?,
@@ -28,39 +31,38 @@ fun MainBottomBar(
     AnimatedVisibility(
         visible = visible,
         enter = fadeIn() + slideIn { IntOffset(0, it.height) },
-        exit = fadeOut() + slideOut { IntOffset(0, it.height) }
+        exit = fadeOut() + slideOut { IntOffset(0, it.height) },
     ) {
         Row(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
-                .height(68.dp)
-                .drawBehind {
-                    val borderThickness = 1.dp.toPx()
-
-                    drawLine(
-                        color = borderColor,
-                        start = Offset(0f, 0f),
-                        end = Offset(size.width, 0f),
-                        strokeWidth = borderThickness
-                    )
-                }
-                .background(
-                    color = colors.White,
-                ),
+                .padding(horizontal = 20.dp)
+                .height(76.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             tabs.forEach { tab ->
                 MainBottomBarItem(
                     tab = tab,
                     selected = tab == currentTab,
-                    onClick = { onTabSelected(tab) },
+                    onClick = {
+                        if (tab != currentTab) onTabSelected(tab)
+                    }
                 )
             }
         }
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun MainBottomBarPreview() {
-    MainBottomBar()
+    OurMenuTheme {
+        MainBottomBar(
+            visible = true,
+            tabs = MainTab.entries.toImmutableList(),
+            currentTab = MainTab.HOME,
+            onTabSelected = {}
+        )
+    }
 }
