@@ -1,5 +1,6 @@
 package com.kuit.ourmenu.ui.searchmenu.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -12,6 +13,7 @@ fun NavController.navigateToSearchMenu(navOptions: NavOptions) {
 }
 
 fun NavGraphBuilder.searchMenuNavGraph(
+    padding: PaddingValues,
     // navigate 이벤트
 ) {
     composable<MainTabRoute.Map> {

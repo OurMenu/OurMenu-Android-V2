@@ -1,6 +1,5 @@
 package com.kuit.ourmenu.ui.onboarding.navigation
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -43,7 +42,6 @@ fun NavController.navigateOnboardingToHome() {
 
 
 fun NavGraphBuilder.onboardingNavGraph(
-    padding: PaddingValues,
     navigateBack: () -> Unit,
     navigateOnboardingToHome: () -> Unit,
     navigateToLogin: () -> Unit,
@@ -56,7 +54,6 @@ fun NavGraphBuilder.onboardingNavGraph(
 
     composable<Routes.Landing> {
         LandingScreen(
-            padding = padding,
             navigateToHome = navigateOnboardingToHome,
             navigateToLogin = navigateToLogin,
             navigateToSignupEmail = navigateToSignupEmail,

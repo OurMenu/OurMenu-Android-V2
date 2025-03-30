@@ -1,5 +1,6 @@
 package com.kuit.ourmenu.ui.home.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -12,6 +13,7 @@ fun NavController.navigateToHome(navOptions: NavOptions) {
 }
 
 fun NavGraphBuilder.homeNavGraph(
+    padding: PaddingValues,
     // navigate 이벤트
 ) {
     composable<MainTabRoute.Home> {

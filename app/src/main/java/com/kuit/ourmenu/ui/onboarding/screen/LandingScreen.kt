@@ -7,7 +7,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -55,7 +54,6 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun LandingScreen(
-    padding: PaddingValues = PaddingValues(0.dp),
     navigateToHome: () -> Unit,
     navigateToLogin: () -> Unit,
     navigateToSignupEmail: () -> Unit,
@@ -94,7 +92,6 @@ fun LandingScreen(
         modifier =
         Modifier
             .fillMaxSize()
-            .padding(padding)
             .padding(bottom = 18.dp),
     ) {
         Column(
