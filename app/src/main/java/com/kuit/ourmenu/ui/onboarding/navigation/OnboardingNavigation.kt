@@ -1,6 +1,9 @@
 package com.kuit.ourmenu.ui.onboarding.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -44,7 +47,6 @@ fun NavController.navigateOnboardingToHome() {
 
 fun NavGraphBuilder.onboardingNavGraph(
     padding: PaddingValues,
-    viewModel: SignupViewModel,
     navigateBack: () -> Unit,
     navigateOnboardingToHome: () -> Unit,
     navigateToLogin: () -> Unit,
@@ -52,6 +54,7 @@ fun NavGraphBuilder.onboardingNavGraph(
     navigateToSignupVerify: () -> Unit,
     navigateToSignupMealTime: () -> Unit,
     navigateToSignupPassword: () -> Unit,
+    getBackStackSignupViewModel : @Composable (NavBackStackEntry) -> SignupViewModel
 ) {
 
     composable<Routes.Landing> {
@@ -74,28 +77,28 @@ fun NavGraphBuilder.onboardingNavGraph(
         SignupEmailScreen(
             navigateToVerify = navigateToSignupVerify,
             navigateBack = navigateBack,
-            viewModel = viewModel
+            viewModel = hiltViewModel()
         )
     }
     composable<Routes.SignupVerify> {
         SignupVerifyScreen(
             navigateToPassword = navigateToSignupPassword,
             navigateBack = navigateBack,
-            viewModel = viewModel
+            viewModel = getBackStackSignupViewModel(it)
         )
     }
     composable<Routes.SignupPassword> {
         SignupPasswordScreen(
             navigateToMealTime = navigateToSignupMealTime,
             navigateBack = navigateBack,
-            viewModel = viewModel
+            viewModel = getBackStackSignupViewModel(it)
         )
     }
     composable<Routes.SignupMealTime> {
         SignupMealTimeScreen(
             navigateToHome = navigateToSignupVerify,
             navigateBack = navigateBack,
-            viewModel = viewModel
+            viewModel = getBackStackSignupViewModel(it)
         )
     }
 }

@@ -31,15 +31,18 @@ fun MainNavHost(
 
         onboardingNavGraph(
             padding = androidx.compose.foundation.layout.PaddingValues(0.dp),
-            viewModel = viewModel,
             navigateBack = navController::navigateUp,
             navigateOnboardingToHome = navController::navigateOnboardingToHome,
             navigateToLogin = navController::navigateToLogin,
             navigateToSignupEmail = navController::navigateToSignupEmail,
             navigateToSignupVerify = navController::navigateToSignupVerify,
             navigateToSignupPassword = navController::navigateToSignupPassword,
-            navigateToSignupMealTime = navController::navigateToSignupMealTime
-        )
+            navigateToSignupMealTime = navController::navigateToSignupMealTime,
+            getBackStackSignupViewModel = { navBackStackEntry ->
+                navController.navController.previousBackStackEntry?.let { previousEntry ->
+                    hiltViewModel<SignupViewModel>(previousEntry)
+                } ?: hiltViewModel(navBackStackEntry)
+            })
 
         homeNavGraph()
 
