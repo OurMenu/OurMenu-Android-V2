@@ -6,9 +6,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.kuit.ourmenu.ui.home.navigation.homeNavGraph
 import com.kuit.ourmenu.ui.home.screen.HomeScreen
+import com.kuit.ourmenu.ui.menuFolder.navigation.menuFolderNavGraph
+import com.kuit.ourmenu.ui.my.navigation.myNavGraph
 import com.kuit.ourmenu.ui.onboarding.navigation.onboardingNavGraph
 import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
+import com.kuit.ourmenu.ui.searchmenu.navigation.searchMenuNavGraph
 
 @Composable
 fun MainNavHost(
@@ -36,5 +40,13 @@ fun MainNavHost(
             navigateToSignupPassword = navController::navigateToSignupPassword,
             navigateToSignupMealTime = navController::navigateToSignupMealTime
         )
+
+        homeNavGraph()
+
+        menuFolderNavGraph()
+
+        searchMenuNavGraph()
+
+        myNavGraph()
     }
 }
