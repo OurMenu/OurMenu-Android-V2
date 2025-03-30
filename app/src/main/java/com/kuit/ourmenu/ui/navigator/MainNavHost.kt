@@ -22,7 +22,7 @@ fun MainNavHost(
 
     NavHost(
         navController = navController.navController,
-        startDestination = MainTabRoute.Home
+        startDestination = navController.startDestination
     ) {
 
         onboardingNavGraph(
