@@ -20,7 +20,7 @@ import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
 fun MainNavGraph(navController: NavHostController) {
     val viewModel = hiltViewModel<SignupViewModel>()
 
-    NavHost(navController, startDestination = Routes.Onboarding) {
+    NavHost(navController, startDestination = Routes.Landing) {
         composable<Routes.Home> {
             HomeScreen(navController = navController)
         }
