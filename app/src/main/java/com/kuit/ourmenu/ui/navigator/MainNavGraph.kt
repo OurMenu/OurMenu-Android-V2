@@ -27,6 +27,7 @@ fun MainNavGraph(navController: NavHostController) {
         onboardingNavGraph(
             padding = androidx.compose.foundation.layout.PaddingValues(0.dp),
             viewModel = viewModel,
+            navigateBack = navController::navigateUp,
             navigateOnboardingToHome = navController::navigateOnboardingToHome,
             navigateToLogin = navController::navigateToLogin,
             navigateToSignupEmail = navController::navigateToSignupEmail,
