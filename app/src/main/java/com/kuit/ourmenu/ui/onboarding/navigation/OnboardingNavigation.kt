@@ -49,6 +49,7 @@ fun NavGraphBuilder.onboardingNavGraph(
     navigateOnboardingToHome: () -> Unit,
     navigateToLogin: () -> Unit,
     navigateToSignupEmail: () -> Unit,
+    navigateToSignupVerify: () -> Unit,
     navigateToSignupMealTime: () -> Unit,
 ) {
 
@@ -69,7 +70,11 @@ fun NavGraphBuilder.onboardingNavGraph(
         )
     }
     composable<Routes.SignupEmail> {
-        SignupEmailScreen(navController = navController, viewModel = viewModel)
+        SignupEmailScreen(
+            navigateToVerify = navigateToSignupVerify,
+            navigateBack = navigateToSignupEmail,
+            viewModel = viewModel
+        )
     }
     composable<Routes.SignupPassword> {
         SignupPasswordScreen(navController = navController, viewModel = viewModel)

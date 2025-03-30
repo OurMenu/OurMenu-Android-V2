@@ -11,6 +11,7 @@ import com.kuit.ourmenu.ui.onboarding.navigation.navigateOnboardingToHome
 import com.kuit.ourmenu.ui.onboarding.navigation.navigateToLogin
 import com.kuit.ourmenu.ui.onboarding.navigation.navigateToSignupEmail
 import com.kuit.ourmenu.ui.onboarding.navigation.navigateToSignupMealTime
+import com.kuit.ourmenu.ui.onboarding.navigation.navigateToSignupVerify
 import com.kuit.ourmenu.ui.onboarding.navigation.onboardingNavGraph
 import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
 
@@ -29,6 +30,7 @@ fun MainNavGraph(navController: NavHostController) {
             navigateOnboardingToHome = navController::navigateOnboardingToHome,
             navigateToLogin = navController::navigateToLogin,
             navigateToSignupEmail = navController::navigateToSignupEmail,
+            navigateToSignupVerify = navController::navigateToSignupVerify,
             navigateToSignupMealTime = navController::navigateToSignupMealTime,
         )
     }
