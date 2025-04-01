@@ -25,7 +25,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "BASE_URL", properties["BASE_URL"].toString())
+        buildConfigField("String", "BASE_URL", "\"${properties["BASE_URL"]}\"")
 
         manifestPlaceholders["KAKAO_APP_KEY"] = properties["KAKAO_APP_KEY"].toString()
         buildConfigField("String", "KAKAO_APP_KEY", properties["KAKAO_APP_KEY"].toString())

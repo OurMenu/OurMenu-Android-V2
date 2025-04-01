@@ -2,6 +2,7 @@ package com.kuit.ourmenu.ui.menuFolder.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,7 +35,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.data.model.menuFolder.response.MenuFolderResponse
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.NeutralWhite
@@ -45,9 +48,13 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MenuFolderButton(
+    menuFolder: MenuFolderResponse,
     isSwiped: Boolean, // 현재 버튼이 스와이프된 상태인지 확인
     onSwipe: () -> Unit, // 새로운 버튼이 스와이프될 때 호출
-    onReset: () -> Unit // 버튼이 닫히면 호출
+    onReset: () -> Unit, // 버튼이 닫히면 호출
+    onButtonClick: () -> Unit = {},
+    onEditClick: () -> Unit = {},
+    onDeleteClick: () -> Unit = {}
 ) {
     var offsetX by remember { mutableFloatStateOf(0f) }
     val scope = rememberCoroutineScope()
@@ -80,26 +87,33 @@ fun MenuFolderButton(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.CenterEnd
         ) {
-            MenuFolderDeleteButton()
-            MenuFolderEditButton()
+            MenuFolderDeleteButton(onDeleteClick)
+            MenuFolderEditButton(onEditClick)
         }
 
         // 스와이프 상태일 때만 offset 적용
-        Box(modifier = Modifier.offset(x = if (isSwiped) offsetX.dp else 0.dp)) {
-            MenuFolderContent()
+        Box(
+            modifier = Modifier
+                .offset(x = if (isSwiped) offsetX.dp else 0.dp)
+                .clickable(onClick = onButtonClick)
+        ) {
+            MenuFolderContent(
+                menuFolder = menuFolder
+            )
         }
     }
 }
 
 @Composable
-fun MenuFolderEditButton() {
+fun MenuFolderEditButton(onEditClick: () -> Unit = {}) {
     Box(
         modifier = Modifier
             .padding(end = 64.dp)
             .width(80.dp)
             .fillMaxHeight()
             .clip(RoundedCornerShape(topEnd = 12.dp, bottomEnd = 12.dp))
-            .background(color = Neutral300),
+            .background(color = Neutral300)
+            .clickable(onClick = onEditClick),
         contentAlignment = Alignment.CenterEnd
     ) {
         Column(modifier = Modifier.padding(end = 20.dp)) {
@@ -119,14 +133,15 @@ fun MenuFolderEditButton() {
 }
 
 @Composable
-fun MenuFolderDeleteButton() {
+fun MenuFolderDeleteButton(onDeleteClick: () -> Unit = {}) {
     Box(
         modifier = Modifier
             .width(80.dp)
             .fillMaxHeight()
             .clip(RoundedCornerShape(topEnd = 12.dp, bottomEnd = 12.dp))
-            .background(color = Primary500Main),
-        contentAlignment = Alignment.CenterEnd
+            .background(color = Primary500Main)
+            .clickable(onClick = onDeleteClick),
+        contentAlignment = Alignment.CenterEnd,
     ) {
         Column(modifier = Modifier.padding(end = 20.dp)) {
             Image(
@@ -145,15 +160,17 @@ fun MenuFolderDeleteButton() {
 }
 
 @Composable
-fun MenuFolderContent() {
-    val menuCount = 5 // 임의로 정한 값
+fun MenuFolderContent(
+    menuFolder: MenuFolderResponse,
+) {
+    val menuCount = menuFolder.menuIds.size
 
     Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.img_dummy_pizza),
+        AsyncImage(
+            model = menuFolder.menuFolderUrl,
             contentDescription = "Folder Image",
             contentScale = ContentScale.FillWidth,
             modifier = Modifier
@@ -185,7 +202,7 @@ fun MenuFolderContent() {
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = stringResource(R.string.menu_folder_name),
+                        text = menuFolder.menuFolderTitle,
                         color = NeutralWhite,
                         style = ourMenuTypography().pretendard_500_24,
                     )
@@ -211,5 +228,16 @@ fun gradientBrush(): Brush {
 @Preview(showBackground = true)
 @Composable
 private fun MenuFolderButtonPreview() {
-    MenuFolderButton(false, {}, {})
+    val dummyMenuFolder = MenuFolderResponse(
+        menuFolderId = 1,
+        menuFolderTitle = "인기 메뉴",
+        menuFolderUrl = "https://ourmenu-default.s3.ap-northeast-2.amazonaws.com/default_menu_folder_img.svg",
+        menuFolderIcon = "DICE",
+        menuIds = listOf(1, 2, 3),
+        index = 0
+    )
+
+    MenuFolderButton(
+        menuFolder = dummyMenuFolder,
+        false, {}, {})
 }

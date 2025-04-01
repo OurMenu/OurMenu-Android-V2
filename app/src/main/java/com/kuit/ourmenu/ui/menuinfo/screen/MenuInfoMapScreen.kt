@@ -18,15 +18,17 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.ui.common.GoToMapButton
 import com.kuit.ourmenu.ui.common.bottomsheet.BottomSheetDragHandle
-import com.kuit.ourmenu.ui.common.topappbar.OurMenuAddButtonTopAppBar
 import com.kuit.ourmenu.ui.common.bottomsheet.MenuInfoBottomSheetContent
+import com.kuit.ourmenu.ui.common.topappbar.OurMenuAddButtonTopAppBar
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MenuInfoMapScreen(modifier: Modifier = Modifier) {
+fun MenuInfoMapScreen(navController: NavController) {
     val scaffoldState = rememberBottomSheetScaffoldState()
     var dragHandleHeight by remember { mutableStateOf(0.dp) }
     var bottomSheetContentHeight by remember { mutableStateOf(0.dp) }
@@ -60,7 +62,7 @@ fun MenuInfoMapScreen(modifier: Modifier = Modifier) {
         sheetPeekHeight = bottomSheetContentHeight,
     ) { innerPaddings ->
         Box(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPaddings)
         ) {
@@ -79,5 +81,7 @@ fun MenuInfoMapScreen(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun MenuInfoMapScreenPreview() {
-    MenuInfoMapScreen()
+    val navController = rememberNavController()
+
+    MenuInfoMapScreen(navController)
 }
