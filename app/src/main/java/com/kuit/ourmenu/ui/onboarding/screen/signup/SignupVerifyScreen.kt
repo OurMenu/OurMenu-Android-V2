@@ -35,15 +35,11 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
 import com.kuit.ourmenu.ui.common.OurSnackbarHost
-import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
 import com.kuit.ourmenu.ui.onboarding.component.VerifyCodeTextField
-import com.kuit.ourmenu.ui.onboarding.state.PasswordState
 import com.kuit.ourmenu.ui.onboarding.state.SignupState
 import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.theme.Neutral300
@@ -53,13 +49,13 @@ import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 import com.kuit.ourmenu.utils.AnimationUtil.shakeAnimation
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @Composable
 fun SignupVerifyScreen(
-    navController: NavController,
+    navigateToPassword: () -> Unit,
+    navigateBack: () -> Unit,
     viewModel: SignupViewModel = hiltViewModel()
 ) {
     val focusRequesters = List(6) { FocusRequester() }
@@ -78,7 +74,7 @@ fun SignupVerifyScreen(
     LaunchedEffect(verifyState) {
         when (verifyState) {
             is SignupState.Success ->
-                navController.navigate(route = Routes.SignupPassword)
+                navigateToPassword()
 
             is SignupState.Error -> {
                 shakeAnimation(
@@ -103,9 +99,7 @@ fun SignupVerifyScreen(
             .imePadding(),
         topBar = {
             OnboardingTopAppBar(
-                onBackClick = {
-                    navController.navigateUp()
-                }
+                onBackClick = navigateBack
             )
         },
         content = { innerPadding ->
@@ -253,7 +247,8 @@ fun SignupVerifyScreen(
 @Preview(showBackground = true)
 @Composable
 private fun SignupVerifyScreenPreview() {
-    val navController = rememberNavController()
-
-    SignupVerifyScreen(navController)
+    SignupVerifyScreen(
+        navigateToPassword = {},
+        navigateBack = {}
+    )
 }

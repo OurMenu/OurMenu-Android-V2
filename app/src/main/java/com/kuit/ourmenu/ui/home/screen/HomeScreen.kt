@@ -12,7 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.ui.common.topappbar.OurMenuAddButtonTopAppBar
 import com.kuit.ourmenu.ui.home.component.recommendation.main.HomeMainRecommendation
@@ -20,7 +19,7 @@ import com.kuit.ourmenu.ui.home.component.recommendation.sub.HomeSubRecommendati
 import com.kuit.ourmenu.ui.home.dummy.HomeDummyData
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, navController: NavHostController) {
+fun HomeScreen(modifier: Modifier = Modifier) {
 
     val scrollState = rememberScrollState()
 
@@ -69,5 +68,5 @@ fun HomeScreen(modifier: Modifier = Modifier, navController: NavHostController) 
 @Composable
 private fun HomeScreenPreview() {
     val navController = rememberNavController()
-    HomeScreen(navController = navController)
+    HomeScreen()
 }

@@ -3,15 +3,8 @@ package com.kuit.ourmenu.ui.navigator
 import kotlinx.serialization.Serializable
 
 sealed interface Routes{
-    // Home
-    @Serializable
-    data object Home: Routes
-
-    // 지도
 
     // 메뉴판
-    @Serializable
-    data object MenuFolder: Routes
     @Serializable
     data object MenuFolderDetail: Routes
     @Serializable

@@ -23,12 +23,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
 import com.kuit.ourmenu.ui.common.OurSnackbarHost
-import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.onboarding.component.EmailSpinner
 import com.kuit.ourmenu.ui.onboarding.component.LoginTextField
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
@@ -41,13 +38,14 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SignupEmailScreen(
-    navController: NavController,
+    navigateToVerify: () -> Unit,
+    navigateBack: () -> Unit,
     viewModel: SignupViewModel = hiltViewModel()
 ) {
 
     val email by viewModel.email.collectAsStateWithLifecycle()
     val domain by viewModel.domain.collectAsStateWithLifecycle()
-    val enable = /*email.isNotEmpty() && domain.isNotEmpty()*/ true
+    val enable = email.isNotEmpty() && domain.isNotEmpty()
     val emailState by viewModel.emailState.collectAsStateWithLifecycle()
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -56,7 +54,7 @@ fun SignupEmailScreen(
 
     LaunchedEffect(emailState) {
         when (emailState) {
-            is SignupState.Success -> navController.navigate(route = Routes.SignupVerify)
+            is SignupState.Success -> navigateToVerify()
             is SignupState.Error -> {
                 scope.launch {
                     snackbarHostState.showSnackbar(
@@ -82,9 +80,7 @@ fun SignupEmailScreen(
     Scaffold(
         topBar = {
             OnboardingTopAppBar(
-                onBackClick = {
-                    navController.navigateUp()
-                }
+                onBackClick = navigateBack
             )
         },
         modifier = Modifier
@@ -193,7 +189,8 @@ fun EmailInputField(
 @Preview
 @Composable
 private fun SignupEmailScreenPreview() {
-    val navController = rememberNavController()
-
-    SignupEmailScreen(navController)
+    SignupEmailScreen(
+        navigateToVerify = {},
+        navigateBack = {}
+    )
 }
