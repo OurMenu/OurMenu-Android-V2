@@ -16,6 +16,8 @@ import com.kuit.ourmenu.ui.navigator.MainNavHost
 import com.kuit.ourmenu.ui.navigator.MainTab
 import com.kuit.ourmenu.ui.navigator.component.MainBottomBar
 import com.kuit.ourmenu.ui.navigator.rememberMainNavigator
+import androidx.navigation.compose.rememberNavController
+import coil3.imageLoader
 import com.kuit.ourmenu.ui.onboarding.screen.SplashScreen
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.OurMenuTheme
@@ -29,11 +31,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             var showSplash by remember { mutableStateOf(true) }
+
             val navController = rememberMainNavigator()
 
             OurMenuTheme {
                 if (showSplash) {
-                    SplashScreen {
+                    SplashScreen(
+                        imageLoader = imageLoader,
+                    ) {
                         showSplash = false
                     }
                 } else {

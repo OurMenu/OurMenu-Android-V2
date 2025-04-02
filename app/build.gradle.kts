@@ -99,10 +99,11 @@ dependencies {
     implementation("com.kakao.sdk:v2-all:2.20.6")
     implementation("com.kakao.sdk:v2-user:2.20.6") // 카카오 로그인 API 모듈
 
-    // image
-    implementation("io.coil-kt.coil3:coil-compose:3.1.0")
-    implementation("io.coil-kt.coil3:coil-network-okhttp:3.1.0")
-    implementation("io.coil-kt.coil3:coil-svg:3.1.0")
+    // coil
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+    implementation(libs.coil.svg)
+
 }
 
 // Hilt를 사용할 때 필요한 Annotation Processor
