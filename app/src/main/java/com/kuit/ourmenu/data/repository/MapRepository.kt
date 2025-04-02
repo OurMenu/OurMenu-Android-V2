@@ -45,4 +45,31 @@ class MapRepository @Inject constructor(
         val response = mapService.getMapSearchHistory().handleBaseResponse().getOrThrow()
     }
 
+    // 크롤링 관련
+    suspend fun getCrawlingHistory() = runCatching {
+        val response = mapService.getCrawlingHistory().handleBaseResponse().getOrThrow()
+    }
+
+    suspend fun getCrawlingStoreDetail(
+        isCrawled: Boolean,
+        storeId: String
+    ) = runCatching {
+        val response = mapService.getCrawlingStoreDetail(
+            isCrawled = isCrawled,
+            storeId = storeId
+        ).handleBaseResponse().getOrThrow()
+    }
+
+    suspend fun getCrawlingStoreInfo(
+        query: String,
+        mapX: Double,
+        mapY: Double
+    ) = kotlin.runCatching {
+        val response = mapService.getCrawlingStoreInfo(
+            query = query,
+            mapX = mapX,
+            mapY = mapY
+        ).handleBaseResponse().getOrThrow()
+    }
+
 }
