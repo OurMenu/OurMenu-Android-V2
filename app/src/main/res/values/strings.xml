@@ -106,4 +106,5 @@
     <string name="nationality">나라 별 음식</string>
     <string name="taste">맛</string>
     <string name="occasion">상황</string>
+    <string name="search_store_name">가게 이름 검색</string>
 </resources>

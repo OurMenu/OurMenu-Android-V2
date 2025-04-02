@@ -177,7 +177,8 @@ fun AddMenuScreen(navController: NavController) {
                     showSearchBackground = true
                     showBottomSheet = false
                 },
-                interactionSource = interactionSource
+                interactionSource = interactionSource,
+                placeHolder = R.string.search_store_name
             ) {
                 //onSearch 함수
                 if (searchBarFocused) focusManager.clearFocus()
