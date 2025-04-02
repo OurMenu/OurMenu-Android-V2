@@ -25,7 +25,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "BASE_URL", properties["BASE_URL"].toString())
+        buildConfigField("String", "BASE_URL", "\"${properties["BASE_URL"]}\"")
 
         manifestPlaceholders["KAKAO_APP_KEY"] = properties["KAKAO_APP_KEY"].toString()
         buildConfigField("String", "KAKAO_APP_KEY", properties["KAKAO_APP_KEY"].toString())
@@ -68,6 +68,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose.android)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.espresso.core)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -75,6 +76,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.kotlinx.collections.immutable)
 
     // Dots Indicator
     implementation("com.tbuonomo:dotsindicator:5.1.0")
@@ -83,7 +85,6 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
-
 
     // Network
     implementation(platform(libs.okhttp.bom))
@@ -97,6 +98,11 @@ dependencies {
     implementation("com.kakao.sdk:v2-all:2.20.6")
     implementation("com.kakao.sdk:v2-user:2.20.6") // 카카오 로그인 API 모듈
     implementation ("com.kakao.maps.open:android:2.12.8") // 카카오 맵 API
+
+    // coil
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+    implementation(libs.coil.svg)
 }
 
 // Hilt를 사용할 때 필요한 Annotation Processor

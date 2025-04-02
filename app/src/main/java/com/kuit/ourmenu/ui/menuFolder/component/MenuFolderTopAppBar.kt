@@ -21,7 +21,7 @@ import com.kuit.ourmenu.ui.theme.NeutralWhite
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MenuFolderTopAppBar(modifier: Modifier = Modifier) {
+fun MenuFolderTopAppBar(onClick: () -> Unit) {
     // 기본
     TopAppBar(
         modifier = Modifier
@@ -45,7 +45,7 @@ fun MenuFolderTopAppBar(modifier: Modifier = Modifier) {
         },
         actions = {
             IconButton(
-                onClick = { /* TODO : Add Menu Button Click Event */ },
+                onClick = onClick,
                 modifier = Modifier.padding(end = 20.dp)
             ) {
                 Icon(
@@ -61,5 +61,7 @@ fun MenuFolderTopAppBar(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun HomeTopAppBarPreview() {
-    MenuFolderTopAppBar()
+    MenuFolderTopAppBar(
+        onClick = {}
+    )
 }

@@ -17,10 +17,10 @@ import com.kuit.ourmenu.ui.theme.Neutral500
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BackButtonTopAppBar(color: Color, isKebabVisible: Boolean) {
+fun BackButtonTopAppBar(color: Color, isKebabVisible: Boolean, onBackClick: () -> Unit = {}) {
     TopAppBar(
         title = {
-            IconButton(onClick = { TODO("뒤로가기 구현") }) {
+            IconButton(onClick = onBackClick) {
                 Icon(
                     painter = painterResource(R.drawable.ic_back),
                     contentDescription = "Back",
@@ -34,7 +34,7 @@ fun BackButtonTopAppBar(color: Color, isKebabVisible: Boolean) {
                     painter = painterResource(R.drawable.ic_kebab),
                     modifier = Modifier.padding(end = 18.dp),
                     contentDescription = "Menu",
-                    tint = color
+                    tint = color,
                 )
             }
         },

@@ -55,10 +55,7 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddMenuScreen(
-    modifier: Modifier = Modifier,
-    navController: NavController
-) {
+fun AddMenuScreen(navController: NavController) {
     var scaffoldState = rememberBottomSheetScaffoldState()
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
     var showSearchBackground by rememberSaveable { mutableStateOf(false) }
@@ -197,5 +194,6 @@ fun AddMenuScreen(
 @Composable
 private fun AddMenuScreenPreview() {
     val navController = rememberNavController()
-    AddMenuScreen(navController = navController)
+
+    AddMenuScreen(navController)
 }

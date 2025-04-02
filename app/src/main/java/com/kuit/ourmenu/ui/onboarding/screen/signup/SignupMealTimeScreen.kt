@@ -18,11 +18,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
-import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.onboarding.component.MealTimeGrid
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
 import com.kuit.ourmenu.ui.onboarding.state.SignupState
@@ -33,7 +30,8 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
 fun SignupMealTimeScreen(
-    navController: NavController,
+    navigateToHome: () -> Unit,
+    navigateBack: () -> Unit,
     viewModel: SignupViewModel = hiltViewModel()
 ) {
 
@@ -44,12 +42,8 @@ fun SignupMealTimeScreen(
 
     LaunchedEffect(signupState) {
         when (signupState) {
-            is SignupState.Success ->{
-                navController.navigate(route = Routes.Home) {
-                    popUpTo(Routes.Onboarding) {
-                        inclusive = true
-                    }
-                }
+            is SignupState.Success -> {
+                navigateToHome()
             }
 
             is SignupState.Error ->
@@ -62,9 +56,7 @@ fun SignupMealTimeScreen(
     Scaffold(
         topBar = {
             OnboardingTopAppBar(
-                onBackClick = {
-                    navController.navigateUp()
-                }
+                onBackClick = navigateBack
             )
         },
         modifier = Modifier
@@ -128,9 +120,9 @@ fun SignupMealTimeScreen(
     widthDp = 360
 )
 @Composable
-private fun SignupNicknameScreenPreview() {
-    val navController = rememberNavController()
-
-    SignupMealTimeScreen(navController)
-
+private fun SignupMealTimeScreenPreview() {
+    SignupMealTimeScreen(
+        navigateToHome = {},
+        navigateBack = {}
+    )
 }

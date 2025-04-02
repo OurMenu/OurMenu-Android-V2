@@ -43,17 +43,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.BottomFullWidthButton
 import com.kuit.ourmenu.ui.common.OurSnackbarHost
-import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.onboarding.component.BottomFullWidthBorderButton
 import com.kuit.ourmenu.ui.onboarding.component.LoginTextField
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
 import com.kuit.ourmenu.ui.onboarding.state.LoginState
-import com.kuit.ourmenu.ui.onboarding.state.PasswordState
 import com.kuit.ourmenu.ui.onboarding.viewmodel.LoginViewModel
 import com.kuit.ourmenu.ui.theme.Neutral100
 import com.kuit.ourmenu.ui.theme.Neutral300
@@ -68,7 +64,9 @@ import kotlin.math.roundToInt
 
 @Composable
 fun LoginScreen(
-    navController: NavController,
+    navigateToHome: () -> Unit,
+    navigateBack: () -> Unit,
+    navigateToSignupEmail: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val email by viewModel.email.collectAsStateWithLifecycle()
@@ -85,12 +83,9 @@ fun LoginScreen(
 
     LaunchedEffect(loginState) {
         when (loginState) {
-            is LoginState.Success -> navController.navigate(route = Routes.Home) {
-                popUpTo(route = Routes.Onboarding) { inclusive = true }
-            }
+            is LoginState.Success -> navigateToHome()
 
             is LoginState.Error -> {
-                // 에러에 따라 snackbar 를 show 하면 됨
                 scope.launch {
                     snackbarHostState.showSnackbar(
                         message = viewModel.error.value ?: "",
@@ -142,9 +137,7 @@ fun LoginScreen(
     Scaffold(
         topBar = {
             OnboardingTopAppBar(
-                onBackClick = {
-                    navController.popBackStack()
-                },
+                onBackClick = navigateBack,
             )
         },
         content = { innerPadding ->
@@ -264,7 +257,7 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(24.dp))
 
                 BottomFullWidthBorderButton {
-                    navController.navigate(route = Routes.SignupEmail)
+                    navigateToSignupEmail()
                 }
             }
 
@@ -311,7 +304,9 @@ fun LoginScreen(
 @Preview(showBackground = true)
 @Composable
 private fun LoginScreenPreview() {
-    val navController = rememberNavController()
-
-    LoginScreen(navController)
+    LoginScreen(
+        navigateToHome = {},
+        navigateBack = {},
+        navigateToSignupEmail = {}
+    )
 }

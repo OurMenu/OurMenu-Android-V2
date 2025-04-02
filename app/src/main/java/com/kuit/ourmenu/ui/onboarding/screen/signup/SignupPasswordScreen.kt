@@ -38,12 +38,9 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
 import com.kuit.ourmenu.ui.common.OurSnackbarHost
-import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.onboarding.component.LoginTextField
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
 import com.kuit.ourmenu.ui.onboarding.state.PasswordState
@@ -62,7 +59,8 @@ import kotlin.math.roundToInt
 
 @Composable
 fun SignupPasswordScreen(
-    navController: NavController,
+    navigateToMealTime: () -> Unit,
+    navigateBack: () -> Unit,
     viewModel: SignupViewModel = hiltViewModel()
 ) {
     val password by viewModel.password.collectAsStateWithLifecycle()
@@ -117,7 +115,7 @@ fun SignupPasswordScreen(
             }
 
             PasswordState.Valid -> {
-                navController.navigate(route = Routes.SignupMealTime)
+                navigateToMealTime()
             }
 
             else -> {}
@@ -129,19 +127,15 @@ fun SignupPasswordScreen(
             .fillMaxSize()
             .imePadding(),
         topBar = {
-            OnboardingTopAppBar(
-                onBackClick = {
-                    navController.navigateUp()
-                }
-            )
+            OnboardingTopAppBar(onBackClick = navigateBack)
         },
         content = { innerPadding ->
             Column(
                 modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                        .padding(horizontal = 20.dp),
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(horizontal = 20.dp),
             ) {
                 Text(
                     text = stringResource(R.string.enter_password),
@@ -174,7 +168,7 @@ fun SignupPasswordScreen(
                     input = password,
                     onTextChange = { viewModel.updatePassword(it) },
                     visualTransformation =
-                        if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -205,14 +199,14 @@ fun SignupPasswordScreen(
                         checked = isPasswordVisible,
                         onCheckedChange = { isPasswordVisible = it },
                         modifier =
-                            Modifier
-                                .size(24.dp),
+                        Modifier
+                            .size(24.dp),
                         colors =
-                            CheckboxDefaults.colors(
-                                checkmarkColor = NeutralWhite,
-                                checkedColor = Primary500Main,
-                                uncheckedColor = Neutral300,
-                            ),
+                        CheckboxDefaults.colors(
+                            checkmarkColor = NeutralWhite,
+                            checkedColor = Primary500Main,
+                            uncheckedColor = Neutral300,
+                        ),
                     )
 
                     Text(
@@ -238,9 +232,9 @@ fun SignupPasswordScreen(
         bottomBar = {
             Column(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(20.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Box(
@@ -265,6 +259,8 @@ fun SignupPasswordScreen(
 @Preview(showBackground = true)
 @Composable
 private fun SignupPasswordScreenPreview() {
-    val navController = rememberNavController()
-    SignupPasswordScreen(navController)
+    SignupPasswordScreen(
+        navigateToMealTime = {},
+        navigateBack = {}
+    )
 }
