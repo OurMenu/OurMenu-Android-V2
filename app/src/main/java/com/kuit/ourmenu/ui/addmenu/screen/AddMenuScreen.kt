@@ -147,7 +147,6 @@ fun AddMenuScreen(navController: NavController) {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-//                    Text("지도 컴포넌트")
                     AndroidView(
                         modifier = Modifier,
                         factory = { mapView }

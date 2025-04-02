@@ -3,7 +3,9 @@ package com.kuit.ourmenu.ui.searchmenu.screen
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,10 +27,17 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import com.kakao.vectormap.LatLng
+import com.kakao.vectormap.camera.CameraUpdateFactory
+import com.kakao.vectormap.label.LabelOptions
+import com.kakao.vectormap.label.LabelStyle
+import com.kakao.vectormap.label.LabelStyles
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.GoToMapButton
 import com.kuit.ourmenu.ui.common.SearchTextField
 import com.kuit.ourmenu.ui.common.bottomsheet.BottomSheetDragHandle
+import com.kuit.ourmenu.ui.common.map.MapViewWithLifecycle
 import com.kuit.ourmenu.ui.common.topappbar.OurMenuAddButtonTopAppBar
 import com.kuit.ourmenu.ui.menuinfo.dummy.MenuInfoDummyData
 import com.kuit.ourmenu.ui.searchmenu.component.SearchBottomSheetContent
@@ -51,6 +60,22 @@ fun SearchMenuScreen(modifier: Modifier = Modifier) {
     val focusManager = LocalFocusManager.current
 
     val density = LocalDensity.current
+
+    val mapView = MapViewWithLifecycle() { kakaoMap ->
+        // 카메라 이동
+        val cameraUpdate = CameraUpdateFactory.newCenterPosition(LatLng.from(37.5416, 127.0793))
+        // 라벨 아이콘 설정
+        val style = kakaoMap.labelManager?.addLabelStyles(
+            // R.drawable에서 vector를 가져오면 화면에 보이지 않는 이슈 존재
+            LabelStyles.from(LabelStyle.from(R.drawable.img_popup_dice))
+        )
+        // 라벨 아이콘 적용
+        val options = LabelOptions.from(LatLng.from(37.5406, 127.0763)).setStyles(style)
+        // 레이어
+        val layer = kakaoMap.labelManager?.layer
+        layer?.addLabel(options)
+        kakaoMap.moveCamera(cameraUpdate)
+    }
 
     LaunchedEffect(searchBarFocused) {
         if (searchBarFocused) {
@@ -103,7 +128,19 @@ fun SearchMenuScreen(modifier: Modifier = Modifier) {
                 .padding(innerPadding)
         ) {
             if (!showSearchBackground) {
-                // TODO : 지도
+                //지도 컴포넌트
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    AndroidView(
+                        modifier = Modifier,
+                        factory = { mapView }
+                    ) { view ->
+
+                    }
+                }
             } else {
                 SearchHistoryList(
                     historyList = emptyList()
