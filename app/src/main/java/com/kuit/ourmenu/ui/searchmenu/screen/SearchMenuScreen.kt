@@ -119,7 +119,7 @@ fun SearchMenuScreen(modifier: Modifier = Modifier) {
                 }
             )
         },
-        sheetPeekHeight = bottomSheetPeekHeight, // TODO : 아이템 개수에 따라 높이 조절 필요
+        sheetPeekHeight = if(showBottomSheet) bottomSheetPeekHeight else 0.dp , // TODO : 아이템 개수에 따라 높이 조절 필요
         containerColor = NeutralWhite,
     ) { innerPadding ->
         Box(

@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.searchmenu.model.SearchHistoryData
-import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
@@ -40,6 +39,7 @@ fun SearchHistoryList(
     Column(
         modifier = modifier
             .fillMaxWidth()
+            .padding(top = 68.dp)
     ) {
         Text(
             text = "최근 검색",

@@ -51,7 +51,7 @@ fun AddMenuSearchBackground(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 116.dp),
+                            .padding(top = 68.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Icon(
