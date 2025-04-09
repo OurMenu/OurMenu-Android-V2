@@ -22,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -37,7 +36,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.data.model.menuFolder.response.SortOrderType
-import com.kuit.ourmenu.data.model.menuFolder.response.TagType
 import com.kuit.ourmenu.ui.common.bottomsheet.BottomSheetDragHandle
 import com.kuit.ourmenu.ui.common.topappbar.BackButtonTopAppBar
 import com.kuit.ourmenu.ui.menuFolder.component.AddButton
@@ -62,10 +60,10 @@ fun MenuFolderAllMenuScreen(
 ) {
     val menus by viewModel.menuFolderAll.collectAsStateWithLifecycle()
     val selectedSort by viewModel.sortOrder.collectAsStateWithLifecycle()
+    val selectedTags by viewModel.selectedTags.collectAsStateWithLifecycle()
     val menuCount = menus.size
 
     var filterCount by rememberSaveable { mutableIntStateOf(0) } // 선택된 필터 개수 상태 관리
-    var selectedFilters by rememberSaveable { mutableStateOf(listOf<TagType>()) } // 선택된 필터 리스트
 
     val scaffoldState = rememberBottomSheetScaffoldState()
     val coroutineScope = rememberCoroutineScope()
@@ -91,17 +89,17 @@ fun MenuFolderAllMenuScreen(
                 nationalityTagList = TagListProvider.nationalityTagList,
                 tasteTagList = TagListProvider.tasteTagList,
                 occasionTagList = TagListProvider.occasionTagList,
-                onApplyButtonClick = {
-                    coroutineScope.launch {
-                        filterCount = selectedFilters.size // 적용 버튼 클릭 시 선택된 필터 개수 반영
-                        viewModel.updateTags(selectedFilters)
-                        scaffoldState.bottomSheetState.partialExpand() // 적용 버튼 클릭 시 BottomSheet 닫기
-                    }
-
+                onSelectedTagsChange = { newSelectedTags ->
+                    viewModel.updateTags(newSelectedTags)
                 },
-                onSelectedTagsChange = { newSelectedTags -> selectedFilters = newSelectedTags },
                 onPriceRangeChange = { min, max ->
                     viewModel.updatePriceRange(min, max)
+                },
+                onApplyButtonClick = {
+                    coroutineScope.launch {
+                        filterCount = selectedTags.size // 적용 버튼 클릭 시 선택된 필터 개수 반영
+                        scaffoldState.bottomSheetState.partialExpand() // 적용 버튼 클릭 시 BottomSheet 닫기
+                    }
                 }
             )
         },
