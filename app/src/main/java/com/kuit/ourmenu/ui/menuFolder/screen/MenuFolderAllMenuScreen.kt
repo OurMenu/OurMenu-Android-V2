@@ -100,10 +100,13 @@ fun MenuFolderAllMenuScreen(
                 onApplyButtonClick = {
                     coroutineScope.launch {
                         val tagFilterCount = selectedTags.size
-                        val priceFilterCount = if (minPrice != null || maxPrice != null) 1 else 0
-                        filterCount = tagFilterCount + priceFilterCount // 적용 버튼 클릭 시 선택된 필터 개수 반영
 
-                        scaffoldState.bottomSheetState.partialExpand() // 적용 버튼 클릭 시 BottomSheet 닫기
+                        val isPriceChanged = minPrice != null && minPrice != 0L || maxPrice != null && maxPrice != 50000L
+                        val priceFilterCount = if (isPriceChanged) 1 else 0
+
+                        filterCount = tagFilterCount + priceFilterCount
+
+                        scaffoldState.bottomSheetState.partialExpand()
                     }
                 }
             )
