@@ -33,14 +33,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.data.model.menuFolder.response.SortOrderType
 import com.kuit.ourmenu.ui.common.bottomsheet.BottomSheetDragHandle
 import com.kuit.ourmenu.ui.common.topappbar.BackButtonTopAppBar
 import com.kuit.ourmenu.ui.menuFolder.component.AddButton
 import com.kuit.ourmenu.ui.menuFolder.component.FilterBottomSheet
+import com.kuit.ourmenu.ui.menuFolder.component.MenuFolderMenuButton
 import com.kuit.ourmenu.ui.menuFolder.component.SortDropdown
+import com.kuit.ourmenu.ui.menuFolder.viewmodel.MenuFolderAllViewModel
 import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral700
@@ -52,13 +56,16 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MenuFolderAllMenuScreen(navController: NavController) {
-    val menuCount = 13
+fun MenuFolderAllMenuScreen(
+    viewModel: MenuFolderAllViewModel = hiltViewModel(),
+    navController: NavController
+) {
+    val menus by viewModel.menuFolderAll.collectAsStateWithLifecycle()
+    val selectedSort by viewModel.sortOrder.collectAsStateWithLifecycle()
+    val menuCount = menus.size
+
     var filterCount by rememberSaveable { mutableIntStateOf(0) } // 선택된 필터 개수 상태 관리
     var selectedFilters by rememberSaveable { mutableStateOf(listOf<String>()) } // 선택된 필터 리스트
-
-    val options = listOf("이름순", "등록순", "가격순")
-    var selectedOption by rememberSaveable { mutableStateOf("이름순") }
 
     val scaffoldState = rememberBottomSheetScaffoldState()
     val coroutineScope = rememberCoroutineScope()
@@ -144,10 +151,12 @@ fun MenuFolderAllMenuScreen(navController: NavController) {
                 }
 
                 SortDropdown(
-                    options = options,
-                    selectedOption = selectedOption,
-                ) {
-                    selectedOption = it
+                    options = SortOrderType.entries.map { it.displayName },
+                    selectedOption = selectedSort.displayName,
+                ) { selectedDisplayName ->
+                    SortOrderType.entries
+                        .firstOrNull { it.displayName == selectedDisplayName }
+                        ?.let { viewModel.updateSortOrder(it) }
                 }
             }
 
@@ -187,14 +196,15 @@ fun MenuFolderAllMenuScreen(navController: NavController) {
                 modifier = Modifier,
             ) {
                 items(menuCount) { index ->
-//                    MenuFolderMenuButton(
-//                        onMenuClick = {
-//                            navController.navigate(route = Routes.MenuInfo)
-//                        },
-//                        onMapClick = {
-//                            navController.navigate(route = Routes.MenuInfoMap)
-//                        }
-//                    )
+                    MenuFolderMenuButton(
+                        menuFolderDetail = menus[index],
+                        onMenuClick = {
+                            navController.navigate(route = Routes.MenuInfo)
+                        },
+                        onMapClick = {
+                            navController.navigate(route = Routes.MenuInfoMap)
+                        }
+                    )
                 }
 
                 item {
@@ -213,7 +223,7 @@ fun MenuFolderAllMenuScreen(navController: NavController) {
 @Preview(showBackground = true)
 @Composable
 private fun MenuFolderAllMenuScreenPreview() {
-    val navController = rememberNavController()
-
-    MenuFolderAllMenuScreen(navController)
+//    val navController = rememberNavController()
+//
+//    MenuFolderAllMenuScreen(navController)
 }
