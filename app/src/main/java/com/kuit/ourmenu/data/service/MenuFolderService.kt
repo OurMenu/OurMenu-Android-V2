@@ -6,5 +6,5 @@ import retrofit2.http.GET
 
 interface MenuFolderService {
     @GET("api/menu-folders")
-    suspend fun getMenuFolders(): BaseResponse<List<MenuFolderResponse>>
+    suspend fun getMenuFolders(): BaseResponse<MenuFolderResponse>
 }
