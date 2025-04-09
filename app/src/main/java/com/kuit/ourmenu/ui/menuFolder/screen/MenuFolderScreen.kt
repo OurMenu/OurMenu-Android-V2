@@ -47,7 +47,7 @@ fun MenuFolderScreen(
     var swipedIndex by remember { mutableIntStateOf(-1) }
 
     val menuFolders by viewModel.menuFolders.collectAsStateWithLifecycle()
-    val totalMenuCount = menuFolders.sumOf { it.menuIds.size } // 전체 메뉴 개수 - 서버에서 받아오도록 수정
+    val totalMenuCount by viewModel.menuCount.collectAsStateWithLifecycle()
 
     Log.d("MenuFolderScreen", "menuFolders: $menuFolders")
 
