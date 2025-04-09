@@ -61,6 +61,8 @@ fun MenuFolderAllMenuScreen(
     val menus by viewModel.menuFolderAll.collectAsStateWithLifecycle()
     val selectedSort by viewModel.sortOrder.collectAsStateWithLifecycle()
     val selectedTags by viewModel.selectedTags.collectAsStateWithLifecycle()
+    val minPrice by viewModel.minPrice.collectAsStateWithLifecycle()
+    val maxPrice by viewModel.maxPrice.collectAsStateWithLifecycle()
     val menuCount = menus.size
 
     var filterCount by rememberSaveable { mutableIntStateOf(0) } // 선택된 필터 개수 상태 관리
@@ -97,7 +99,10 @@ fun MenuFolderAllMenuScreen(
                 },
                 onApplyButtonClick = {
                     coroutineScope.launch {
-                        filterCount = selectedTags.size // 적용 버튼 클릭 시 선택된 필터 개수 반영
+                        val tagFilterCount = selectedTags.size
+                        val priceFilterCount = if (minPrice != null || maxPrice != null) 1 else 0
+                        filterCount = tagFilterCount + priceFilterCount // 적용 버튼 클릭 시 선택된 필터 개수 반영
+
                         scaffoldState.bottomSheetState.partialExpand() // 적용 버튼 클릭 시 BottomSheet 닫기
                     }
                 }
