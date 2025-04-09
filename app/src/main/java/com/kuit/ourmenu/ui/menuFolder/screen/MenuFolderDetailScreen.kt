@@ -33,22 +33,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.topappbar.BackButtonTopAppBar
 import com.kuit.ourmenu.ui.menuFolder.component.AddButton
 import com.kuit.ourmenu.ui.menuFolder.component.MenuFolderMenuButton
 import com.kuit.ourmenu.ui.menuFolder.component.SortDropdown
 import com.kuit.ourmenu.ui.menuFolder.viewmodel.MenuFolderDetailViewModel
-import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.theme.Neutral50
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
 fun MenuFolderDetailScreen(
-    navController: NavController,
+//    onNavigateToMenuInfo: () -> Unit, // TODO: Menu Info로 화면 이동 구현
+//    onNavigateToMap: () -> Unit, // TODO: Map으로 화면 이동 구현
+//    onNavigateToAddMenu: () -> Unit, // TODO: AddMenu로 화면 이동 구현
+    onNavigateBack: () -> Unit,
     viewModel: MenuFolderDetailViewModel = hiltViewModel()
 ) {
     val menuFolderDetails by viewModel.menuFolderDetails.collectAsStateWithLifecycle()
@@ -138,10 +138,10 @@ fun MenuFolderDetailScreen(
                         MenuFolderMenuButton(
                             menuFolderDetail = menuFolderDetails[index],
                             onMenuClick = {
-                                navController.navigate(route = Routes.MenuInfo)
+//                                onNavigateToMenuInfo()
                             },
                             onMapClick = {
-                                navController.navigate(route = Routes.MenuInfoMap)
+//                                onNavigateToMap()
                             }
                         )
                     }
@@ -151,14 +151,14 @@ fun MenuFolderDetailScreen(
                             stringResource(R.string.add_menu),
                             modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 20.dp)
                         ) {
-                            navController.navigate(route = Routes.AddMenu)
+//                            onNavigateToAddMenu()
                         }
                     }
                 }
             }
 
             BackButtonTopAppBar(NeutralWhite, true) {
-                navController.popBackStack()
+                onNavigateBack()
             }
         }
     )
@@ -168,7 +168,10 @@ fun MenuFolderDetailScreen(
 @Preview(showBackground = true)
 @Composable
 private fun MenuFolderDetailScreenPreview() {
-    val navController = rememberNavController()
-
-    MenuFolderDetailScreen(navController)
+    MenuFolderDetailScreen(
+//        onNavigateToMenuInfo = {},
+//        onNavigateToMap = {},
+//        onNavigateToAddMenu = {},
+        onNavigateBack = {},
+    )
 }
