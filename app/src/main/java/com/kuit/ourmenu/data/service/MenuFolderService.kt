@@ -1,6 +1,7 @@
 package com.kuit.ourmenu.data.service
 
 import com.kuit.ourmenu.data.model.base.BaseResponse
+import com.kuit.ourmenu.data.model.menuFolder.response.MenuFolderAllResponse
 import com.kuit.ourmenu.data.model.menuFolder.response.MenuFolderDetailResponse
 import com.kuit.ourmenu.data.model.menuFolder.response.MenuFolderResponse
 import retrofit2.http.GET
@@ -16,4 +17,14 @@ interface MenuFolderService {
         @Path("menuFolderId") menuFolderId: Int,
         @Query("sortOrder") sortOrder: String,
     ): BaseResponse<List<MenuFolderDetailResponse>>
+
+    @GET("api/menus")
+    suspend fun getMenuFolderAll(
+        @Query("tags") tags: List<String>? = null,
+        @Query("minPrice") minPrice: Long? = null,
+        @Query("maxPrice") maxPrice: Long? = null,
+        @Query("page") page: Int? = null,
+        @Query("size") size: Int,
+        @Query("sortOrder") sortOrder: String,
+    ): BaseResponse<List<MenuFolderAllResponse>>
 }
