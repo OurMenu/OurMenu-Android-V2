@@ -1,5 +1,6 @@
 package com.kuit.ourmenu.ui.menuFolder.screen
 
+import SortOrderType
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -30,6 +31,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
@@ -37,17 +40,21 @@ import com.kuit.ourmenu.ui.common.topappbar.BackButtonTopAppBar
 import com.kuit.ourmenu.ui.menuFolder.component.AddButton
 import com.kuit.ourmenu.ui.menuFolder.component.MenuFolderMenuButton
 import com.kuit.ourmenu.ui.menuFolder.component.SortDropdown
+import com.kuit.ourmenu.ui.menuFolder.viewmodel.MenuFolderDetailViewModel
 import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.theme.Neutral50
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun MenuFolderDetailScreen(navController: NavController) {
-    val menuCount = 13 // 임의로 정한 값
+fun MenuFolderDetailScreen(
+    navController: NavController,
+    viewModel: MenuFolderDetailViewModel = hiltViewModel()
+) {
+    val menuFolderDetails by viewModel.menuFolderDetails.collectAsStateWithLifecycle()
 
-    val options = listOf("이름순", "등록순", "가격순")
-    var selectedOption by rememberSaveable { mutableStateOf("이름순") }
+    val options = SortOrderType.entries
+    var selectedOption by rememberSaveable { mutableStateOf(SortOrderType.TITLE_ASC) }
 
     Scaffold(
         topBar = {},
@@ -108,18 +115,18 @@ fun MenuFolderDetailScreen(navController: NavController) {
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
-                                text = String.format(stringResource(R.string.count), menuCount),
+                                text = String.format(stringResource(R.string.count), menuFolderDetails.size),
                                 color = Neutral50,
                                 style = ourMenuTypography().pretendard_500_14,
                             )
                         }
 
                         SortDropdown(
-                            options = options,
-                            selectedOption = selectedOption,
+                            options = options.map { it.displayName },
+                            selectedOption = selectedOption.displayName,
                             color = NeutralWhite
-                        ) {
-                            selectedOption = it
+                        ) { selected ->
+                            selectedOption = options.first { it.displayName == selected }
                         }
                     }
                 }
@@ -127,8 +134,9 @@ fun MenuFolderDetailScreen(navController: NavController) {
                 LazyColumn(
                     modifier = Modifier.padding(top = 16.dp),
                 ) {
-                    items(menuCount) { index ->
+                    items(menuFolderDetails.size) { index ->
                         MenuFolderMenuButton(
+                            menuFolderDetail = menuFolderDetails[index],
                             onMenuClick = {
                                 navController.navigate(route = Routes.MenuInfo)
                             },
