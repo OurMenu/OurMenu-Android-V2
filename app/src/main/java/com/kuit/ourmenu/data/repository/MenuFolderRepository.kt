@@ -22,4 +22,22 @@ class MenuFolderRepository @Inject constructor(
             sortOrder = sortOrder
         ).handleBaseResponse().getOrThrow()
     }
+
+    suspend fun getMenuFolderAll(
+        tags: List<String>? = null,
+        minPrice: Long? = null,
+        maxPrice: Long? = null,
+        page: Int? = null,
+        size: Int = 10,
+        sortOrder: String,
+    ) = runCatching {
+        menuFolderService.getMenuFolderAll(
+            tags = tags,
+            minPrice = minPrice,
+            maxPrice = maxPrice,
+            page = page,
+            size = size,
+            sortOrder = sortOrder
+        ).handleBaseResponse().getOrThrow()
+    }
 }
