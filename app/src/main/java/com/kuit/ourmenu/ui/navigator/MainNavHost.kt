@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import com.kuit.ourmenu.ui.addmenu.screen.AddMenuScreen
 import com.kuit.ourmenu.ui.home.navigation.homeNavGraph
 import com.kuit.ourmenu.ui.menuFolder.navigation.menuFolderNavGraph
@@ -63,7 +64,9 @@ fun MainNavHost(
 
         // 메뉴판
         composable<Routes.MenuFolderDetail> {
+            val menuFolderId = it.toRoute<Routes.MenuFolderDetail>().menuFolderId
             MenuFolderDetailScreen(
+                menuFolderId = menuFolderId,
                 onNavigateBack = navController::navigateUp,
 //                onNavigateToMenuInfo = navController::navigateToMenuInfo,
 //                onNavigateToAddMenu = { menuId ->

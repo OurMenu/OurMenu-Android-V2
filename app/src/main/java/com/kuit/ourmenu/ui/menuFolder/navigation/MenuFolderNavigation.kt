@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import com.kuit.ourmenu.ui.menuFolder.screen.MenuFolderDetailScreen
 import com.kuit.ourmenu.ui.menuFolder.screen.MenuFolderScreen
 import com.kuit.ourmenu.ui.navigator.MainTabRoute
@@ -36,7 +37,9 @@ fun NavGraphBuilder.menuFolderNavGraph(
         )
 
         composable<Routes.MenuFolderDetail> {
+            val menuFolderId = it.toRoute<Routes.MenuFolderDetail>().menuFolderId
             MenuFolderDetailScreen(
+                menuFolderId = menuFolderId,
 //                onNavigateToMenuInfo = navigateToMenuInfo,
                 onNavigateBack = navigateBack,
             )

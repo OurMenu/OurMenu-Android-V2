@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -45,6 +46,7 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
 fun MenuFolderDetailScreen(
+    menuFolderId: Int,
 //    onNavigateToMenuInfo: () -> Unit, // TODO: Menu Info로 화면 이동 구현
 //    onNavigateToMap: () -> Unit, // TODO: Map으로 화면 이동 구현
 //    onNavigateToAddMenu: () -> Unit, // TODO: AddMenu로 화면 이동 구현
@@ -52,6 +54,10 @@ fun MenuFolderDetailScreen(
     viewModel: MenuFolderDetailViewModel = hiltViewModel()
 ) {
     val menuFolderDetails by viewModel.menuFolderDetails.collectAsStateWithLifecycle()
+
+    LaunchedEffect(menuFolderId) {
+        viewModel.getMenuFolderDetails(menuFolderId)
+    }
 
     val options = SortOrderType.entries
     var selectedOption by rememberSaveable { mutableStateOf(SortOrderType.TITLE_ASC) }
@@ -169,6 +175,7 @@ fun MenuFolderDetailScreen(
 @Composable
 private fun MenuFolderDetailScreenPreview() {
     MenuFolderDetailScreen(
+        menuFolderId = 0,
 //        onNavigateToMenuInfo = {},
 //        onNavigateToMap = {},
 //        onNavigateToAddMenu = {},

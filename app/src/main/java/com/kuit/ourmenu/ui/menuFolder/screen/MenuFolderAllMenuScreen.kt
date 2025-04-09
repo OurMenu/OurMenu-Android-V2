@@ -40,7 +40,6 @@ import com.kuit.ourmenu.ui.common.bottomsheet.BottomSheetDragHandle
 import com.kuit.ourmenu.ui.common.topappbar.BackButtonTopAppBar
 import com.kuit.ourmenu.ui.menuFolder.component.AddButton
 import com.kuit.ourmenu.ui.menuFolder.component.FilterBottomSheet
-import com.kuit.ourmenu.ui.menuFolder.component.MenuFolderMenuButton
 import com.kuit.ourmenu.ui.menuFolder.component.SortDropdown
 import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.theme.Neutral500
@@ -188,14 +187,14 @@ fun MenuFolderAllMenuScreen(navController: NavController) {
                 modifier = Modifier,
             ) {
                 items(menuCount) { index ->
-                    MenuFolderMenuButton(
-                        onMenuClick = {
-                            navController.navigate(route = Routes.MenuInfo)
-                        },
-                        onMapClick = {
-                            navController.navigate(route = Routes.MenuInfoMap)
-                        }
-                    )
+//                    MenuFolderMenuButton(
+//                        onMenuClick = {
+//                            navController.navigate(route = Routes.MenuInfo)
+//                        },
+//                        onMapClick = {
+//                            navController.navigate(route = Routes.MenuInfoMap)
+//                        }
+//                    )
                 }
 
                 item {
