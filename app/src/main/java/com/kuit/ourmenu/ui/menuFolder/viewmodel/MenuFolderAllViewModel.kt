@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kuit.ourmenu.data.model.menuFolder.response.MenuFolderAllResponse
 import com.kuit.ourmenu.data.model.menuFolder.response.SortOrderType
+import com.kuit.ourmenu.data.model.menuFolder.response.TagType
 import com.kuit.ourmenu.data.repository.MenuFolderRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -55,8 +56,8 @@ class MenuFolderAllViewModel @Inject constructor(
     }
 
     /** 태그 필터 변경 */
-    fun updateTags(tags: List<String>) {
-        _selectedTags.value = tags
+    fun updateTags(tags: List<TagType>) {
+        _selectedTags.value = TagType.toApiValues(tags)
         fetchMenuFolderAll()
     }
 

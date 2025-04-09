@@ -31,9 +31,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.data.model.menuFolder.response.TagType
 import com.kuit.ourmenu.ui.common.BottomHalfWidthButton
 import com.kuit.ourmenu.ui.common.OurSnackbarHost
 import com.kuit.ourmenu.ui.common.chip.TagChipGroup
@@ -50,11 +50,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun FilterBottomSheet(
     modifier: Modifier = Modifier,
-    categoryTagList: List<Pair<Int, String>>,
-    nationalityTagList: List<Pair<Int, String>>,
-    tasteTagList: List<Pair<Int, String>>,
-    occasionTagList: List<Pair<Int, String>>,
-    onSelectedTagsChange: (List<String>) -> Unit,
+    categoryTagList: List<Pair<Int, TagType>>,
+    nationalityTagList: List<Pair<Int, TagType>>,
+    tasteTagList: List<Pair<Int, TagType>>,
+    occasionTagList: List<Pair<Int, TagType>>,
+    onSelectedTagsChange: (List<TagType>) -> Unit,
     onApplyButtonClick: () -> Unit,
 ) {
     // toast를 위한 context
@@ -69,10 +69,10 @@ fun FilterBottomSheet(
     val stepSize = 5000f // 5000원 단위 조정
 
     // 각 항목별로 선택된 태그 상태를 개별적으로 관리
-    var selectedCategoryTag by rememberSaveable { mutableStateOf<String?>(null) }
-    var selectedNationalityTag by rememberSaveable { mutableStateOf<String?>(null) }
-    var selectedTasteTag by rememberSaveable { mutableStateOf<String?>(null) }
-    var selectedOccasionTag by rememberSaveable { mutableStateOf<String?>(null) }
+    var selectedCategoryTag by rememberSaveable { mutableStateOf<TagType?>(null) }
+    var selectedNationalityTag by rememberSaveable { mutableStateOf<TagType?>(null) }
+    var selectedTasteTag by rememberSaveable { mutableStateOf<TagType?>(null) }
+    var selectedOccasionTag by rememberSaveable { mutableStateOf<TagType?>(null) }
 
     fun updateSelectedTags() {
         val selectedTags = listOfNotNull(
@@ -121,15 +121,16 @@ fun FilterBottomSheet(
                     item {
                         TagChipGroup(
                             groupLabel = stringResource(R.string.type),
-                            tags = categoryTagList,
-                            selectedTags = listOfNotNull(selectedCategoryTag),
-                        ) { tag ->
-                            if (selectedCategoryTag != null && selectedCategoryTag != tag) {
+                            tags = categoryTagList.map { it.first to it.second.displayName },
+                            selectedTags = listOfNotNull(selectedCategoryTag?.displayName),
+                        ) { tagDisplayName ->
+                            val matchedTag = TagType.fromDisplayName(tagDisplayName)
+                            if (selectedCategoryTag != null && selectedCategoryTag != matchedTag) {
                                 scope.launch {
                                     snackbarHostState.showSnackbar(context.getString(R.string.tag_max_one))
                                 }
                             } else {
-                                selectedCategoryTag = if (selectedCategoryTag == tag) null else tag
+                                selectedCategoryTag = if (selectedCategoryTag == matchedTag) null else matchedTag
                                 updateSelectedTags()
                             }
                         }
@@ -139,16 +140,16 @@ fun FilterBottomSheet(
                     item {
                         TagChipGroup(
                             groupLabel = stringResource(R.string.nationality),
-                            tags = nationalityTagList,
-                            selectedTags = listOfNotNull(selectedNationalityTag),
-                        ) { tag ->
-                            if (selectedNationalityTag != null && selectedNationalityTag != tag) {
+                            tags = nationalityTagList.map { it.first to it.second.displayName },
+                            selectedTags = listOfNotNull(selectedNationalityTag?.displayName),
+                        ) { tagDisplayName ->
+                            val matchedTag = TagType.fromDisplayName(tagDisplayName)
+                            if (selectedNationalityTag != null && selectedNationalityTag != matchedTag) {
                                 scope.launch {
                                     snackbarHostState.showSnackbar(context.getString(R.string.tag_max_one))
                                 }
                             } else {
-                                selectedNationalityTag =
-                                    if (selectedNationalityTag == tag) null else tag
+                                selectedNationalityTag = if (selectedNationalityTag == matchedTag) null else matchedTag
                                 updateSelectedTags()
                             }
                         }
@@ -158,15 +159,16 @@ fun FilterBottomSheet(
                     item {
                         TagChipGroup(
                             groupLabel = stringResource(R.string.taste),
-                            tags = tasteTagList,
-                            selectedTags = listOfNotNull(selectedTasteTag),
-                        ) { tag ->
-                            if (selectedTasteTag != null && selectedTasteTag != tag) {
+                            tags = tasteTagList.map { it.first to it.second.displayName },
+                            selectedTags = listOfNotNull(selectedTasteTag?.displayName),
+                        ) { tagDisplayName ->
+                            val matchedTag = TagType.fromDisplayName(tagDisplayName)
+                            if (selectedTasteTag != null && selectedTasteTag != matchedTag) {
                                 scope.launch {
                                     snackbarHostState.showSnackbar(context.getString(R.string.tag_max_one))
                                 }
                             } else {
-                                selectedTasteTag = if (selectedTasteTag == tag) null else tag
+                                selectedTasteTag = if (selectedTasteTag == matchedTag) null else matchedTag
                                 updateSelectedTags()
                             }
                         }
@@ -176,15 +178,16 @@ fun FilterBottomSheet(
                     item {
                         TagChipGroup(
                             groupLabel = stringResource(R.string.occasion),
-                            tags = occasionTagList,
-                            selectedTags = listOfNotNull(selectedOccasionTag),
-                        ) { tag ->
-                            if (selectedOccasionTag != null && selectedOccasionTag != tag) {
+                            tags = occasionTagList.map { it.first to it.second.displayName },
+                            selectedTags = listOfNotNull(selectedOccasionTag?.displayName),
+                        ) { tagDisplayName ->
+                            val matchedTag = TagType.fromDisplayName(tagDisplayName)
+                            if (selectedOccasionTag != null && selectedOccasionTag != matchedTag) {
                                 scope.launch {
                                     snackbarHostState.showSnackbar(context.getString(R.string.tag_max_one))
                                 }
                             } else {
-                                selectedOccasionTag = if (selectedOccasionTag == tag) null else tag
+                                selectedOccasionTag = if (selectedOccasionTag == matchedTag) null else matchedTag
                                 updateSelectedTags()
                             }
                         }
@@ -308,51 +311,4 @@ fun FilterBottomSheet(
             isChecked = false,
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun FilterBottomSheetPreview() {
-    val categoryTags = listOf(
-        R.drawable.ic_tag_rice to "밥",
-        R.drawable.ic_tag_rice to "빵",
-        R.drawable.ic_tag_rice to "면",
-        R.drawable.ic_tag_rice to "고기",
-        R.drawable.ic_tag_rice to "생선",
-        R.drawable.ic_tag_rice to "카페",
-        R.drawable.ic_tag_rice to "디저트",
-        R.drawable.ic_tag_rice to "패스트푸드",
-    )
-    val nationalityTags = listOf(
-        R.drawable.ic_tag_rice to "한식",
-        R.drawable.ic_tag_rice to "중식",
-        R.drawable.ic_tag_rice to "일식",
-        R.drawable.ic_tag_rice to "양식",
-        R.drawable.ic_tag_rice to "아시안",
-    )
-    val tasteTags = listOf(
-        R.drawable.ic_tag_rice to "매콤함",
-        R.drawable.ic_tag_rice to "달달함",
-        R.drawable.ic_tag_rice to "시원함",
-        R.drawable.ic_tag_rice to "뜨끈함",
-        R.drawable.ic_tag_rice to "얼큰함",
-    )
-    val occasionTags = listOf(
-        R.drawable.ic_tag_rice to "혼밥",
-        R.drawable.ic_tag_rice to "비즈니스 미팅",
-        R.drawable.ic_tag_rice to "친구 약속",
-        R.drawable.ic_tag_rice to "데이트",
-        R.drawable.ic_tag_rice to "밥약",
-        R.drawable.ic_tag_rice to "단체",
-    )
-    var selectedTags by rememberSaveable { mutableStateOf(listOf<String>()) }
-
-    FilterBottomSheet(
-        categoryTagList = categoryTags,
-        nationalityTagList = nationalityTags,
-        tasteTagList = tasteTags,
-        occasionTagList = occasionTags,
-        onSelectedTagsChange = { newSelectedTags -> selectedTags = newSelectedTags },
-        onApplyButtonClick = {}
-    )
 }
