@@ -4,10 +4,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MenuFolderDetailResponse(
-    val menuId: Int,
-    val menuTitle: String,
-    val storeTitle: String,
-    val storeAddress: String,
-    val menuPrice: Int,
-    val menuImgUrl: String,
-)
+    override val menuId: Int,
+    override val menuTitle: String,
+    override val storeTitle: String,
+    override val storeAddress: String,
+    override val menuPrice: Int,
+    override val menuImgUrl: String
+) : MenuFolderMenuItem

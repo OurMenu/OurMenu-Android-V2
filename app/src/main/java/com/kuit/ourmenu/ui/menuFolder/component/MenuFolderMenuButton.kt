@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.data.model.menuFolder.response.MenuFolderDetailResponse
+import com.kuit.ourmenu.data.model.menuFolder.response.MenuFolderMenuItem
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.Neutral900
@@ -34,7 +35,7 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
 fun MenuFolderMenuButton(
-    menuFolderDetail: MenuFolderDetailResponse,
+    menuFolderDetail: MenuFolderMenuItem,
     onMenuClick: () -> Unit = {},
     onMapClick: () -> Unit = {}
 ) {
