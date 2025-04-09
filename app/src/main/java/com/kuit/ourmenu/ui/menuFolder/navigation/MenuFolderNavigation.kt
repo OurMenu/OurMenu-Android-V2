@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.kuit.ourmenu.ui.menuFolder.screen.MenuFolderAllMenuScreen
 import com.kuit.ourmenu.ui.menuFolder.screen.MenuFolderDetailScreen
 import com.kuit.ourmenu.ui.menuFolder.screen.MenuFolderScreen
 import com.kuit.ourmenu.ui.navigator.MainTabRoute
@@ -46,7 +47,12 @@ fun NavGraphBuilder.menuFolderNavGraph(
         }
 
         composable<Routes.MenuFolderAllMenu> {
-//            MenuFolderAllMenuScreen()
+            MenuFolderAllMenuScreen(
+                onNavigateBack = navigateBack,
+//                onNavigateToMenuInfo = navigateToMenuFolderDetail, // TODO: Menu Info로 화면 이동 구현
+//                onNavigateToMenuInfoMap = navigateToMenuFolderDetail, // TODO: Map으로 화면 이동 구현
+//                onNavigateToAddMenu = {}, // TODO: AddMenu로 화면 이동 구현
+            )
         }
     }
 }

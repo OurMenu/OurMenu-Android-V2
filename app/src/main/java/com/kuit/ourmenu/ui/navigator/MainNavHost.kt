@@ -75,7 +75,10 @@ fun MainNavHost(
             )
         }
         composable<Routes.MenuFolderAllMenu> {
-            MenuFolderAllMenuScreen(navController = navController.navController)
+            MenuFolderAllMenuScreen(
+                onNavigateBack = navController::navigateUp,
+                // TODO: 나머지 navigate 작성
+            )
         }
 
         // 메뉴

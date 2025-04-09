@@ -35,7 +35,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.data.model.menuFolder.response.SortOrderType
 import com.kuit.ourmenu.ui.common.bottomsheet.BottomSheetDragHandle
@@ -45,7 +44,6 @@ import com.kuit.ourmenu.ui.menuFolder.component.FilterBottomSheet
 import com.kuit.ourmenu.ui.menuFolder.component.MenuFolderMenuButton
 import com.kuit.ourmenu.ui.menuFolder.component.SortDropdown
 import com.kuit.ourmenu.ui.menuFolder.viewmodel.MenuFolderAllViewModel
-import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.Neutral900
@@ -57,8 +55,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MenuFolderAllMenuScreen(
-    viewModel: MenuFolderAllViewModel = hiltViewModel(),
-    navController: NavController
+    onNavigateBack: () -> Unit,
+    viewModel: MenuFolderAllViewModel = hiltViewModel()
 ) {
     val menus by viewModel.menuFolderAll.collectAsStateWithLifecycle()
     val selectedSort by viewModel.sortOrder.collectAsStateWithLifecycle()
@@ -80,7 +78,7 @@ fun MenuFolderAllMenuScreen(
         scaffoldState = scaffoldState,
         topBar = {
             BackButtonTopAppBar(Neutral500, false) {
-                navController.popBackStack()
+                onNavigateBack()
             }
         },
         sheetContainerColor = NeutralWhite,
@@ -199,10 +197,10 @@ fun MenuFolderAllMenuScreen(
                     MenuFolderMenuButton(
                         menuFolderDetail = menus[index],
                         onMenuClick = {
-                            navController.navigate(route = Routes.MenuInfo)
+//                            navController.navigate(route = Routes.MenuInfo)
                         },
                         onMapClick = {
-                            navController.navigate(route = Routes.MenuInfoMap)
+//                            navController.navigate(route = Routes.MenuInfoMap)
                         }
                     )
                 }
@@ -212,7 +210,7 @@ fun MenuFolderAllMenuScreen(
                         stringResource(R.string.add_menu),
                         modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 20.dp)
                     ) {
-                        navController.navigate(route = Routes.AddMenu)
+//                        navController.navigate(route = Routes.AddMenu)
                     }
                 }
             }
