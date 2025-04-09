@@ -1,6 +1,5 @@
 package com.kuit.ourmenu.ui.menuFolder.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kuit.ourmenu.data.model.menuFolder.response.MenuFolderList
