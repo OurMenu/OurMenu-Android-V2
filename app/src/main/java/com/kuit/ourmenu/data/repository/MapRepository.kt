@@ -10,7 +10,7 @@ class MapRepository @Inject constructor(
     private val mapService: MapService
 ) {
     suspend fun getMapDetail(
-        mapId: Int
+        mapId: Long
     ) = runCatching {
         val response = mapService.getMapDetail(
             mapId = mapId
@@ -22,7 +22,7 @@ class MapRepository @Inject constructor(
     }
 
     suspend fun getMapMenuDetail(
-        menuId: Int
+        menuId: Long
     ) = runCatching {
         val response = mapService.getMapMenuDetail(
             menuId = menuId
