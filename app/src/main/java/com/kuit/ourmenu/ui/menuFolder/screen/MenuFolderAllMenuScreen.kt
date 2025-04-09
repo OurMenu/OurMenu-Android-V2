@@ -100,6 +100,9 @@ fun MenuFolderAllMenuScreen(
 
                 },
                 onSelectedTagsChange = { newSelectedTags -> selectedFilters = newSelectedTags },
+                onPriceRangeChange = { min, max ->
+                    viewModel.updatePriceRange(min, max)
+                }
             )
         },
         sheetDragHandle = {

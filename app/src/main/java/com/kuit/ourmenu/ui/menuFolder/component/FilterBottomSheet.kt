@@ -55,6 +55,7 @@ fun FilterBottomSheet(
     tasteTagList: List<Pair<Int, TagType>>,
     occasionTagList: List<Pair<Int, TagType>>,
     onSelectedTagsChange: (List<TagType>) -> Unit,
+    onPriceRangeChange: (Long, Long) -> Unit,
     onApplyButtonClick: () -> Unit,
 ) {
     // toast를 위한 context
@@ -298,6 +299,7 @@ fun FilterBottomSheet(
                     contentColor = NeutralWhite,
                     text = stringResource(R.string.apply)
                 ) {
+                    onPriceRangeChange(priceRange.start.toLong(), priceRange.endInclusive.toLong())
                     onApplyButtonClick()
                 }
             }
