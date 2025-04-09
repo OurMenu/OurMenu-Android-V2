@@ -10,5 +10,4 @@ data class MenuFolderDetailResponse(
     val storeAddress: String,
     val menuPrice: Int,
     val menuImgUrl: String,
-    val createdAt: String,
 )
