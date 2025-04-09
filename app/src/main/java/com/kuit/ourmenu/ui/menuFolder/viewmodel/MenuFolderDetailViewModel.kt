@@ -1,9 +1,9 @@
 package com.kuit.ourmenu.ui.menuFolder.viewmodel
 
-import SortOrderType
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kuit.ourmenu.data.model.menuFolder.response.MenuFolderDetailResponse
+import com.kuit.ourmenu.data.model.menuFolder.response.SortOrderType
 import com.kuit.ourmenu.data.repository.MenuFolderRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,17 +30,11 @@ class MenuFolderDetailViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
-    init {
-        getMenuFolderDetails(
-            menuFolderId = _menuFolderId.value,
-            sortOrder = _sortOrder.value
-        )
-    }
-
     fun getMenuFolderDetails(
         menuFolderId: Int,
         sortOrder: SortOrderType = _sortOrder.value
     ) {
+        _menuFolderId.value = menuFolderId
         viewModelScope.launch {
             _isLoading.value = true
             _error.value = null

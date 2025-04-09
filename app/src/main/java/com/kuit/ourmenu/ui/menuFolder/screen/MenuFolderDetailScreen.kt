@@ -1,6 +1,5 @@
 package com.kuit.ourmenu.ui.menuFolder.screen
 
-import SortOrderType
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -35,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.data.model.menuFolder.response.SortOrderType
 import com.kuit.ourmenu.ui.common.topappbar.BackButtonTopAppBar
 import com.kuit.ourmenu.ui.menuFolder.component.AddButton
 import com.kuit.ourmenu.ui.menuFolder.component.MenuFolderMenuButton
@@ -131,8 +131,10 @@ fun MenuFolderDetailScreen(
                             options = options.map { it.displayName },
                             selectedOption = selectedOption.displayName,
                             color = NeutralWhite
-                        ) { selected ->
-                            selectedOption = options.first { it.displayName == selected }
+                        ) { selectedDisplayName ->
+                            val newSortOption = options.first { it.displayName == selectedDisplayName }
+                            selectedOption = newSortOption
+                            viewModel.updateSortOrder(newSortOption, menuFolderId)
                         }
                     }
                 }

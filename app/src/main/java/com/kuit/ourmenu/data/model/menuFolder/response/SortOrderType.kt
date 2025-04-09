@@ -1,3 +1,5 @@
+package com.kuit.ourmenu.data.model.menuFolder.response
+
 enum class SortOrderType(val apiValue: String, val displayName: String) {
     TITLE_ASC("TITLE_ASC", "이름순"),
 //    TITLE_DESC("TITLE_DESC", "이름역순"),
