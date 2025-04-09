@@ -47,7 +47,8 @@ fun MainNavHost(
         )
 
         menuFolderNavGraph(
-            padding = padding,
+            navigateToMenuFolderDetail = navController::navigateToMenuFolderDetail,
+            navigateToMenuFolderAllMenu = navController::navigateToMenuFolderAllMenu,
         )
 
         searchMenuNavGraph(
@@ -59,9 +60,6 @@ fun MainNavHost(
         )
 
         // 메뉴판
-//        composable<Routes.MenuFolder> {
-//            MenuFolderScreen(navController = navController.navController)
-//        }
         composable<Routes.MenuFolderDetail> {
             MenuFolderDetailScreen(navController = navController.navController)
         }
