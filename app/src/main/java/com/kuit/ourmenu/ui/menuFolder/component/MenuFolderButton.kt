@@ -37,7 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.kuit.ourmenu.R
-import com.kuit.ourmenu.data.model.menuFolder.response.MenuFolderResponse
+import com.kuit.ourmenu.data.model.menuFolder.response.MenuFolderList
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.NeutralWhite
@@ -48,7 +48,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MenuFolderButton(
-    menuFolder: MenuFolderResponse,
+    menuFolder: MenuFolderList,
     isSwiped: Boolean, // 현재 버튼이 스와이프된 상태인지 확인
     onSwipe: () -> Unit, // 새로운 버튼이 스와이프될 때 호출
     onReset: () -> Unit, // 버튼이 닫히면 호출
@@ -161,7 +161,7 @@ fun MenuFolderDeleteButton(onDeleteClick: () -> Unit = {}) {
 
 @Composable
 fun MenuFolderContent(
-    menuFolder: MenuFolderResponse,
+    menuFolder: MenuFolderList,
 ) {
     val menuCount = menuFolder.menuIds.size
 
@@ -228,7 +228,7 @@ fun gradientBrush(): Brush {
 @Preview(showBackground = true)
 @Composable
 private fun MenuFolderButtonPreview() {
-    val dummyMenuFolder = MenuFolderResponse(
+    val dummyMenuFolder = MenuFolderList(
         menuFolderId = 1,
         menuFolderTitle = "인기 메뉴",
         menuFolderUrl = "https://ourmenu-default.s3.ap-northeast-2.amazonaws.com/default_menu_folder_img.svg",

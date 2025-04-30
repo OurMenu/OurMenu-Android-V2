@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -30,24 +31,36 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.data.model.menuFolder.response.SortOrderType
 import com.kuit.ourmenu.ui.common.topappbar.BackButtonTopAppBar
 import com.kuit.ourmenu.ui.menuFolder.component.AddButton
 import com.kuit.ourmenu.ui.menuFolder.component.MenuFolderMenuButton
 import com.kuit.ourmenu.ui.menuFolder.component.SortDropdown
-import com.kuit.ourmenu.ui.navigator.Routes
+import com.kuit.ourmenu.ui.menuFolder.viewmodel.MenuFolderDetailViewModel
 import com.kuit.ourmenu.ui.theme.Neutral50
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun MenuFolderDetailScreen(navController: NavController) {
-    val menuCount = 13 // 임의로 정한 값
+fun MenuFolderDetailScreen(
+    menuFolderId: Int,
+//    onNavigateToMenuInfo: () -> Unit, // TODO: Menu Info로 화면 이동 구현
+//    onNavigateToMap: () -> Unit, // TODO: Map으로 화면 이동 구현
+//    onNavigateToAddMenu: () -> Unit, // TODO: AddMenu로 화면 이동 구현
+    onNavigateBack: () -> Unit,
+    viewModel: MenuFolderDetailViewModel = hiltViewModel()
+) {
+    val menuFolderDetails by viewModel.menuFolderDetails.collectAsStateWithLifecycle()
 
-    val options = listOf("이름순", "등록순", "가격순")
-    var selectedOption by rememberSaveable { mutableStateOf("이름순") }
+    LaunchedEffect(menuFolderId) {
+        viewModel.getMenuFolderDetails(menuFolderId)
+    }
+
+    val options = SortOrderType.entries
+    var selectedOption by rememberSaveable { mutableStateOf(SortOrderType.TITLE_ASC) }
 
     Scaffold(
         topBar = {},
@@ -108,18 +121,20 @@ fun MenuFolderDetailScreen(navController: NavController) {
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
-                                text = String.format(stringResource(R.string.count), menuCount),
+                                text = String.format(stringResource(R.string.count), menuFolderDetails.size),
                                 color = Neutral50,
                                 style = ourMenuTypography().pretendard_500_14,
                             )
                         }
 
                         SortDropdown(
-                            options = options,
-                            selectedOption = selectedOption,
+                            options = options.map { it.displayName },
+                            selectedOption = selectedOption.displayName,
                             color = NeutralWhite
-                        ) {
-                            selectedOption = it
+                        ) { selectedDisplayName ->
+                            val newSortOption = options.first { it.displayName == selectedDisplayName }
+                            selectedOption = newSortOption
+                            viewModel.updateSortOrder(newSortOption, menuFolderId)
                         }
                     }
                 }
@@ -127,13 +142,14 @@ fun MenuFolderDetailScreen(navController: NavController) {
                 LazyColumn(
                     modifier = Modifier.padding(top = 16.dp),
                 ) {
-                    items(menuCount) { index ->
+                    items(menuFolderDetails.size) { index ->
                         MenuFolderMenuButton(
+                            menuFolderDetail = menuFolderDetails[index],
                             onMenuClick = {
-                                navController.navigate(route = Routes.MenuInfo)
+//                                onNavigateToMenuInfo()
                             },
                             onMapClick = {
-                                navController.navigate(route = Routes.MenuInfoMap)
+//                                onNavigateToMap()
                             }
                         )
                     }
@@ -143,14 +159,14 @@ fun MenuFolderDetailScreen(navController: NavController) {
                             stringResource(R.string.add_menu),
                             modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 20.dp)
                         ) {
-                            navController.navigate(route = Routes.AddMenu)
+//                            onNavigateToAddMenu()
                         }
                     }
                 }
             }
 
             BackButtonTopAppBar(NeutralWhite, true) {
-                navController.popBackStack()
+                onNavigateBack()
             }
         }
     )
@@ -160,7 +176,11 @@ fun MenuFolderDetailScreen(navController: NavController) {
 @Preview(showBackground = true)
 @Composable
 private fun MenuFolderDetailScreenPreview() {
-    val navController = rememberNavController()
-
-    MenuFolderDetailScreen(navController)
+    MenuFolderDetailScreen(
+        menuFolderId = 0,
+//        onNavigateToMenuInfo = {},
+//        onNavigateToMap = {},
+//        onNavigateToAddMenu = {},
+        onNavigateBack = {},
+    )
 }
