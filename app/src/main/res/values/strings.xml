@@ -106,4 +106,12 @@
     <string name="nationality">나라 별 음식</string>
     <string name="taste">맛</string>
     <string name="occasion">상황</string>
+
+    <!--my page-->
+    <string name="now_meal_time">현재 설정하신 식사 시간입니다!</string>
+    <string name="change_meal_time">식사 시간 수정하기</string>
+    <string name="notice">공지사항</string>
+    <string name="customer_service">고객센터</string>
+    <string name="app_review">앱 리뷰 남기기</string>
+    <string name="app_version">현재 버전 : %s</string>
 </resources>
