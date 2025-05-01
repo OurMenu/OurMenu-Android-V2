@@ -118,4 +118,13 @@
     <string name="change_password">비밀번호 변경하기</string>
     <string name="logout">로그아웃</string>
     <string name="delete_account">회원 탈퇴</string>
+
+    <string name="current_password">기존 비밀번호</string>
+    <string name="enter_current_password">기존 비밀번호를\n입력해주세요.</string>
+    <string name="new_password">변경할 비밀번호</string>
+    <string name="confirm_new_password">변경할 비밀번호 확인</string>
+    <string name="enter_new_password">변경할 비밀번호를\n입력해주세요.</string>
+    <string name="want_to_logout">로그아웃 하시겠습니까?</string>
+    <string name="want_to_delete_account">탈퇴 하시겠습니까?</string>
+    <string name="delete_account_warning">탈퇴 시 계정 및 이용 기록은 모두 삭제되며,\n삭제된 데이터는 복구가 불가능합니다.</string>
 </resources>
