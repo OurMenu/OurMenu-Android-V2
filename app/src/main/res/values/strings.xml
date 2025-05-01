@@ -114,4 +114,8 @@
     <string name="customer_service">고객센터</string>
     <string name="app_review">앱 리뷰 남기기</string>
     <string name="app_version">현재 버전 : %s</string>
+
+    <string name="change_password">비밀번호 변경하기</string>
+    <string name="logout">로그아웃</string>
+    <string name="delete_account">회원 탈퇴</string>
 </resources>
