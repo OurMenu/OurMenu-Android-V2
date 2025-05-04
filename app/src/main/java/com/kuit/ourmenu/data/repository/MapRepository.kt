@@ -12,19 +12,19 @@ class MapRepository @Inject constructor(
     suspend fun getMapDetail(
         mapId: Long
     ) = runCatching {
-        val response = mapService.getMapDetail(
+        mapService.getMapDetail(
             mapId = mapId
         ).handleBaseResponse().getOrThrow()
     }
 
     suspend fun getMap() = runCatching {
-        val response = mapService.getMap().handleBaseResponse().getOrThrow()
+        mapService.getMap().handleBaseResponse().getOrThrow()
     }
 
     suspend fun getMapMenuDetail(
         menuId: Long
     ) = runCatching {
-        val response = mapService.getMapMenuDetail(
+        mapService.getMapMenuDetail(
             menuId = menuId
         ).handleBaseResponse().getOrThrow()
     }
@@ -34,7 +34,7 @@ class MapRepository @Inject constructor(
         mapX: Double?,
         mapY: Double?
     ) = runCatching {
-        val response = mapService.getMapSearch(
+        mapService.getMapSearch(
             title = title,
             mapX = mapX,
             mapY = mapY
@@ -42,19 +42,19 @@ class MapRepository @Inject constructor(
     }
 
     suspend fun getMapSearchHistory() = runCatching {
-        val response = mapService.getMapSearchHistory().handleBaseResponse().getOrThrow()
+        mapService.getMapSearchHistory().handleBaseResponse().getOrThrow()
     }
 
     // 크롤링 관련
     suspend fun getCrawlingHistory() = runCatching {
-        val response = mapService.getCrawlingHistory().handleBaseResponse().getOrThrow()
+        mapService.getCrawlingHistory().handleBaseResponse().getOrThrow()
     }
 
     suspend fun getCrawlingStoreDetail(
         isCrawled: Boolean,
         storeId: String
     ) = runCatching {
-        val response = mapService.getCrawlingStoreDetail(
+        mapService.getCrawlingStoreDetail(
             isCrawled = isCrawled,
             storeId = storeId
         ).handleBaseResponse().getOrThrow()
@@ -65,7 +65,7 @@ class MapRepository @Inject constructor(
         mapX: Double,
         mapY: Double
     ) = kotlin.runCatching {
-        val response = mapService.getCrawlingStoreInfo(
+        mapService.getCrawlingStoreInfo(
             query = query,
             mapX = mapX,
             mapY = mapY

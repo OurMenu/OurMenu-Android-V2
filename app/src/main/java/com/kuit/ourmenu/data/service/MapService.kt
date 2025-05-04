@@ -40,7 +40,7 @@ interface MapService {
 
     // 크롤링 관련 요청
     @GET("api/priored/users/{userId}/histories")
-    suspend fun getCrawlingHistory(): BaseResponse<CrawlingHistoryResponse>
+    suspend fun getCrawlingHistory(): BaseResponse<List<CrawlingHistoryResponse>>
 
     @GET("api/priored/stores/{storeId}")
     suspend fun getCrawlingStoreDetail(

@@ -46,7 +46,10 @@ import com.kuit.ourmenu.ui.theme.NeutralWhite
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchMenuScreen(modifier: Modifier = Modifier) {
+fun SearchMenuScreen(
+    modifier: Modifier = Modifier,
+//    viewModel: SearchMenuViewModel = hiltViewModel(),
+) {
 
     val scaffoldState = rememberBottomSheetScaffoldState()
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }

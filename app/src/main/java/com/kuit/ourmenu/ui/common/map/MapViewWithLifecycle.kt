@@ -13,9 +13,21 @@ import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.KakaoMapReadyCallback
 import com.kakao.vectormap.MapLifeCycleCallback
 import com.kakao.vectormap.MapView
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+
+class MapController {
+    private val _kakaoMap = MutableStateFlow<KakaoMap?>(null)
+    val kakaoMap: StateFlow<KakaoMap?> = _kakaoMap
+    
+    fun setMap(map: KakaoMap) {
+        _kakaoMap.value = map
+    }
+}
 
 @Composable
 fun MapViewWithLifecycle(
+    mapController: MapController? = null,
     mapSettings: (kakaoMap : KakaoMap) -> Unit
 ): View {
     val context = LocalContext.current
@@ -30,6 +42,7 @@ fun MapViewWithLifecycle(
                         override fun onMapDestroy() {
                             // 지도 API가 정상적으로 종료될 때 호출됩니다.
                             Log.d("MapViewWithLifecycle", "onMapDestroy")
+                            mapController?.setMap(null)
                         }
 
                         override fun onMapError(error: Exception) {
@@ -38,13 +51,10 @@ fun MapViewWithLifecycle(
                         }
                     },
                     object : KakaoMapReadyCallback() {
-//                        override fun getPosition(): LatLng {
-//                            return LatLng.from()
-//                        }
-
                         override fun onMapReady(kakaoMap: KakaoMap) {
                             // 지도 초기화 및 설정 작업
                             Log.d("MapViewWithLifecycle", "onMapReady")
+                            mapController?.setMap(kakaoMap)
                             mapSettings(kakaoMap)
                         }
                     }
