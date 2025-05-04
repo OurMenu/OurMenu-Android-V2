@@ -200,8 +200,8 @@ fun SearchMenuScreen(
                         // 검색어와 현재 좌표로 크롤링 스토어 정보 요청
                         viewModel.getCrawlingStoreInfo(
                             query = searchText,
-                            mapX = longitude,  // 경도
-                            mapY = latitude    // 위도
+                            long = longitude,
+                            lat = latitude
                         )
                         
                         showBottomSheet = true

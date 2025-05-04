@@ -31,8 +31,8 @@ interface MapService {
     @GET("api/users/menus/maps/search")
     suspend fun getMapSearch(
         @Query("title") title: String,
-        @Query("mapX") mapX: Double?,
-        @Query("mapY") mapY: Double?
+        @Query("mapX") longitude: Double?,
+        @Query("mapY") latitude: Double?
     ): BaseResponse<MapSearchResponse>
 
     @GET("api/users/menus/maps/search-history")
@@ -51,7 +51,7 @@ interface MapService {
     @GET("api/priored/stores/menus")
     suspend fun getCrawlingStoreInfo(
         @Query("query") query: String,
-        @Query("mapX") mapX: Double,
-        @Query("mapY") mapY: Double
+        @Query("mapX") longitude: Double,
+        @Query("mapY") latitude: Double
     ): BaseResponse<CrawlingStoreInfoResponse>
 }

@@ -31,13 +31,13 @@ class MapRepository @Inject constructor(
 
     suspend fun getMapSearch(
         title: String,
-        mapX: Double?,
-        mapY: Double?
+        longitude: Double?,
+        latitude: Double?
     ) = runCatching {
         mapService.getMapSearch(
             title = title,
-            mapX = mapX,
-            mapY = mapY
+            longitude = longitude,
+            latitude = latitude
         ).handleBaseResponse().getOrThrow()
     }
 
@@ -62,13 +62,13 @@ class MapRepository @Inject constructor(
 
     suspend fun getCrawlingStoreInfo(
         query: String,
-        mapX: Double,
-        mapY: Double
+        longitude: Double,
+        latitude: Double
     ) = kotlin.runCatching {
         mapService.getCrawlingStoreInfo(
             query = query,
-            mapX = mapX,
-            mapY = mapY
+            longitude = longitude,
+            latitude = latitude
         ).handleBaseResponse().getOrThrow()
     }
 

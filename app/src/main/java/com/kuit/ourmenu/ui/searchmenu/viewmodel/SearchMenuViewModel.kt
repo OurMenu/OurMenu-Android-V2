@@ -116,16 +116,16 @@ class SearchMenuViewModel @Inject constructor(
 
     fun getCrawlingStoreInfo(
         query: String,
-        mapX: Double,
-        mapY: Double
+        long: Double,
+        lat: Double
     ) {
         viewModelScope.launch {
-            Log.d("SearchMenuViewModel", "크롤링 스토어 정보 요청: $query, 좌표($mapY, $mapX)")
+            Log.d("SearchMenuViewModel", "크롤링 스토어 정보 요청: $query, 좌표($lat, $long)")
             
             val response = mapRepository.getCrawlingStoreInfo(
                 query = query,
-                mapX = mapX,
-                mapY = mapY
+                longitude = long,
+                latitude = lat
             )
             
             response.onSuccess { result ->
@@ -137,10 +137,10 @@ class SearchMenuViewModel @Inject constructor(
                 clearMarkers()
                 
                 // 마커 추가
-                addMarker(mapY, mapX, R.drawable.img_popup_dice)
+                addMarker(lat, long, R.drawable.img_popup_dice)
                 
                 // 카메라 이동 (필요한 경우)
-                // moveCamera(mapY, mapX)
+                // moveCamera(lat, long)
             }.onFailure {
                 Log.d("SearchMenuViewModel", "크롤링 스토어 정보 조회 실패: ${it.message}")
             }
