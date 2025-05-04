@@ -7,6 +7,7 @@ import com.kuit.ourmenu.ui.navigator.MainTabRoute
 import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.onboarding.screen.LandingRoute
 import com.kuit.ourmenu.ui.onboarding.screen.LandingScreen
+import com.kuit.ourmenu.ui.onboarding.screen.LoginRoute
 import com.kuit.ourmenu.ui.onboarding.screen.LoginScreen
 import com.kuit.ourmenu.ui.onboarding.screen.signup.SignupEmailScreen
 import com.kuit.ourmenu.ui.onboarding.screen.signup.SignupMealTimeScreen
@@ -63,7 +64,7 @@ fun NavGraphBuilder.onboardingNavGraph(
         )
     }
     composable<Routes.Login> {
-        LoginScreen(
+        LoginRoute(
             navigateToHome = navigateOnboardingToHome,
             navigateBack = navigateBack,
             navigateToSignupEmail = navigateToSignupEmail,
