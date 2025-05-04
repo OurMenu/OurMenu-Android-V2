@@ -1,5 +1,6 @@
 package com.kuit.ourmenu.ui.searchmenu.screen
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
@@ -61,6 +62,9 @@ fun SearchMenuScreen(
     val interactionSource = remember { MutableInteractionSource() }
     val searchBarFocused by interactionSource.collectIsFocusedAsState()
     val focusManager = LocalFocusManager.current
+    
+    // 지도 중심 좌표 상태
+    val currentCenter by viewModel.currentCenter.collectAsState()
     
     // Collect history data from ViewModel
     val searchHistory by viewModel.searchHistory.collectAsState()
@@ -161,7 +165,7 @@ fun SearchMenuScreen(
                 SearchHistoryList(
                     historyList = historyDataList,
                     onClick = {
-                        // Handle history item click
+                        // 크롤링 기록 아이템 클릭시 동작
                         showSearchBackground = false
                         showBottomSheet = true
                     }
@@ -183,18 +187,25 @@ fun SearchMenuScreen(
                 if (searchBarFocused) focusManager.clearFocus()
                 searchActionDone = true
                 
-                // Example of map manipulation in response to search
+                // 검색 시 현재 지도 중심 좌표 사용
                 if (searchText.isNotEmpty()) {
-                    // You could perform a search and update the map based on results
-                    // For example: Move camera to search result location
-                    viewModel.moveCamera(37.5416, 127.0793)
+                    // 검색 직전에 현재 지도 중심 좌표 업데이트
+                    viewModel.updateCurrentCenter()
                     
-                    // And add a marker for the result
-                    viewModel.clearMarkers()
-                    viewModel.addMarker(37.5416, 127.0793, R.drawable.img_popup_dice)
-                    
-                    // Show bottom sheet with results
-                    showBottomSheet = true
+                    val center = viewModel.getCurrentCoordinates()
+                    if (center != null) {
+                        val (latitude, longitude) = center
+                        Log.d("SearchMenuScreen", "검색 위치: $latitude, $longitude")
+                        
+                        // 검색어와 현재 좌표로 크롤링 스토어 정보 요청
+                        viewModel.getCrawlingStoreInfo(
+                            query = searchText,
+                            mapX = longitude,  // 경도
+                            mapY = latitude    // 위도
+                        )
+                        
+                        showBottomSheet = true
+                    }
                 }
             }
 
