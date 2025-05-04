@@ -41,6 +41,7 @@ import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.BottomFullWidthButton
 import com.kuit.ourmenu.ui.oauth.KakaoModule.getKakaoLogin
 import com.kuit.ourmenu.ui.onboarding.component.BottomFullWidthBorderButton
+import com.kuit.ourmenu.ui.onboarding.model.LandingUiState
 import com.kuit.ourmenu.ui.onboarding.state.KakaoState
 import com.kuit.ourmenu.ui.onboarding.viewmodel.LandingViewModel
 import com.kuit.ourmenu.ui.theme.Neutral300
@@ -53,22 +54,21 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 import kotlinx.coroutines.launch
 
 @Composable
-fun LandingScreen(
+fun LandingRoute(
     navigateToHome: () -> Unit,
     navigateToLogin: () -> Unit,
     navigateToSignupEmail: () -> Unit,
     navigateToSignupMealTime: () -> Unit,
     viewModel: LandingViewModel = hiltViewModel()
 ) {
-    val kakaoState by viewModel.kakaoState.collectAsStateWithLifecycle()
-
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current as Activity
 
-    LaunchedEffect(kakaoState) {
-        Log.d("KakaoModule", kakaoState.toString())
-        when (kakaoState) {
+    LaunchedEffect(uiState.kakaoState) {
+        Log.d("KakaoModule", uiState.kakaoState.toString())
+        when (uiState.kakaoState) {
             is KakaoState.Login -> navigateToHome()
 
             is KakaoState.Loading -> viewModel.signInWithKakao()
@@ -88,17 +88,36 @@ fun LandingScreen(
         }
     }
 
+    LandingScreen(
+        navigateToLogin = navigateToLogin,
+        navigateToSignupEmail = navigateToSignupEmail,
+        onKakaoLoginClick = {
+            getKakaoLogin(
+                context = context,
+                successLogin = { viewModel.updateKakaoState(KakaoState.Loading) }
+            )
+        }
+    )
+}
+
+@Composable
+fun LandingScreen(
+    navigateToLogin: () -> Unit,
+    navigateToSignupEmail: () -> Unit,
+    onKakaoLoginClick: () -> Unit = { },
+) {
+
     Box(
         modifier =
-        Modifier
-            .fillMaxSize()
-            .padding(bottom = 18.dp),
+            Modifier
+                .fillMaxSize()
+                .padding(bottom = 18.dp),
     ) {
         Column(
             modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(horizontal = 20.dp),
+                Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Image(
@@ -184,21 +203,16 @@ fun LandingScreen(
                     .fillMaxWidth()
                     .wrapContentHeight()
                     .padding(top = 16.dp)
-                    .clickable {
-                        getKakaoLogin(
-                            context = context,
-                            successLogin = { viewModel.updateKakaoState(KakaoState.Loading) }
-                        )
-                    },
+                    .clickable { onKakaoLoginClick() },
                 contentScale = ContentScale.FillWidth
             )
         }
 
         Box(
             modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(bottom = 65.5.dp),
+                Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 65.5.dp),
             contentAlignment = Alignment.BottomCenter,
         ) {
             Row {
@@ -225,11 +239,9 @@ fun LandingScreen(
 @Composable
 @Preview(showBackground = true)
 private fun LandingScreenPreview() {
+
     LandingScreen(
-        navigateToHome = {},
         navigateToLogin = {},
         navigateToSignupEmail = {},
-        navigateToSignupMealTime = {},
-        viewModel = hiltViewModel()
     )
 }

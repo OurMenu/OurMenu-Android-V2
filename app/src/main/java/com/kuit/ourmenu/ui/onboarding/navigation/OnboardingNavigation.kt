@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.kuit.ourmenu.ui.navigator.MainTabRoute
 import com.kuit.ourmenu.ui.navigator.Routes
+import com.kuit.ourmenu.ui.onboarding.screen.LandingRoute
 import com.kuit.ourmenu.ui.onboarding.screen.LandingScreen
 import com.kuit.ourmenu.ui.onboarding.screen.LoginScreen
 import com.kuit.ourmenu.ui.onboarding.screen.signup.SignupEmailScreen
@@ -54,7 +55,7 @@ fun NavGraphBuilder.onboardingNavGraph(
 ) {
 
     composable<Routes.Landing> {
-        LandingScreen(
+        LandingRoute(
             navigateToHome = navigateOnboardingToHome,
             navigateToLogin = navigateToLogin,
             navigateToSignupEmail = navigateToSignupEmail,
