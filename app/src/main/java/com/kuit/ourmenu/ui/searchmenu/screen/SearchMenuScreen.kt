@@ -15,6 +15,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,11 +29,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.kakao.vectormap.LatLng
-import com.kakao.vectormap.camera.CameraUpdateFactory
-import com.kakao.vectormap.label.LabelOptions
-import com.kakao.vectormap.label.LabelStyle
-import com.kakao.vectormap.label.LabelStyles
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.GoToMapButton
 import com.kuit.ourmenu.ui.common.SearchTextField
@@ -42,13 +39,16 @@ import com.kuit.ourmenu.ui.common.topappbar.OurMenuAddButtonTopAppBar
 import com.kuit.ourmenu.ui.menuinfo.dummy.MenuInfoDummyData
 import com.kuit.ourmenu.ui.searchmenu.component.SearchBottomSheetContent
 import com.kuit.ourmenu.ui.searchmenu.component.SearchHistoryList
+import com.kuit.ourmenu.ui.searchmenu.model.SearchHistoryData
+import com.kuit.ourmenu.ui.searchmenu.viewmodel.SearchMenuViewModel
 import com.kuit.ourmenu.ui.theme.NeutralWhite
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchMenuScreen(
     modifier: Modifier = Modifier,
-//    viewModel: SearchMenuViewModel = hiltViewModel(),
+    viewModel: SearchMenuViewModel = hiltViewModel(),
 ) {
 
     val scaffoldState = rememberBottomSheetScaffoldState()
@@ -61,29 +61,35 @@ fun SearchMenuScreen(
     val interactionSource = remember { MutableInteractionSource() }
     val searchBarFocused by interactionSource.collectIsFocusedAsState()
     val focusManager = LocalFocusManager.current
+    
+    // Collect history data from ViewModel
+    val searchHistory by viewModel.searchHistory.collectAsState()
 
     val density = LocalDensity.current
 
-    val mapView = MapViewWithLifecycle() { kakaoMap ->
-        // 카메라 이동
-        val cameraUpdate = CameraUpdateFactory.newCenterPosition(LatLng.from(37.5416, 127.0793))
-        // 라벨 아이콘 설정
-        val style = kakaoMap.labelManager?.addLabelStyles(
-            // R.drawable에서 vector를 가져오면 화면에 보이지 않는 이슈 존재
-            LabelStyles.from(LabelStyle.from(R.drawable.img_popup_dice))
-        )
-        // 라벨 아이콘 적용
-        val options = LabelOptions.from(LatLng.from(37.5406, 127.0763)).setStyles(style)
-        // 레이어
-        val layer = kakaoMap.labelManager?.layer
-        layer?.addLabel(options)
-        kakaoMap.moveCamera(cameraUpdate)
+    val mapView = MapViewWithLifecycle(
+        mapController = viewModel.mapController
+    ) { kakaoMap ->
+        // viewModel에서 kakaoMap을 초기화
+        viewModel.initializeMap(kakaoMap)
     }
+
+//    // 지도 초기화 후 카메라 위치 및 마커 추가 (테스트용)
+//    LaunchedEffect(Unit) {
+//        delay(2000)
+//        viewModel.moveCamera(37.5665, 126.9780) // Seoul City Hall coordinates
+//        viewModel.addMarker(37.5665, 126.9780, R.drawable.img_popup_dice)
+//    }
 
     LaunchedEffect(searchBarFocused) {
         if (searchBarFocused) {
             showSearchBackground = true
             showBottomSheet = false
+            
+            // Fetch crawling history when search field is focused
+            launch {
+                viewModel.getCrawlingHistory()
+            }
         }
     }
 
@@ -140,13 +146,25 @@ fun SearchMenuScreen(
                     AndroidView(
                         modifier = Modifier,
                         factory = { mapView }
-                    ) { view ->
-
-                    }
+                    )
                 }
             } else {
+                // Convert CrawlingHistoryResponse to SearchHistoryData
+                val historyDataList = searchHistory?.map { history ->
+                    SearchHistoryData(
+                        menuTitle = history.menuTitle,
+                        storeTitle = history.storeAddress.split(',').firstOrNull() ?: "",
+                        address = history.storeAddress
+                    )
+                } ?: emptyList()
+                
                 SearchHistoryList(
-                    historyList = emptyList()
+                    historyList = historyDataList,
+                    onClick = {
+                        // Handle history item click
+                        showSearchBackground = false
+                        showBottomSheet = true
+                    }
                 )
             }
 
@@ -164,14 +182,30 @@ fun SearchMenuScreen(
                 // onSearch 함수
                 if (searchBarFocused) focusManager.clearFocus()
                 searchActionDone = true
-
+                
+                // Example of map manipulation in response to search
+                if (searchText.isNotEmpty()) {
+                    // You could perform a search and update the map based on results
+                    // For example: Move camera to search result location
+                    viewModel.moveCamera(37.5416, 127.0793)
+                    
+                    // And add a marker for the result
+                    viewModel.clearMarkers()
+                    viewModel.addMarker(37.5416, 127.0793, R.drawable.img_popup_dice)
+                    
+                    // Show bottom sheet with results
+                    showBottomSheet = true
+                }
             }
 
             GoToMapButton(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(bottom = 16.dp, end = 20.dp),
-                onClick = { /* TODO : Go To Map Button Click Event */ },
+                onClick = { 
+                    // Example of map manipulation in response to button click
+                    viewModel.moveCamera(37.5416, 127.0793)
+                },
             )
         }
     }

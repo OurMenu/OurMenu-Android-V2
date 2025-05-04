@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class MapController {
-    private val _kakaoMap = MutableStateFlow<KakaoMap?>(null)
+    val _kakaoMap = MutableStateFlow<KakaoMap?>(null)
     val kakaoMap: StateFlow<KakaoMap?> = _kakaoMap
     
     fun setMap(map: KakaoMap) {
@@ -42,7 +42,9 @@ fun MapViewWithLifecycle(
                         override fun onMapDestroy() {
                             // 지도 API가 정상적으로 종료될 때 호출됩니다.
                             Log.d("MapViewWithLifecycle", "onMapDestroy")
-                            mapController?.setMap(null)
+                            if (mapController != null) {
+                                mapController._kakaoMap.value = null
+                            }
                         }
 
                         override fun onMapError(error: Exception) {
