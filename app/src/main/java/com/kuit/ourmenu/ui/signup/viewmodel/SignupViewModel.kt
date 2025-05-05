@@ -84,6 +84,9 @@ class SignupViewModel @Inject constructor(
                 if (i == index) code.uppercase() else item
             }
         }
+        _uiState.update {
+            it.copy(codes = _codes.value)
+        }
     }
 
     fun updatePassword(password: String) {
@@ -140,20 +143,28 @@ class SignupViewModel @Inject constructor(
     fun verifyCode() {
         viewModelScope.launch {
             authRepository.confirmCode(
-                confirmCode = codes.value.joinToString(""),
-                email = "${email.value}@${domain.value}"
+                confirmCode = _uiState.value.codes.joinToString(""),
+                email = "${_uiState.value.email}@${_uiState.value.domain}"
             )
                 .fold(
                     onSuccess = {
-                        _verifyState.value = SignupState.Success
+                        _uiState.update {
+                            it.copy(verifyState = SignupState.Success)
+                        }
                     },
                     onFailure = { error ->
-                        _verifyState.value = SignupState.Error
-                        _error.value = error.message
+                        _uiState.update {
+                            it.copy(
+                                verifyState = SignupState.Error,
+                                error = error.message ?: "Unknown error"
+                            )
+                        }
                     }
                 )
             delay(1000)
-            _verifyState.value = SignupState.Default
+            _uiState.update {
+                it.copy(verifyState = SignupState.Default)
+            }
         }
     }
 

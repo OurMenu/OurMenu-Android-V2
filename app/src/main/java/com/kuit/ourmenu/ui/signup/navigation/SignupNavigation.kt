@@ -9,7 +9,7 @@ import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.signup.screen.SignupEmailRoute
 import com.kuit.ourmenu.ui.signup.screen.SignupMealTimeScreen
 import com.kuit.ourmenu.ui.signup.screen.SignupPasswordScreen
-import com.kuit.ourmenu.ui.signup.screen.SignupVerifyScreen
+import com.kuit.ourmenu.ui.signup.screen.SignupVerifyRoute
 import com.kuit.ourmenu.ui.signup.viewmodel.SignupViewModel
 
 fun NavController.navigateToSignupEmail() {
@@ -45,7 +45,7 @@ fun NavGraphBuilder.signupNavGraph(
         )
     }
     composable<Routes.SignupVerify> {
-        SignupVerifyScreen(
+        SignupVerifyRoute(
             navigateToPassword = navigateToSignupPassword,
             navigateBack = navigateBack,
             viewModel = getSignupViewModel(it)

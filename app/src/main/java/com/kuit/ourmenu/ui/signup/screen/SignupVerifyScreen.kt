@@ -1,6 +1,7 @@
 package com.kuit.ourmenu.ui.signup.screen
 
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -21,6 +22,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -40,6 +42,7 @@ import com.kuit.ourmenu.ui.common.OurSnackbarHost
 import com.kuit.ourmenu.ui.common.topappbar.OnboardingTopAppBar
 import com.kuit.ourmenu.ui.signup.component.VerifyCodeTextField
 import com.kuit.ourmenu.ui.signup.model.SignupState
+import com.kuit.ourmenu.ui.signup.uistate.SignupUiState
 import com.kuit.ourmenu.ui.signup.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral500
@@ -51,26 +54,21 @@ import com.kuit.ourmenu.utils.AnimationUtil.shakeErrorInputField
 import kotlin.math.roundToInt
 
 @Composable
-fun SignupVerifyScreen(
+fun SignupVerifyRoute(
     navigateToPassword: () -> Unit,
     navigateBack: () -> Unit,
     viewModel: SignupViewModel = hiltViewModel()
 ) {
-    val focusRequesters = List(6) { FocusRequester() }
-    val codes by viewModel.codes.collectAsStateWithLifecycle()
-
-    // 모든 입력 칸이 채워졌는지 확인
-    val isConfirmButtonEnabled = codes.all { it.isNotEmpty() }
-    val verifyState by viewModel.verifyState.collectAsStateWithLifecycle()
-
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val enabled by remember {
+        derivedStateOf { uiState.codes.all { it.isNotEmpty() } }
+    }
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val shakeOffset = remember { Animatable(0f) }
-    val shakingModifier = Modifier.offset { IntOffset(shakeOffset.value.roundToInt(), 0) }
 
-
-    LaunchedEffect(verifyState) {
-        when (verifyState) {
+    LaunchedEffect(uiState.verifyState) {
+        when (uiState.verifyState) {
             is SignupState.Success ->
                 navigateToPassword()
 
@@ -86,6 +84,41 @@ fun SignupVerifyScreen(
             else -> {}
         }
     }
+
+    SignupVerifyScreen(
+        navigateBack = navigateBack,
+        enabled = enabled,
+        uiState = uiState,
+        shakeOffset = shakeOffset,
+        sendEmail = viewModel::sendEmail,
+        verifyCode = viewModel::verifyCode,
+        updateCode = viewModel::updateCode
+    )
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 44.dp),
+        contentAlignment = Alignment.TopCenter
+    ) {
+        OurSnackbarHost(
+            hostState = snackbarHostState
+        )
+    }
+}
+
+@Composable
+fun SignupVerifyScreen(
+    navigateBack: () -> Unit,
+    enabled: Boolean,
+    uiState: SignupUiState,
+    shakeOffset: Animatable<Float, AnimationVector1D>,
+    sendEmail: () -> Unit,
+    verifyCode: () -> Unit,
+    updateCode: (Int, String) -> Unit,
+) {
+    val focusRequesters = List(6) { FocusRequester() }
+    val shakingModifier = Modifier.offset { IntOffset(shakeOffset.value.roundToInt(), 0) }
 
     Scaffold(
         modifier = Modifier
@@ -133,24 +166,24 @@ fun SignupVerifyScreen(
                 Row {
                     for (i in 0 until 6) {
                         VerifyCodeTextField(
-                            modifier = when (verifyState) {
+                            modifier = when (uiState.verifyState) {
                                 SignupState.Error -> shakingModifier
                                 else -> Modifier
                             }.then(
-                                if (i == 0 && codes[i].isEmpty()) {
+                                if (i == 0 && uiState.codes[i].isEmpty()) {
                                     Modifier.focusRequester(focusRequesters[i])
                                 } else {
                                     Modifier
                                 }
                             ),
-                            error = when (verifyState) {
+                            error = when (uiState.verifyState) {
                                 SignupState.Error -> true
                                 else -> false
                             },
-                            input = codes[i],
+                            input = uiState.codes[i],
                             onTextChange = { newText ->
                                 if (newText.length <= 1) {
-                                    viewModel.updateCode(i, newText) // Compose에서 상태 변경 감지
+                                    updateCode(i, newText) // Compose에서 상태 변경 감지
                                 }
                             },
                             onNext = {
@@ -171,17 +204,7 @@ fun SignupVerifyScreen(
                     }
                 }
             }
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(top = 44.dp),
-                contentAlignment = Alignment.TopCenter
-            ) {
-                OurSnackbarHost(
-                    hostState = snackbarHostState
-                )
-            }
+
         },
         bottomBar = {
             Column(
@@ -224,14 +247,14 @@ fun SignupVerifyScreen(
                     modifier = Modifier
                         .padding(bottom = 36.dp)
                         .clickable {
-                            viewModel.sendEmail()
+                            sendEmail()
                         },
                 )
 
                 DisableBottomFullWidthButton(
-                    enable = isConfirmButtonEnabled,
+                    enable = enabled,
                     text = stringResource(R.string.confirm),
-                    onClick = { viewModel.verifyCode() },
+                    onClick = { verifyCode() },
                 )
             }
         },
@@ -242,7 +265,12 @@ fun SignupVerifyScreen(
 @Composable
 private fun SignupVerifyScreenPreview() {
     SignupVerifyScreen(
-        navigateToPassword = {},
-        navigateBack = {}
+        navigateBack = { },
+        enabled = true,
+        uiState = SignupUiState(),
+        shakeOffset = remember { Animatable(0f) },
+        sendEmail = { },
+        verifyCode = { },
+        updateCode = { _, _ -> }
     )
 }
