@@ -15,7 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.kuit.ourmenu.ui.onboarding.model.MealTimeState
+import com.kuit.ourmenu.ui.signup.uistate.MealTime
 import com.kuit.ourmenu.ui.theme.Neutral100
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral500
@@ -27,7 +27,7 @@ import com.kuit.ourmenu.utils.ViewUtil.noRippleClickable
 @Composable
 fun MealTimeGrid(
     modifier: Modifier = Modifier,
-    mealTimes: List<MealTimeState>,
+    mealTimes: List<MealTime>,
     selectedTimes: List<String>,
     addTime: (Int, String) -> Unit,
     removeTime: (Int, String) -> Unit

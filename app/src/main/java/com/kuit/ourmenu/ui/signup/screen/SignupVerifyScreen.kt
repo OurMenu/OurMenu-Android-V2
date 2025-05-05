@@ -40,7 +40,7 @@ import com.kuit.ourmenu.ui.common.OurSnackbarHost
 import com.kuit.ourmenu.ui.common.topappbar.OnboardingTopAppBar
 import com.kuit.ourmenu.ui.signup.component.VerifyCodeTextField
 import com.kuit.ourmenu.ui.signup.model.SignupState
-import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
+import com.kuit.ourmenu.ui.signup.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral900

@@ -1,4 +1,4 @@
-package com.kuit.ourmenu.ui.onboarding.viewmodel
+package com.kuit.ourmenu.ui.signup.viewmodel
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
@@ -7,8 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.kuit.ourmenu.data.model.auth.SignInType
 import com.kuit.ourmenu.data.repository.AuthRepository
 import com.kuit.ourmenu.ui.oauth.KakaoModule.getUserEmail
-import com.kuit.ourmenu.ui.onboarding.model.MealTimeState
 import com.kuit.ourmenu.ui.signup.model.SignupState
+import com.kuit.ourmenu.ui.signup.uistate.MealTime
+import com.kuit.ourmenu.ui.signup.uistate.SignupUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,6 +23,9 @@ import javax.inject.Inject
 class SignupViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
+
+    private val _uiState = MutableStateFlow(SignupUiState())
+    val uiState = _uiState.asStateFlow()
 
     private val _email = MutableStateFlow("")
     val email = _email.asStateFlow()
@@ -41,11 +45,11 @@ class SignupViewModel @Inject constructor(
     private val _mealTimes = MutableStateFlow(
         mutableStateListOf(
             *List(18) {
-                MealTimeState(mealTime = "${it + 6}:00")
+                MealTime(mealTime = "${it + 6}:00")
             }.toTypedArray()
         )
     )
-    val mealTimes: StateFlow<List<MealTimeState>> = _mealTimes.asStateFlow()
+    val mealTimes: StateFlow<List<MealTime>> = _mealTimes.asStateFlow()
 
     private val _selectedTimes = MutableStateFlow(listOf<String>())
     val selectedTimes: StateFlow<List<String>> = _selectedTimes.asStateFlow()

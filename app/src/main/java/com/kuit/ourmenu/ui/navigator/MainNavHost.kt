@@ -17,7 +17,7 @@ import com.kuit.ourmenu.ui.menuinfo.screen.MenuInfoDefaultScreen
 import com.kuit.ourmenu.ui.menuinfo.screen.MenuInfoMapScreen
 import com.kuit.ourmenu.ui.my.navigation.myNavGraph
 import com.kuit.ourmenu.ui.onboarding.navigation.onboardingNavGraph
-import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
+import com.kuit.ourmenu.ui.signup.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.searchmenu.navigation.searchMenuNavGraph
 import com.kuit.ourmenu.ui.signup.navigation.signupNavGraph
 

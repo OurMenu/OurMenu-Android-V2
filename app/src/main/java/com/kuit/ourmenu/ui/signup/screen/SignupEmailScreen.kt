@@ -28,9 +28,9 @@ import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
 import com.kuit.ourmenu.ui.common.LoginTextField
 import com.kuit.ourmenu.ui.common.OurSnackbarHost
 import com.kuit.ourmenu.ui.common.topappbar.OnboardingTopAppBar
-import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.signup.component.EmailSpinner
 import com.kuit.ourmenu.ui.signup.model.SignupState
+import com.kuit.ourmenu.ui.signup.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
@@ -42,7 +42,7 @@ fun SignupEmailRoute(
     navigateBack: () -> Unit,
     viewModel: SignupViewModel = hiltViewModel()
 ) {
-//    val uiState
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
 }
 

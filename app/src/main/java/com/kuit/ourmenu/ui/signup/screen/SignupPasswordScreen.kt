@@ -42,7 +42,7 @@ import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
 import com.kuit.ourmenu.ui.common.OurSnackbarHost
 import com.kuit.ourmenu.ui.common.LoginTextField
 import com.kuit.ourmenu.ui.common.topappbar.OnboardingTopAppBar
-import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
+import com.kuit.ourmenu.ui.signup.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.signup.model.PasswordState
 import com.kuit.ourmenu.ui.signup.model.checkPassword
 import com.kuit.ourmenu.ui.theme.Neutral300
