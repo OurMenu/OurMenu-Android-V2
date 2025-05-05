@@ -59,7 +59,7 @@ fun SignupEmailRoute(
             is SignupState.Error -> {
                 scope.launch {
                     snackbarHostState.showSnackbar(
-                        message = viewModel.error.value ?: "",
+                        message = uiState.error,
                         duration = SnackbarDuration.Short
                     )
                 }

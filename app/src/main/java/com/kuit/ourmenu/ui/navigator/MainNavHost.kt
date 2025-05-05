@@ -3,7 +3,6 @@ package com.kuit.ourmenu.ui.navigator
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -17,18 +16,15 @@ import com.kuit.ourmenu.ui.menuinfo.screen.MenuInfoDefaultScreen
 import com.kuit.ourmenu.ui.menuinfo.screen.MenuInfoMapScreen
 import com.kuit.ourmenu.ui.my.navigation.myNavGraph
 import com.kuit.ourmenu.ui.onboarding.navigation.onboardingNavGraph
-import com.kuit.ourmenu.ui.signup.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.searchmenu.navigation.searchMenuNavGraph
 import com.kuit.ourmenu.ui.signup.navigation.signupNavGraph
+import com.kuit.ourmenu.ui.signup.viewmodel.SignupViewModel
 
 @Composable
 fun MainNavHost(
-    modifier: Modifier = Modifier,
     navController: MainNavController,
     padding: PaddingValues
 ) {
-//    val signupViewModel = hiltViewModel<SignupViewModel>()
-
     NavHost(
         navController = navController.navController,
         startDestination = navController.startDestination
