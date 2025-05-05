@@ -67,11 +67,15 @@ class SignupViewModel @Inject constructor(
     val error = _error.asStateFlow()
 
     fun updateEmail(email: String) {
-        _email.value = email
+        _uiState.update {
+            it.copy(email = email)
+        }
     }
 
     fun updateDomain(domain: String) {
-        _domain.value = domain
+        _uiState.update {
+            it.copy(domain = domain)
+        }
     }
 
     fun updateCode(index: Int, code: String) {
@@ -108,20 +112,28 @@ class SignupViewModel @Inject constructor(
     fun sendEmail() {
         viewModelScope.launch {
             authRepository.sendEmail(
-                email = "${email.value}@${domain.value}"
+                email = "${_uiState.value.email}@${_uiState.value.domain}"
             )
                 .fold(
                     onSuccess = {
-                        _emailState.value = SignupState.Success
+                        _uiState.update {
+                            it.copy(emailState = SignupState.Success)
+                        }
                     },
                     onFailure = { error ->
-                        _emailState.value = SignupState.Error
-                        _error.value = error.message
+                        _uiState.update {
+                            it.copy(
+                                emailState = SignupState.Error,
+                                error = error.message ?: "Unknown error"
+                            )
+                        }
                     }
 
                 )
             delay(1000)
-            _emailState.value = SignupState.Default
+            _uiState.update {
+                it.copy(emailState = SignupState.Default)
+            }
         }
     }
 

@@ -6,11 +6,11 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.kuit.ourmenu.ui.navigator.Routes
-import com.kuit.ourmenu.ui.signup.viewmodel.SignupViewModel
-import com.kuit.ourmenu.ui.signup.screen.SignupEmailScreen
+import com.kuit.ourmenu.ui.signup.screen.SignupEmailRoute
 import com.kuit.ourmenu.ui.signup.screen.SignupMealTimeScreen
 import com.kuit.ourmenu.ui.signup.screen.SignupPasswordScreen
 import com.kuit.ourmenu.ui.signup.screen.SignupVerifyScreen
+import com.kuit.ourmenu.ui.signup.viewmodel.SignupViewModel
 
 fun NavController.navigateToSignupEmail() {
     navigate(Routes.SignupEmail)
@@ -38,10 +38,10 @@ fun NavGraphBuilder.signupNavGraph(
     getSignupViewModel: @Composable (NavBackStackEntry) -> SignupViewModel
 ) {
     composable<Routes.SignupEmail> {
-        SignupEmailScreen(
+        SignupEmailRoute(
             navigateToVerify = navigateToSignupVerify,
             navigateBack = navigateBack,
-//            viewModel = getSignupViewModel(it)
+            viewModel = getSignupViewModel(it)
         )
     }
     composable<Routes.SignupVerify> {

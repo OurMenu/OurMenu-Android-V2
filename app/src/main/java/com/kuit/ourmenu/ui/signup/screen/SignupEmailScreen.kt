@@ -1,6 +1,7 @@
 package com.kuit.ourmenu.ui.signup.screen
 
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +14,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -30,6 +32,7 @@ import com.kuit.ourmenu.ui.common.OurSnackbarHost
 import com.kuit.ourmenu.ui.common.topappbar.OnboardingTopAppBar
 import com.kuit.ourmenu.ui.signup.component.EmailSpinner
 import com.kuit.ourmenu.ui.signup.model.SignupState
+import com.kuit.ourmenu.ui.signup.uistate.SignupUiState
 import com.kuit.ourmenu.ui.signup.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral900
@@ -43,27 +46,15 @@ fun SignupEmailRoute(
     viewModel: SignupViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-}
-
-@Composable
-fun SignupEmailScreen(
-    navigateToVerify: () -> Unit,
-    navigateBack: () -> Unit,
-    viewModel: SignupViewModel = hiltViewModel()
-) {
-
-    val email by viewModel.email.collectAsStateWithLifecycle()
-    val domain by viewModel.domain.collectAsStateWithLifecycle()
-    val enable = email.isNotEmpty() && domain.isNotEmpty()
-    val emailState by viewModel.emailState.collectAsStateWithLifecycle()
-
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val enable by remember {
+        derivedStateOf { uiState.email.isNotEmpty() && uiState.domain.isNotEmpty() }
+    }
     val shakeOffset = remember { Animatable(0f) }
 
-    LaunchedEffect(emailState) {
-        when (emailState) {
+    LaunchedEffect(uiState.emailState) {
+        when (uiState.emailState) {
             is SignupState.Success -> navigateToVerify()
             is SignupState.Error -> {
                 scope.launch {
@@ -87,6 +78,40 @@ fun SignupEmailScreen(
         }
     }
 
+    SignupEmailScreen(
+        navigateBack = navigateBack,
+        uiState = uiState,
+        enable = enable,
+        shakeOffset = shakeOffset,
+        sendEmail = viewModel::sendEmail,
+        updateEmail = viewModel::updateEmail,
+        updateDomain = viewModel::updateDomain
+    )
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 44.dp),
+        contentAlignment = Alignment.TopCenter
+    ) {
+        OurSnackbarHost(
+            hostState = snackbarHostState
+        )
+    }
+
+}
+
+@Composable
+fun SignupEmailScreen(
+    navigateBack: () -> Unit,
+    uiState: SignupUiState,
+    shakeOffset: Animatable<Float, AnimationVector1D>,
+    enable: Boolean = true,
+    sendEmail: () -> Unit = {},
+    updateEmail: (String) -> Unit,
+    updateDomain: (String) -> Unit
+) {
+
     Scaffold(
         topBar = {
             OnboardingTopAppBar(
@@ -109,7 +134,7 @@ fun SignupEmailScreen(
                     .align(Alignment.BottomCenter)
                     .padding(bottom = 20.dp),
                 text = stringResource(R.string.send_auth_mail)
-            ) { viewModel.sendEmail() }
+            ) { sendEmail() }
 
             Column(
                 modifier = Modifier
@@ -134,26 +159,12 @@ fun SignupEmailScreen(
                         .padding(top = 12.dp)
 //                        .offset { IntOffset(shakeOffset.value.roundToInt(), 0) }
                     ,
-                    email = email,
-                    onEmailChange = { viewModel.updateEmail(it) },
-                    domain = domain,
-                    onDomainChange = { viewModel.updateDomain(it) }
+                    email = uiState.email,
+                    onEmailChange = { updateEmail(it) },
+                    domain = uiState.domain,
+                    onDomainChange = { updateDomain(it) }
                 )
             }
-
-
-        }
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(top = 44.dp),
-            contentAlignment = Alignment.TopCenter
-        ) {
-            OurSnackbarHost(
-                hostState = snackbarHostState
-            )
         }
     }
 }
@@ -200,7 +211,10 @@ fun EmailInputField(
 @Composable
 private fun SignupEmailScreenPreview() {
     SignupEmailScreen(
-        navigateToVerify = {},
-        navigateBack = {}
+        navigateBack = { },
+        uiState = SignupUiState(),
+        shakeOffset = remember { Animatable(0f) },
+        updateEmail = { },
+        updateDomain = { }
     )
 }
