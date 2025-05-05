@@ -19,6 +19,7 @@ import com.kuit.ourmenu.ui.my.navigation.myNavGraph
 import com.kuit.ourmenu.ui.onboarding.navigation.onboardingNavGraph
 import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.searchmenu.navigation.searchMenuNavGraph
+import com.kuit.ourmenu.ui.signup.navigation.signupNavGraph
 
 @Composable
 fun MainNavHost(
@@ -37,12 +38,18 @@ fun MainNavHost(
             navigateOnboardingToHome = navController::navigateOnboardingToHome,
             navigateToLogin = navController::navigateToLogin,
             navigateToSignupEmail = navController::navigateToSignupEmail,
+            navigateToSignupMealTime = navController::navigateToSignupMealTime,
+        )
+
+        signupNavGraph(
+            navigateBack = navController::navigateUp,
+            navigateOnboardingToHome = navController::navigateOnboardingToHome,
             navigateToSignupVerify = navController::navigateToSignupVerify,
             navigateToSignupPassword = navController::navigateToSignupPassword,
             navigateToSignupMealTime = navController::navigateToSignupMealTime,
             getSignupViewModel = { navBackStackEntry ->
                 val parent = remember(navBackStackEntry) {
-                    navController.navController.getBackStackEntry(Routes.Signup)
+                    navController.navController.getBackStackEntry(Routes.SignupEmail)
                 }
                 hiltViewModel<SignupViewModel>(parent)
             }

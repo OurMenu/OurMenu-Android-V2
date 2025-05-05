@@ -14,11 +14,11 @@ import com.kuit.ourmenu.ui.menuFolder.navigation.navigateToMenuFolderDetail
 import com.kuit.ourmenu.ui.my.navigation.navigateToMy
 import com.kuit.ourmenu.ui.onboarding.navigation.navigateOnboardingToHome
 import com.kuit.ourmenu.ui.onboarding.navigation.navigateToLogin
-import com.kuit.ourmenu.ui.onboarding.navigation.navigateToSignupEmail
-import com.kuit.ourmenu.ui.onboarding.navigation.navigateToSignupMealTime
-import com.kuit.ourmenu.ui.onboarding.navigation.navigateToSignupPassword
-import com.kuit.ourmenu.ui.onboarding.navigation.navigateToSignupVerify
 import com.kuit.ourmenu.ui.searchmenu.navigation.navigateToSearchMenu
+import com.kuit.ourmenu.ui.signup.navigation.navigateToSignupEmail
+import com.kuit.ourmenu.ui.signup.navigation.navigateToSignupMealTime
+import com.kuit.ourmenu.ui.signup.navigation.navigateToSignupPassword
+import com.kuit.ourmenu.ui.signup.navigation.navigateToSignupVerify
 
 class MainNavController(
     val navController: NavHostController,

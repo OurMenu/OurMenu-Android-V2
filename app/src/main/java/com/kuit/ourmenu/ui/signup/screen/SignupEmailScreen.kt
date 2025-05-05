@@ -1,4 +1,4 @@
-package com.kuit.ourmenu.ui.onboarding.screen.signup
+package com.kuit.ourmenu.ui.signup.screen
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.layout.Box
@@ -29,12 +29,22 @@ import com.kuit.ourmenu.ui.common.OurSnackbarHost
 import com.kuit.ourmenu.ui.onboarding.component.EmailSpinner
 import com.kuit.ourmenu.ui.onboarding.component.LoginTextField
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
-import com.kuit.ourmenu.ui.onboarding.state.SignupState
+import com.kuit.ourmenu.ui.signup.model.SignupState
 import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 import kotlinx.coroutines.launch
+
+@Composable
+fun SignupEmailRoute(
+    navigateToVerify: () -> Unit,
+    navigateBack: () -> Unit,
+    viewModel: SignupViewModel = hiltViewModel()
+) {
+//    val uiState
+
+}
 
 @Composable
 fun SignupEmailScreen(

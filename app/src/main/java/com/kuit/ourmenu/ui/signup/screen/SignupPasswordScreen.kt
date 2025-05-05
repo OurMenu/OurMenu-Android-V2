@@ -1,4 +1,4 @@
-package com.kuit.ourmenu.ui.onboarding.screen.signup
+package com.kuit.ourmenu.ui.signup.screen
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.layout.Box
@@ -43,9 +43,9 @@ import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
 import com.kuit.ourmenu.ui.common.OurSnackbarHost
 import com.kuit.ourmenu.ui.onboarding.component.LoginTextField
 import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
-import com.kuit.ourmenu.ui.onboarding.state.PasswordState
-import com.kuit.ourmenu.ui.onboarding.state.checkPassword
 import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
+import com.kuit.ourmenu.ui.signup.model.PasswordState
+import com.kuit.ourmenu.ui.signup.model.checkPassword
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral900

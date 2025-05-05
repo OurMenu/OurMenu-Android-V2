@@ -8,7 +8,7 @@ import com.kuit.ourmenu.data.model.auth.SignInType
 import com.kuit.ourmenu.data.repository.AuthRepository
 import com.kuit.ourmenu.ui.oauth.KakaoModule.getUserEmail
 import com.kuit.ourmenu.ui.onboarding.model.MealTimeState
-import com.kuit.ourmenu.ui.onboarding.state.SignupState
+import com.kuit.ourmenu.ui.signup.model.SignupState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
