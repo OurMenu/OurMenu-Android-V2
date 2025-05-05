@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,8 +37,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
 import com.kuit.ourmenu.ui.common.OurSnackbarHost
-import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
-import com.kuit.ourmenu.ui.onboarding.component.VerifyCodeTextField
+import com.kuit.ourmenu.ui.common.topappbar.OnboardingTopAppBar
+import com.kuit.ourmenu.ui.signup.component.VerifyCodeTextField
 import com.kuit.ourmenu.ui.signup.model.SignupState
 import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.theme.Neutral300
@@ -48,9 +47,7 @@ import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
-import com.kuit.ourmenu.utils.AnimationUtil.shakeAnimation
 import com.kuit.ourmenu.utils.AnimationUtil.shakeErrorInputField
-import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @Composable

@@ -1,4 +1,4 @@
-package com.kuit.ourmenu.ui.onboarding.component
+package com.kuit.ourmenu.ui.signup.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

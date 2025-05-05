@@ -44,8 +44,8 @@ import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.BottomFullWidthButton
 import com.kuit.ourmenu.ui.common.OurSnackbarHost
 import com.kuit.ourmenu.ui.onboarding.component.BottomFullWidthBorderButton
-import com.kuit.ourmenu.ui.onboarding.component.LoginTextField
-import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
+import com.kuit.ourmenu.ui.common.LoginTextField
+import com.kuit.ourmenu.ui.common.topappbar.OnboardingTopAppBar
 import com.kuit.ourmenu.ui.onboarding.model.LoginUiState
 import com.kuit.ourmenu.ui.onboarding.state.LoginState
 import com.kuit.ourmenu.ui.onboarding.viewmodel.LoginViewModel

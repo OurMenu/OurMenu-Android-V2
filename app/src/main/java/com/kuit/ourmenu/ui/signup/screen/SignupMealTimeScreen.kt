@@ -20,8 +20,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
-import com.kuit.ourmenu.ui.onboarding.component.MealTimeGrid
-import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
+import com.kuit.ourmenu.ui.signup.component.MealTimeGrid
+import com.kuit.ourmenu.ui.common.topappbar.OnboardingTopAppBar
 import com.kuit.ourmenu.ui.signup.model.SignupState
 import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.theme.Neutral500
