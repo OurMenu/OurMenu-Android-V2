@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.kuit.ourmenu.data.model.auth.SignInType
 import com.kuit.ourmenu.data.repository.AuthRepository
 import com.kuit.ourmenu.ui.oauth.KakaoModule.getUserEmail
+import com.kuit.ourmenu.ui.signup.model.PasswordState
 import com.kuit.ourmenu.ui.signup.model.SignupState
 import com.kuit.ourmenu.ui.signup.uistate.MealTime
 import com.kuit.ourmenu.ui.signup.uistate.SignupUiState
@@ -95,6 +96,18 @@ class SignupViewModel @Inject constructor(
 
     fun updateConfirmPassword(confirmPassword: String) {
         _confirmPassword.value = confirmPassword
+    }
+
+    fun setPasswordVisibility(visible: Boolean) {
+        _uiState.update {
+            it.copy(passwordVisible = visible)
+        }
+    }
+
+    fun updatePasswordState(passwordState: PasswordState) {
+        _uiState.update {
+            it.copy(passwordState = passwordState)
+        }
     }
 
     fun addSelectedTime(index: Int, selectedTime: String) {

@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.signup.screen.SignupEmailRoute
 import com.kuit.ourmenu.ui.signup.screen.SignupMealTimeScreen
+import com.kuit.ourmenu.ui.signup.screen.SignupPasswordRoute
 import com.kuit.ourmenu.ui.signup.screen.SignupPasswordScreen
 import com.kuit.ourmenu.ui.signup.screen.SignupVerifyRoute
 import com.kuit.ourmenu.ui.signup.viewmodel.SignupViewModel
@@ -52,7 +53,7 @@ fun NavGraphBuilder.signupNavGraph(
         )
     }
     composable<Routes.SignupPassword> {
-        SignupPasswordScreen(
+        SignupPasswordRoute(
             navigateToMealTime = navigateToSignupMealTime,
             navigateBack = navigateBack,
             viewModel = getSignupViewModel(it)

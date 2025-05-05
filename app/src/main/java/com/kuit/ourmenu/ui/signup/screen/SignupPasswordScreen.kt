@@ -1,6 +1,7 @@
 package com.kuit.ourmenu.ui.signup.screen
 
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,12 +20,10 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -39,12 +38,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
-import com.kuit.ourmenu.ui.common.OurSnackbarHost
 import com.kuit.ourmenu.ui.common.LoginTextField
+import com.kuit.ourmenu.ui.common.OurSnackbarHost
 import com.kuit.ourmenu.ui.common.topappbar.OnboardingTopAppBar
-import com.kuit.ourmenu.ui.signup.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.signup.model.PasswordState
 import com.kuit.ourmenu.ui.signup.model.checkPassword
+import com.kuit.ourmenu.ui.signup.uistate.SignupUiState
+import com.kuit.ourmenu.ui.signup.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral900
@@ -58,27 +58,23 @@ import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @Composable
-fun SignupPasswordScreen(
+fun SignupPasswordRoute(
     navigateToMealTime: () -> Unit,
     navigateBack: () -> Unit,
     viewModel: SignupViewModel = hiltViewModel()
 ) {
-    val password by viewModel.password.collectAsStateWithLifecycle()
-    val confirmPassword by viewModel.confirmPassword.collectAsStateWithLifecycle()
-    var isPasswordVisible by rememberSaveable { mutableStateOf(false) }
-
-    // 모든 입력 칸이 채워졌는지 확인
-    val isConfirmButtonEnabled = password.isNotEmpty() && confirmPassword.isNotEmpty()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val enable = remember {
+        derivedStateOf { uiState.password.isNotEmpty() && uiState.confirmPassword.isNotEmpty() }
+    }
 
     val focusRequester = remember { FocusRequester() }
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val shakeOffset = remember { Animatable(0f) }
-    var passwordState: PasswordState by remember { mutableStateOf(PasswordState.Default) }
-    val shakingModifier = Modifier.offset { IntOffset(shakeOffset.value.roundToInt(), 0) }
 
-    LaunchedEffect(passwordState) {
-        when (passwordState) {
+    LaunchedEffect(uiState.passwordState) {
+        when (uiState.passwordState) {
             PasswordState.NotMeetCondition -> {
                 shakeErrorInputFieldWithFocus(
                     shakeOffset = shakeOffset,
@@ -98,7 +94,7 @@ fun SignupPasswordScreen(
                 )
                 scope.launch {
                     delay(800)
-                    passwordState = PasswordState.Default
+                    viewModel.updatePasswordState(PasswordState.Default)
                 }
             }
 
@@ -110,6 +106,46 @@ fun SignupPasswordScreen(
         }
     }
 
+    SignupPasswordScreen(
+        navigateBack = navigateBack,
+        enable = enable.value,
+        uiState = uiState,
+        focusRequester = focusRequester,
+        shakeOffset = shakeOffset,
+        setPasswordVisibility = viewModel::setPasswordVisibility,
+        updatePasswordState = viewModel::updatePasswordState,
+        updatePassword = viewModel::updatePassword,
+        updateConfirmPassword = viewModel::updateConfirmPassword
+    )
+
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 44.dp),
+        contentAlignment = Alignment.TopCenter
+    ) {
+        OurSnackbarHost(
+            hostState = snackbarHostState
+        )
+    }
+
+}
+
+@Composable
+fun SignupPasswordScreen(
+    navigateBack: () -> Unit,
+    enable: Boolean,
+    uiState: SignupUiState,
+    focusRequester: FocusRequester,
+    shakeOffset: Animatable<Float, AnimationVector1D>,
+    setPasswordVisibility: (Boolean) -> Unit,
+    updatePasswordState: (PasswordState) -> Unit,
+    updatePassword: (String) -> Unit,
+    updateConfirmPassword: (String) -> Unit,
+) {
+    val shakingModifier = Modifier.offset { IntOffset(shakeOffset.value.roundToInt(), 0) }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -120,10 +156,10 @@ fun SignupPasswordScreen(
         content = { innerPadding ->
             Column(
                 modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(horizontal = 20.dp),
+                    Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .padding(horizontal = 20.dp),
             ) {
                 Text(
                     text = stringResource(R.string.enter_password),
@@ -142,40 +178,40 @@ fun SignupPasswordScreen(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 LoginTextField(
-                    error = when (passwordState) {
+                    error = when (uiState.passwordState) {
                         PasswordState.NotMeetCondition, PasswordState.DifferentPassword -> true
                         else -> false
                     },
-                    modifier = when (passwordState) {
+                    modifier = when (uiState.passwordState) {
                         PasswordState.NotMeetCondition, PasswordState.DifferentPassword ->
                             shakingModifier.focusRequester(focusRequester)
 
                         else -> Modifier.focusRequester(focusRequester)
                     },
                     placeholder = stringResource(R.string.password_placeholder),
-                    input = password,
-                    onTextChange = { viewModel.updatePassword(it) },
+                    input = uiState.password,
+                    onTextChange = { updatePassword(it) },
                     visualTransformation =
-                    if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        if (uiState.passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 LoginTextField(
-                    error = when (passwordState) {
+                    error = when (uiState.passwordState) {
                         PasswordState.DifferentPassword -> true
                         else -> false
                     },
-                    modifier = when (passwordState) {
+                    modifier = when (uiState.passwordState) {
                         PasswordState.NotMeetCondition, PasswordState.DifferentPassword ->
                             shakingModifier
 
                         else -> Modifier
                     },
                     placeholder = stringResource(R.string.confirm_password_placeholder),
-                    input = confirmPassword,
-                    onTextChange = { viewModel.updateConfirmPassword(it) },
-                    visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    input = uiState.confirmPassword,
+                    onTextChange = { updateConfirmPassword(it) },
+                    visualTransformation = if (uiState.passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -184,17 +220,17 @@ fun SignupPasswordScreen(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Checkbox(
-                        checked = isPasswordVisible,
-                        onCheckedChange = { isPasswordVisible = it },
+                        checked = uiState.passwordVisible,
+                        onCheckedChange = { setPasswordVisibility(it) },
                         modifier =
-                        Modifier
-                            .size(24.dp),
+                            Modifier
+                                .size(24.dp),
                         colors =
-                        CheckboxDefaults.colors(
-                            checkmarkColor = NeutralWhite,
-                            checkedColor = Primary500Main,
-                            uncheckedColor = Neutral300,
-                        ),
+                            CheckboxDefaults.colors(
+                                checkmarkColor = NeutralWhite,
+                                checkedColor = Primary500Main,
+                                uncheckedColor = Neutral300,
+                            ),
                     )
 
                     Text(
@@ -205,36 +241,27 @@ fun SignupPasswordScreen(
                     )
                 }
             }
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(top = 44.dp),
-                contentAlignment = Alignment.TopCenter
-            ) {
-                OurSnackbarHost(
-                    hostState = snackbarHostState
-                )
-            }
         },
         bottomBar = {
             Column(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Box(
                     contentAlignment = Alignment.Center,
                 ) {
                     DisableBottomFullWidthButton(
-                        enable = isConfirmButtonEnabled,
+                        enable = enable,
                         text = stringResource(R.string.confirm),
                         onClick = {
-                            passwordState = checkPassword(
-                                password = password,
-                                confirmPassword = confirmPassword,
+                            updatePasswordState(
+                                checkPassword(
+                                    password = uiState.password,
+                                    confirmPassword = uiState.confirmPassword,
+                                )
                             )
                         },
                     )
@@ -248,7 +275,14 @@ fun SignupPasswordScreen(
 @Composable
 private fun SignupPasswordScreenPreview() {
     SignupPasswordScreen(
-        navigateToMealTime = {},
-        navigateBack = {}
+        navigateBack = {},
+        enable = true,
+        uiState = SignupUiState(),
+        focusRequester = FocusRequester(),
+        shakeOffset = remember { Animatable(0f) },
+        setPasswordVisibility = {},
+        updatePasswordState = {},
+        updatePassword = {},
+        updateConfirmPassword = {}
     )
 }
