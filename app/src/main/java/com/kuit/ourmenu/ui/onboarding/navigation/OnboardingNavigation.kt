@@ -1,14 +1,15 @@
 package com.kuit.ourmenu.ui.onboarding.navigation
 
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.navigation
 import com.kuit.ourmenu.ui.navigator.MainTabRoute
 import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.onboarding.screen.LandingRoute
-import com.kuit.ourmenu.ui.onboarding.screen.LandingScreen
 import com.kuit.ourmenu.ui.onboarding.screen.LoginRoute
-import com.kuit.ourmenu.ui.onboarding.screen.LoginScreen
 import com.kuit.ourmenu.ui.onboarding.screen.signup.SignupEmailScreen
 import com.kuit.ourmenu.ui.onboarding.screen.signup.SignupMealTimeScreen
 import com.kuit.ourmenu.ui.onboarding.screen.signup.SignupPasswordScreen
@@ -20,7 +21,7 @@ fun NavController.navigateToLogin() {
 }
 
 fun NavController.navigateToSignupEmail() {
-    navigate(Routes.SignupEmail)
+    navigate(Routes.Signup)
 }
 
 fun NavController.navigateToSignupPassword() {
@@ -52,9 +53,8 @@ fun NavGraphBuilder.onboardingNavGraph(
     navigateToSignupVerify: () -> Unit,
     navigateToSignupMealTime: () -> Unit,
     navigateToSignupPassword: () -> Unit,
-    viewModel: SignupViewModel,
+    getSignupViewModel: @Composable (NavBackStackEntry) -> SignupViewModel
 ) {
-
     composable<Routes.Landing> {
         LandingRoute(
             navigateToHome = navigateOnboardingToHome,
@@ -70,32 +70,37 @@ fun NavGraphBuilder.onboardingNavGraph(
             navigateToSignupEmail = navigateToSignupEmail,
         )
     }
-    composable<Routes.SignupEmail> {
-        SignupEmailScreen(
-            navigateToVerify = navigateToSignupVerify,
-            navigateBack = navigateBack,
-            viewModel = viewModel
-        )
-    }
-    composable<Routes.SignupVerify> {
-        SignupVerifyScreen(
-            navigateToPassword = navigateToSignupPassword,
-            navigateBack = navigateBack,
-            viewModel = viewModel
-        )
-    }
-    composable<Routes.SignupPassword> {
-        SignupPasswordScreen(
-            navigateToMealTime = navigateToSignupMealTime,
-            navigateBack = navigateBack,
-            viewModel = viewModel
-        )
-    }
-    composable<Routes.SignupMealTime> {
-        SignupMealTimeScreen(
-            navigateToHome = navigateOnboardingToHome,
-            navigateBack = navigateBack,
-            viewModel = viewModel
-        )
+
+    navigation<Routes.Signup>(
+        startDestination = Routes.SignupEmail
+    ) {
+        composable<Routes.SignupEmail> {
+            SignupEmailScreen(
+                navigateToVerify = navigateToSignupVerify,
+                navigateBack = navigateBack,
+                viewModel = getSignupViewModel(it)
+            )
+        }
+        composable<Routes.SignupVerify> {
+            SignupVerifyScreen(
+                navigateToPassword = navigateToSignupPassword,
+                navigateBack = navigateBack,
+                viewModel = getSignupViewModel(it)
+            )
+        }
+        composable<Routes.SignupPassword> {
+            SignupPasswordScreen(
+                navigateToMealTime = navigateToSignupMealTime,
+                navigateBack = navigateBack,
+                viewModel = getSignupViewModel(it)
+            )
+        }
+        composable<Routes.SignupMealTime> {
+            SignupMealTimeScreen(
+                navigateToHome = navigateOnboardingToHome,
+                navigateBack = navigateBack,
+                viewModel = getSignupViewModel(it)
+            )
+        }
     }
 }

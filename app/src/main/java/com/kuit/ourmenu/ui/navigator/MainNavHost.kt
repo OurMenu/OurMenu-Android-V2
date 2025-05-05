@@ -2,6 +2,7 @@ package com.kuit.ourmenu.ui.navigator
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
@@ -23,17 +24,15 @@ import com.kuit.ourmenu.ui.searchmenu.navigation.searchMenuNavGraph
 fun MainNavHost(
     modifier: Modifier = Modifier,
     navController: MainNavController,
-    padding : PaddingValues
+    padding: PaddingValues
 ) {
-    val signupViewModel = hiltViewModel<SignupViewModel>()
+//    val signupViewModel = hiltViewModel<SignupViewModel>()
 
     NavHost(
         navController = navController.navController,
         startDestination = navController.startDestination
     ) {
-
         onboardingNavGraph(
-            viewModel = signupViewModel,
             navigateBack = navController::navigateUp,
             navigateOnboardingToHome = navController::navigateOnboardingToHome,
             navigateToLogin = navController::navigateToLogin,
@@ -41,6 +40,12 @@ fun MainNavHost(
             navigateToSignupVerify = navController::navigateToSignupVerify,
             navigateToSignupPassword = navController::navigateToSignupPassword,
             navigateToSignupMealTime = navController::navigateToSignupMealTime,
+            getSignupViewModel = { navBackStackEntry ->
+                val parent = remember(navBackStackEntry) {
+                    navController.navController.getBackStackEntry(Routes.Signup)
+                }
+                hiltViewModel<SignupViewModel>(parent)
+            }
         )
 
         homeNavGraph(
