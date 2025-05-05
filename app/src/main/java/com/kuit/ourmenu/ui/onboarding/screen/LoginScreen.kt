@@ -20,17 +20,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -59,34 +55,9 @@ import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
-import com.kuit.ourmenu.utils.AnimationUtil.shakeAnimation
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
+import com.kuit.ourmenu.utils.AnimationUtil.shakeErrorInputFieldWithFocus
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
-
-private fun errorInput(
-    shakeOffset: Animatable<Float, AnimationVector1D>,
-    focusRequester: FocusRequester,
-    message: String,
-    snackbarHostState: SnackbarHostState,
-    scope: CoroutineScope,
-) {
-    scope.launch {
-        focusRequester.requestFocus()
-        delay(800)
-    }
-    shakeAnimation(
-        offset = shakeOffset,
-        coroutineScope = scope,
-    )
-    scope.launch {
-        snackbarHostState.showSnackbar(
-            message = message,
-            duration = SnackbarDuration.Short
-        )
-    }
-}
 
 @Composable
 fun LoginRoute(
@@ -116,7 +87,7 @@ fun LoginRoute(
             }
 
             is LoginState.NotFoundUser -> {
-                errorInput(
+                shakeErrorInputFieldWithFocus(
                     shakeOffset = shakeOffset,
                     focusRequester = emailFocusRequester,
                     message = "존재하지 않는 이메일입니다.",
@@ -126,7 +97,7 @@ fun LoginRoute(
             }
 
             is LoginState.DifferentPassword -> {
-                errorInput(
+                shakeErrorInputFieldWithFocus(
                     shakeOffset = shakeOffset,
                     focusRequester = passwordFocusRequester,
                     message = "비밀번호가 일치하지 않아요.",
@@ -146,7 +117,6 @@ fun LoginRoute(
         navigateToSignupEmail = navigateToSignupEmail,
         shakeOffset = shakeOffset,
         uiState = uiState,
-        snackbarHostState = snackbarHostState,
         emailFocusRequester = emailFocusRequester,
         passwordFocusRequester = passwordFocusRequester,
         updatePasswordVisible = viewModel::updatePasswordVisible,
@@ -155,6 +125,17 @@ fun LoginRoute(
         updatePassword = viewModel::updatePassword,
     )
 
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 44.dp),
+        contentAlignment = Alignment.TopCenter
+    ) {
+        OurSnackbarHost(
+            hostState = snackbarHostState
+        )
+    }
+
 
 }
 
@@ -162,7 +143,6 @@ fun LoginRoute(
 fun LoginScreen(
     navigateBack: () -> Unit,
     navigateToSignupEmail: () -> Unit,
-    snackbarHostState: SnackbarHostState,
     emailFocusRequester: FocusRequester,
     passwordFocusRequester: FocusRequester,
     shakeOffset: Animatable<Float, AnimationVector1D>,
@@ -326,17 +306,6 @@ fun LoginScreen(
                     )
                 }
             }
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 44.dp),
-                contentAlignment = Alignment.TopCenter
-            ) {
-                OurSnackbarHost(
-                    hostState = snackbarHostState
-                )
-            }
-
         },
     )
 }
@@ -353,7 +322,6 @@ private fun LoginScreenPreview() {
         signInWithEmail = { },
         updateEmail = { },
         updatePassword = { },
-        snackbarHostState = remember { SnackbarHostState() },
         emailFocusRequester = FocusRequester(),
         passwordFocusRequester = FocusRequester(),
     )

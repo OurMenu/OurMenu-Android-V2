@@ -49,6 +49,7 @@ import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 import com.kuit.ourmenu.utils.AnimationUtil.shakeAnimation
+import com.kuit.ourmenu.utils.AnimationUtil.shakeErrorInputField
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -77,16 +78,12 @@ fun SignupVerifyScreen(
                 navigateToPassword()
 
             is SignupState.Error -> {
-                shakeAnimation(
-                    offset = shakeOffset,
-                    coroutineScope = scope,
+                shakeErrorInputField(
+                    shakeOffset = shakeOffset,
+                    message = "인증 코드가 일치하지 않습니다.",
+                    snackbarHostState = snackbarHostState,
+                    scope = scope
                 )
-                scope.launch {
-                    snackbarHostState.showSnackbar(
-                        message = "인증 코드가 일치하지 않습니다.",
-                        duration = SnackbarDuration.Short
-                    )
-                }
             }
 
             else -> {}

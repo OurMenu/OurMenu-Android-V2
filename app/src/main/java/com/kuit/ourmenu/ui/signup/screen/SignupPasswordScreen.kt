@@ -53,6 +53,8 @@ import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 import com.kuit.ourmenu.utils.AnimationUtil.shakeAnimation
+import com.kuit.ourmenu.utils.AnimationUtil.shakeErrorInputField
+import com.kuit.ourmenu.utils.AnimationUtil.shakeErrorInputFieldWithFocus
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
@@ -80,34 +82,22 @@ fun SignupPasswordScreen(
     LaunchedEffect(passwordState) {
         when (passwordState) {
             PasswordState.NotMeetCondition -> {
-                scope.launch {
-                    focusRequester.requestFocus()
-                    delay(800)
-                    passwordState = PasswordState.Default
-                }
-                shakeAnimation(
-                    offset = shakeOffset,
-                    coroutineScope = scope,
+                shakeErrorInputFieldWithFocus(
+                    shakeOffset = shakeOffset,
+                    focusRequester = focusRequester,
+                    message = "비밀번호 조건을 다시 확인해주세요.",
+                    snackbarHostState = snackbarHostState,
+                    scope = scope
                 )
-                scope.launch {
-                    snackbarHostState.showSnackbar(
-                        message = "비밀번호 조건을 다시 확인해주세요.",
-                        duration = SnackbarDuration.Short
-                    )
-                }
             }
 
             PasswordState.DifferentPassword -> {
-                shakeAnimation(
-                    offset = shakeOffset,
-                    coroutineScope = scope,
+                shakeErrorInputField(
+                    shakeOffset = shakeOffset,
+                    message = "비밀번호가 일치하지 않아요.",
+                    snackbarHostState = snackbarHostState,
+                    scope = scope
                 )
-                scope.launch {
-                    snackbarHostState.showSnackbar(
-                        message = "비밀번호가 일치하지 않아요.",
-                        duration = SnackbarDuration.Short
-                    )
-                }
                 scope.launch {
                     delay(800)
                     passwordState = PasswordState.Default
