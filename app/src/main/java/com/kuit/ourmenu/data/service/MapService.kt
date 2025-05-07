@@ -44,8 +44,8 @@ interface MapService {
 
     @GET("api/priored/stores/{storeId}")
     suspend fun getCrawlingStoreDetail(
-        @Query("is-crawled") isCrawled: Boolean,
-        @Path("storeId") storeId: String
+        @Path("storeId") storeId: String,
+        @Query("is-crawled") isCrawled: Boolean
     ): BaseResponse<CrawlingStoreDetailResponse>
 
     @GET("api/priored/stores/menus")

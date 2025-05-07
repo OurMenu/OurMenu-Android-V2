@@ -11,6 +11,7 @@ import com.kakao.vectormap.label.LabelStyle
 import com.kakao.vectormap.label.LabelStyles
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.data.model.map.response.CrawlingHistoryResponse
+import com.kuit.ourmenu.data.model.map.response.CrawlingStoreDetailResponse
 import com.kuit.ourmenu.data.model.map.response.CrawlingStoreInfoResponse
 import com.kuit.ourmenu.data.repository.MapRepository
 import com.kuit.ourmenu.ui.common.map.MapController
@@ -30,7 +31,7 @@ class SearchMenuViewModel @Inject constructor(
     val searchHistory = _searchHistory.asStateFlow()
 
     // 검색 결과
-    private val _searchResult = MutableStateFlow<List<CrawlingStoreInfoResponse>?>(emptyList())
+    private val _searchResult = MutableStateFlow<List<CrawlingStoreDetailResponse>?>(emptyList())
     val searchResult = _searchResult.asStateFlow()
 
     // 화면에 보이는 지도 상의 중심에 해당하는 좌표
@@ -112,17 +113,6 @@ class SearchMenuViewModel @Inject constructor(
         }
     }
 
-    suspend fun getCrawlingStoreDetail(
-        isCrawled: Boolean,
-        storeId: String
-    ) {
-        val response = mapRepository.getCrawlingStoreDetail(
-            isCrawled = isCrawled,
-            storeId = storeId
-        )
-
-    }
-
     fun getCrawlingStoreInfo(
         query: String,
         long: Double,
@@ -138,10 +128,12 @@ class SearchMenuViewModel @Inject constructor(
             )
             
             response.onSuccess { result ->
-                _searchResult.value = result
                 if (result != null) {
                     Log.d("SearchMenuViewModel", "크롤링 스토어 정보 조회 성공: ${result.size}개")
                     Log.d("SearchMenuViewModel", "크롤링 스토어 정보 조회 성공: ${result[0].storeTitle}")
+                    // 검색 결과 저장
+                    getCrawlingStoreDetail(result)
+                    Log.d("SearchMenuViewModel", "크롤링 끝")
                 }
 
                 // 지도에 마커 추가 (필요한 경우)
@@ -159,6 +151,44 @@ class SearchMenuViewModel @Inject constructor(
                 // moveCamera(lat, long)
             }.onFailure {
                 Log.d("SearchMenuViewModel", "크롤링 스토어 정보 조회 실패: ${it.message}")
+            }
+        }
+    }
+
+    // 크롤링 한 세부 정보를 _searchResult에 저장하는 함수
+    fun getCrawlingStoreDetail(crawledDatas: List<CrawlingStoreInfoResponse>){
+        val updatedResult = mutableListOf<CrawlingStoreDetailResponse>()
+        viewModelScope.launch {
+            crawledDatas.forEach { crawledData ->
+                val response = mapRepository.getCrawlingStoreDetail(
+                    isCrawled = true,
+                    storeId = crawledData.storeId
+                )
+                response.onSuccess {
+                    if (it != null) {
+                        updatedResult.add(it)
+                        Log.d("SearchMenuViewModel", "크롤링 스토어 정보 업데이트 성공: ${it.storeTitle}")
+                    }else{
+                        Log.d("SearchMenuViewModel", "크롤링 스토어 정보 업데이트 실패: null")
+                    }
+                }.onFailure {
+                    Log.d("SearchMenuViewModel", "크롤링 스토어 정보 업데이트 실패: ${it.message}")
+                }
+            }
+            _searchResult.value = updatedResult
+            showSearchResultOnMap()
+        }
+    }
+
+    // 지도에 검색 결과 핀 추가
+    fun showSearchResultOnMap() {
+        viewModelScope.launch {
+            clearMarkers()
+            searchResult.value?.forEach { store ->
+                val latitude = store.storeMapY
+                val longitude = store.storeMapX
+                addMarker(latitude, longitude, R.drawable.img_popup_dice)
+                Log.d("SearchMenuViewModel", "마커 추가: ${store.storeTitle} lat: (${latitude}, long: ${longitude})")
             }
         }
     }

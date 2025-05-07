@@ -153,7 +153,6 @@ fun SearchMenuScreen(
                     )
                 }
             } else {
-                // Convert CrawlingHistoryResponse to SearchHistoryData
                 val historyDataList = searchHistory?.map { history ->
                     SearchHistoryData(
                         menuTitle = history.menuTitle,
