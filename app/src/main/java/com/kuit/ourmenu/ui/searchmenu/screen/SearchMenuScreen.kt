@@ -204,6 +204,7 @@ fun SearchMenuScreen(
                         )
                         
                         showBottomSheet = true
+                        showSearchBackground = false
                     }
                 }
             }

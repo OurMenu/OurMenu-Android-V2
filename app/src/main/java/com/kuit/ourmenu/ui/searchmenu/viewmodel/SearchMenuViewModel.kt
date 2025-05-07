@@ -190,6 +190,8 @@ class SearchMenuViewModel @Inject constructor(
                 addMarker(latitude, longitude, R.drawable.img_popup_dice)
                 Log.d("SearchMenuViewModel", "마커 추가: ${store.storeTitle} lat: (${latitude}, long: ${longitude})")
             }
+            // 첫 번째 검색 결과로 카메라 이동
+            searchResult.value?.get(0)?.let { moveCamera(it.storeMapY, it.storeMapX) }
         }
     }
 }
