@@ -11,6 +11,7 @@ import com.kakao.vectormap.label.LabelStyle
 import com.kakao.vectormap.label.LabelStyles
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.data.model.map.response.CrawlingHistoryResponse
+import com.kuit.ourmenu.data.model.map.response.CrawlingStoreInfoResponse
 import com.kuit.ourmenu.data.repository.MapRepository
 import com.kuit.ourmenu.ui.common.map.MapController
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,22 +25,28 @@ import javax.inject.Inject
 class SearchMenuViewModel @Inject constructor(
     private val mapRepository: MapRepository
 ) : ViewModel() {
+    // 검색 기록
     private val _searchHistory = MutableStateFlow<List<CrawlingHistoryResponse>?>(emptyList())
     val searchHistory = _searchHistory.asStateFlow()
-    
-    val mapController = MapController()
-    
-    // Current map center coordinates
+
+    // 검색 결과
+    private val _searchResult = MutableStateFlow<List<CrawlingStoreInfoResponse>?>(emptyList())
+    val searchResult = _searchResult.asStateFlow()
+
+    // 화면에 보이는 지도 상의 중심에 해당하는 좌표
     private val _currentCenter = MutableStateFlow<LatLng?>(null)
     val currentCenter: StateFlow<LatLng?> = _currentCenter
 
-    // Map operations
+    val mapController = MapController()
+
+    // 지도 초기화
     fun initializeMap(kakaoMap: KakaoMap) {
         // Initial map setup
         moveCamera(37.5416, 127.0793)
         addMarker(37.5406, 127.0763, R.drawable.img_popup_dice)
     }
-    
+
+    // 지도에서의 화면 이동
     fun moveCamera(latitude: Double, longitude: Double) {
         viewModelScope.launch {
             mapController.kakaoMap.value?.let { map ->
@@ -50,7 +57,7 @@ class SearchMenuViewModel @Inject constructor(
         }
     }
     
-    // Get the current center coordinates of the map
+    // 지도 중앙 좌표 업데이트
     fun updateCurrentCenter() {
         viewModelScope.launch {
             mapController.kakaoMap.value?.let { map ->
@@ -69,7 +76,8 @@ class SearchMenuViewModel @Inject constructor(
             Pair(it.latitude, it.longitude) 
         }
     }
-    
+
+    // 지도에 핀 추가
     fun addMarker(latitude: Double, longitude: Double, resourceId: Int) {
         viewModelScope.launch {
             mapController.kakaoMap.value?.let { map ->
@@ -81,7 +89,8 @@ class SearchMenuViewModel @Inject constructor(
             }
         }
     }
-    
+
+    // 지도의 전체 핀 제거
     fun clearMarkers() {
         viewModelScope.launch {
             mapController.kakaoMap.value?.let { map ->
@@ -129,15 +138,22 @@ class SearchMenuViewModel @Inject constructor(
             )
             
             response.onSuccess { result ->
+                _searchResult.value = result
                 if (result != null) {
-                    Log.d("SearchMenuViewModel", "크롤링 스토어 정보 조회 성공: ${result.storeTitle}")
+                    Log.d("SearchMenuViewModel", "크롤링 스토어 정보 조회 성공: ${result.size}개")
+                    Log.d("SearchMenuViewModel", "크롤링 스토어 정보 조회 성공: ${result[0].storeTitle}")
                 }
-                
-                // 마커 초기화
-                clearMarkers()
-                
-                // 마커 추가
-                addMarker(lat, long, R.drawable.img_popup_dice)
+
+                // 지도에 마커 추가 (필요한 경우)
+                // val store = result[0]
+                // val lat = store.latitude
+                // val long = store.longitude
+
+//                // 마커 초기화
+//                clearMarkers()
+//
+//                // 마커 추가
+//                addMarker(lat, long, R.drawable.img_popup_dice)
                 
                 // 카메라 이동 (필요한 경우)
                 // moveCamera(lat, long)

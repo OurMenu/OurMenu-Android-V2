@@ -53,5 +53,5 @@ interface MapService {
         @Query("query") query: String,
         @Query("mapX") longitude: Double,
         @Query("mapY") latitude: Double
-    ): BaseResponse<CrawlingStoreInfoResponse>
+    ): BaseResponse<List<CrawlingStoreInfoResponse>>
 }
