@@ -25,7 +25,6 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
 fun StoreSearchItem(
-    isLastItem: Boolean = false,
     onClick: () -> Unit = {}
 ) {
     Row(
@@ -52,16 +51,6 @@ fun StoreSearchItem(
             )
         }
     }
-
-    //마지막 item이 아닌경우에만 하단에 divider 표시
-    if (!isLastItem) {
-        HorizontalDivider(
-            thickness = 1.dp,
-            color = Neutral300,
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
-
 }
 
 @Preview(showBackground = true)
@@ -70,6 +59,6 @@ private fun RestaurantSearchItemPreview() {
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
         StoreSearchItem()
         StoreSearchItem()
-        StoreSearchItem(true)
+        StoreSearchItem()
     }
 }
