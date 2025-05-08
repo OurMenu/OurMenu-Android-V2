@@ -10,7 +10,7 @@ data class MapResponse(
     @SerialName("menuPins")
     val menuPins: List<String>,
     @SerialName("mapX")
-    val mapX: Int,
+    val mapX: Double,
     @SerialName("mapY")
-    val mapY: Int
+    val mapY: Double
 )
