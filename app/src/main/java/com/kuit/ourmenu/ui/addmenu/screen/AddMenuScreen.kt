@@ -33,10 +33,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.kakao.vectormap.LatLng
 import com.kakao.vectormap.camera.CameraUpdateFactory
 import com.kakao.vectormap.label.LabelOptions
@@ -45,7 +43,7 @@ import com.kakao.vectormap.label.LabelStyles
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.addmenu.component.AddMenuSearchBackground
 import com.kuit.ourmenu.ui.addmenu.component.bottomsheet.AddMenuBottomSheetContent
-import com.kuit.ourmenu.ui.addmenu.viewmodel.AddMenuSearchViewModel
+import com.kuit.ourmenu.ui.addmenu.viewmodel.AddMenuViewModel
 import com.kuit.ourmenu.ui.common.SearchTextField
 import com.kuit.ourmenu.ui.common.map.MapViewWithLifecycle
 import com.kuit.ourmenu.ui.common.topappbar.OurMenuBackButtonTopAppBar
@@ -55,7 +53,11 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddMenuScreen(navController: NavController) {
+fun AddMenuScreen(
+    modifier: Modifier = Modifier,
+    viewModel: AddMenuViewModel = hiltViewModel(),
+
+) {
     var scaffoldState = rememberBottomSheetScaffoldState()
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
     var showSearchBackground by rememberSaveable { mutableStateOf(false) }
@@ -65,7 +67,6 @@ fun AddMenuScreen(navController: NavController) {
     val searchBarFocused by interactionSource.collectIsFocusedAsState()
     val focusManager = LocalFocusManager.current
 
-    val viewModel: AddMenuSearchViewModel = viewModel()
     val recentSearchResults by viewModel.recentSearchResults.collectAsStateWithLifecycle()
     val searchResults by viewModel.searchResults.collectAsStateWithLifecycle()
     val storeInfo by viewModel.storeInfo.collectAsStateWithLifecycle()
@@ -193,7 +194,5 @@ fun AddMenuScreen(navController: NavController) {
 @Preview(showBackground = true)
 @Composable
 private fun AddMenuScreenPreview() {
-    val navController = rememberNavController()
-
-    AddMenuScreen(navController)
+    AddMenuScreen()
 }

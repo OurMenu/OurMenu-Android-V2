@@ -38,7 +38,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.addmenu.component.item.SelectMenuItem
 import com.kuit.ourmenu.ui.addmenu.viewmodel.AddMenuDummyStoreInfo
-import com.kuit.ourmenu.ui.addmenu.viewmodel.AddMenuSearchViewModel
+import com.kuit.ourmenu.ui.addmenu.viewmodel.AddMenuViewModel
 import com.kuit.ourmenu.ui.common.BottomFullWidthButton
 import com.kuit.ourmenu.ui.theme.Neutral100
 import com.kuit.ourmenu.ui.theme.Neutral300
@@ -181,7 +181,7 @@ fun AddMenuBottomSheetContent(
 @Composable
 private fun AddMenuBottomSheetContentPreview() {
     val scaffoldState = rememberBottomSheetScaffoldState()
-    val viewModel: AddMenuSearchViewModel = viewModel()
+    val viewModel: AddMenuViewModel = viewModel()
     val storeInfo by viewModel.storeInfo.collectAsStateWithLifecycle()
     LaunchedEffect(Unit) {
         //아래 주석 해제하면 bottom sheet 확장된 상태 확인 가능

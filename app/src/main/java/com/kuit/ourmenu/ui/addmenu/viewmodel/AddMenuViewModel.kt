@@ -4,11 +4,17 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.data.repository.MapRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AddMenuSearchViewModel : ViewModel() {
+@HiltViewModel
+class AddMenuViewModel @Inject constructor(
+    private val mapRepository: MapRepository
+) : ViewModel() {
     // 최근 검색 결과를 저장
     private val _recentSearchResults = MutableStateFlow<List<Boolean>>(emptyList())
     val recentSearchResults: StateFlow<List<Boolean>> = _recentSearchResults
@@ -22,10 +28,10 @@ class AddMenuSearchViewModel : ViewModel() {
     val storeInfo: StateFlow<AddMenuDummyStoreInfo> = _storeInfo
 
     init {
-        getRecentSearchResults()
-        //확인용, 이후에는 제거
-        getSearchResults()
-        getRestaurantInfo()
+//        getRecentSearchResults()
+//        //확인용, 이후에는 제거
+//        getSearchResults()
+//        getRestaurantInfo()
     }
 
     fun getRecentSearchResults() {
