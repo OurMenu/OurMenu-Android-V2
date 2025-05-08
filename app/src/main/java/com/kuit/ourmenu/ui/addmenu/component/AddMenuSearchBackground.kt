@@ -23,7 +23,8 @@ import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.data.model.map.response.CrawlingHistoryResponse
 import com.kuit.ourmenu.data.model.map.response.CrawlingStoreDetailResponse
-import com.kuit.ourmenu.ui.addmenu.component.item.StoreSearchItem
+import com.kuit.ourmenu.ui.addmenu.component.item.StoreSearchHistoryItem
+import com.kuit.ourmenu.ui.addmenu.component.item.StoreSearchResultItem
 import com.kuit.ourmenu.ui.common.BottomFullWidthButton
 import com.kuit.ourmenu.ui.theme.Neutral100
 import com.kuit.ourmenu.ui.theme.Neutral300
@@ -35,7 +36,7 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 fun AddMenuSearchBackground(
     modifier: Modifier = Modifier,
     searchActionDone: Boolean,
-    recentSearchResults: List<CrawlingHistoryResponse>?, //이후에 타입 변경
+    searchHistory: List<CrawlingHistoryResponse>?, //이후에 타입 변경
     searchResults: List<CrawlingStoreDetailResponse>?, //이후에 타입 변경
     onItemClick: () -> Unit
 ) {
@@ -73,7 +74,9 @@ fun AddMenuSearchBackground(
                     } else {
                         LazyColumn(modifier = Modifier.padding(top = 68.dp)) {
                             items(searchResults.size) { index ->
-                                StoreSearchItem {
+                                StoreSearchResultItem(
+                                    resultItem = searchResults[index]
+                                ) {
                                     onItemClick()
                                 }
                                 if (index < searchResults.size - 1) {
@@ -95,16 +98,35 @@ fun AddMenuSearchBackground(
                     color = Neutral700,
                     modifier = Modifier.padding(start = 28.dp, top = 68.dp)
                 )
-                if (recentSearchResults != null) {
-                    if (recentSearchResults.isEmpty()) {
-                        Column(modifier = Modifier.fillMaxSize()) { /*empty view*/ }
+                if (searchHistory != null) {
+                    if (searchHistory.isEmpty()) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 68.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_addmenu_noresult),
+                                contentDescription = "no result",
+                                tint = Color.Unspecified
+                            )
+                            Text(
+                                text = stringResource(R.string.no_result),
+                                style = ourMenuTypography().pretendard_600_14,
+                                color = Neutral500,
+                                modifier = Modifier.padding(top = 8.dp)
+                            )
+                        }
                     } else {
                         LazyColumn() {
-                            items(recentSearchResults.size) { index ->
-                                StoreSearchItem {
+                            items(searchHistory.size) { index ->
+                                StoreSearchHistoryItem(
+                                    historyItem = searchHistory[index]
+                                ) {
                                     onItemClick()
                                 }
-                                if (index < recentSearchResults.size - 1) {
+                                if (index < searchHistory.size - 1) {
                                     HorizontalDivider(
                                         thickness = 1.dp,
                                         color = Neutral300,
@@ -135,11 +157,17 @@ fun AddMenuSearchBackground(
 @Composable
 private fun AddMenuSearchBackgroundPreview() {
     val searchActionDone by rememberSaveable { mutableStateOf(false) }
-    val recentSearchResults = emptyList<CrawlingHistoryResponse>()
+    val recentSearchResults = listOf(
+        CrawlingHistoryResponse(
+            menuTitle = stringResource(R.string.our_ddeokbokki),
+            storeAddress = stringResource(R.string.resaturant_address),
+            modifiedAt = "2023-10-01T12:00:00Z",
+        )
+    )
     val searchResults = emptyList<CrawlingStoreDetailResponse>()
     AddMenuSearchBackground(
         searchActionDone = searchActionDone,
-        recentSearchResults = recentSearchResults,
+        searchHistory = recentSearchResults,
         searchResults = searchResults,
     ){
         //onItemClick
