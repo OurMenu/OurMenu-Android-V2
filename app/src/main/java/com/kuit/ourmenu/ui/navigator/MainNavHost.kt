@@ -79,7 +79,7 @@ fun MainNavHost(
 
         // 메뉴 추가
         composable<Routes.AddMenu> {
-            AddMenuScreen(navController = navController.navController)
+            AddMenuScreen()
         }
     }
 }

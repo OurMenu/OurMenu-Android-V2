@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,11 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.kakao.vectormap.LatLng
-import com.kakao.vectormap.camera.CameraUpdateFactory
-import com.kakao.vectormap.label.LabelOptions
-import com.kakao.vectormap.label.LabelStyle
-import com.kakao.vectormap.label.LabelStyles
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.addmenu.component.AddMenuSearchBackground
 import com.kuit.ourmenu.ui.addmenu.component.bottomsheet.AddMenuBottomSheetContent
@@ -50,6 +46,7 @@ import com.kuit.ourmenu.ui.common.topappbar.OurMenuBackButtonTopAppBar
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,30 +64,31 @@ fun AddMenuScreen(
     val searchBarFocused by interactionSource.collectIsFocusedAsState()
     val focusManager = LocalFocusManager.current
 
-    val recentSearchResults by viewModel.recentSearchResults.collectAsStateWithLifecycle()
-    val searchResults by viewModel.searchResults.collectAsStateWithLifecycle()
+    val recentSearchResults by viewModel.searchHistory.collectAsStateWithLifecycle()
+    val searchResults by viewModel.searchResult.collectAsStateWithLifecycle()
     val storeInfo by viewModel.storeInfo.collectAsStateWithLifecycle()
 
-    val mapView = MapViewWithLifecycle() { kakaoMap ->
-        // 카메라 이동
-        val cameraUpdate = CameraUpdateFactory.newCenterPosition(LatLng.from(37.5416, 127.0793))
-        // 라벨 아이콘 설정
-        val style = kakaoMap.labelManager?.addLabelStyles(
-            // R.drawable에서 vector를 가져오면 화면에 보이지 않는 이슈 존재
-            LabelStyles.from(LabelStyle.from(R.drawable.img_popup_dice))
-        )
-        // 라벨 아이콘 적용
-        val options = LabelOptions.from(LatLng.from(37.5406, 127.0763)).setStyles(style)
-        // 레이어
-        val layer = kakaoMap.labelManager?.layer
-        layer?.addLabel(options)
-        kakaoMap.moveCamera(cameraUpdate)
+    // 지도 중심 좌표 상태
+    val currentCenter by viewModel.currentCenter.collectAsState()
+
+    // Collect history data from ViewModel
+    val searchHistory by viewModel.searchHistory.collectAsState()
+
+    val mapView = MapViewWithLifecycle(
+        mapController = viewModel.mapController
+    ) { kakaoMap ->
+        // viewModel에서 kakaoMap을 초기화
+        viewModel.initializeMap(kakaoMap)
     }
 
     LaunchedEffect(searchBarFocused) {
         if (searchBarFocused) {
             showSearchBackground = true
             showBottomSheet = false
+
+            launch {
+                viewModel.getCrawlingHistory()
+            }
         }
     }
 
@@ -159,7 +157,7 @@ fun AddMenuScreen(
                 //검색 컴포넌트
                 AddMenuSearchBackground(
                     searchActionDone = searchActionDone,
-                    recentSearchResults = recentSearchResults,
+                    searchHistory = recentSearchResults,
                     searchResults = searchResults
                 ) {
                     //검색된 아이템 클릭시 작동할 함수
