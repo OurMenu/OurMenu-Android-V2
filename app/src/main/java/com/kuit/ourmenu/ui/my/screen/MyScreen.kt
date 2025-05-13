@@ -31,8 +31,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.topappbar.OurMenuAddButtonTopAppBar
+import com.kuit.ourmenu.ui.my.component.DeleteAccountModal
+import com.kuit.ourmenu.ui.my.component.LogoutModal
 import com.kuit.ourmenu.ui.my.component.MyBottomModal
+import com.kuit.ourmenu.ui.my.component.MyCurrentPasswordModal
 import com.kuit.ourmenu.ui.my.component.MyMealTime
+import com.kuit.ourmenu.ui.my.component.MyNewPasswordModal
 import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.NeutralBlack
@@ -42,8 +46,12 @@ import com.kuit.ourmenu.ui.theme.OurMenuTypography
 @Composable
 fun MyScreen() {
     var bottomSheetVisible by remember { mutableStateOf(false) }
+    var showCurrentPasswordModal by remember { mutableStateOf(false) }
+    var showNewPasswordModal by remember { mutableStateOf(false) }
+    var showLogoutModal by remember { mutableStateOf(false) }
+    var showDeleteAccountModal by remember { mutableStateOf(false) }
 
-    Box{
+    Box {
         Scaffold(
             topBar = {
                 OurMenuAddButtonTopAppBar(
@@ -74,8 +82,7 @@ fun MyScreen() {
                         Icon(
                             painter = painterResource(R.drawable.ic_profile),
                             contentDescription = null,
-                            modifier = Modifier
-                                .size(44.dp),
+                            modifier = Modifier.size(44.dp),
                             tint = Color.Unspecified
                         )
 
@@ -115,11 +122,11 @@ fun MyScreen() {
                     }
                     Spacer(Modifier.height(20.dp))
                     InfoRow(infoTitle = stringResource(R.string.customer_service)) {
-                        // TODO: 공지사항 화면으로 이동
+                        // TODO: 고객센터 화면으로 이동
                     }
                     Spacer(Modifier.height(20.dp))
                     InfoRow(infoTitle = stringResource(R.string.app_review)) {
-                        // TODO: 공지사항 화면으로 이동
+                        // TODO: 앱 리뷰 화면으로 이동
                     }
                     Spacer(Modifier.height(20.dp))
                     Text(
@@ -131,12 +138,62 @@ fun MyScreen() {
             }
         }
 
+        // 모달은 Box의 맨 위에 배치해야 함
         if (bottomSheetVisible) {
             MyBottomModal(
                 onDismissRequest = { bottomSheetVisible = false },
-                onChangePassword = { /* TODO */ },
-                onLogout = { /* TODO */ },
-                onDeleteAccount = { /* TODO */ }
+                onChangePassword = {
+                    showCurrentPasswordModal = true
+                    bottomSheetVisible = false
+                },
+                onLogout = {
+                    showLogoutModal = true
+                    bottomSheetVisible = false
+                },
+                onDeleteAccount = {
+                    showDeleteAccountModal = true
+                    bottomSheetVisible = false
+                }
+            )
+        }
+
+        if (showCurrentPasswordModal) {
+            MyCurrentPasswordModal(
+                onDismiss = { showCurrentPasswordModal = false },
+                onConfirm = {
+                    showNewPasswordModal = true
+                    showCurrentPasswordModal = false
+                }
+            )
+        }
+
+        if (showNewPasswordModal) {
+            MyNewPasswordModal(
+                onDismiss = { showNewPasswordModal = false },
+                onConfirm = {
+                    // TODO: 비밀번호 변경 로직 추가
+                    showNewPasswordModal = false
+                }
+            )
+        }
+
+        if (showLogoutModal) {
+            LogoutModal(
+                onDismiss = { showLogoutModal = false },
+                onConfirm = {
+                    // TODO: 로그아웃 로직 추가
+                    showLogoutModal = false
+                }
+            )
+        }
+
+        if (showDeleteAccountModal) {
+            DeleteAccountModal(
+                onDismiss = { showDeleteAccountModal = false },
+                onConfirm = {
+                    // TODO: 계정 삭제 로직 추가
+                    showDeleteAccountModal = false
+                }
             )
         }
     }
