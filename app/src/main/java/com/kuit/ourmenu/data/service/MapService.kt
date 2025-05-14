@@ -18,7 +18,7 @@ interface MapService {
     @GET("api/users/menus/{mapId}/maps")
     suspend fun getMapDetail(
         @Path("mapId") mapId: Long
-    ): BaseResponse<MapDetailResponse>
+    ): BaseResponse<List<MapDetailResponse>>
 
     @GET("api/users/menus/maps")
     suspend fun getMap(): BaseResponse<List<MapResponse>>

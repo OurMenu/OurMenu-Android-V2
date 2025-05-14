@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MapResponse(
     @SerialName("mapId")
-    val mapId: Int,
+    val mapId: Long,
     @SerialName("menuPins")
     val menuPins: List<String>,
     @SerialName("mapX")

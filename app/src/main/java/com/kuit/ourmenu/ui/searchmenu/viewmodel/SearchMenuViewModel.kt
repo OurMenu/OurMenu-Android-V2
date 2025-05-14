@@ -10,6 +10,7 @@ import com.kakao.vectormap.label.LabelOptions
 import com.kakao.vectormap.label.LabelStyle
 import com.kakao.vectormap.label.LabelStyles
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.data.model.map.response.MapDetailResponse
 import com.kuit.ourmenu.data.model.map.response.MapResponse
 import com.kuit.ourmenu.data.model.map.response.MapSearchHistoryResponse
 import com.kuit.ourmenu.data.model.map.response.MapSearchResponse
@@ -37,6 +38,10 @@ class SearchMenuViewModel @Inject constructor(
     // 검색 결과
     private val _searchResult = MutableStateFlow<List<MapSearchResponse>?>(emptyList())
     val searchResult = _searchResult.asStateFlow()
+
+    // 위치에 따른 메뉴 조회
+    private val _menusOnPin = MutableStateFlow<List<MapDetailResponse>?>(emptyList())
+    val menusOnPin = _menusOnPin.asStateFlow()
 
     // 화면에 보이는 지도 상의 중심에 해당하는 좌표
     private val _currentCenter = MutableStateFlow<LatLng?>(null)
@@ -90,8 +95,23 @@ class SearchMenuViewModel @Inject constructor(
                 val style = map.labelManager?.addLabelStyles(
                     LabelStyles.from(LabelStyle.from(resourceId))
                 )
-                val options = LabelOptions.from(LatLng.from(latitude, longitude)).setStyles(style)
+                val options = LabelOptions.from(LatLng.from(latitude, longitude)).setStyles(style).setClickable(true)
                 map.labelManager?.layer?.addLabel(options)
+                map.setOnLabelClickListener { kakaoMap, labelLayer, label ->
+                    // 핀 클릭시 동작 정의
+                    Log.d("SearchMenuViewModel", "핀 클릭됨")
+                    moveCamera(latitude = label.position.latitude, longitude = label.position.longitude)
+                    
+                    // Find the matching menu item and call getMapDetail
+                    _myMenus.value?.find { menu ->
+                        menu.mapY == label.position.latitude && menu.mapX == label.position.longitude
+                    }?.let { matchingMenu ->
+                        Log.d("SearchMenuViewModel", "핀 클릭된 메뉴: ${matchingMenu.mapId}")
+                        getMapDetail(matchingMenu.mapId)
+                    }
+                    
+                    true
+                }
             }
         }
     }
@@ -159,6 +179,24 @@ class SearchMenuViewModel @Inject constructor(
                 }
             }.onFailure {
                 Log.d("SearchMenuViewModel", "내 메뉴 조회 실패: ${it.message}")
+            }
+        }
+    }
+
+    // mapId에 위치하는 메뉴 조회(메뉴핀 누른 경우)
+    fun getMapDetail(mapId: Long) {
+        viewModelScope.launch {
+            val response = mapRepository.getMapDetail(mapId)
+            response.onSuccess {
+                if (it != null) {
+                    _menusOnPin.value = it
+                    Log.d("SearchMenuViewModel", "핀 위치의 메뉴 조회 성공: $it")
+                    showSearchResultOnMap()
+                } else {
+                    Log.d("SearchMenuViewModel", "핀 위치의 메뉴 조회 실패: null")
+                }
+            }.onFailure {
+                Log.d("SearchMenuViewModel", "핀 위치의 메뉴 조회 실패: ${it.message}")
             }
         }
     }

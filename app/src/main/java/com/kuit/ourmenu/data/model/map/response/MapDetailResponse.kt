@@ -20,11 +20,11 @@ data class MapDetailResponse(
     @SerialName("menuFolderInfo")
     val menuFolderInfo: MenuFolderInfo,
     @SerialName("mapId")
-    val mapId: Int,
+    val mapId: Long,
     @SerialName("mapX")
-    val mapX: Int,
+    val mapX: Double,
     @SerialName("mapY")
-    val mapY: Int
+    val mapY: Double
 )
 
 @Serializable
