@@ -64,7 +64,7 @@ class MapRepository @Inject constructor(
         query: String,
         longitude: Double,
         latitude: Double
-    ) = kotlin.runCatching {
+    ) = runCatching {
         mapService.getCrawlingStoreInfo(
             query = query,
             longitude = longitude,
