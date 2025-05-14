@@ -136,6 +136,12 @@ class AddMenuViewModel @Inject constructor(
                 )
                 val options = LabelOptions.from(LatLng.from(latitude, longitude)).setStyles(style)
                 map.labelManager?.layer?.addLabel(options)
+                map.setOnLabelClickListener { kakaoMap, labelLayer, label ->
+                    // TODO: 핀 클릭시 동작 정의
+                    Log.d("SearchMenuViewModel", "핀 클릭됨")
+                    moveCamera(latitude = label.position.latitude, longitude = label.position.longitude)
+                    true
+                }
             }
         }
     }
