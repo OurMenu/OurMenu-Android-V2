@@ -37,7 +37,6 @@ import com.kuit.ourmenu.ui.common.SearchTextField
 import com.kuit.ourmenu.ui.common.bottomsheet.BottomSheetDragHandle
 import com.kuit.ourmenu.ui.common.map.MapViewWithLifecycle
 import com.kuit.ourmenu.ui.common.topappbar.OurMenuAddButtonTopAppBar
-import com.kuit.ourmenu.ui.menuinfo.dummy.MenuInfoDummyData
 import com.kuit.ourmenu.ui.searchmenu.component.SearchBottomSheetContent
 import com.kuit.ourmenu.ui.searchmenu.component.SearchHistoryList
 import com.kuit.ourmenu.ui.searchmenu.model.SearchHistoryData
@@ -63,13 +62,23 @@ fun SearchMenuScreen(
     val searchBarFocused by interactionSource.collectIsFocusedAsState()
     val focusManager = LocalFocusManager.current
     
-    // 지도 중심 좌표 상태
+    // 지도 중심 좌표
     val currentCenter by viewModel.currentCenter.collectAsState()
     
-    // Collect history data from ViewModel
+    // 검색기록
     val searchHistory by viewModel.searchHistory.collectAsState()
+    
+    // 핀 위치에 해당하는 메뉴들
+    val menusOnPin by viewModel.menusOnPin.collectAsState()
 
     val density = LocalDensity.current
+    val singleItemHeight = 300.dp // Fixed height for each item
+
+    LaunchedEffect(menusOnPin) {
+        if (menusOnPin != null && menusOnPin?.isNotEmpty() == true) {
+            showBottomSheet = true
+        }
+    }
 
     val mapView = MapViewWithLifecycle(
         mapController = viewModel.mapController
@@ -103,17 +112,8 @@ fun SearchMenuScreen(
         topBar = { OurMenuAddButtonTopAppBar() },
         sheetContent = {
             SearchBottomSheetContent(
-                modifier = Modifier
-                    .onGloballyPositioned { coordinates ->
-                        val heightPx = coordinates.size.height
-                        bottomSheetPeekHeight = density.run {
-                            heightPx.toDp() + dragHandleHeight
-                        }
-                    },
-                dataList = listOf(
-                    MenuInfoDummyData.dummyData,
-                    MenuInfoDummyData.dummyData,
-                )
+                modifier = Modifier.fillMaxWidth(),
+                dataList = menusOnPin ?: emptyList()
             )
         },
         sheetContainerColor = NeutralWhite,
@@ -125,7 +125,10 @@ fun SearchMenuScreen(
                 }
             )
         },
-        sheetPeekHeight = if(showBottomSheet) bottomSheetPeekHeight else 0.dp , // TODO : 아이템 개수에 따라 높이 조절 필요
+        sheetPeekHeight = if(showBottomSheet) {
+            val itemCount = menusOnPin?.size ?: 0
+            (singleItemHeight * itemCount) + dragHandleHeight
+        } else 0.dp,
         containerColor = NeutralWhite,
     ) { innerPadding ->
         Box(
@@ -207,7 +210,7 @@ fun SearchMenuScreen(
                     .align(Alignment.BottomEnd)
                     .padding(bottom = 16.dp, end = 20.dp),
                 onClick = { 
-                    // Example of map manipulation in response to button click
+                    // TODO: 임시로 설정해놓은 카메라 이동
                     viewModel.moveCamera(37.5416, 127.0793)
                 },
             )

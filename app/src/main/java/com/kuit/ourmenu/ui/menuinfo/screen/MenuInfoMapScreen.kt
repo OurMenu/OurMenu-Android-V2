@@ -20,6 +20,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.kuit.ourmenu.data.model.map.response.MapDetailResponse
+import com.kuit.ourmenu.data.model.map.response.MenuFolderInfo
 import com.kuit.ourmenu.ui.common.GoToMapButton
 import com.kuit.ourmenu.ui.common.bottomsheet.BottomSheetDragHandle
 import com.kuit.ourmenu.ui.common.bottomsheet.MenuInfoBottomSheetContent
@@ -56,7 +58,25 @@ fun MenuInfoMapScreen(navController: NavController) {
                         bottomSheetContentHeight = density.run {
                             heightPx.toDp() + dragHandleHeight
                         }
-                    }.padding(bottom = 20.dp)
+                    }
+                    .padding(bottom = 20.dp),
+                // TODO: 이후에 수정 필요
+                menuInfoData = MapDetailResponse(
+                    menuId = 1,
+                    menuTitle = "Test Menu",
+                    menuPrice = 10000,
+                    menuPin = "pin",
+                    menuTags = listOf("한식", "밥"),
+                    menuImgUrls = listOf(),
+                    menuFolderInfo = MenuFolderInfo(
+                        menuFolderTitle = "Test Store",
+                        menuFolderIcon = "icon",
+                        menuFolderCount = 1
+                    ),
+                    mapId = 1,
+                    mapX = 127.0,
+                    mapY = 37.0
+                )
             )
         },
         sheetPeekHeight = bottomSheetContentHeight,

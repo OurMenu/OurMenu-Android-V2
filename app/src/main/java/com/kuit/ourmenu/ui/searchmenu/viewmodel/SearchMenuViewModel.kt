@@ -191,7 +191,6 @@ class SearchMenuViewModel @Inject constructor(
                 if (it != null) {
                     _menusOnPin.value = it
                     Log.d("SearchMenuViewModel", "핀 위치의 메뉴 조회 성공: $it")
-                    showSearchResultOnMap()
                 } else {
                     Log.d("SearchMenuViewModel", "핀 위치의 메뉴 조회 실패: null")
                 }
