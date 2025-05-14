@@ -78,13 +78,6 @@ fun SearchMenuScreen(
         viewModel.initializeMap(kakaoMap)
     }
 
-//    // 지도 초기화 후 카메라 위치 및 마커 추가 (테스트용)
-//    LaunchedEffect(Unit) {
-//        delay(2000)
-//        viewModel.moveCamera(37.5665, 126.9780) // Seoul City Hall coordinates
-//        viewModel.addMarker(37.5665, 126.9780, R.drawable.img_popup_dice)
-//    }
-
     LaunchedEffect(searchBarFocused) {
         if (searchBarFocused) {
             showSearchBackground = true
@@ -92,7 +85,7 @@ fun SearchMenuScreen(
             
             // Fetch crawling history when search field is focused
             launch {
-                viewModel.getCrawlingHistory()
+                viewModel.getSearchHistory()
             }
         }
     }
@@ -197,7 +190,7 @@ fun SearchMenuScreen(
                         Log.d("SearchMenuScreen", "검색 위치: $latitude, $longitude")
                         
                         // 검색어와 현재 좌표로 크롤링 스토어 정보 요청
-                        viewModel.getCrawlingStoreInfo(
+                        viewModel.getMapSearchResult(
                             query = searchText,
                             long = longitude,
                             lat = latitude

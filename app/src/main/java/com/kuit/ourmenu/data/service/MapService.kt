@@ -21,7 +21,7 @@ interface MapService {
     ): BaseResponse<MapDetailResponse>
 
     @GET("api/users/menus/maps")
-    suspend fun getMap(): BaseResponse<MapResponse>
+    suspend fun getMap(): BaseResponse<List<MapResponse>>
 
     @GET("api/users/menus/maps/{menuId}/search")
     suspend fun getMapMenuDetail(
@@ -33,10 +33,10 @@ interface MapService {
         @Query("title") title: String,
         @Query("mapX") longitude: Double?,
         @Query("mapY") latitude: Double?
-    ): BaseResponse<MapSearchResponse>
+    ): BaseResponse<List<MapSearchResponse>>
 
     @GET("api/users/menus/maps/search-history")
-    suspend fun getMapSearchHistory(): BaseResponse<MapSearchHistoryResponse>
+    suspend fun getMapSearchHistory(): BaseResponse<List<MapSearchHistoryResponse>>
 
     // 크롤링 관련 요청
     @GET("api/priored/users/{userId}/histories")

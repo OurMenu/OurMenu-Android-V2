@@ -10,9 +10,9 @@ import com.kakao.vectormap.label.LabelOptions
 import com.kakao.vectormap.label.LabelStyle
 import com.kakao.vectormap.label.LabelStyles
 import com.kuit.ourmenu.R
-import com.kuit.ourmenu.data.model.map.response.CrawlingHistoryResponse
-import com.kuit.ourmenu.data.model.map.response.CrawlingStoreDetailResponse
-import com.kuit.ourmenu.data.model.map.response.CrawlingStoreInfoResponse
+import com.kuit.ourmenu.data.model.map.response.MapResponse
+import com.kuit.ourmenu.data.model.map.response.MapSearchHistoryResponse
+import com.kuit.ourmenu.data.model.map.response.MapSearchResponse
 import com.kuit.ourmenu.data.repository.MapRepository
 import com.kuit.ourmenu.ui.common.map.MapController
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,11 +27,15 @@ class SearchMenuViewModel @Inject constructor(
     private val mapRepository: MapRepository
 ) : ViewModel() {
     // 검색 기록
-    private val _searchHistory = MutableStateFlow<List<CrawlingHistoryResponse>?>(emptyList())
+    private val _searchHistory = MutableStateFlow<List<MapSearchHistoryResponse>?>(emptyList())
     val searchHistory = _searchHistory.asStateFlow()
 
+    // 전체 등록된 메뉴
+    private val _myMenus = MutableStateFlow<List<MapResponse>?>(emptyList())
+    val myMenus = _myMenus.asStateFlow()
+
     // 검색 결과
-    private val _searchResult = MutableStateFlow<List<CrawlingStoreDetailResponse>?>(emptyList())
+    private val _searchResult = MutableStateFlow<List<MapSearchResponse>?>(emptyList())
     val searchResult = _searchResult.asStateFlow()
 
     // 화면에 보이는 지도 상의 중심에 해당하는 좌표
@@ -43,8 +47,9 @@ class SearchMenuViewModel @Inject constructor(
     // 지도 초기화
     fun initializeMap(kakaoMap: KakaoMap) {
         // Initial map setup
-        moveCamera(37.5416, 127.0793)
-        addMarker(37.5406, 127.0763, R.drawable.img_popup_dice)
+//        moveCamera(37.5416, 127.0793)
+        getMyMenus()
+//        showSearchResultOnMap()
     }
 
     // 지도에서의 화면 이동
@@ -100,9 +105,9 @@ class SearchMenuViewModel @Inject constructor(
         }
     }
 
-    fun getCrawlingHistory() {
+    fun getSearchHistory() {
         viewModelScope.launch {
-            val response = mapRepository.getCrawlingHistory()
+            val response = mapRepository.getMapSearchHistory()
             response.onSuccess {
                 _searchHistory.value = it
                 Log.d("SearchMenuViewModel", "크롤링 기록 조회 성공")
@@ -113,7 +118,7 @@ class SearchMenuViewModel @Inject constructor(
         }
     }
 
-    fun getCrawlingStoreInfo(
+    fun getMapSearchResult(
         query: String,
         long: Double,
         lat: Double
@@ -121,8 +126,8 @@ class SearchMenuViewModel @Inject constructor(
         viewModelScope.launch {
             Log.d("SearchMenuViewModel", "크롤링 스토어 정보 요청: $query, 좌표($lat, $long)")
             
-            val response = mapRepository.getCrawlingStoreInfo(
-                query = query,
+            val response = mapRepository.getMapSearch(
+                title = query,
                 longitude = long,
                 latitude = lat
             )
@@ -132,51 +137,29 @@ class SearchMenuViewModel @Inject constructor(
                     Log.d("SearchMenuViewModel", "크롤링 스토어 정보 조회 성공: ${result.size}개")
                     Log.d("SearchMenuViewModel", "크롤링 스토어 정보 조회 성공: ${result[0].storeTitle}")
                     // 검색 결과 저장
-                    getCrawlingStoreDetail(result)
-                    Log.d("SearchMenuViewModel", "크롤링 끝")
+                    _searchResult.value = result
                 }
-
-                // 지도에 마커 추가 (필요한 경우)
-                // val store = result[0]
-                // val lat = store.latitude
-                // val long = store.longitude
-
-//                // 마커 초기화
-//                clearMarkers()
-//
-//                // 마커 추가
-//                addMarker(lat, long, R.drawable.img_popup_dice)
-                
-                // 카메라 이동 (필요한 경우)
-                // moveCamera(lat, long)
             }.onFailure {
                 Log.d("SearchMenuViewModel", "크롤링 스토어 정보 조회 실패: ${it.message}")
             }
         }
     }
 
-    // 크롤링 한 세부 정보를 _searchResult에 저장하는 함수
-    fun getCrawlingStoreDetail(crawledDatas: List<CrawlingStoreInfoResponse>){
-        val updatedResult = mutableListOf<CrawlingStoreDetailResponse>()
+    // 등록한 전체 메뉴 조회(빈 검색시 수행?)
+    fun getMyMenus(){
         viewModelScope.launch {
-            crawledDatas.forEach { crawledData ->
-                val response = mapRepository.getCrawlingStoreDetail(
-                    isCrawled = true,
-                    storeId = crawledData.storeId
-                )
-                response.onSuccess {
-                    if (it != null) {
-                        updatedResult.add(it)
-                        Log.d("SearchMenuViewModel", "크롤링 스토어 정보 업데이트 성공: ${it.storeTitle}")
-                    }else{
-                        Log.d("SearchMenuViewModel", "크롤링 스토어 정보 업데이트 실패: null")
-                    }
-                }.onFailure {
-                    Log.d("SearchMenuViewModel", "크롤링 스토어 정보 업데이트 실패: ${it.message}")
+            val response = mapRepository.getMap()
+            response.onSuccess {
+                if (it != null) {
+                    _myMenus.value = it
+                    Log.d("SearchMenuViewModel", "내 메뉴 조회 성공: ${it.size}개")
+                    showSearchResultOnMap()
+                } else {
+                    Log.d("SearchMenuViewModel", "내 메뉴 조회 실패: null")
                 }
+            }.onFailure {
+                Log.d("SearchMenuViewModel", "내 메뉴 조회 실패: ${it.message}")
             }
-            _searchResult.value = updatedResult
-            showSearchResultOnMap()
         }
     }
 
@@ -184,14 +167,14 @@ class SearchMenuViewModel @Inject constructor(
     fun showSearchResultOnMap() {
         viewModelScope.launch {
             clearMarkers()
-            searchResult.value?.forEach { store ->
-                val latitude = store.storeMapY
-                val longitude = store.storeMapX
+            myMenus.value?.forEach { store ->
+                val latitude = store.mapY
+                val longitude = store.mapX
                 addMarker(latitude, longitude, R.drawable.img_popup_dice)
-                Log.d("SearchMenuViewModel", "마커 추가: ${store.storeTitle} lat: (${latitude}, long: ${longitude})")
+                Log.d("SearchMenuViewModel", "mapId: ${store.mapId} lat: (${latitude}, long: ${longitude})")
             }
             // 첫 번째 검색 결과로 카메라 이동
-            searchResult.value?.get(0)?.let { moveCamera(it.storeMapY, it.storeMapX) }
+            myMenus.value?.get(0)?.let { moveCamera(it.mapY, it.mapX) }
         }
     }
 }
