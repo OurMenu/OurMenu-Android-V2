@@ -1,0 +1,68 @@
+package com.kuit.ourmenu.ui.signup.navigation
+
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
+import com.kuit.ourmenu.ui.navigator.Routes
+import com.kuit.ourmenu.ui.signup.screen.SignupEmailRoute
+import com.kuit.ourmenu.ui.signup.screen.SignupMealTimeRoute
+import com.kuit.ourmenu.ui.signup.screen.SignupPasswordRoute
+import com.kuit.ourmenu.ui.signup.screen.SignupVerifyRoute
+import com.kuit.ourmenu.ui.signup.viewmodel.SignupViewModel
+
+fun NavController.navigateToSignupEmail() {
+    navigate(Routes.SignupEmail)
+}
+
+fun NavController.navigateToSignupPassword() {
+    navigate(Routes.SignupPassword)
+}
+
+fun NavController.navigateToSignupMealTime() {
+    navigate(Routes.SignupMealTime)
+}
+
+fun NavController.navigateToSignupVerify() {
+    navigate(Routes.SignupVerify)
+}
+
+
+fun NavGraphBuilder.signupNavGraph(
+    navigateBack: () -> Unit,
+    navigateOnboardingToHome: () -> Unit,
+    navigateToSignupVerify: () -> Unit,
+    navigateToSignupMealTime: () -> Unit,
+    navigateToSignupPassword: () -> Unit,
+    getSignupViewModel: @Composable (NavBackStackEntry) -> SignupViewModel
+) {
+    composable<Routes.SignupEmail> {
+        SignupEmailRoute(
+            navigateToVerify = navigateToSignupVerify,
+            navigateBack = navigateBack,
+            viewModel = getSignupViewModel(it)
+        )
+    }
+    composable<Routes.SignupVerify> {
+        SignupVerifyRoute(
+            navigateToPassword = navigateToSignupPassword,
+            navigateBack = navigateBack,
+            viewModel = getSignupViewModel(it)
+        )
+    }
+    composable<Routes.SignupPassword> {
+        SignupPasswordRoute(
+            navigateToMealTime = navigateToSignupMealTime,
+            navigateBack = navigateBack,
+            viewModel = getSignupViewModel(it)
+        )
+    }
+    composable<Routes.SignupMealTime> {
+        SignupMealTimeRoute(
+            navigateToHome = navigateOnboardingToHome,
+            navigateBack = navigateBack,
+            viewModel = getSignupViewModel(it)
+        )
+    }
+}

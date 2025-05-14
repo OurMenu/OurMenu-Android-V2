@@ -3,7 +3,7 @@ package com.kuit.ourmenu.ui.onboarding.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kuit.ourmenu.data.repository.CacheRepository
-import com.kuit.ourmenu.ui.onboarding.mapper.toState
+import com.kuit.ourmenu.ui.onboarding.state.toState
 import com.kuit.ourmenu.ui.onboarding.state.CacheState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,4 +1,4 @@
-package com.kuit.ourmenu.ui.onboarding.component
+package com.kuit.ourmenu.ui.common.topappbar
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CenterAlignedTopAppBar

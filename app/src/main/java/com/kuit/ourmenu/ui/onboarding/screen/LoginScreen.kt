@@ -1,6 +1,7 @@
 package com.kuit.ourmenu.ui.onboarding.screen
 
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,17 +20,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -47,8 +44,9 @@ import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.BottomFullWidthButton
 import com.kuit.ourmenu.ui.common.OurSnackbarHost
 import com.kuit.ourmenu.ui.onboarding.component.BottomFullWidthBorderButton
-import com.kuit.ourmenu.ui.onboarding.component.LoginTextField
-import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
+import com.kuit.ourmenu.ui.common.LoginTextField
+import com.kuit.ourmenu.ui.common.topappbar.OnboardingTopAppBar
+import com.kuit.ourmenu.ui.onboarding.model.LoginUiState
 import com.kuit.ourmenu.ui.onboarding.state.LoginState
 import com.kuit.ourmenu.ui.onboarding.viewmodel.LoginViewModel
 import com.kuit.ourmenu.ui.theme.Neutral100
@@ -57,82 +55,104 @@ import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
-import com.kuit.ourmenu.utils.AnimationUtil.shakeAnimation
-import kotlinx.coroutines.delay
+import com.kuit.ourmenu.utils.AnimationUtil.shakeErrorInputFieldWithFocus
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @Composable
-fun LoginScreen(
+fun LoginRoute(
     navigateToHome: () -> Unit,
     navigateBack: () -> Unit,
     navigateToSignupEmail: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
-    val email by viewModel.email.collectAsStateWithLifecycle()
-    val password by viewModel.password.collectAsStateWithLifecycle()
-    var isPasswordVisible by rememberSaveable { mutableStateOf(false) }
-    val loginState by viewModel.loginState.collectAsStateWithLifecycle()
-
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val shakeOffset = remember { Animatable(0f) }
     val emailFocusRequester = remember { FocusRequester() }
     val passwordFocusRequester = remember { FocusRequester() }
-    val shakingModifier = Modifier.offset { IntOffset(shakeOffset.value.roundToInt(), 0) }
 
-    LaunchedEffect(loginState) {
-        when (loginState) {
+    LaunchedEffect(uiState.loginState) {
+        when (uiState.loginState) {
             is LoginState.Success -> navigateToHome()
 
             is LoginState.Error -> {
                 scope.launch {
                     snackbarHostState.showSnackbar(
-                        message = viewModel.error.value ?: "",
-                        duration = SnackbarDuration.Short
+                        message = uiState.error ?: "",
                     )
                 }
 
             }
 
             is LoginState.NotFoundUser -> {
-                scope.launch {
-                    emailFocusRequester.requestFocus()
-                    delay(800)
-                }
-                shakeAnimation(
-                    offset = shakeOffset,
-                    coroutineScope = scope,
+                shakeErrorInputFieldWithFocus(
+                    shakeOffset = shakeOffset,
+                    focusRequester = emailFocusRequester,
+                    message = "존재하지 않는 이메일입니다.",
+                    snackbarHostState = snackbarHostState,
+                    scope = scope
                 )
-                scope.launch {
-                    snackbarHostState.showSnackbar(
-                        message = "존재하지 않는 이메일입니다.",
-                        duration = SnackbarDuration.Short
-                    )
-                }
             }
 
             is LoginState.DifferentPassword -> {
-                scope.launch {
-                    passwordFocusRequester.requestFocus()
-                    delay(800)
-                }
-                shakeAnimation(
-                    offset = shakeOffset,
-                    coroutineScope = scope,
+                shakeErrorInputFieldWithFocus(
+                    shakeOffset = shakeOffset,
+                    focusRequester = passwordFocusRequester,
+                    message = "비밀번호가 일치하지 않아요.",
+                    snackbarHostState = snackbarHostState,
+                    scope = scope
                 )
-                scope.launch {
-                    snackbarHostState.showSnackbar(
-                        message = "비밀번호가 일치하지 않아요.",
-                        duration = SnackbarDuration.Short
-                    )
-                }
+
             }
 
 
             else -> {}
         }
     }
+
+    LoginScreen(
+        navigateBack = navigateBack,
+        navigateToSignupEmail = navigateToSignupEmail,
+        shakeOffset = shakeOffset,
+        uiState = uiState,
+        emailFocusRequester = emailFocusRequester,
+        passwordFocusRequester = passwordFocusRequester,
+        updatePasswordVisible = viewModel::updatePasswordVisible,
+        signInWithEmail = viewModel::signInWithEmail,
+        updateEmail = viewModel::updateEmail,
+        updatePassword = viewModel::updatePassword,
+    )
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 44.dp),
+        contentAlignment = Alignment.TopCenter
+    ) {
+        OurSnackbarHost(
+            hostState = snackbarHostState
+        )
+    }
+
+
+}
+
+@Composable
+fun LoginScreen(
+    navigateBack: () -> Unit,
+    navigateToSignupEmail: () -> Unit,
+    emailFocusRequester: FocusRequester,
+    passwordFocusRequester: FocusRequester,
+    shakeOffset: Animatable<Float, AnimationVector1D>,
+    uiState: LoginUiState,
+    signInWithEmail: () -> Unit,
+    updateEmail: (String) -> Unit,
+    updatePassword: (String) -> Unit,
+    updatePasswordVisible: (Boolean) -> Unit,
+) {
+    val shakingModifier = Modifier.offset { IntOffset(shakeOffset.value.roundToInt(), 0) }
 
     Scaffold(
         topBar = {
@@ -163,34 +183,34 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(56.dp))
 
                 LoginTextField(
-                    modifier = when (loginState) {
+                    modifier = when (uiState.loginState) {
                         LoginState.NotFoundUser -> shakingModifier.focusRequester(
                             emailFocusRequester
                         )
 
                         else -> Modifier
                     },
-                    error = loginState == LoginState.NotFoundUser,
+                    error = uiState.loginState == LoginState.NotFoundUser,
                     placeholder = stringResource(R.string.email),
-                    input = email,
-                    onTextChange = { viewModel.updateEmail(it) },
+                    input = uiState.email,
+                    onTextChange = { updateEmail(it) },
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 LoginTextField(
-                    modifier = when (loginState) {
+                    modifier = when (uiState.loginState) {
                         LoginState.DifferentPassword -> shakingModifier.focusRequester(
                             passwordFocusRequester
                         )
 
                         else -> Modifier
                     },
-                    error = loginState == LoginState.DifferentPassword,
+                    error = uiState.loginState == LoginState.DifferentPassword,
                     placeholder = stringResource(R.string.password),
-                    input = password,
-                    onTextChange = { viewModel.updatePassword(it) },
-                    visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    input = uiState.password,
+                    onTextChange = { updatePassword(it) },
+                    visualTransformation = if (uiState.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 )
 
                 Row(
@@ -204,8 +224,8 @@ fun LoginScreen(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Checkbox(
-                            checked = isPasswordVisible,
-                            onCheckedChange = { isPasswordVisible = it },
+                            checked = uiState.isPasswordVisible,
+                            onCheckedChange = { updatePasswordVisible(it) },
                             modifier =
                                 Modifier
                                     .border(1.dp, Neutral300, RoundedCornerShape(4.dp))
@@ -244,7 +264,7 @@ fun LoginScreen(
                     containerColor = Primary500Main,
                     contentColor = NeutralWhite,
                     text = stringResource(R.string.login),
-                ) { viewModel.signInWithEmail() }
+                ) { signInWithEmail() }
 
                 Spacer(modifier = Modifier.height(104.dp))
 
@@ -286,17 +306,6 @@ fun LoginScreen(
                     )
                 }
             }
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(top = 44.dp),
-                contentAlignment = Alignment.TopCenter
-            ) {
-                OurSnackbarHost(
-                    hostState = snackbarHostState
-                )
-            }
         },
     )
 }
@@ -305,8 +314,15 @@ fun LoginScreen(
 @Composable
 private fun LoginScreenPreview() {
     LoginScreen(
-        navigateToHome = {},
         navigateBack = {},
-        navigateToSignupEmail = {}
+        navigateToSignupEmail = {},
+        shakeOffset = remember { Animatable(0f) },
+        uiState = LoginUiState(),
+        updatePasswordVisible = { },
+        signInWithEmail = { },
+        updateEmail = { },
+        updatePassword = { },
+        emailFocusRequester = FocusRequester(),
+        passwordFocusRequester = FocusRequester(),
     )
 }

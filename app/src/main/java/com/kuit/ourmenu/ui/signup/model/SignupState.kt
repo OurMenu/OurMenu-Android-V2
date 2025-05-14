@@ -1,4 +1,4 @@
-package com.kuit.ourmenu.ui.onboarding.state
+package com.kuit.ourmenu.ui.signup.model
 
 sealed class SignupState {
     data object Default : SignupState()

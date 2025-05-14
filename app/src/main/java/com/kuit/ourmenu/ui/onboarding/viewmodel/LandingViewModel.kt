@@ -7,11 +7,13 @@ import com.kakao.sdk.user.UserApiClient
 import com.kuit.ourmenu.data.model.auth.SignInType
 import com.kuit.ourmenu.data.repository.AuthRepository
 import com.kuit.ourmenu.ui.oauth.KakaoModule.getUserEmail
+import com.kuit.ourmenu.ui.onboarding.model.LandingUiState
 import com.kuit.ourmenu.ui.onboarding.state.KakaoState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,13 +22,14 @@ class LandingViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
-    private val _kakaoState = MutableStateFlow<KakaoState>(KakaoState.Default)
-    val kakaoState = _kakaoState.asStateFlow()
+    private val _uiState = MutableStateFlow(LandingUiState())
+    val uiState = _uiState.asStateFlow()
 
     private val _error: MutableStateFlow<String?> = MutableStateFlow(null)
     val error = _error.asStateFlow()
 
     init {
+        // TODO : 디버깅 후 블록 삭제
         UserApiClient.instance.unlink { error ->
             if (error != null) {
                 Log.e("KakaoModule", "연결 끊기 실패", error)
@@ -37,17 +40,23 @@ class LandingViewModel @Inject constructor(
     }
 
     fun updateKakaoState(state: KakaoState) {
-        _kakaoState.value = state
+        _uiState.update {
+            it.copy(kakaoState = state)
+        }
     }
 
     fun signInWithKakao() {
         viewModelScope.launch {
             val email = getUserEmail()
             email ?: run {
-                _error.value = "이메일을 가져오는데 실패했습니다."
+                _uiState.update {
+                    it.copy(error = "이메일을 가져오는데 실패했습니다.")
+                }
                 return@launch
             }
-            _kakaoState.value = KakaoState.Loading
+            _uiState.update {
+                it.copy(kakaoState = KakaoState.Loading)
+            }
 
             if (checkKakaoEmail()) {
                 authRepository.login(
@@ -56,18 +65,26 @@ class LandingViewModel @Inject constructor(
                     signInType = SignInType.KAKAO
                 ).fold(
                     onSuccess = {
-                        _kakaoState.value = KakaoState.Login
+                        _uiState.update {
+                            it.copy(kakaoState = KakaoState.Login)
+                        }
                     },
                     onFailure = { error ->
-                        _kakaoState.value = KakaoState.Error
-                        _error.value = error.message
+                        _uiState.update {
+                            it.copy(
+                                kakaoState = KakaoState.Error,
+                                error = error.message ?: "로그인 실패"
+                            )
+                        }
 
                         delay(1000)
                     }
                 )
             } else {
                 // 카카오 회원 X -> 회원가입
-                _kakaoState.value = KakaoState.Signup
+                _uiState.update {
+                    it.copy(kakaoState = KakaoState.Signup)
+                }
             }
 
         }
