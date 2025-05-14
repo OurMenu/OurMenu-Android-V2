@@ -9,14 +9,16 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.kuit.ourmenu.ui.home.navigation.navigateToHome
 import com.kuit.ourmenu.ui.menuFolder.navigation.navigateToMenuFolder
+import com.kuit.ourmenu.ui.menuFolder.navigation.navigateToMenuFolderAllMenu
+import com.kuit.ourmenu.ui.menuFolder.navigation.navigateToMenuFolderDetail
 import com.kuit.ourmenu.ui.my.navigation.navigateToMy
 import com.kuit.ourmenu.ui.onboarding.navigation.navigateOnboardingToHome
 import com.kuit.ourmenu.ui.onboarding.navigation.navigateToLogin
-import com.kuit.ourmenu.ui.onboarding.navigation.navigateToSignupEmail
-import com.kuit.ourmenu.ui.onboarding.navigation.navigateToSignupMealTime
-import com.kuit.ourmenu.ui.onboarding.navigation.navigateToSignupPassword
-import com.kuit.ourmenu.ui.onboarding.navigation.navigateToSignupVerify
 import com.kuit.ourmenu.ui.searchmenu.navigation.navigateToSearchMenu
+import com.kuit.ourmenu.ui.signup.navigation.navigateToSignupEmail
+import com.kuit.ourmenu.ui.signup.navigation.navigateToSignupMealTime
+import com.kuit.ourmenu.ui.signup.navigation.navigateToSignupPassword
+import com.kuit.ourmenu.ui.signup.navigation.navigateToSignupVerify
 
 class MainNavController(
     val navController: NavHostController,
@@ -81,6 +83,15 @@ class MainNavController(
 
     fun popBackStack() {
         navController.popBackStack()
+    }
+
+    // Menu Folder
+    fun navigateToMenuFolderDetail(menuFolderId: Int) {
+        navController.navigateToMenuFolderDetail(menuFolderId)
+    }
+
+    fun navigateToMenuFolderAllMenu() {
+        navController.navigateToMenuFolderAllMenu()
     }
 
     @Composable

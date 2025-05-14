@@ -24,14 +24,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.data.model.menuFolder.response.MenuFolderDetailResponse
+import com.kuit.ourmenu.data.model.menuFolder.response.MenuFolderMenuItem
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun MenuFolderMenuButton(onMenuClick: () -> Unit = {}, onMapClick: () -> Unit = {}) {
+fun MenuFolderMenuButton(
+    menuFolderDetail: MenuFolderMenuItem,
+    onMenuClick: () -> Unit = {},
+    onMapClick: () -> Unit = {}
+) {
     val menuPrice = 12000
 
     Row(
@@ -41,8 +48,8 @@ fun MenuFolderMenuButton(onMenuClick: () -> Unit = {}, onMapClick: () -> Unit = 
             .padding(horizontal = 20.dp, vertical = 12.dp)
             .clickable(onClick = onMenuClick)
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.img_dummy_pizza),
+        AsyncImage(
+            model = menuFolderDetail.menuImgUrl,
             contentDescription = "Menu Image",
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -60,7 +67,7 @@ fun MenuFolderMenuButton(onMenuClick: () -> Unit = {}, onMapClick: () -> Unit = 
                 Alignment.Center
             ) {
                 Text(
-                    text = stringResource(R.string.menu_name),
+                    text = menuFolderDetail.menuTitle,
                     style = ourMenuTypography().pretendard_700_16,
                     color = Neutral900,
                 )
@@ -72,7 +79,7 @@ fun MenuFolderMenuButton(onMenuClick: () -> Unit = {}, onMapClick: () -> Unit = 
             ) {
                 Row {
                     Text(
-                        text = stringResource(R.string.store_name),
+                        text = menuFolderDetail.storeTitle,
                         style = ourMenuTypography().pretendard_500_14,
                         color = Neutral700
                     )
@@ -88,7 +95,7 @@ fun MenuFolderMenuButton(onMenuClick: () -> Unit = {}, onMapClick: () -> Unit = 
                     Spacer(modifier = Modifier.width(5.dp))
 
                     Text(
-                        text = stringResource(R.string.resaturant_address),
+                        text = menuFolderDetail.storeAddress,
                         style = ourMenuTypography().pretendard_500_14,
                         color = Neutral700
                     )
@@ -103,7 +110,7 @@ fun MenuFolderMenuButton(onMenuClick: () -> Unit = {}, onMapClick: () -> Unit = 
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = String.format(stringResource(R.string.menu_price_won), menuPrice),
+                    text = String.format(stringResource(R.string.menu_price_won), menuFolderDetail.menuPrice),
                     style = ourMenuTypography().pretendard_500_14,
                     color = Neutral700
                 )
@@ -129,5 +136,16 @@ fun MenuFolderMenuButton(onMenuClick: () -> Unit = {}, onMapClick: () -> Unit = 
 @Preview(showBackground = true)
 @Composable
 private fun MenuFolderMenuButtonPreview() {
-    MenuFolderMenuButton()
+    MenuFolderMenuButton(
+        menuFolderDetail = MenuFolderDetailResponse(
+            menuId = 1,
+            menuTitle = "Menu Title",
+            storeTitle = "Store Title",
+            storeAddress = "Store Address",
+            menuImgUrl = "https://ourmenu-default.s3.ap-northeast-2.amazonaws.com/default_menu_folder_img.svg",
+            menuPrice = 12000
+        ),
+        onMenuClick = {},
+        onMapClick = {}
+    )
 }

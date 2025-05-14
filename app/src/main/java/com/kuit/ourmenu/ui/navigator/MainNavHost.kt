@@ -2,10 +2,11 @@ package com.kuit.ourmenu.ui.navigator
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import com.kuit.ourmenu.ui.addmenu.screen.AddMenuScreen
 import com.kuit.ourmenu.ui.home.navigation.homeNavGraph
 import com.kuit.ourmenu.ui.menuFolder.navigation.menuFolderNavGraph
@@ -15,31 +16,39 @@ import com.kuit.ourmenu.ui.menuinfo.screen.MenuInfoDefaultScreen
 import com.kuit.ourmenu.ui.menuinfo.screen.MenuInfoMapScreen
 import com.kuit.ourmenu.ui.my.navigation.myNavGraph
 import com.kuit.ourmenu.ui.onboarding.navigation.onboardingNavGraph
-import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.searchmenu.navigation.searchMenuNavGraph
+import com.kuit.ourmenu.ui.signup.navigation.signupNavGraph
+import com.kuit.ourmenu.ui.signup.viewmodel.SignupViewModel
 
 @Composable
 fun MainNavHost(
-    modifier: Modifier = Modifier,
     navController: MainNavController,
-    padding : PaddingValues
+    padding: PaddingValues
 ) {
-    val signupViewModel = hiltViewModel<SignupViewModel>()
-
     NavHost(
         navController = navController.navController,
         startDestination = navController.startDestination
     ) {
-
         onboardingNavGraph(
-            viewModel = signupViewModel,
             navigateBack = navController::navigateUp,
             navigateOnboardingToHome = navController::navigateOnboardingToHome,
             navigateToLogin = navController::navigateToLogin,
             navigateToSignupEmail = navController::navigateToSignupEmail,
+            navigateToSignupMealTime = navController::navigateToSignupMealTime,
+        )
+
+        signupNavGraph(
+            navigateBack = navController::navigateUp,
+            navigateOnboardingToHome = navController::navigateOnboardingToHome,
             navigateToSignupVerify = navController::navigateToSignupVerify,
             navigateToSignupPassword = navController::navigateToSignupPassword,
             navigateToSignupMealTime = navController::navigateToSignupMealTime,
+            getSignupViewModel = { navBackStackEntry ->
+                val parent = remember(navBackStackEntry) {
+                    navController.navController.getBackStackEntry(Routes.SignupEmail)
+                }
+                hiltViewModel<SignupViewModel>(parent)
+            }
         )
 
         homeNavGraph(
@@ -47,7 +56,10 @@ fun MainNavHost(
         )
 
         menuFolderNavGraph(
-            padding = padding,
+            navigateBack = navController::navigateUp,
+            navigateToMenuFolderDetail = navController::navigateToMenuFolderDetail,
+            navigateToMenuFolderAllMenu = navController::navigateToMenuFolderAllMenu,
+//            navigateToMenuInfo = navController::navigateToMenuInfo,
         )
 
         searchMenuNavGraph(
@@ -59,14 +71,22 @@ fun MainNavHost(
         )
 
         // 메뉴판
-//        composable<Routes.MenuFolder> {
-//            MenuFolderScreen(navController = navController.navController)
-//        }
         composable<Routes.MenuFolderDetail> {
-            MenuFolderDetailScreen(navController = navController.navController)
+            val menuFolderId = it.toRoute<Routes.MenuFolderDetail>().menuFolderId
+            MenuFolderDetailScreen(
+                menuFolderId = menuFolderId,
+                onNavigateBack = navController::navigateUp,
+//                onNavigateToMenuInfo = navController::navigateToMenuInfo,
+//                onNavigateToAddMenu = { menuId ->
+//                    navController.navigateToAddMenu(menuId)
+//                }
+            )
         }
         composable<Routes.MenuFolderAllMenu> {
-            MenuFolderAllMenuScreen(navController = navController.navController)
+            MenuFolderAllMenuScreen(
+                onNavigateBack = navController::navigateUp,
+                // TODO: 나머지 navigate 작성
+            )
         }
 
         // 메뉴

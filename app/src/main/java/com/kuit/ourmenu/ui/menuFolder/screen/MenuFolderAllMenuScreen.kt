@@ -22,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -33,33 +32,40 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.data.model.menuFolder.response.SortOrderType
 import com.kuit.ourmenu.ui.common.bottomsheet.BottomSheetDragHandle
 import com.kuit.ourmenu.ui.common.topappbar.BackButtonTopAppBar
 import com.kuit.ourmenu.ui.menuFolder.component.AddButton
 import com.kuit.ourmenu.ui.menuFolder.component.FilterBottomSheet
 import com.kuit.ourmenu.ui.menuFolder.component.MenuFolderMenuButton
 import com.kuit.ourmenu.ui.menuFolder.component.SortDropdown
-import com.kuit.ourmenu.ui.navigator.Routes
+import com.kuit.ourmenu.ui.menuFolder.viewmodel.MenuFolderAllViewModel
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
+import com.kuit.ourmenu.utils.TagListProvider
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MenuFolderAllMenuScreen(navController: NavController) {
-    val menuCount = 13
-    var filterCount by rememberSaveable { mutableIntStateOf(0) } // 선택된 필터 개수 상태 관리
-    var selectedFilters by rememberSaveable { mutableStateOf(listOf<String>()) } // 선택된 필터 리스트
+fun MenuFolderAllMenuScreen(
+    onNavigateBack: () -> Unit,
+    viewModel: MenuFolderAllViewModel = hiltViewModel()
+) {
+    val menus by viewModel.menuFolderAll.collectAsStateWithLifecycle()
+    val selectedSort by viewModel.sortOrder.collectAsStateWithLifecycle()
+    val selectedTags by viewModel.selectedTags.collectAsStateWithLifecycle()
+    val minPrice by viewModel.minPrice.collectAsStateWithLifecycle()
+    val maxPrice by viewModel.maxPrice.collectAsStateWithLifecycle()
+    val menuCount = menus.size
 
-    val options = listOf("이름순", "등록순", "가격순")
-    var selectedOption by rememberSaveable { mutableStateOf("이름순") }
+    var filterCount by rememberSaveable { mutableIntStateOf(0) } // 선택된 필터 개수 상태 관리
 
     val scaffoldState = rememberBottomSheetScaffoldState()
     val coroutineScope = rememberCoroutineScope()
@@ -74,41 +80,35 @@ fun MenuFolderAllMenuScreen(navController: NavController) {
         scaffoldState = scaffoldState,
         topBar = {
             BackButtonTopAppBar(Neutral500, false) {
-                navController.popBackStack()
+                onNavigateBack()
             }
         },
         sheetContainerColor = NeutralWhite,
         sheetPeekHeight = 0.dp,
         sheetContent = {
             FilterBottomSheet(
-                categoryTagList = listOf(
-                    R.drawable.ic_tag_rice to "밥",
-                    R.drawable.ic_tag_rice to "빵",
-                    R.drawable.ic_tag_rice to "면"
-                ),
-                nationalityTagList = listOf(
-                    R.drawable.ic_tag_rice to "한식",
-                    R.drawable.ic_tag_rice to "중식",
-                    R.drawable.ic_tag_rice to "일식"
-                ),
-                tasteTagList = listOf(
-                    R.drawable.ic_tag_rice to "매콤함",
-                    R.drawable.ic_tag_rice to "달달함",
-                    R.drawable.ic_tag_rice to "시원함"
-                ),
-                occasionTagList = listOf(
-                    R.drawable.ic_tag_rice to "혼밥",
-                    R.drawable.ic_tag_rice to "친구 약속",
-                    R.drawable.ic_tag_rice to "데이트"
-                ),
+                categoryTagList = TagListProvider.categoryTagList,
+                nationalityTagList = TagListProvider.nationalityTagList,
+                tasteTagList = TagListProvider.tasteTagList,
+                occasionTagList = TagListProvider.occasionTagList,
+                onSelectedTagsChange = { newSelectedTags ->
+                    viewModel.updateTags(newSelectedTags)
+                },
+                onPriceRangeChange = { min, max ->
+                    viewModel.updatePriceRange(min, max)
+                },
                 onApplyButtonClick = {
                     coroutineScope.launch {
-                        filterCount = selectedFilters.size // 적용 버튼 클릭 시 선택된 필터 개수 반영
-                        scaffoldState.bottomSheetState.partialExpand() // 적용 버튼 클릭 시 BottomSheet 닫기
-                    }
+                        val tagFilterCount = selectedTags.size
 
-                },
-                onSelectedTagsChange = { newSelectedTags -> selectedFilters = newSelectedTags },
+                        val isPriceChanged = minPrice != null && minPrice != 0L || maxPrice != null && maxPrice != 50000L
+                        val priceFilterCount = if (isPriceChanged) 1 else 0
+
+                        filterCount = tagFilterCount + priceFilterCount
+
+                        scaffoldState.bottomSheetState.partialExpand()
+                    }
+                }
             )
         },
         sheetDragHandle = {
@@ -145,10 +145,12 @@ fun MenuFolderAllMenuScreen(navController: NavController) {
                 }
 
                 SortDropdown(
-                    options = options,
-                    selectedOption = selectedOption,
-                ) {
-                    selectedOption = it
+                    options = SortOrderType.entries.map { it.displayName },
+                    selectedOption = selectedSort.displayName,
+                ) { selectedDisplayName ->
+                    SortOrderType.entries
+                        .firstOrNull { it.displayName == selectedDisplayName }
+                        ?.let { viewModel.updateSortOrder(it) }
                 }
             }
 
@@ -189,11 +191,12 @@ fun MenuFolderAllMenuScreen(navController: NavController) {
             ) {
                 items(menuCount) { index ->
                     MenuFolderMenuButton(
+                        menuFolderDetail = menus[index],
                         onMenuClick = {
-                            navController.navigate(route = Routes.MenuInfo)
+//                            navController.navigate(route = Routes.MenuInfo)
                         },
                         onMapClick = {
-                            navController.navigate(route = Routes.MenuInfoMap)
+//                            navController.navigate(route = Routes.MenuInfoMap)
                         }
                     )
                 }
@@ -203,7 +206,7 @@ fun MenuFolderAllMenuScreen(navController: NavController) {
                         stringResource(R.string.add_menu),
                         modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 20.dp)
                     ) {
-                        navController.navigate(route = Routes.AddMenu)
+//                        navController.navigate(route = Routes.AddMenu)
                     }
                 }
             }
@@ -214,7 +217,7 @@ fun MenuFolderAllMenuScreen(navController: NavController) {
 @Preview(showBackground = true)
 @Composable
 private fun MenuFolderAllMenuScreenPreview() {
-    val navController = rememberNavController()
-
-    MenuFolderAllMenuScreen(navController)
+//    val navController = rememberNavController()
+//
+//    MenuFolderAllMenuScreen(navController)
 }

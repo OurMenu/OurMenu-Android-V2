@@ -1,4 +1,4 @@
-package com.kuit.ourmenu.ui.onboarding.screen.signup
+package com.kuit.ourmenu.ui.signup.screen
 
 import android.util.Log
 import androidx.compose.foundation.layout.Box
@@ -10,7 +10,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -20,39 +22,57 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
-import com.kuit.ourmenu.ui.onboarding.component.MealTimeGrid
-import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
-import com.kuit.ourmenu.ui.onboarding.state.SignupState
-import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
+import com.kuit.ourmenu.ui.common.topappbar.OnboardingTopAppBar
+import com.kuit.ourmenu.ui.signup.component.MealTimeGrid
+import com.kuit.ourmenu.ui.signup.model.SignupState
+import com.kuit.ourmenu.ui.signup.uistate.SignupUiState
+import com.kuit.ourmenu.ui.signup.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun SignupMealTimeScreen(
+fun SignupMealTimeRoute(
     navigateToHome: () -> Unit,
     navigateBack: () -> Unit,
     viewModel: SignupViewModel = hiltViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val enable = remember { derivedStateOf { uiState.selectedTimes.isNotEmpty() } }
 
-    val mealTimeList by viewModel.mealTimes.collectAsStateWithLifecycle()
-    val selectedTimes by viewModel.selectedTimes.collectAsStateWithLifecycle()
-    val enable = selectedTimes.isNotEmpty()
-    val signupState by viewModel.signupState.collectAsStateWithLifecycle()
-
-    LaunchedEffect(signupState) {
-        when (signupState) {
+    LaunchedEffect(uiState.signupState) {
+        when (uiState.signupState) {
             is SignupState.Success -> {
                 navigateToHome()
             }
 
             is SignupState.Error ->
-                Log.e("SignupVerifyScreen", viewModel.error.value.toString())
+                Log.e("SignupVerifyScreen", uiState.error)
 
             else -> {}
         }
     }
 
+    SignupMealTimeScreen(
+        navigateBack = navigateBack,
+        uiState = uiState,
+        enable = enable.value,
+        addSelectedTime = viewModel::addSelectedTime,
+        removeSelectedTime = viewModel::removeSelectedTime,
+        signup = viewModel::signup
+    )
+
+}
+
+@Composable
+fun SignupMealTimeScreen(
+    navigateBack: () -> Unit,
+    uiState: SignupUiState,
+    enable: Boolean,
+    addSelectedTime: (Int, String) -> Unit,
+    removeSelectedTime: (Int, String) -> Unit,
+    signup: () -> Unit,
+) {
     Scaffold(
         topBar = {
             OnboardingTopAppBar(
@@ -89,13 +109,13 @@ fun SignupMealTimeScreen(
 
                 MealTimeGrid(
                     modifier = Modifier.padding(top = 29.dp),
-                    mealTimes = mealTimeList,
-                    selectedTimes = selectedTimes,
+                    mealTimes = uiState.mealTimes,
+                    selectedTimes = uiState.selectedTimes,
                     addTime = { index, mealTime ->
-                        viewModel.addSelectedTime(index, mealTime)
+                        addSelectedTime(index, mealTime)
                     },
                     removeTime = { index, mealTime ->
-                        viewModel.removeSelectedTime(index, mealTime)
+                        removeSelectedTime(index, mealTime)
                     }
                 )
             }
@@ -108,7 +128,7 @@ fun SignupMealTimeScreen(
                 text = stringResource(R.string.confirm)
             ) {
                 Log.d("okhttp", "SignupMealTimeScreen")
-                viewModel.signup()
+                signup()
             }
 
         }
@@ -122,7 +142,11 @@ fun SignupMealTimeScreen(
 @Composable
 private fun SignupMealTimeScreenPreview() {
     SignupMealTimeScreen(
-        navigateToHome = {},
-        navigateBack = {}
+        navigateBack = {},
+        uiState = SignupUiState(),
+        enable = true,
+        addSelectedTime = { _, _ -> },
+        removeSelectedTime = { _, _ -> },
+        signup = {}
     )
 }

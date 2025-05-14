@@ -6,7 +6,9 @@ sealed interface Routes{
 
     // 메뉴판
     @Serializable
-    data object MenuFolderDetail: Routes
+    data object MenuFolder: Routes
+    @Serializable
+    data class MenuFolderDetail(val menuFolderId: Int): Routes
     @Serializable
     data object MenuFolderAllMenu: Routes
 
@@ -24,11 +26,11 @@ sealed interface Routes{
 
     // Onboarding
     @Serializable
-    data object Onboarding: Routes
-    @Serializable
     data object Landing: Routes
     @Serializable
     data object Login: Routes
+
+    // Signup
     @Serializable
     data object SignupEmail: Routes
     @Serializable
