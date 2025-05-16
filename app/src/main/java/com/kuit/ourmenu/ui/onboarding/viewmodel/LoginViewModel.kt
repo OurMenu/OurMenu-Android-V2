@@ -5,11 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.kuit.ourmenu.data.model.auth.SignInType
 import com.kuit.ourmenu.data.model.base.OurMenuApiFailureException
 import com.kuit.ourmenu.data.repository.AuthRepository
+import com.kuit.ourmenu.ui.onboarding.model.LoginUiState
 import com.kuit.ourmenu.ui.onboarding.state.LoginState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,54 +20,70 @@ class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
 
-    private val _email = MutableStateFlow("")
-    val email = _email.asStateFlow()
-
-    private val _password = MutableStateFlow("")
-    val password = _password.asStateFlow()
-
-    private val _loginState: MutableStateFlow<LoginState> = MutableStateFlow(LoginState.Default)
-    val loginState = _loginState.asStateFlow()
-
-    private val _error: MutableStateFlow<String?> = MutableStateFlow(null)
-    val error = _error.asStateFlow()
+    private val _uiState = MutableStateFlow(LoginUiState())
+    val uiState = _uiState.asStateFlow()
 
     fun updateEmail(email: String) {
-        _email.value = email
+        _uiState.update {
+            it.copy(email = email)
+        }
     }
 
     fun updatePassword(password: String) {
-        _password.value = password
+        _uiState.update {
+            it.copy(password = password)
+        }
+    }
+
+    fun updatePasswordVisible(isPasswordVisible: Boolean) {
+        _uiState.update {
+            it.copy(isPasswordVisible = isPasswordVisible)
+        }
     }
 
     fun signInWithEmail() {
         viewModelScope.launch {
-            _loginState.value = LoginState.Loading
+            _uiState.update { it.copy(loginState = LoginState.Loading) }
 
             authRepository.login(
-                email = email.value,
-                password = password.value,
+                email = _uiState.value.email,
+                password = _uiState.value.password,
                 signInType = SignInType.EMAIL
             ).fold(
                 onSuccess = {
-                    _loginState.value = LoginState.Success
+                    _uiState.update {
+                        it.copy(loginState = LoginState.Success)
+                    }
                 },
                 onFailure = { error ->
-                    _loginState.value = LoginState.Error
+                    _uiState.update {
+                        it.copy(loginState = LoginState.Error)
+                    }
                     when (error) {
                         is OurMenuApiFailureException -> {
-                            _error.value = error.message
+                            _uiState.update { it.copy(error = error.message ?: "Unknown error") }
                             when (error.status) {
-                                401 -> _loginState.value = LoginState.DifferentPassword
-                                404 -> _loginState.value = LoginState.NotFoundUser
+                                401 -> _uiState.update {
+                                    it.copy(loginState = LoginState.DifferentPassword)
+                                }
+
+                                404 -> _uiState.update {
+                                    it.copy(loginState = LoginState.NotFoundUser)
+                                }
                             }
                         }
 
-                        else -> _error.value = error.message
+                        else -> _uiState.update {
+                            it.copy(
+                                error = error.message ?: "Unknown error"
+                            )
+                        }
                     }
 
                     delay(1000)
-                    _loginState.value = LoginState.Default
+                    _uiState.update {
+                        it.copy(loginState = LoginState.Default)
+                    }
                 }
             )
 

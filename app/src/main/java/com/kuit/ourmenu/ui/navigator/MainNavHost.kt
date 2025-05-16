@@ -2,7 +2,7 @@ package com.kuit.ourmenu.ui.navigator
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,31 +16,39 @@ import com.kuit.ourmenu.ui.menuinfo.screen.MenuInfoDefaultScreen
 import com.kuit.ourmenu.ui.menuinfo.screen.MenuInfoMapScreen
 import com.kuit.ourmenu.ui.my.navigation.myNavGraph
 import com.kuit.ourmenu.ui.onboarding.navigation.onboardingNavGraph
-import com.kuit.ourmenu.ui.onboarding.viewmodel.SignupViewModel
 import com.kuit.ourmenu.ui.searchmenu.navigation.searchMenuNavGraph
+import com.kuit.ourmenu.ui.signup.navigation.signupNavGraph
+import com.kuit.ourmenu.ui.signup.viewmodel.SignupViewModel
 
 @Composable
 fun MainNavHost(
-    modifier: Modifier = Modifier,
     navController: MainNavController,
-    padding : PaddingValues
+    padding: PaddingValues
 ) {
-    val signupViewModel = hiltViewModel<SignupViewModel>()
-
     NavHost(
         navController = navController.navController,
         startDestination = navController.startDestination
     ) {
-
         onboardingNavGraph(
-            viewModel = signupViewModel,
             navigateBack = navController::navigateUp,
             navigateOnboardingToHome = navController::navigateOnboardingToHome,
             navigateToLogin = navController::navigateToLogin,
             navigateToSignupEmail = navController::navigateToSignupEmail,
+            navigateToSignupMealTime = navController::navigateToSignupMealTime,
+        )
+
+        signupNavGraph(
+            navigateBack = navController::navigateUp,
+            navigateOnboardingToHome = navController::navigateOnboardingToHome,
             navigateToSignupVerify = navController::navigateToSignupVerify,
             navigateToSignupPassword = navController::navigateToSignupPassword,
             navigateToSignupMealTime = navController::navigateToSignupMealTime,
+            getSignupViewModel = { navBackStackEntry ->
+                val parent = remember(navBackStackEntry) {
+                    navController.navController.getBackStackEntry(Routes.SignupEmail)
+                }
+                hiltViewModel<SignupViewModel>(parent)
+            }
         )
 
         homeNavGraph(
