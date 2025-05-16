@@ -3,11 +3,9 @@ package com.kuit.ourmenu.ui.my.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -34,6 +32,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.onboarding.component.LoginTextField
 import com.kuit.ourmenu.ui.theme.Neutral100
@@ -41,7 +40,6 @@ import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.NeutralWhite
-import com.kuit.ourmenu.ui.theme.OurMenuTypography
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
@@ -53,19 +51,13 @@ fun MyCurrentPasswordModal(
     var password by rememberSaveable { mutableStateOf("") }
     var isPasswordVisible by rememberSaveable { mutableStateOf(false) }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Neutral900.copy(alpha = 0.4f))
-            .clickable(onClick = onDismiss),
-        contentAlignment = Alignment.Center
-    ) {
+    Dialog(onDismissRequest = onDismiss) {
         Column(
             modifier = Modifier
-                .padding(horizontal = 40.dp)
                 .background(NeutralWhite, shape = RoundedCornerShape(16.dp))
                 .padding(20.dp)
-                .clickable(enabled = false) {}, // 내부 클릭 방지
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
                 painter = painterResource(R.drawable.ic_close_24_n400),
@@ -77,9 +69,11 @@ fun MyCurrentPasswordModal(
                     .size(24.dp)
             )
 
+            Spacer(modifier = Modifier.height(8.dp))
+
             Text(
                 text = stringResource(R.string.enter_current_password),
-                style = OurMenuTypography().pretendard_700_18,
+                style = ourMenuTypography().pretendard_700_18,
                 color = Neutral900,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
@@ -98,6 +92,7 @@ fun MyCurrentPasswordModal(
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Checkbox(
                     checked = isPasswordVisible,
