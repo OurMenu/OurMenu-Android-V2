@@ -1,6 +1,5 @@
 package com.kuit.ourmenu.ui.common.topappbar
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,7 +21,7 @@ import com.kuit.ourmenu.ui.theme.NeutralWhite
 fun OurMenuAddButtonTopAppBar(modifier: Modifier = Modifier) {
     // 기본
     TopAppBar(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         colors = TopAppBarDefaults.topAppBarColors().copy(
             containerColor = NeutralWhite
         ),
