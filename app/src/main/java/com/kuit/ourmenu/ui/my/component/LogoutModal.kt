@@ -42,7 +42,7 @@ fun LogoutModal(
             modifier = Modifier
                 .background(NeutralWhite, shape = RoundedCornerShape(16.dp))
                 .padding(20.dp)
-                .fillMaxWidth(),
+                .width(288.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // 닫기 아이콘

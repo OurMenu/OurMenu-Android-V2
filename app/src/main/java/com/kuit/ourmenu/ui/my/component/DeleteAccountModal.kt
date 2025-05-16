@@ -41,7 +41,7 @@ fun DeleteAccountModal(
     Dialog(onDismissRequest = onDismiss) {
         Column(
             modifier = Modifier
-                .fillMaxWidth()
+                .width(288.dp)
                 .background(NeutralWhite, shape = RoundedCornerShape(16.dp))
                 .padding(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally

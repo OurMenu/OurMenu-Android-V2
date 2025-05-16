@@ -18,7 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,11 +45,11 @@ import com.kuit.ourmenu.ui.theme.OurMenuTypography
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyScreen() {
-    var bottomSheetVisible by remember { mutableStateOf(false) }
-    var showCurrentPasswordModal by remember { mutableStateOf(false) }
-    var showNewPasswordModal by remember { mutableStateOf(false) }
-    var showLogoutModal by remember { mutableStateOf(false) }
-    var showDeleteAccountModal by remember { mutableStateOf(false) }
+    var bottomSheetVisible by rememberSaveable { mutableStateOf(false) }
+    var showCurrentPasswordModal by rememberSaveable { mutableStateOf(false) }
+    var showNewPasswordModal by rememberSaveable { mutableStateOf(false) }
+    var showLogoutModal by rememberSaveable { mutableStateOf(false) }
+    var showDeleteAccountModal by rememberSaveable { mutableStateOf(false) }
 
     Box {
         Scaffold(
@@ -138,7 +138,7 @@ fun MyScreen() {
             }
         }
 
-        // 모달은 Box의 맨 위에 배치해야 함
+        // 모달 처리
         if (bottomSheetVisible) {
             MyBottomModal(
                 onDismissRequest = { bottomSheetVisible = false },
@@ -157,6 +157,7 @@ fun MyScreen() {
             )
         }
 
+        // 비밀번호 변경 모달
         if (showCurrentPasswordModal) {
             MyCurrentPasswordModal(
                 onDismiss = { showCurrentPasswordModal = false },
@@ -167,6 +168,7 @@ fun MyScreen() {
             )
         }
 
+        // 새 비밀번호 입력 모달
         if (showNewPasswordModal) {
             MyNewPasswordModal(
                 onDismiss = { showNewPasswordModal = false },
@@ -177,6 +179,7 @@ fun MyScreen() {
             )
         }
 
+        // 로그아웃 모달
         if (showLogoutModal) {
             LogoutModal(
                 onDismiss = { showLogoutModal = false },
@@ -187,6 +190,7 @@ fun MyScreen() {
             )
         }
 
+        // 계정 삭제 모달
         if (showDeleteAccountModal) {
             DeleteAccountModal(
                 onDismiss = { showDeleteAccountModal = false },

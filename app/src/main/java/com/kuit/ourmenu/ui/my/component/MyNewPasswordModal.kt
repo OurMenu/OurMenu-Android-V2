@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -34,7 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.kuit.ourmenu.R
-import com.kuit.ourmenu.ui.onboarding.component.LoginTextField
+import com.kuit.ourmenu.ui.common.LoginTextField
 import com.kuit.ourmenu.ui.theme.Neutral100
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral500
@@ -57,7 +58,7 @@ fun MyNewPasswordModal(
             modifier = Modifier
                 .background(NeutralWhite, shape = RoundedCornerShape(16.dp))
                 .padding(20.dp)
-                .fillMaxWidth(),
+                .width(288.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
