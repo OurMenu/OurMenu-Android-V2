@@ -33,7 +33,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
-import com.kuit.ourmenu.data.model.menuFolder.response.TagType
+import com.kuit.ourmenu.data.model.base.type.TagType
 import com.kuit.ourmenu.ui.common.BottomHalfWidthButton
 import com.kuit.ourmenu.ui.common.OurSnackbarHost
 import com.kuit.ourmenu.ui.common.chip.TagChipGroup
