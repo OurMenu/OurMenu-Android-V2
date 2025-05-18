@@ -41,7 +41,7 @@ import com.kuit.ourmenu.ui.addmenu.component.AddMenuSearchBackground
 import com.kuit.ourmenu.ui.addmenu.component.bottomsheet.AddMenuBottomSheetContent
 import com.kuit.ourmenu.ui.addmenu.viewmodel.AddMenuViewModel
 import com.kuit.ourmenu.ui.common.SearchTextField
-import com.kuit.ourmenu.ui.common.map.MapViewWithLifecycle
+import com.kuit.ourmenu.ui.common.map.mapViewWithLifecycle
 import com.kuit.ourmenu.ui.common.topappbar.OurMenuBackButtonTopAppBar
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Primary500Main
@@ -74,7 +74,7 @@ fun AddMenuScreen(
     // Collect history data from ViewModel
     val searchHistory by viewModel.searchHistory.collectAsState()
 
-    val mapView = MapViewWithLifecycle(
+    val mapView = mapViewWithLifecycle(
         mapController = viewModel.mapController
     ) { kakaoMap ->
         // viewModel에서 kakaoMap을 초기화

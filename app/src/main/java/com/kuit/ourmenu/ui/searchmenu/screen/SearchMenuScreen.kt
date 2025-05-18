@@ -35,7 +35,7 @@ import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.GoToMapButton
 import com.kuit.ourmenu.ui.common.SearchTextField
 import com.kuit.ourmenu.ui.common.bottomsheet.BottomSheetDragHandle
-import com.kuit.ourmenu.ui.common.map.MapViewWithLifecycle
+import com.kuit.ourmenu.ui.common.map.mapViewWithLifecycle
 import com.kuit.ourmenu.ui.common.topappbar.OurMenuAddButtonTopAppBar
 import com.kuit.ourmenu.ui.searchmenu.component.SearchBottomSheetContent
 import com.kuit.ourmenu.ui.searchmenu.component.SearchHistoryList
@@ -80,7 +80,7 @@ fun SearchMenuScreen(
         }
     }
 
-    val mapView = MapViewWithLifecycle(
+    val mapView = mapViewWithLifecycle(
         mapController = viewModel.mapController
     ) { kakaoMap ->
         // viewModel에서 kakaoMap을 초기화
