@@ -79,17 +79,17 @@ class AddMenuViewModel @Inject constructor(
         viewModelScope.launch {
             val currentState = _storeInfo.value.menuList[index]
             val updatedMenuList =
-                if (currentState){
+                if (currentState) {
                     //선택된 아이템 클릭시 false로 다시 변경
                     _storeInfo.value.menuList.map {
                         false
                     }
-                }else{
+                } else {
                     //클릭된 인덱스만 true, 나머지는 false
                     _storeInfo.value.menuList.mapIndexed { i, _ ->
                         i == index
+                    }
                 }
-            }
 //            Log.d("AddMenuViewModel", "updatedMenuList: $updatedMenuList")
             _storeInfo.value = _storeInfo.value.copy(menuList = updatedMenuList)
         }
@@ -98,12 +98,11 @@ class AddMenuViewModel @Inject constructor(
 
     // 지도에서의 화면 이동
     fun moveCamera(latitude: Double, longitude: Double) {
-        viewModelScope.launch {
-            mapController.kakaoMap.value?.let { map ->
-                val cameraUpdate = CameraUpdateFactory.newCenterPosition(LatLng.from(latitude, longitude))
-                map.moveCamera(cameraUpdate)
-                updateCurrentCenter()
-            }
+        mapController.kakaoMap.value?.let { map ->
+            val cameraUpdate =
+                CameraUpdateFactory.newCenterPosition(LatLng.from(latitude, longitude))
+            map.moveCamera(cameraUpdate)
+            updateCurrentCenter()
         }
     }
 
@@ -114,7 +113,10 @@ class AddMenuViewModel @Inject constructor(
                 val center = map.cameraPosition?.position
                 _currentCenter.value = center
                 if (center != null) {
-                    Log.d("SearchMenuViewModel", "현재 지도 중심 좌표: ${center.latitude}, ${center.longitude}")
+                    Log.d(
+                        "SearchMenuViewModel",
+                        "현재 지도 중심 좌표: ${center.latitude}, ${center.longitude}"
+                    )
                 }
             }
         }
@@ -129,29 +131,25 @@ class AddMenuViewModel @Inject constructor(
 
     // 지도에 핀 추가
     fun addMarker(latitude: Double, longitude: Double, resourceId: Int) {
-        viewModelScope.launch {
-            mapController.kakaoMap.value?.let { map ->
-                val style = map.labelManager?.addLabelStyles(
-                    LabelStyles.from(LabelStyle.from(resourceId))
-                )
-                val options = LabelOptions.from(LatLng.from(latitude, longitude)).setStyles(style)
-                map.labelManager?.layer?.addLabel(options)
-                map.setOnLabelClickListener { kakaoMap, labelLayer, label ->
-                    // TODO: 핀 클릭시 동작 정의
-                    Log.d("SearchMenuViewModel", "핀 클릭됨")
-                    moveCamera(latitude = label.position.latitude, longitude = label.position.longitude)
-                    true
-                }
+        mapController.kakaoMap.value?.let { map ->
+            val style = map.labelManager?.addLabelStyles(
+                LabelStyles.from(LabelStyle.from(resourceId))
+            )
+            val options = LabelOptions.from(LatLng.from(latitude, longitude)).setStyles(style)
+            map.labelManager?.layer?.addLabel(options)
+            map.setOnLabelClickListener { kakaoMap, labelLayer, label ->
+                // TODO: 핀 클릭시 동작 정의
+                Log.d("SearchMenuViewModel", "핀 클릭됨")
+                moveCamera(latitude = label.position.latitude, longitude = label.position.longitude)
+                true
             }
         }
     }
 
     // 지도의 전체 핀 제거
     fun clearMarkers() {
-        viewModelScope.launch {
-            mapController.kakaoMap.value?.let { map ->
-                map.labelManager?.layer?.removeAll()
-            }
+        mapController.kakaoMap.value?.let { map ->
+            map.labelManager?.layer?.removeAll()
         }
     }
 
@@ -210,7 +208,7 @@ class AddMenuViewModel @Inject constructor(
     }
 
     // 크롤링 한 세부 정보를 _searchResult에 저장하는 함수
-    fun getCrawlingStoreDetail(crawledDatas: List<CrawlingStoreInfoResponse>){
+    fun getCrawlingStoreDetail(crawledDatas: List<CrawlingStoreInfoResponse>) {
         val updatedResult = mutableListOf<CrawlingStoreDetailResponse>()
         viewModelScope.launch {
             crawledDatas.forEach { crawledData ->
@@ -222,7 +220,7 @@ class AddMenuViewModel @Inject constructor(
                     if (it != null) {
                         updatedResult.add(it)
                         Log.d("SearchMenuViewModel", "크롤링 스토어 정보 업데이트 성공: ${it.storeTitle}")
-                    }else{
+                    } else {
                         Log.d("SearchMenuViewModel", "크롤링 스토어 정보 업데이트 실패: null")
                     }
                 }.onFailure {
@@ -236,17 +234,18 @@ class AddMenuViewModel @Inject constructor(
 
     // 지도에 검색 결과 핀 추가
     fun showSearchResultOnMap() {
-        viewModelScope.launch {
-            clearMarkers()
-            searchResult.value?.forEach { store ->
-                val latitude = store.storeMapY
-                val longitude = store.storeMapX
-                addMarker(latitude, longitude, R.drawable.img_popup_dice)
-                Log.d("SearchMenuViewModel", "마커 추가: ${store.storeTitle} lat: (${latitude}, long: ${longitude})")
-            }
-            // 첫 번째 검색 결과로 카메라 이동
-            searchResult.value?.get(0)?.let { moveCamera(it.storeMapY, it.storeMapX) }
+        clearMarkers()
+        searchResult.value?.forEach { store ->
+            val latitude = store.storeMapY
+            val longitude = store.storeMapX
+            addMarker(latitude, longitude, R.drawable.img_popup_dice)
+            Log.d(
+                "SearchMenuViewModel",
+                "마커 추가: ${store.storeTitle} lat: (${latitude}, long: ${longitude})"
+            )
         }
+        // 첫 번째 검색 결과로 카메라 이동
+        searchResult.value?.get(0)?.let { moveCamera(it.storeMapY, it.storeMapX) }
     }
 }
 

@@ -59,15 +59,14 @@ class SearchMenuViewModel @Inject constructor(
 
     // 지도에서의 화면 이동
     fun moveCamera(latitude: Double, longitude: Double) {
-        viewModelScope.launch {
-            mapController.kakaoMap.value?.let { map ->
-                val cameraUpdate = CameraUpdateFactory.newCenterPosition(LatLng.from(latitude, longitude))
-                map.moveCamera(cameraUpdate)
-                updateCurrentCenter()
-            }
+        mapController.kakaoMap.value?.let { map ->
+            val cameraUpdate =
+                CameraUpdateFactory.newCenterPosition(LatLng.from(latitude, longitude))
+            map.moveCamera(cameraUpdate)
+            updateCurrentCenter()
         }
     }
-    
+
     // 지도 중앙 좌표 업데이트
     fun updateCurrentCenter() {
         viewModelScope.launch {
@@ -75,53 +74,53 @@ class SearchMenuViewModel @Inject constructor(
                 val center = map.cameraPosition?.position
                 _currentCenter.value = center
                 if (center != null) {
-                    Log.d("SearchMenuViewModel", "현재 지도 중심 좌표: ${center.latitude}, ${center.longitude}")
+                    Log.d(
+                        "SearchMenuViewModel",
+                        "현재 지도 중심 좌표: ${center.latitude}, ${center.longitude}"
+                    )
                 }
             }
         }
     }
-    
+
     // Get the current center coordinates as a Pair
     fun getCurrentCoordinates(): Pair<Double, Double>? {
-        return currentCenter.value?.let { 
-            Pair(it.latitude, it.longitude) 
+        return currentCenter.value?.let {
+            Pair(it.latitude, it.longitude)
         }
     }
 
     // 지도에 핀 추가
     fun addMarker(latitude: Double, longitude: Double, resourceId: Int) {
-        viewModelScope.launch {
-            mapController.kakaoMap.value?.let { map ->
-                val style = map.labelManager?.addLabelStyles(
-                    LabelStyles.from(LabelStyle.from(resourceId))
-                )
-                val options = LabelOptions.from(LatLng.from(latitude, longitude)).setStyles(style).setClickable(true)
-                map.labelManager?.layer?.addLabel(options)
-                map.setOnLabelClickListener { kakaoMap, labelLayer, label ->
-                    // 핀 클릭시 동작 정의
-                    Log.d("SearchMenuViewModel", "핀 클릭됨")
-                    moveCamera(latitude = label.position.latitude, longitude = label.position.longitude)
-                    
-                    // Find the matching menu item and call getMapDetail
-                    _myMenus.value?.find { menu ->
-                        menu.mapY == label.position.latitude && menu.mapX == label.position.longitude
-                    }?.let { matchingMenu ->
-                        Log.d("SearchMenuViewModel", "핀 클릭된 메뉴: ${matchingMenu.mapId}")
-                        getMapDetail(matchingMenu.mapId)
-                    }
-                    
-                    true
+        mapController.kakaoMap.value?.let { map ->
+            val style = map.labelManager?.addLabelStyles(
+                LabelStyles.from(LabelStyle.from(resourceId))
+            )
+            val options = LabelOptions.from(LatLng.from(latitude, longitude)).setStyles(style)
+                .setClickable(true)
+            map.labelManager?.layer?.addLabel(options)
+            map.setOnLabelClickListener { kakaoMap, labelLayer, label ->
+                // 핀 클릭시 동작 정의
+                Log.d("SearchMenuViewModel", "핀 클릭됨")
+                moveCamera(latitude = label.position.latitude, longitude = label.position.longitude)
+
+                // Find the matching menu item and call getMapDetail
+                _myMenus.value?.find { menu ->
+                    menu.mapY == label.position.latitude && menu.mapX == label.position.longitude
+                }?.let { matchingMenu ->
+                    Log.d("SearchMenuViewModel", "핀 클릭된 메뉴: ${matchingMenu.mapId}")
+                    getMapDetail(matchingMenu.mapId)
                 }
+
+                true
             }
         }
     }
 
     // 지도의 전체 핀 제거
     fun clearMarkers() {
-        viewModelScope.launch {
-            mapController.kakaoMap.value?.let { map ->
-                map.labelManager?.layer?.removeAll()
-            }
+        mapController.kakaoMap.value?.let { map ->
+            map.labelManager?.layer?.removeAll()
         }
     }
 
@@ -145,13 +144,13 @@ class SearchMenuViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             Log.d("SearchMenuViewModel", "크롤링 스토어 정보 요청: $query, 좌표($lat, $long)")
-            
+
             val response = mapRepository.getMapSearch(
                 title = query,
                 longitude = long,
                 latitude = lat
             )
-            
+
             response.onSuccess { result ->
                 if (result != null) {
                     Log.d("SearchMenuViewModel", "크롤링 스토어 정보 조회 성공: ${result.size}개")
@@ -166,7 +165,7 @@ class SearchMenuViewModel @Inject constructor(
     }
 
     // 등록한 전체 메뉴 조회(빈 검색시 수행?)
-    fun getMyMenus(){
+    fun getMyMenus() {
         viewModelScope.launch {
             val response = mapRepository.getMap()
             response.onSuccess {
@@ -202,16 +201,17 @@ class SearchMenuViewModel @Inject constructor(
 
     // 지도에 검색 결과 핀 추가
     fun showSearchResultOnMap() {
-        viewModelScope.launch {
-            clearMarkers()
-            myMenus.value?.forEach { store ->
-                val latitude = store.mapY
-                val longitude = store.mapX
-                addMarker(latitude, longitude, R.drawable.img_popup_dice)
-                Log.d("SearchMenuViewModel", "mapId: ${store.mapId} lat: (${latitude}, long: ${longitude})")
-            }
-            // 첫 번째 검색 결과로 카메라 이동
-            myMenus.value?.get(0)?.let { moveCamera(it.mapY, it.mapX) }
+        clearMarkers()
+        myMenus.value?.forEach { store ->
+            val latitude = store.mapY
+            val longitude = store.mapX
+            addMarker(latitude, longitude, R.drawable.img_popup_dice)
+            Log.d(
+                "SearchMenuViewModel",
+                "mapId: ${store.mapId} lat: (${latitude}, long: ${longitude})"
+            )
         }
+        // 첫 번째 검색 결과로 카메라 이동
+        myMenus.value?.get(0)?.let { moveCamera(it.mapY, it.mapX) }
     }
 }
