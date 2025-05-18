@@ -86,7 +86,6 @@ dependencies {
     kapt(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
-
     // Network
     implementation(platform(libs.okhttp.bom))
     implementation(libs.okhttp)
@@ -98,12 +97,12 @@ dependencies {
     // Kakao SDK
     implementation("com.kakao.sdk:v2-all:2.20.6")
     implementation("com.kakao.sdk:v2-user:2.20.6") // 카카오 로그인 API 모듈
+    implementation ("com.kakao.maps.open:android:2.12.8") // 카카오 맵 API
 
     // coil
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
     implementation(libs.coil.svg)
-
 }
 
 // Hilt를 사용할 때 필요한 Annotation Processor

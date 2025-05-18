@@ -18,13 +18,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
-import com.kuit.ourmenu.data.model.map.response.CrawlingHistoryResponse
+import com.kuit.ourmenu.data.model.map.response.CrawlingStoreDetailResponse
 import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun StoreSearchHistoryItem(
-    historyItem: CrawlingHistoryResponse,
+fun StoreSearchResultItem(
+    resultItem: CrawlingStoreDetailResponse,
     onClick: () -> Unit = {}
 ) {
     Row(
@@ -41,11 +41,11 @@ fun StoreSearchHistoryItem(
         )
         Column(modifier = Modifier.padding(start = 20.dp)) {
             Text(
-                text = historyItem.menuTitle,
+                text = resultItem.storeTitle,
                 style = ourMenuTypography().pretendard_600_16,
             )
             Text(
-                text = historyItem.storeAddress,
+                text = resultItem.storeAddress,
                 style = ourMenuTypography().pretendard_500_14,
                 color = Neutral700
             )
@@ -57,11 +57,15 @@ fun StoreSearchHistoryItem(
 @Composable
 private fun RestaurantSearchItemPreview() {
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
-        StoreSearchHistoryItem(
-            historyItem = CrawlingHistoryResponse(
-                menuTitle = stringResource(R.string.our_ddeokbokki),
+        StoreSearchResultItem(
+            resultItem = CrawlingStoreDetailResponse(
+                storeTitle = stringResource(R.string.our_ddeokbokki),
                 storeAddress = stringResource(R.string.resaturant_address),
-                modifiedAt = "2023-10-01T12:00:00Z",
+                storeId = TODO(),
+                storeImgs = TODO(),
+                menus = TODO(),
+                storeMapX = TODO(),
+                storeMapY = TODO(),
             )
         )
     }

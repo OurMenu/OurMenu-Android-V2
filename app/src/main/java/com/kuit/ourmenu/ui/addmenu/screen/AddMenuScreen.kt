@@ -19,9 +19,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -32,23 +34,28 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.addmenu.component.AddMenuSearchBackground
 import com.kuit.ourmenu.ui.addmenu.component.bottomsheet.AddMenuBottomSheetContent
-import com.kuit.ourmenu.ui.addmenu.viewmodel.AddMenuSearchViewModel
+import com.kuit.ourmenu.ui.addmenu.viewmodel.AddMenuViewModel
 import com.kuit.ourmenu.ui.common.SearchTextField
+import com.kuit.ourmenu.ui.common.map.mapViewWithLifecycle
 import com.kuit.ourmenu.ui.common.topappbar.OurMenuBackButtonTopAppBar
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddMenuScreen(navController: NavController) {
+fun AddMenuScreen(
+    modifier: Modifier = Modifier,
+    viewModel: AddMenuViewModel = hiltViewModel(),
+
+) {
     var scaffoldState = rememberBottomSheetScaffoldState()
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
     var showSearchBackground by rememberSaveable { mutableStateOf(false) }
@@ -57,16 +64,33 @@ fun AddMenuScreen(navController: NavController) {
     val interactionSource = remember { MutableInteractionSource() }
     val searchBarFocused by interactionSource.collectIsFocusedAsState()
     val focusManager = LocalFocusManager.current
+    val scope = rememberCoroutineScope()
 
-    val viewModel: AddMenuSearchViewModel = viewModel()
-    val recentSearchResults by viewModel.recentSearchResults.collectAsStateWithLifecycle()
-    val searchResults by viewModel.searchResults.collectAsStateWithLifecycle()
+    val recentSearchResults by viewModel.searchHistory.collectAsStateWithLifecycle()
+    val searchResults by viewModel.searchResult.collectAsStateWithLifecycle()
     val storeInfo by viewModel.storeInfo.collectAsStateWithLifecycle()
+
+    // 지도 중심 좌표 상태
+    val currentCenter by viewModel.currentCenter.collectAsState()
+
+    // Collect history data from ViewModel
+    val searchHistory by viewModel.searchHistory.collectAsState()
+
+    val mapView = mapViewWithLifecycle(
+        mapController = viewModel.mapController
+    ) { kakaoMap ->
+        // viewModel에서 kakaoMap을 초기화
+        viewModel.initializeMap(kakaoMap)
+    }
 
     LaunchedEffect(searchBarFocused) {
         if (searchBarFocused) {
             showSearchBackground = true
             showBottomSheet = false
+
+            scope.launch {
+                viewModel.getCrawlingHistory()
+            }
         }
     }
 
@@ -124,13 +148,18 @@ fun AddMenuScreen(navController: NavController) {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text("지도 컴포넌트")
+                    AndroidView(
+                        modifier = Modifier,
+                        factory = { mapView }
+                    ) { view ->
+
+                    }
                 }
             } else {
                 //검색 컴포넌트
                 AddMenuSearchBackground(
                     searchActionDone = searchActionDone,
-                    recentSearchResults = recentSearchResults,
+                    searchHistory = recentSearchResults,
                     searchResults = searchResults
                 ) {
                     //검색된 아이템 클릭시 작동할 함수
@@ -149,7 +178,8 @@ fun AddMenuScreen(navController: NavController) {
                     showSearchBackground = true
                     showBottomSheet = false
                 },
-                interactionSource = interactionSource
+                interactionSource = interactionSource,
+                placeHolder = R.string.search_store_name
             ) {
                 //onSearch 함수
                 if (searchBarFocused) focusManager.clearFocus()
@@ -164,7 +194,5 @@ fun AddMenuScreen(navController: NavController) {
 @Preview(showBackground = true)
 @Composable
 private fun AddMenuScreenPreview() {
-    val navController = rememberNavController()
-
-    AddMenuScreen(navController)
+    AddMenuScreen()
 }

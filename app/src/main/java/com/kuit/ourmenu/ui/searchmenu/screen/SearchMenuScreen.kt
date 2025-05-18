@@ -1,9 +1,12 @@
 package com.kuit.ourmenu.ui.searchmenu.screen
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,6 +16,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,19 +29,27 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.GoToMapButton
 import com.kuit.ourmenu.ui.common.SearchTextField
 import com.kuit.ourmenu.ui.common.bottomsheet.BottomSheetDragHandle
+import com.kuit.ourmenu.ui.common.map.mapViewWithLifecycle
 import com.kuit.ourmenu.ui.common.topappbar.OurMenuAddButtonTopAppBar
-import com.kuit.ourmenu.ui.menuinfo.dummy.MenuInfoDummyData
 import com.kuit.ourmenu.ui.searchmenu.component.SearchBottomSheetContent
 import com.kuit.ourmenu.ui.searchmenu.component.SearchHistoryList
+import com.kuit.ourmenu.ui.searchmenu.model.SearchHistoryData
+import com.kuit.ourmenu.ui.searchmenu.viewmodel.SearchMenuViewModel
 import com.kuit.ourmenu.ui.theme.NeutralWhite
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchMenuScreen(modifier: Modifier = Modifier) {
+fun SearchMenuScreen(
+    modifier: Modifier = Modifier,
+    viewModel: SearchMenuViewModel = hiltViewModel(),
+) {
 
     val scaffoldState = rememberBottomSheetScaffoldState()
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
@@ -49,13 +61,41 @@ fun SearchMenuScreen(modifier: Modifier = Modifier) {
     val interactionSource = remember { MutableInteractionSource() }
     val searchBarFocused by interactionSource.collectIsFocusedAsState()
     val focusManager = LocalFocusManager.current
+    
+    // 지도 중심 좌표
+    val currentCenter by viewModel.currentCenter.collectAsState()
+    
+    // 검색기록
+    val searchHistory by viewModel.searchHistory.collectAsState()
+    
+    // 핀 위치에 해당하는 메뉴들
+    val menusOnPin by viewModel.menusOnPin.collectAsState()
 
     val density = LocalDensity.current
+    val singleItemHeight = 300.dp // Fixed height for each item
+
+    LaunchedEffect(menusOnPin) {
+        if (menusOnPin != null && menusOnPin?.isNotEmpty() == true) {
+            showBottomSheet = true
+        }
+    }
+
+    val mapView = mapViewWithLifecycle(
+        mapController = viewModel.mapController
+    ) { kakaoMap ->
+        // viewModel에서 kakaoMap을 초기화
+        viewModel.initializeMap(kakaoMap)
+    }
 
     LaunchedEffect(searchBarFocused) {
         if (searchBarFocused) {
             showSearchBackground = true
             showBottomSheet = false
+            
+            // Fetch crawling history when search field is focused
+            launch {
+                viewModel.getSearchHistory()
+            }
         }
     }
 
@@ -72,17 +112,8 @@ fun SearchMenuScreen(modifier: Modifier = Modifier) {
         topBar = { OurMenuAddButtonTopAppBar() },
         sheetContent = {
             SearchBottomSheetContent(
-                modifier = Modifier
-                    .onGloballyPositioned { coordinates ->
-                        val heightPx = coordinates.size.height
-                        bottomSheetPeekHeight = density.run {
-                            heightPx.toDp() + dragHandleHeight
-                        }
-                    },
-                dataList = listOf(
-                    MenuInfoDummyData.dummyData,
-                    MenuInfoDummyData.dummyData,
-                )
+                modifier = Modifier.fillMaxWidth(),
+                dataList = menusOnPin ?: emptyList()
             )
         },
         sheetContainerColor = NeutralWhite,
@@ -94,7 +125,10 @@ fun SearchMenuScreen(modifier: Modifier = Modifier) {
                 }
             )
         },
-        sheetPeekHeight = bottomSheetPeekHeight, // TODO : 아이템 개수에 따라 높이 조절 필요
+        sheetPeekHeight = if(showBottomSheet) {
+            val itemCount = menusOnPin?.size ?: 0
+            (singleItemHeight * itemCount) + dragHandleHeight
+        } else 0.dp,
         containerColor = NeutralWhite,
     ) { innerPadding ->
         Box(
@@ -103,10 +137,33 @@ fun SearchMenuScreen(modifier: Modifier = Modifier) {
                 .padding(innerPadding)
         ) {
             if (!showSearchBackground) {
-                // TODO : 지도
+                //지도 컴포넌트
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    AndroidView(
+                        modifier = Modifier,
+                        factory = { mapView }
+                    )
+                }
             } else {
+                val historyDataList = searchHistory?.map { history ->
+                    SearchHistoryData(
+                        menuTitle = history.menuTitle,
+                        storeTitle = history.storeAddress.split(',').firstOrNull() ?: "",
+                        address = history.storeAddress
+                    )
+                } ?: emptyList()
+                
                 SearchHistoryList(
-                    historyList = emptyList()
+                    historyList = historyDataList,
+                    onClick = {
+                        // 크롤링 기록 아이템 클릭시 동작
+                        showSearchBackground = false
+                        showBottomSheet = true
+                    }
                 )
             }
 
@@ -124,14 +181,38 @@ fun SearchMenuScreen(modifier: Modifier = Modifier) {
                 // onSearch 함수
                 if (searchBarFocused) focusManager.clearFocus()
                 searchActionDone = true
-
+                
+                // 검색 시 현재 지도 중심 좌표 사용
+                if (searchText.isNotEmpty()) {
+                    // 검색 직전에 현재 지도 중심 좌표 업데이트
+                    viewModel.updateCurrentCenter()
+                    
+                    val center = viewModel.getCurrentCoordinates()
+                    if (center != null) {
+                        val (latitude, longitude) = center
+                        Log.d("SearchMenuScreen", "검색 위치: $latitude, $longitude")
+                        
+                        // 검색어와 현재 좌표로 크롤링 스토어 정보 요청
+                        viewModel.getMapSearchResult(
+                            query = searchText,
+                            long = longitude,
+                            lat = latitude
+                        )
+                        
+                        showBottomSheet = true
+                        showSearchBackground = false
+                    }
+                }
             }
 
             GoToMapButton(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(bottom = 16.dp, end = 20.dp),
-                onClick = { /* TODO : Go To Map Button Click Event */ },
+                onClick = { 
+                    // TODO: 임시로 설정해놓은 카메라 이동
+                    viewModel.moveCamera(37.5416, 127.0793)
+                },
             )
         }
     }
