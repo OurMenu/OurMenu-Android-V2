@@ -17,9 +17,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
-import com.kuit.ourmenu.ui.onboarding.component.MealTimeGrid
-import com.kuit.ourmenu.ui.onboarding.component.OnboardingTopAppBar
-import com.kuit.ourmenu.ui.onboarding.model.MealTimeState
+import com.kuit.ourmenu.ui.common.topappbar.OnboardingTopAppBar
+import com.kuit.ourmenu.ui.signup.component.MealTimeGrid
+import com.kuit.ourmenu.ui.signup.uistate.MealTime
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
@@ -34,8 +34,8 @@ fun EditMyMealTimeScreen() {
     )
 
     val mealTimeList = remember {
-        mutableStateListOf<MealTimeState>().apply {
-            addAll(initialTimes.map { MealTimeState(mealTime = it) })
+        mutableStateListOf<MealTime>().apply {
+            addAll(initialTimes.map { MealTime(mealTime = it) })
         }
     }
 
