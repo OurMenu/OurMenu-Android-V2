@@ -33,6 +33,7 @@
     <string name="type_body">본문을 입력해주세요.</string>
     <string name="food_tag">음식 태그</string>
     <string name="multiple_choice_available">중복 선택 가능</string>
+    <string name="search_store_name">가게 이름 검색</string>
 
     <!--  onboarding  -->
     <string name="landing_introduce_title">아워메뉴에 온 걸 환영해요!</string>
@@ -106,5 +107,25 @@
     <string name="nationality">나라 별 음식</string>
     <string name="taste">맛</string>
     <string name="occasion">상황</string>
-    <string name="search_store_name">가게 이름 검색</string>
+
+    <!--my page-->
+    <string name="now_meal_time">현재 설정하신 식사 시간입니다!</string>
+    <string name="change_meal_time">식사 시간 수정하기</string>
+    <string name="notice">공지사항</string>
+    <string name="customer_service">고객센터</string>
+    <string name="app_review">앱 리뷰 남기기</string>
+    <string name="app_version">현재 버전 : %s</string>
+
+    <string name="change_password">비밀번호 변경하기</string>
+    <string name="logout">로그아웃</string>
+    <string name="delete_account">회원 탈퇴</string>
+
+    <string name="current_password">기존 비밀번호</string>
+    <string name="enter_current_password">기존 비밀번호를\n입력해주세요.</string>
+    <string name="new_password">변경할 비밀번호</string>
+    <string name="confirm_new_password">변경할 비밀번호 확인</string>
+    <string name="enter_new_password">변경할 비밀번호를\n입력해주세요.</string>
+    <string name="want_to_logout">로그아웃 하시겠습니까?</string>
+    <string name="want_to_delete_account">탈퇴 하시겠습니까?</string>
+    <string name="delete_account_warning">탈퇴 시 계정 및 이용 기록은 모두 삭제되며,\n삭제된 데이터는 복구가 불가능합니다.</string>
 </resources>
