@@ -1,8 +1,11 @@
 package com.kuit.ourmenu.ui.addmenu.viewmodel
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.location.LocationServices
 import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.LatLng
 import com.kakao.vectormap.camera.CameraUpdateFactory
@@ -15,6 +18,7 @@ import com.kuit.ourmenu.data.model.map.response.CrawlingStoreDetailResponse
 import com.kuit.ourmenu.data.model.map.response.CrawlingStoreInfoResponse
 import com.kuit.ourmenu.data.repository.MapRepository
 import com.kuit.ourmenu.ui.common.map.MapController
+import com.kuit.ourmenu.utils.PreferencesManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,7 +28,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddMenuViewModel @Inject constructor(
-    private val mapRepository: MapRepository
+    private val mapRepository: MapRepository,
+    private val preferencesManager: PreferencesManager
 ) : ViewModel() {
     // 최근 검색 결과를 저장
     private val _searchHistory = MutableStateFlow<List<CrawlingHistoryResponse>?>(emptyList())
@@ -44,19 +49,42 @@ class AddMenuViewModel @Inject constructor(
 
     val mapController = MapController()
 
-    init {
-//        getRecentSearchResults()
-//        //확인용, 이후에는 제거
-//        getSearchResults()
-//        getRestaurantInfo()
+    // Permission state
+    private val _locationPermissionGranted = MutableStateFlow(false)
+    val locationPermissionGranted: StateFlow<Boolean> = _locationPermissionGranted.asStateFlow()
 
+    init {
+        viewModelScope.launch {
+            preferencesManager.locationPermissionGranted.collect { granted ->
+                _locationPermissionGranted.value = granted
+            }
+        }
+    }
+
+    fun updateLocationPermission(granted: Boolean) {
+        viewModelScope.launch {
+            preferencesManager.setLocationPermissionGranted(granted)
+        }
     }
 
     // 지도 초기화
-    fun initializeMap(kakaoMap: KakaoMap) {
+    @SuppressLint("MissingPermission")
+    fun initializeMap(kakaoMap: KakaoMap, context: Context) {
         // Initial map setup
-        moveCamera(37.5416, 127.0793)
-        addMarker(37.5406, 127.0763, R.drawable.img_popup_dice)
+        // Get current location and move camera
+        Log.d("AddMenuViewModel", "initialize Map")
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
+        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+            location?.let {
+                Log.d("AddMenuViewModel", "location success: lat=${it.latitude}, long=${it.longitude}")
+                moveCamera(it.latitude, it.longitude)
+                addMarker(it.latitude, it.longitude, R.drawable.img_popup_dice)
+            } ?: run {
+                Log.d("AddMenuViewModel", "location fail")
+                moveCamera(37.5416, 127.0793)
+                addMarker(37.5416, 127.0793, R.drawable.img_popup_dice)
+            }
+        }
     }
 
     fun getRestaurantInfo() {
