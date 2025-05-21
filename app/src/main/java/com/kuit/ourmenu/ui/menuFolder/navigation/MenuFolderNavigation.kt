@@ -24,11 +24,16 @@ fun NavController.navigateToMenuFolderAllMenu() {
     navigate(Routes.MenuFolderAllMenu)
 }
 
+fun NavController.navigateToAddMenu() {
+    navigate(Routes.AddMenu)
+}
+
 fun NavGraphBuilder.menuFolderNavGraph(
     navigateBack: () -> Unit,
     navigateToMenuFolderDetail: (Int) -> Unit,
     navigateToMenuFolderAllMenu: () -> Unit,
 //    navigateToMenuInfo: () -> Unit,
+    navigateToAddMenu: () -> Unit
 ) {
     composable<MainTabRoute.MenuFolder> {
         MenuFolderScreen(
@@ -43,6 +48,7 @@ fun NavGraphBuilder.menuFolderNavGraph(
                 menuFolderId = menuFolderId,
 //                onNavigateToMenuInfo = navigateToMenuInfo,
                 onNavigateBack = navigateBack,
+                onNavigateToAddMenu = navigateToAddMenu
             )
         }
 

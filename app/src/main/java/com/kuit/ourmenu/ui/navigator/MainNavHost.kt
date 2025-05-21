@@ -60,6 +60,7 @@ fun MainNavHost(
             navigateToMenuFolderDetail = navController::navigateToMenuFolderDetail,
             navigateToMenuFolderAllMenu = navController::navigateToMenuFolderAllMenu,
 //            navigateToMenuInfo = navController::navigateToMenuInfo,
+            navigateToAddMenu = navController::navigateToAddMenu
         )
 
         searchMenuNavGraph(
@@ -77,9 +78,7 @@ fun MainNavHost(
                 menuFolderId = menuFolderId,
                 onNavigateBack = navController::navigateUp,
 //                onNavigateToMenuInfo = navController::navigateToMenuInfo,
-//                onNavigateToAddMenu = { menuId ->
-//                    navController.navigateToAddMenu(menuId)
-//                }
+                onNavigateToAddMenu = navController::navigateToAddMenu
             )
         }
         composable<Routes.MenuFolderAllMenu> {

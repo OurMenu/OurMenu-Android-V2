@@ -1,5 +1,6 @@
 package com.kuit.ourmenu.ui.addmenu.screen
 
+import android.Manifest
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -30,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,6 +49,7 @@ import com.kuit.ourmenu.ui.common.topappbar.OurMenuBackButtonTopAppBar
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
+import com.kuit.ourmenu.utils.PermissionHandler
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,7 +57,6 @@ import kotlinx.coroutines.launch
 fun AddMenuScreen(
     modifier: Modifier = Modifier,
     viewModel: AddMenuViewModel = hiltViewModel(),
-
 ) {
     var scaffoldState = rememberBottomSheetScaffoldState()
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
@@ -65,10 +67,12 @@ fun AddMenuScreen(
     val searchBarFocused by interactionSource.collectIsFocusedAsState()
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     val recentSearchResults by viewModel.searchHistory.collectAsStateWithLifecycle()
     val searchResults by viewModel.searchResult.collectAsStateWithLifecycle()
     val storeInfo by viewModel.storeInfo.collectAsStateWithLifecycle()
+    val locationPermissionGranted by viewModel.locationPermissionGranted.collectAsStateWithLifecycle()
 
     // 지도 중심 좌표 상태
     val currentCenter by viewModel.currentCenter.collectAsState()
@@ -76,11 +80,31 @@ fun AddMenuScreen(
     // Collect history data from ViewModel
     val searchHistory by viewModel.searchHistory.collectAsState()
 
+    // Handle location permission
+    PermissionHandler(
+        permission = Manifest.permission.ACCESS_FINE_LOCATION,
+        rationaleMessage = "Location permission is required to show your current location on the map",
+        onPermissionGranted = {
+            viewModel.updateLocationPermission(true)
+        },
+        onPermissionDenied = {
+            viewModel.updateLocationPermission(false)
+        }
+    )
+
     val mapView = mapViewWithLifecycle(
         mapController = viewModel.mapController
     ) { kakaoMap ->
-        // viewModel에서 kakaoMap을 초기화
-        viewModel.initializeMap(kakaoMap)
+        // Map will be initialized in LaunchedEffect when permission is granted
+    }
+
+    // Initialize map when permission is granted
+    LaunchedEffect(locationPermissionGranted) {
+        if (locationPermissionGranted) {
+            viewModel.mapController.kakaoMap.value?.let { kakaoMap ->
+                viewModel.initializeMap(kakaoMap, context)
+            }
+        }
     }
 
     LaunchedEffect(searchBarFocused) {
@@ -184,9 +208,7 @@ fun AddMenuScreen(
                 //onSearch 함수
                 if (searchBarFocused) focusManager.clearFocus()
                 searchActionDone = true
-
             }
-
         }
     }
 }
