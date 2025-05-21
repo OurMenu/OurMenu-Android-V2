@@ -57,6 +57,7 @@ class AddMenuViewModel @Inject constructor(
         viewModelScope.launch {
             preferencesManager.locationPermissionGranted.collect { granted ->
                 _locationPermissionGranted.value = granted
+                Log.d("AddMenuViewModel", "location permission : $granted")
             }
         }
     }
@@ -78,11 +79,11 @@ class AddMenuViewModel @Inject constructor(
             location?.let {
                 Log.d("AddMenuViewModel", "location success: lat=${it.latitude}, long=${it.longitude}")
                 moveCamera(it.latitude, it.longitude)
-                addMarker(it.latitude, it.longitude, R.drawable.img_popup_dice)
+//                addMarker(it.latitude, it.longitude, R.drawable.img_popup_dice)
             } ?: run {
                 Log.d("AddMenuViewModel", "location fail")
                 moveCamera(37.5416, 127.0793)
-                addMarker(37.5416, 127.0793, R.drawable.img_popup_dice)
+//                addMarker(37.5416, 127.0793, R.drawable.img_popup_dice)
             }
         }
     }

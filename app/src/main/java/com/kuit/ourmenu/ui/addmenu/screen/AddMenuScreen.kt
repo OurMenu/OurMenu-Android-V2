@@ -80,25 +80,30 @@ fun AddMenuScreen(
     // Collect history data from ViewModel
     val searchHistory by viewModel.searchHistory.collectAsState()
 
-    // Handle location permission
-    PermissionHandler(
-        permission = Manifest.permission.ACCESS_FINE_LOCATION,
-        rationaleMessage = "Location permission is required to show your current location on the map",
-        onPermissionGranted = {
-            viewModel.updateLocationPermission(true)
-        },
-        onPermissionDenied = {
-            viewModel.updateLocationPermission(false)
-        }
-    )
+    // 권한 허용이 안된 경우 권한 요청
+    if (!locationPermissionGranted) {
+        PermissionHandler(
+            permission = Manifest.permission.ACCESS_FINE_LOCATION,
+            rationaleMessage = "Location permission is required to show your current location on the map",
+            onPermissionGranted = {
+                viewModel.updateLocationPermission(true)
+            },
+            onPermissionDenied = {
+                viewModel.updateLocationPermission(false)
+            }
+        )
+    }
 
     val mapView = mapViewWithLifecycle(
         mapController = viewModel.mapController
     ) { kakaoMap ->
-        // Map will be initialized in LaunchedEffect when permission is granted
+        // 이미 permission 허용한 경우
+        if (locationPermissionGranted) {
+            viewModel.initializeMap(kakaoMap, context)
+        }
     }
 
-    // Initialize map when permission is granted
+    // permission 여부 변한 경우에 발생
     LaunchedEffect(locationPermissionGranted) {
         if (locationPermissionGranted) {
             viewModel.mapController.kakaoMap.value?.let { kakaoMap ->
