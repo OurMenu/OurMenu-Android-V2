@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.kuit.ourmenu.ui.home.navigation.navigateToHome
 import com.kuit.ourmenu.ui.menuFolder.navigation.navigateToAddMenu
+import com.kuit.ourmenu.ui.menuFolder.navigation.navigateToAddMenuInfo
 import com.kuit.ourmenu.ui.menuFolder.navigation.navigateToMenuFolder
 import com.kuit.ourmenu.ui.menuFolder.navigation.navigateToMenuFolderAllMenu
 import com.kuit.ourmenu.ui.menuFolder.navigation.navigateToMenuFolderDetail
@@ -97,6 +98,10 @@ class MainNavController(
 
     fun navigateToAddMenu() {
         navController.navigateToAddMenu()
+    }
+
+    fun navigateToAddMenuInfo() {
+        navController.navigateToAddMenuInfo()
     }
 
     @Composable

@@ -60,7 +60,8 @@ fun MainNavHost(
             navigateToMenuFolderDetail = navController::navigateToMenuFolderDetail,
             navigateToMenuFolderAllMenu = navController::navigateToMenuFolderAllMenu,
 //            navigateToMenuInfo = navController::navigateToMenuInfo,
-            navigateToAddMenu = navController::navigateToAddMenu
+            navigateToAddMenu = navController::navigateToAddMenu,
+            navigateToAddMenuInfo = navController::navigateToAddMenuInfo
         )
 
         searchMenuNavGraph(
@@ -98,7 +99,9 @@ fun MainNavHost(
 
         // 메뉴 추가
         composable<Routes.AddMenu> {
-            AddMenuScreen()
+            AddMenuScreen(
+                onNavigateToAddMenuInfo = navController::navigateToAddMenuInfo
+            )
         }
     }
 }
