@@ -13,8 +13,8 @@ data class HomeResponse(
 
 @Serializable
 data class RecommendMenuList(
-    val menuId: Int,
-    val menuName: String,
-    val menuPrice: Int,
-    val menuImgUrl: String,
+    val menuId: Int = 0,
+    val menuName: String = "",
+    val menuPrice: Int = 0, // TODO: StoreTitle로 변경
+    val menuImgUrl: String = "",
 )
