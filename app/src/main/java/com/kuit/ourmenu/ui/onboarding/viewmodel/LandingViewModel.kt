@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.kakao.sdk.user.UserApiClient
 import com.kuit.ourmenu.data.model.auth.SignInType
 import com.kuit.ourmenu.data.repository.AuthRepository
-import com.kuit.ourmenu.ui.oauth.KakaoModule.getUserEmail
+import com.kuit.ourmenu.data.oauth.KakaoRepository
 import com.kuit.ourmenu.ui.onboarding.model.LandingUiState
 import com.kuit.ourmenu.ui.onboarding.state.KakaoState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LandingViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val kakaoRepository: KakaoRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LandingUiState())
@@ -45,9 +46,17 @@ class LandingViewModel @Inject constructor(
         }
     }
 
+    fun getKakaoLogin() {
+        kakaoRepository.getKakaoLogin(
+            successLogin = {
+                updateKakaoState(KakaoState.Loading)
+            }
+        )
+    }
+
     fun signInWithKakao() {
         viewModelScope.launch {
-            val email = getUserEmail()
+            val email = kakaoRepository.getUserEmail()
             email ?: run {
                 _uiState.update {
                     it.copy(error = "이메일을 가져오는데 실패했습니다.")
@@ -91,7 +100,7 @@ class LandingViewModel @Inject constructor(
     }
 
     private suspend fun checkKakaoEmail(): Boolean {
-        val email = getUserEmail()
+        val email = kakaoRepository.getUserEmail()
 
         authRepository.checkKakaoEmail(email).fold(
             onSuccess = { response ->

@@ -1,4 +1,4 @@
-package com.kuit.ourmenu.ui.oauth
+package com.kuit.ourmenu.data.oauth
 
 import android.content.Context
 import android.util.Log
@@ -7,13 +7,17 @@ import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.suspendCancellableCoroutine
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.coroutines.resume
 
-object KakaoModule {
-
+@Singleton
+class KakaoRepository @Inject constructor(
+    @ApplicationContext private val context: Context
+) {
     fun getKakaoLogin(
-        context: Context,
         successLogin: () -> Unit,
     ) {
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->

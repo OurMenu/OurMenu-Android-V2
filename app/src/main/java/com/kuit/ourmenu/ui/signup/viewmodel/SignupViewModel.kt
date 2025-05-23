@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kuit.ourmenu.data.model.auth.SignInType
 import com.kuit.ourmenu.data.repository.AuthRepository
-import com.kuit.ourmenu.ui.oauth.KakaoModule.getUserEmail
+import com.kuit.ourmenu.data.oauth.KakaoRepository
 import com.kuit.ourmenu.ui.common.model.PasswordState
 import com.kuit.ourmenu.ui.signup.model.SignupState
 import com.kuit.ourmenu.ui.signup.uistate.SignupUiState
@@ -19,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignupViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val kakaoRepository: KakaoRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SignupUiState())
@@ -178,7 +179,7 @@ class SignupViewModel @Inject constructor(
 
     private fun signupWithKakao() {
         viewModelScope.launch {
-            val kakaoEmail = getUserEmail()
+            val kakaoEmail = kakaoRepository.getUserEmail()
 
             authRepository.signup(
                 email = kakaoEmail,
