@@ -23,6 +23,8 @@ sealed interface Routes{
     data object AddMenu: Routes
 
     // Mypage
+    @Serializable
+    data object EditMyMealTime: Routes
 
     // Onboarding
     @Serializable

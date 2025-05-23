@@ -10,5 +10,7 @@ data class MyPageUiState(
     val showCurrentPasswordModal: Boolean = false,
     val showNewPasswordModal: Boolean = false,
     val showLogoutModal: Boolean = false,
-    val showDeleteAccountModal: Boolean = false
+    val showDeleteAccountModal: Boolean = false,
+    val isLogoutSuccess: Boolean = false,
+    val isDeleteAccountSuccess: Boolean = false,
 )

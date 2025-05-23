@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -48,9 +50,14 @@ import com.kuit.ourmenu.utils.ViewUtil.noRippleClickable
 fun MyRoute(
     padding: PaddingValues,
     navigateToEdit: () -> Unit = {},
+    navigateToLanding : () -> Unit = {},
     viewModel: MyPageViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    if(uiState.isLogoutSuccess || uiState.isDeleteAccountSuccess) {
+        navigateToLanding()
+    }
 
     MyScreen(
         padding = padding,
@@ -138,7 +145,7 @@ fun MyScreen(
 
                 MyMealTime(
                     navigateToEdit = navigateToEdit,
-                    // TODO: mealTimes 데이터 받아오기
+                    mealTimes = uiState.mealTimes
                 )
 
                 Column(
@@ -250,7 +257,8 @@ fun InfoRow(
         )
 
         Icon(
-            painter = painterResource(R.drawable.ic_arrow_right),
+//            painter = painterResource(R.drawable.ic_arrow_right),
+            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
             contentDescription = null,
             modifier = Modifier.height(24.dp)
         )
