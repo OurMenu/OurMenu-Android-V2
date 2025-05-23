@@ -8,5 +8,6 @@ data class EditMyMealTimeUiState(
         MealTime(mealTime = it + 6)
     },
     val selectedTimes: List<Int> = emptyList(),
+    val isSuccess: Boolean = false,
 )
 

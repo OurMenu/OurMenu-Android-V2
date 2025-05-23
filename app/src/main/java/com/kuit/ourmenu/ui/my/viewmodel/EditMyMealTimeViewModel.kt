@@ -55,7 +55,7 @@ class EditMyMealTimeViewModel @Inject constructor(
     fun changeMealTime() {
         viewModelScope.launch {
             userRepository.updateMealTimes(
-                mealTimes = _uiState.value.selectedTimes
+                newMealTimes = _uiState.value.selectedTimes
             ).fold(
                 onSuccess = {
                     _uiState.update {

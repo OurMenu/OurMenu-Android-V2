@@ -1,6 +1,7 @@
 package com.kuit.ourmenu.data.repository
 
 import com.kuit.ourmenu.data.model.base.handleBaseResponse
+import com.kuit.ourmenu.data.model.user.request.ChangeMealTimeRequest
 import com.kuit.ourmenu.data.model.user.request.ChangePasswordRequest
 import com.kuit.ourmenu.data.oauth.KakaoRepository
 import com.kuit.ourmenu.data.service.UserService
@@ -29,9 +30,11 @@ class UserRepository @Inject constructor(
     }
 
     suspend fun updateMealTimes(
-        mealTimes: List<Int>
+        newMealTimes: List<Int>
     ) = runCatching {
-        userService.updateMealTimes(mealTimes).handleBaseResponse().getOrThrow()
+        userService.updateMealTimes(
+            ChangeMealTimeRequest(newMealTimes)
+        ).handleBaseResponse().getOrThrow()
     }
 
     suspend fun getUserInfo() = runCatching {

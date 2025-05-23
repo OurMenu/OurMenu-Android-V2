@@ -2,6 +2,7 @@ package com.kuit.ourmenu.data.service
 
 import com.kuit.ourmenu.data.model.auth.response.TemporaryPasswordResponse
 import com.kuit.ourmenu.data.model.base.BaseResponse
+import com.kuit.ourmenu.data.model.user.request.ChangeMealTimeRequest
 import com.kuit.ourmenu.data.model.user.request.ChangePasswordRequest
 import com.kuit.ourmenu.data.model.user.response.UserInfoResponse
 import retrofit2.http.Body
@@ -22,9 +23,9 @@ interface UserService {
         @Body request: ChangePasswordRequest
     ): BaseResponse<Unit>
 
-    @PATCH("api/users/meal-times")
+    @PATCH("api/users/meal-time")
     suspend fun updateMealTimes(
-        @Body mealTimes: List<Int>
+        @Body mealTimes: ChangeMealTimeRequest
     ): BaseResponse<Unit>
 
     @GET("api/users")

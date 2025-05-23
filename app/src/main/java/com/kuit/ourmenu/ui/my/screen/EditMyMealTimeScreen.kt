@@ -41,16 +41,20 @@ fun EditMyMealTimeRoute(
         viewModel.setSelectedTimes(selectedTimes)
     }
 
+    LaunchedEffect(uiState.isSuccess) {
+        if (uiState.isSuccess) {
+            navigateToBack()
+        }
+    }
+
     EditMyMealTimeScreen(
         padding = padding,
         uiState = uiState,
         updateSelectedTime = viewModel::updateSelectedTime,
         navigateToBack = navigateToBack,
+        onConfirmClick = viewModel::changeMealTime,
     )
 
-    if (uiState.isSuccess) {
-        navigateToBack()
-    }
 
 }
 
@@ -60,6 +64,7 @@ fun EditMyMealTimeScreen(
     uiState: EditMyMealTimeUiState,
     updateSelectedTime: (Int) -> Unit = {},
     navigateToBack: () -> Unit = {},
+    onConfirmClick: () -> Unit = {},
 ) {
     val mealTimes = uiState.mealTimes
     val selectedTimes = uiState.selectedTimes
@@ -114,7 +119,7 @@ fun EditMyMealTimeScreen(
                     .align(Alignment.BottomCenter)
                     .padding(bottom = 20.dp),
                 text = stringResource(R.string.confirm),
-                onClick = navigateToBack
+                onClick = onConfirmClick
             )
         }
     }

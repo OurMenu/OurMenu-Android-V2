@@ -57,8 +57,12 @@ fun MyRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    if (uiState.isLogoutSuccess || uiState.isDeleteAccountSuccess) {
-        navigateToLanding()
+    LaunchedEffect(
+        uiState.isLogoutSuccess,
+        uiState.isDeleteAccountSuccess
+    ) {
+        if (uiState.isLogoutSuccess || uiState.isDeleteAccountSuccess)
+            navigateToLanding()
     }
 
     LaunchedEffect(Unit) {
