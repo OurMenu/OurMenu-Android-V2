@@ -5,6 +5,7 @@ import com.kuit.ourmenu.data.model.base.BaseResponse
 import com.kuit.ourmenu.data.model.user.request.ChangePasswordRequest
 import com.kuit.ourmenu.data.model.user.response.UserInfoResponse
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -28,4 +29,7 @@ interface UserService {
 
     @GET("api/users")
     suspend fun getUserInfo(): BaseResponse<UserInfoResponse> // TODO : 리스폰스 변경에 따라 수정해야함
+
+    @DELETE("api/users")
+    suspend fun deleteUser(): BaseResponse<Unit>
 }

@@ -71,6 +71,7 @@ fun MyRoute(
         navigateToEdit = navigateToEdit,
         changePassword = viewModel::changePassword,
         logout = viewModel::logout,
+        deleteAccount = viewModel::deleteAccount,
         updateBottomSheetVisible = viewModel::updateBottomSheetVisible,
         updateCurrentPasswordModalVisible = viewModel::updateCurrentPasswordModalVisible,
         updateNewPasswordModalVisible = viewModel::updateNewPasswordModalVisible,
@@ -87,6 +88,7 @@ fun MyScreen(
     navigateToEdit: () -> Unit = {},
     changePassword: (String) -> Unit = {},
     logout: () -> Unit = {},
+    deleteAccount: () -> Unit = {},
     updateBottomSheetVisible: (Boolean) -> Unit = {},
     updateCurrentPasswordModalVisible: (Boolean) -> Unit = {},
     updateNewPasswordModalVisible: (Boolean) -> Unit = {},
@@ -235,8 +237,7 @@ fun MyScreen(
         if (uiState.showDeleteAccountModal) {
             DeleteAccountModal(
                 onDismiss = { updateDeleteAccountModalVisible(false) },
-                onConfirm = {
-                }
+                onConfirm = { deleteAccount() }
             )
         }
     }

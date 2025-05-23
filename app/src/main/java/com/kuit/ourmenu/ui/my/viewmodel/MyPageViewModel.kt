@@ -85,6 +85,19 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
+    fun deleteAccount() {
+        viewModelScope.launch {
+            userRepository.deleteUser().fold(
+                onSuccess = {
+                    updateDeleteAccountModalVisible(false)
+                    Log.d("MyPageViewModel", "deleteAccount: $it")
+                },
+                onFailure = {
+                    Log.d("MyPageViewModel", "deleteAccount: $it")
+                }
+            )
+        }
+    }
 
     fun updateBottomSheetVisible(visible: Boolean) {
         _uiState.update {

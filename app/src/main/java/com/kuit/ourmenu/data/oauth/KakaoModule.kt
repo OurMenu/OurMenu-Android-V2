@@ -85,4 +85,18 @@ class KakaoRepository @Inject constructor(
         }
     }
 
+    fun unlink(
+        errorUnlink: (Throwable) -> Unit,
+    ) {
+        if (AuthApiClient.instance.hasToken()) {
+            UserApiClient.instance.unlink { error ->
+                if (error != null) {
+                    Log.e("KakaoTag", "회원 탈퇴 실패. SDK에서 토큰 삭제됨", error)
+                    errorUnlink(error)
+                } else {
+                    Log.i("KakaoTag", "회원 탈퇴 성공. SDK에서 토큰 삭제됨")
+                }
+            }
+        }
+    }
 }
