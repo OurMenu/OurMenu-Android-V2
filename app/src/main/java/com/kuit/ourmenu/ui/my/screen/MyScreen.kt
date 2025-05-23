@@ -1,5 +1,7 @@
 package com.kuit.ourmenu.ui.my.screen
 
+import android.R.attr.bottom
+import android.R.attr.text
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -41,6 +43,7 @@ import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.NeutralBlack
 import com.kuit.ourmenu.ui.theme.OurMenuTypography
+import com.kuit.ourmenu.utils.ViewUtil.noRippleClickable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -100,7 +103,7 @@ fun MyScreen() {
                         contentDescription = null,
                         modifier = Modifier
                             .size(24.dp)
-                            .clickable(
+                            .noRippleClickable(
                                 onClick = {
                                     bottomSheetVisible = true
                                 }
@@ -115,21 +118,19 @@ fun MyScreen() {
 
                 Column(
                     modifier = Modifier
-                        .padding(top = 32.dp, start = 20.dp, end = 20.dp)
+                        .padding(top = 32.dp)
                 ) {
                     InfoRow(infoTitle = stringResource(R.string.notice)) {
                         // TODO: 공지사항 화면으로 이동
                     }
-                    Spacer(Modifier.height(20.dp))
                     InfoRow(infoTitle = stringResource(R.string.customer_service)) {
                         // TODO: 고객센터 화면으로 이동
                     }
-                    Spacer(Modifier.height(20.dp))
                     InfoRow(infoTitle = stringResource(R.string.app_review)) {
                         // TODO: 앱 리뷰 화면으로 이동
                     }
-                    Spacer(Modifier.height(20.dp))
                     Text(
+                        modifier = Modifier.padding(top = 10.dp, start = 20.dp),
                         text = stringResource(R.string.app_version, "2.0"),
                         style = OurMenuTypography().pretendard_600_16,
                         color = Neutral900
@@ -211,8 +212,9 @@ fun InfoRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 16.dp)
-            .clickable(onClick = onClick),
+            .noRippleClickable(onClick = onClick)
+            .padding(start = 20.dp, end = 30.dp)
+            .padding(vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -235,3 +237,4 @@ fun InfoRow(
 private fun MyScreenPreview() {
     MyScreen()
 }
+
