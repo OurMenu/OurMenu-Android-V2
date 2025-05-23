@@ -23,7 +23,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
 import com.kuit.ourmenu.ui.common.topappbar.OnboardingTopAppBar
-import com.kuit.ourmenu.ui.signup.component.MealTimeGrid
+import com.kuit.ourmenu.ui.common.MealTimeGrid
 import com.kuit.ourmenu.ui.signup.model.SignupState
 import com.kuit.ourmenu.ui.signup.uistate.SignupUiState
 import com.kuit.ourmenu.ui.signup.viewmodel.SignupViewModel

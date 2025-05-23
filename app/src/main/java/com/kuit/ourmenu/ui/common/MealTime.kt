@@ -1,4 +1,4 @@
-package com.kuit.ourmenu.ui.signup.component
+package com.kuit.ourmenu.ui.common
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,7 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.kuit.ourmenu.ui.signup.uistate.MealTime
+import com.kuit.ourmenu.ui.common.model.MealTime
 import com.kuit.ourmenu.ui.theme.Neutral100
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral500
