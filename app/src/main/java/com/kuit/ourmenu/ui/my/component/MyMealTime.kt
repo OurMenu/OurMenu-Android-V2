@@ -33,6 +33,7 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
 fun MyMealTime(
+    navigateToEdit: () -> Unit = {},
     mealTimes: List<String> = listOf("8:00", "12:00", "19:00"),
 ) {
     Column(
@@ -51,9 +52,7 @@ fun MyMealTime(
         Spacer(Modifier.height(20.dp))
 
         Button(
-            onClick = {
-                // TODO: EditMyMealTimeScreen으로 이동
-            },
+            onClick = { navigateToEdit() },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(42.dp),

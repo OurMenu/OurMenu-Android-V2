@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class MyPageViewModel @Inject constructor(): ViewModel() {
+class MyPageViewModel @Inject constructor() : ViewModel() {
 
     private val _uiState = MutableStateFlow(MyPageUiState())
     val uiState = _uiState.asStateFlow()
@@ -24,19 +24,23 @@ class MyPageViewModel @Inject constructor(): ViewModel() {
             it.copy(showCurrentPasswordModal = visible)
         }
     }
+
     fun updateNewPasswordModalVisible(visible: Boolean) {
         _uiState.update {
             it.copy(showNewPasswordModal = visible)
         }
     }
+
     fun updateLogoutModalVisible(visible: Boolean) {
         _uiState.update {
             it.copy(showLogoutModal = visible)
         }
     }
+
     fun updateDeleteAccountModalVisible(visible: Boolean) {
         _uiState.update {
             it.copy(showDeleteAccountModal = visible)
         }
     }
+
 }

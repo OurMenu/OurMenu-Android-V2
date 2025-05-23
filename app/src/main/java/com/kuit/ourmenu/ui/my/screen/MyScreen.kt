@@ -1,11 +1,9 @@
 package com.kuit.ourmenu.ui.my.screen
 
-import android.R.attr.bottom
-import android.R.attr.text
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,9 +17,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -31,6 +26,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.topappbar.OurMenuAddButtonTopAppBar
 import com.kuit.ourmenu.ui.my.component.DeleteAccountModal
@@ -39,22 +36,51 @@ import com.kuit.ourmenu.ui.my.component.MyBottomModal
 import com.kuit.ourmenu.ui.my.component.MyCurrentPasswordModal
 import com.kuit.ourmenu.ui.my.component.MyMealTime
 import com.kuit.ourmenu.ui.my.component.MyNewPasswordModal
+import com.kuit.ourmenu.ui.my.viewmodel.MyPageUiState
+import com.kuit.ourmenu.ui.my.viewmodel.MyPageViewModel
 import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.NeutralBlack
 import com.kuit.ourmenu.ui.theme.OurMenuTypography
 import com.kuit.ourmenu.utils.ViewUtil.noRippleClickable
 
+@Composable
+fun MyRoute(
+    padding: PaddingValues,
+    navigateToEdit: () -> Unit = {},
+    viewModel: MyPageViewModel = hiltViewModel(),
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    MyScreen(
+        padding = padding,
+        uiState = uiState,
+        navigateToEdit = navigateToEdit,
+        updateBottomSheetVisible = viewModel::updateBottomSheetVisible,
+        updateCurrentPasswordModalVisible = viewModel::updateCurrentPasswordModalVisible,
+        updateNewPasswordModalVisible = viewModel::updateNewPasswordModalVisible,
+        updateLogoutModalVisible = viewModel::updateLogoutModalVisible,
+        updateDeleteAccountModalVisible = viewModel::updateDeleteAccountModalVisible
+    )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyScreen() {
-    var bottomSheetVisible by rememberSaveable { mutableStateOf(false) }
-    var showCurrentPasswordModal by rememberSaveable { mutableStateOf(false) }
-    var showNewPasswordModal by rememberSaveable { mutableStateOf(false) }
-    var showLogoutModal by rememberSaveable { mutableStateOf(false) }
-    var showDeleteAccountModal by rememberSaveable { mutableStateOf(false) }
+fun MyScreen(
+    padding: PaddingValues,
+    uiState: MyPageUiState,
+    navigateToEdit: () -> Unit = {},
+    updateBottomSheetVisible: (Boolean) -> Unit = {},
+    updateCurrentPasswordModalVisible: (Boolean) -> Unit = {},
+    updateNewPasswordModalVisible: (Boolean) -> Unit = {},
+    updateLogoutModalVisible: (Boolean) -> Unit = {},
+    updateDeleteAccountModalVisible: (Boolean) -> Unit = {},
+) {
 
-    Box {
+    Box(
+        modifier = Modifier
+            .padding(padding)
+    ) {
         Scaffold(
             topBar = {
                 OurMenuAddButtonTopAppBar(
@@ -92,7 +118,7 @@ fun MyScreen() {
                         Spacer(modifier = Modifier.width(16.dp))
 
                         Text(
-                            text = stringResource(R.string.email),
+                            text = uiState.email,
                             style = OurMenuTypography().pretendard_700_14,
                             color = Neutral900
                         )
@@ -104,15 +130,14 @@ fun MyScreen() {
                         modifier = Modifier
                             .size(24.dp)
                             .noRippleClickable(
-                                onClick = {
-                                    bottomSheetVisible = true
-                                }
+                                onClick = { updateBottomSheetVisible(true) }
                             ),
                         tint = Neutral700
                     )
                 }
 
                 MyMealTime(
+                    navigateToEdit = navigateToEdit,
                     // TODO: mealTimes 데이터 받아오기
                 )
 
@@ -140,64 +165,64 @@ fun MyScreen() {
         }
 
         // 모달 처리
-        if (bottomSheetVisible) {
+        if (uiState.bottomSheetVisible) {
             MyBottomModal(
-                onDismissRequest = { bottomSheetVisible = false },
+                onDismissRequest = { updateBottomSheetVisible(false) },
                 onChangePassword = {
-                    showCurrentPasswordModal = true
-                    bottomSheetVisible = false
+                    updateCurrentPasswordModalVisible(true)
+                    updateBottomSheetVisible(false)
                 },
                 onLogout = {
-                    showLogoutModal = true
-                    bottomSheetVisible = false
+                    updateLogoutModalVisible(true)
+                    updateBottomSheetVisible(false)
                 },
                 onDeleteAccount = {
-                    showDeleteAccountModal = true
-                    bottomSheetVisible = false
+                    updateDeleteAccountModalVisible(true)
+                    updateBottomSheetVisible(false)
                 }
             )
         }
 
         // 비밀번호 변경 모달
-        if (showCurrentPasswordModal) {
+        if (uiState.showCurrentPasswordModal) {
             MyCurrentPasswordModal(
-                onDismiss = { showCurrentPasswordModal = false },
+                onDismiss = { updateCurrentPasswordModalVisible(false) },
                 onConfirm = {
-                    showNewPasswordModal = true
-                    showCurrentPasswordModal = false
+                    updateNewPasswordModalVisible(true)
+                    updateCurrentPasswordModalVisible(false)
                 }
             )
         }
 
         // 새 비밀번호 입력 모달
-        if (showNewPasswordModal) {
+        if (uiState.showNewPasswordModal) {
             MyNewPasswordModal(
-                onDismiss = { showNewPasswordModal = false },
+                onDismiss = { updateNewPasswordModalVisible(false) },
                 onConfirm = {
                     // TODO: 비밀번호 변경 로직 추가
-                    showNewPasswordModal = false
+                    updateNewPasswordModalVisible(false)
                 }
             )
         }
 
         // 로그아웃 모달
-        if (showLogoutModal) {
+        if (uiState.showLogoutModal) {
             LogoutModal(
-                onDismiss = { showLogoutModal = false },
+                onDismiss = { updateLogoutModalVisible(false) },
                 onConfirm = {
                     // TODO: 로그아웃 로직 추가
-                    showLogoutModal = false
+                    updateLogoutModalVisible(false)
                 }
             )
         }
 
         // 계정 삭제 모달
-        if (showDeleteAccountModal) {
+        if (uiState.showDeleteAccountModal) {
             DeleteAccountModal(
-                onDismiss = { showDeleteAccountModal = false },
+                onDismiss = { updateDeleteAccountModalVisible(false) },
                 onConfirm = {
                     // TODO: 계정 삭제 로직 추가
-                    showDeleteAccountModal = false
+                    updateDeleteAccountModalVisible(false)
                 }
             )
         }
@@ -235,6 +260,9 @@ fun InfoRow(
 @Preview(showBackground = true)
 @Composable
 private fun MyScreenPreview() {
-    MyScreen()
+    MyScreen(
+        uiState = MyPageUiState(),
+        padding = PaddingValues(),
+    )
 }
 
