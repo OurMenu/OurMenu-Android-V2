@@ -12,9 +12,9 @@ data class SignupUiState(
     val passwordVisible: Boolean = false,
     val codes: List<String> = listOf("", "", "", "", "", ""),
     val mealTimes: List<MealTime> = List(18) {
-        MealTime(mealTime = "${it + 6}:00")
+        MealTime(mealTime = it + 6)
     },
-    val selectedTimes: List<String> = emptyList(),
+    val selectedTimes: List<Int> = emptyList(),
     val emailState: SignupState = SignupState.Default,
     val verifyState: SignupState = SignupState.Default,
     val passwordState: PasswordState = PasswordState.Default,

@@ -30,11 +30,12 @@ import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.OurMenuTypography
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
+import com.kuit.ourmenu.utils.ExtensionUtil.toMealTime
 
 @Composable
 fun MyMealTime(
     navigateToEdit: () -> Unit = {},
-    mealTimes: List<String> = listOf("8:00", "12:00", "19:00"),
+    mealTimes: List<Int> = listOf(),
 ) {
     Column(
         modifier = Modifier
@@ -72,7 +73,7 @@ fun MyMealTime(
 }
 
 @Composable
-fun MyMealTimeBox(mealTimes: List<String>) {
+fun MyMealTimeBox(mealTimes: List<Int>) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -95,7 +96,7 @@ fun MyMealTimeBox(mealTimes: List<String>) {
                     modifier = Modifier.padding(end = 16.dp)
                 )
                 Text(
-                    text = time,
+                    text = time.toMealTime(),
                     style = OurMenuTypography().pretendard_600_18,
                     color = Neutral900
                 )

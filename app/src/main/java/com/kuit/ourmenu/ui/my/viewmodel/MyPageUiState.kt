@@ -1,9 +1,11 @@
 package com.kuit.ourmenu.ui.my.viewmodel
 
+import com.kuit.ourmenu.data.model.auth.SignInType
+
 data class MyPageUiState(
     val email: String = "",
-    val password: String = "",
-    val mealTimes: List<String> = emptyList(),
+    val signInType: SignInType = SignInType.EMAIL,
+    val mealTimes: List<Int> = emptyList(),
     val selectedMealTimes: List<String> = emptyList(),
     val error: String = "",
     val bottomSheetVisible: Boolean = false,

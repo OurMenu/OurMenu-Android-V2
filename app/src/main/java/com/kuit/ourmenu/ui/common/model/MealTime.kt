@@ -1,6 +1,6 @@
 package com.kuit.ourmenu.ui.common.model
 
 data class MealTime(
-    val mealTime: String,
+    val mealTime: Int,
     var selected: Boolean = false
 )

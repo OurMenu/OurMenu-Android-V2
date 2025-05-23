@@ -22,6 +22,7 @@ import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Primary100
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
+import com.kuit.ourmenu.utils.ExtensionUtil.toMealTime
 import com.kuit.ourmenu.utils.ViewUtil.noRippleClickable
 
 @Composable
@@ -55,7 +56,7 @@ fun MealTimeGrid(
 @Composable
 fun MealTimeItem(
     modifier: Modifier = Modifier,
-    mealTime: String = "10:00",
+    mealTime: Int = 0,
     selected: Boolean = false,
     updateSelected: () -> Unit = { },
 ) {
@@ -75,7 +76,7 @@ fun MealTimeItem(
             .noRippleClickable { updateSelected() }
     ) {
         Text(
-            text = mealTime,
+            text = mealTime.toMealTime(),
             style = ourMenuTypography().pretendard_500_16,
             color = textColor,
             modifier = Modifier.align(Alignment.Center)

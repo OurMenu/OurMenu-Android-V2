@@ -5,8 +5,8 @@ import com.kuit.ourmenu.ui.common.model.MealTime
 
 data class EditMyMealTimeUiState(
     val mealTimes: List<MealTime> = List(18) {
-        MealTime(mealTime = "${it + 6}:00")
+        MealTime(mealTime = it + 6)
     },
-    val selectedTimes: List<String> = emptyList(),
+    val selectedTimes: List<Int> = emptyList(),
 )
 
