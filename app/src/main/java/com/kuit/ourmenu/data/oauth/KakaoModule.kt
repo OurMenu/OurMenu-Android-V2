@@ -70,15 +70,19 @@ class KakaoRepository @Inject constructor(
         }
     }
 
-    fun logout() {
+    fun logout(
+        errorLogout: (Throwable) -> Unit,
+    ) {
         if (AuthApiClient.instance.hasToken()) {
             UserApiClient.instance.logout { error ->
                 if (error != null) {
                     Log.e("KakaoTag", "로그아웃 실패. SDK에서 토큰 삭제됨", error)
+                    errorLogout(error)
                 } else {
                     Log.i("KakaoTag", "로그아웃 성공. SDK에서 토큰 삭제됨")
                 }
             }
         }
     }
+
 }

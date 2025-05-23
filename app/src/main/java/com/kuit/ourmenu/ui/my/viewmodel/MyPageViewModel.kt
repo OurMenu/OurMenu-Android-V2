@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kuit.ourmenu.data.model.auth.SignInType
+import com.kuit.ourmenu.data.oauth.KakaoRepository
 import com.kuit.ourmenu.data.repository.AuthRepository
 import com.kuit.ourmenu.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MyPageUiState())
@@ -74,9 +75,6 @@ class MyPageViewModel @Inject constructor(
         viewModelScope.launch {
             authRepository.logout().fold(
                 onSuccess = {
-                    if (_uiState.value.signInType == SignInType.KAKAO) {
-//                        KakaoModule.logout()
-                    }
                     updateLogoutModalVisible(false)
                     Log.d("MyPageViewModel", "logout: $it")
                 },
@@ -87,20 +85,6 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    fun deleteAccount() {
-        viewModelScope.launch {
-            userRepository.deleteUser().fold(
-                onSuccess = {
-//                    KakaoModule.logout()
-                    updateDeleteAccountModalVisible(false)
-                    Log.d("MyPageViewModel", "deleteAccount: $it")
-                },
-                onFailure = {
-                    Log.d("MyPageViewModel", "deleteAccount: $it")
-                }
-            )
-        }
-    }
 
     fun updateBottomSheetVisible(visible: Boolean) {
         _uiState.update {

@@ -7,6 +7,7 @@ import com.kuit.ourmenu.data.model.auth.request.EmailRequest
 import com.kuit.ourmenu.data.model.auth.request.LoginRequest
 import com.kuit.ourmenu.data.model.auth.request.SignupRequest
 import com.kuit.ourmenu.data.model.base.handleBaseResponse
+import com.kuit.ourmenu.data.oauth.KakaoRepository
 import com.kuit.ourmenu.data.service.AuthService
 import com.kuit.ourmenu.utils.auth.TokenManager
 import javax.inject.Inject
@@ -15,7 +16,8 @@ import javax.inject.Singleton
 @Singleton
 class AuthRepository @Inject constructor(
     private val authService: AuthService,
-    private val tokenManager: TokenManager
+    private val tokenManager: TokenManager,
+    private val kakaoRepository: KakaoRepository
 ) {
     suspend fun signup(
         email: String?,
@@ -39,6 +41,9 @@ class AuthRepository @Inject constructor(
     }
 
     suspend fun logout() = runCatching {
+        kakaoRepository.logout { error ->
+            throw error
+        }
         authService.logout().handleBaseResponse().getOrThrow()
     }
 

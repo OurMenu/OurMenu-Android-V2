@@ -70,6 +70,7 @@ fun MyRoute(
         uiState = uiState,
         navigateToEdit = navigateToEdit,
         changePassword = viewModel::changePassword,
+        logout = viewModel::logout,
         updateBottomSheetVisible = viewModel::updateBottomSheetVisible,
         updateCurrentPasswordModalVisible = viewModel::updateCurrentPasswordModalVisible,
         updateNewPasswordModalVisible = viewModel::updateNewPasswordModalVisible,
@@ -85,6 +86,7 @@ fun MyScreen(
     uiState: MyPageUiState,
     navigateToEdit: () -> Unit = {},
     changePassword: (String) -> Unit = {},
+    logout: () -> Unit = {},
     updateBottomSheetVisible: (Boolean) -> Unit = {},
     updateCurrentPasswordModalVisible: (Boolean) -> Unit = {},
     updateNewPasswordModalVisible: (Boolean) -> Unit = {},
@@ -214,7 +216,6 @@ fun MyScreen(
             MyNewPasswordModal(
                 onDismiss = { updateNewPasswordModalVisible(false) },
                 onConfirm = { newPassword ->
-                    // TODO: 비밀번호 변경 로직 추가
                     changePassword(newPassword)
                 }
             )
@@ -225,8 +226,7 @@ fun MyScreen(
             LogoutModal(
                 onDismiss = { updateLogoutModalVisible(false) },
                 onConfirm = {
-                    // TODO: 로그아웃 로직 추가
-                    updateLogoutModalVisible(false)
+                    logout()
                 }
             )
         }
@@ -236,8 +236,6 @@ fun MyScreen(
             DeleteAccountModal(
                 onDismiss = { updateDeleteAccountModalVisible(false) },
                 onConfirm = {
-                    // TODO: 계정 삭제 로직 추가
-                    updateDeleteAccountModalVisible(false)
                 }
             )
         }
