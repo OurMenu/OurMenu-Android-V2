@@ -23,7 +23,7 @@ class SplashViewModel @Inject constructor(
     val errorMessage = _errorMessage.asStateFlow()
 
     init {
-        getCacheData()
+//        getCacheData()
     }
 
     private fun getCacheData() {

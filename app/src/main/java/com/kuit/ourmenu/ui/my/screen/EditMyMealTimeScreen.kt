@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,10 +31,15 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 @Composable
 fun EditMyMealTimeRoute(
     padding: PaddingValues,
+    selectedTimes: List<Int> = listOf(),
     navigateToBack: () -> Unit = {},
     viewModel: EditMyMealTimeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.setSelectedTimes(selectedTimes)
+    }
 
     EditMyMealTimeScreen(
         padding = padding,
@@ -41,6 +47,10 @@ fun EditMyMealTimeRoute(
         updateSelectedTime = viewModel::updateSelectedTime,
         navigateToBack = navigateToBack,
     )
+
+    if (uiState.isSuccess) {
+        navigateToBack()
+    }
 
 }
 

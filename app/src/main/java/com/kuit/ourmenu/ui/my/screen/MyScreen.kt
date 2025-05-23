@@ -51,7 +51,7 @@ import com.kuit.ourmenu.utils.ViewUtil.noRippleClickable
 @Composable
 fun MyRoute(
     padding: PaddingValues,
-    navigateToEdit: () -> Unit = {},
+    navigateToEdit: (List<Int>) -> Unit = {},
     navigateToLanding: () -> Unit = {},
     viewModel: MyPageViewModel = hiltViewModel(),
 ) {
@@ -68,7 +68,7 @@ fun MyRoute(
     MyScreen(
         padding = padding,
         uiState = uiState,
-        navigateToEdit = navigateToEdit,
+        navigateToEdit = { navigateToEdit(uiState.mealTimes) },
         changePassword = viewModel::changePassword,
         logout = viewModel::logout,
         deleteAccount = viewModel::deleteAccount,

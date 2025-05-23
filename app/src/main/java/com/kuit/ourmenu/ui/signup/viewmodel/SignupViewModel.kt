@@ -73,12 +73,21 @@ class SignupViewModel @Inject constructor(
     fun updateSelectedTime(index: Int) {
         _uiState.update {
             val selected = it.mealTimes[index].selected
+            val currentSelectedTimes = it.selectedTimes.toMutableList()
+            val mealTime = it.mealTimes[index].mealTime
+
             it.copy(
-                selectedTimes =
-                    if (selected) it.selectedTimes.toMutableList() - it.mealTimes[index].mealTime
-                    else it.selectedTimes.toMutableList() + it.mealTimes[index].mealTime,
                 mealTimes = it.mealTimes.toMutableList()
-                    .apply { this[index].selected = !selected }
+                    .apply {
+                        this[index].selected = !selected && currentSelectedTimes.size < 4
+                    }.toList(),
+                selectedTimes =
+                    run {
+                        if (!selected && currentSelectedTimes.size < 4) {
+                            currentSelectedTimes.add(mealTime)
+                        } else currentSelectedTimes.remove(mealTime)
+                        currentSelectedTimes.toList()
+                    },
             )
         }
     }

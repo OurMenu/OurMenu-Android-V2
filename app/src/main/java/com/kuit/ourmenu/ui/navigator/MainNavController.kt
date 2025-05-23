@@ -11,6 +11,7 @@ import com.kuit.ourmenu.ui.home.navigation.navigateToHome
 import com.kuit.ourmenu.ui.menuFolder.navigation.navigateToMenuFolder
 import com.kuit.ourmenu.ui.menuFolder.navigation.navigateToMenuFolderAllMenu
 import com.kuit.ourmenu.ui.menuFolder.navigation.navigateToMenuFolderDetail
+import com.kuit.ourmenu.ui.my.navigation.navigateToEditMyMealTime
 import com.kuit.ourmenu.ui.my.navigation.navigateToMy
 import com.kuit.ourmenu.ui.onboarding.navigation.navigateOnboardingToHome
 import com.kuit.ourmenu.ui.onboarding.navigation.navigateToLogin
@@ -92,6 +93,11 @@ class MainNavController(
 
     fun navigateToMenuFolderAllMenu() {
         navController.navigateToMenuFolderAllMenu()
+    }
+
+    // My
+    fun navigateToEditMyMealTime(selectedTimes: List<Int>) {
+        navController.navigateToEditMyMealTime(selectedTimes)
     }
 
     @Composable

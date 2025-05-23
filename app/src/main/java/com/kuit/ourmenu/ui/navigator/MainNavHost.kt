@@ -68,6 +68,7 @@ fun MainNavHost(
 
         myNavGraph(
             padding = padding,
+            navigateToEdit = navController::navigateToEditMyMealTime
         )
 
         // 메뉴판

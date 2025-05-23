@@ -6,7 +6,6 @@ data class MyPageUiState(
     val email: String = "",
     val signInType: SignInType = SignInType.EMAIL,
     val mealTimes: List<Int> = emptyList(),
-    val selectedMealTimes: List<String> = emptyList(),
     val error: String = "",
     val bottomSheetVisible: Boolean = false,
     val showCurrentPasswordModal: Boolean = false,
