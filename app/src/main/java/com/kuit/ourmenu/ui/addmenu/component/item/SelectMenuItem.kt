@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.data.model.map.response.CrawlingMenuDetail
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.NeutralWhite
@@ -29,7 +30,11 @@ import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun SelectMenuItem(isSelected: Boolean = false, onClick: () -> Unit) {
+fun SelectMenuItem(
+    menu: CrawlingMenuDetail,
+    isSelected: Boolean = false,
+    onClick: () -> Unit
+) {
     HorizontalDivider(
         thickness = 1.dp,
         color = Neutral300,
@@ -44,11 +49,11 @@ fun SelectMenuItem(isSelected: Boolean = false, onClick: () -> Unit) {
     ) {
         Column {
             Text(
-                text = "메뉴 이름",
+                text = menu.menuTitle,
                 style = ourMenuTypography().pretendard_700_16
             )
             Text(
-                text = "14,000원",
+                text = menu.menuPrice,
                 style = ourMenuTypography().pretendard_500_14,
                 color = Neutral700,
             )
@@ -93,7 +98,21 @@ fun SelectMenuItem(isSelected: Boolean = false, onClick: () -> Unit) {
 @Composable
 private fun SelectedMenuItemPreview() {
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
-        SelectMenuItem(false, onClick = {})
-        SelectMenuItem(true, onClick = {})
+        SelectMenuItem(
+            menu = CrawlingMenuDetail(
+                menuTitle = "떡볶이",
+                menuPrice = "14,000원"
+            ),
+            isSelected = false,
+            onClick = {}
+        )
+        SelectMenuItem(
+            menu = CrawlingMenuDetail(
+                menuTitle = "치킨",
+                menuPrice = "18,000원"
+            ),
+            isSelected = true,
+            onClick = {}
+        )
     }
 }

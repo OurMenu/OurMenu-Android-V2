@@ -1,6 +1,7 @@
 package com.kuit.ourmenu.ui.addmenu.screen
 
 import android.Manifest
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -40,6 +41,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.data.model.map.response.CrawlingStoreDetailResponse
 import com.kuit.ourmenu.ui.addmenu.component.AddMenuSearchBackground
 import com.kuit.ourmenu.ui.addmenu.component.bottomsheet.AddMenuBottomSheetContent
 import com.kuit.ourmenu.ui.addmenu.viewmodel.AddMenuViewModel
@@ -57,6 +59,7 @@ import kotlinx.coroutines.launch
 fun AddMenuScreen(
     modifier: Modifier = Modifier,
     viewModel: AddMenuViewModel = hiltViewModel(),
+    onNavigateToAddMenuInfo: () -> Unit
 ) {
     var scaffoldState = rememberBottomSheetScaffoldState()
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
@@ -72,6 +75,7 @@ fun AddMenuScreen(
     val recentSearchResults by viewModel.searchHistory.collectAsStateWithLifecycle()
     val searchResults by viewModel.searchResult.collectAsStateWithLifecycle()
     val storeInfo by viewModel.storeInfo.collectAsStateWithLifecycle()
+    val selectedMenuIndex by viewModel.selectedMenuIndex.collectAsStateWithLifecycle() // storeInfo에서 선택된 메뉴의 인덱스
     val locationPermissionGranted by viewModel.locationPermissionGranted.collectAsStateWithLifecycle()
 
     // 지도 중심 좌표 상태
@@ -146,7 +150,19 @@ fun AddMenuScreen(
             //bottom sheet 구성
             AddMenuBottomSheetContent(
                 scaffoldState = scaffoldState,
-                storeInfo = storeInfo,
+                storeInfo = storeInfo ?: CrawlingStoreDetailResponse(
+                    storeId = "",
+                    storeTitle = "",
+                    storeAddress = "",
+                    storeImgs = emptyList(),
+                    menus = emptyList(),
+                    storeMapX = 0.0,
+                    storeMapY = 0.0
+                ),
+                selectedMenuIndex = selectedMenuIndex,
+                onNavigateToAddMenuInfo = {
+                    onNavigateToAddMenuInfo()
+                },
                 onItemClick = { index -> viewModel.updateSelectedMenu(index) })
         },
         //조건 만족하면 bottom sheet 보여주고, 아니면 화면에 안보이도록 처리
@@ -213,6 +229,26 @@ fun AddMenuScreen(
                 //onSearch 함수
                 if (searchBarFocused) focusManager.clearFocus()
                 searchActionDone = true
+
+                if (searchText.isNotEmpty()){
+                    viewModel.updateCurrentCenter()
+
+                    val center = viewModel.getCurrentCoordinates()
+                    if (center != null) {
+                        val (latitude, longitude) = center
+                        Log.d("SearchMenuScreen", "검색 위치: $latitude, $longitude")
+
+                        // 검색어와 현재 좌표로 크롤링 스토어 정보 요청
+                        viewModel.getCrawlingStoreInfo(
+                            query = searchText,
+                            long = longitude,
+                            lat = latitude
+                        )
+
+                        showBottomSheet = true
+                        showSearchBackground = false
+                    }
+                }
             }
         }
     }
@@ -221,5 +257,10 @@ fun AddMenuScreen(
 @Preview(showBackground = true)
 @Composable
 private fun AddMenuScreenPreview() {
-    AddMenuScreen()
+    val viewModel : AddMenuViewModel = hiltViewModel()
+    AddMenuScreen(
+        modifier = Modifier,
+        viewModel = viewModel,
+        onNavigateToAddMenuInfo = {}
+    )
 }
