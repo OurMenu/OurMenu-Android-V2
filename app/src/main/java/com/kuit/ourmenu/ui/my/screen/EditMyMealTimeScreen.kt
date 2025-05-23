@@ -34,7 +34,7 @@ fun EditMyMealTimeRoute(
     viewModel: EditMyMealTimeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    
+
     EditMyMealTimeScreen(
         padding = padding,
         uiState = uiState,
@@ -59,7 +59,7 @@ fun EditMyMealTimeScreen(
     Scaffold(
         topBar = {
             OnboardingTopAppBar(
-                onBackClick = { /* TODO: Handle back click */ },
+                onBackClick = navigateToBack,
             )
         },
         modifier = Modifier

@@ -79,7 +79,7 @@ fun MyMealTimeBox(mealTimes: List<String>) {
             .padding(top = 16.dp)
             .clip(RoundedCornerShape(12.dp))
             .background(NeutralWhite)
-            .padding(horizontal = 16.dp, vertical = 12.dp)
+            .padding(horizontal = 16.dp, vertical = 2.dp)
     ) {
         mealTimes.forEachIndexed { index, time ->
             Row(
