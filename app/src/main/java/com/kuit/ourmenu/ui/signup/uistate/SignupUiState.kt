@@ -1,7 +1,7 @@
 package com.kuit.ourmenu.ui.signup.uistate
 
 import com.kuit.ourmenu.ui.common.model.MealTime
-import com.kuit.ourmenu.ui.signup.model.PasswordState
+import com.kuit.ourmenu.ui.common.model.PasswordState
 import com.kuit.ourmenu.ui.signup.model.SignupState
 
 data class SignupUiState(

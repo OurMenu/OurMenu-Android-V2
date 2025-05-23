@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.kuit.ourmenu.data.model.auth.SignInType
 import com.kuit.ourmenu.data.repository.AuthRepository
 import com.kuit.ourmenu.ui.oauth.KakaoModule.getUserEmail
-import com.kuit.ourmenu.ui.signup.model.PasswordState
+import com.kuit.ourmenu.ui.common.model.PasswordState
 import com.kuit.ourmenu.ui.signup.model.SignupState
 import com.kuit.ourmenu.ui.signup.uistate.SignupUiState
 import dagger.hilt.android.lifecycle.HiltViewModel

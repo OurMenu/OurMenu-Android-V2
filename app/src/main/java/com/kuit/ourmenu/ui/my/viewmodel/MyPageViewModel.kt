@@ -29,7 +29,9 @@ class MyPageViewModel @Inject constructor(
                         _uiState.update {
                             it.copy(
                                 email = response.email,
-                                mealTimes = response.mealTime.map { it.substring(3, 5).toInt() }, // TODO: 리스폰스 변경에 따라 수정해야함
+                                mealTimes = response.mealTime.map {
+                                    it.substring(3, 5).toInt()
+                                }, // TODO: 리스폰스 변경에 따라 수정해야함
                                 signInType = SignInType.valueOf(response.signInType),
                             )
                         }
@@ -39,6 +41,29 @@ class MyPageViewModel @Inject constructor(
                 },
                 onFailure = {
                     Log.d("MyPageViewModel", "getUserInfo: $it")
+                }
+            )
+        }
+    }
+
+    fun changePassword(
+        newPassword: String,
+    ) {
+        viewModelScope.launch {
+            userRepository.changePassword(
+                currentPassword = "TODO()", // TODO : 제거예정
+                newPassword = newPassword
+            ).fold(
+                onSuccess = { response ->
+                    if (response != null) {
+                        Log.d("MyPageViewModel", "changePassword: $response")
+                    } else {
+                        Log.d("MyPageViewModel", "changePassword: response is null")
+                    }
+                    updateNewPasswordModalVisible(false)
+                },
+                onFailure = {
+                    Log.d("MyPageViewModel", "changePassword: $it")
                 }
             )
         }

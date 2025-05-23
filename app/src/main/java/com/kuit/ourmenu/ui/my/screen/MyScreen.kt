@@ -69,6 +69,7 @@ fun MyRoute(
         padding = padding,
         uiState = uiState,
         navigateToEdit = navigateToEdit,
+        changePassword = viewModel::changePassword,
         updateBottomSheetVisible = viewModel::updateBottomSheetVisible,
         updateCurrentPasswordModalVisible = viewModel::updateCurrentPasswordModalVisible,
         updateNewPasswordModalVisible = viewModel::updateNewPasswordModalVisible,
@@ -83,6 +84,7 @@ fun MyScreen(
     padding: PaddingValues,
     uiState: MyPageUiState,
     navigateToEdit: () -> Unit = {},
+    changePassword: (String) -> Unit = {},
     updateBottomSheetVisible: (Boolean) -> Unit = {},
     updateCurrentPasswordModalVisible: (Boolean) -> Unit = {},
     updateNewPasswordModalVisible: (Boolean) -> Unit = {},
@@ -211,9 +213,9 @@ fun MyScreen(
         if (uiState.showNewPasswordModal) {
             MyNewPasswordModal(
                 onDismiss = { updateNewPasswordModalVisible(false) },
-                onConfirm = {
+                onConfirm = { newPassword ->
                     // TODO: 비밀번호 변경 로직 추가
-                    updateNewPasswordModalVisible(false)
+                    changePassword(newPassword)
                 }
             )
         }

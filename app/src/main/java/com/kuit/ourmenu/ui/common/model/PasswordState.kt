@@ -1,4 +1,4 @@
-package com.kuit.ourmenu.ui.signup.model
+package com.kuit.ourmenu.ui.common.model
 
 sealed class PasswordState {
     data object Default : PasswordState()
