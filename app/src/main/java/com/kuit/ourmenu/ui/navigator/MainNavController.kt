@@ -7,9 +7,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.kuit.ourmenu.ui.addmenu.navigation.navigateToAddMenuInfo
 import com.kuit.ourmenu.ui.home.navigation.navigateToHome
 import com.kuit.ourmenu.ui.menuFolder.navigation.navigateToAddMenu
-import com.kuit.ourmenu.ui.menuFolder.navigation.navigateToAddMenuInfo
 import com.kuit.ourmenu.ui.menuFolder.navigation.navigateToMenuFolder
 import com.kuit.ourmenu.ui.menuFolder.navigation.navigateToMenuFolderAllMenu
 import com.kuit.ourmenu.ui.menuFolder.navigation.navigateToMenuFolderDetail
