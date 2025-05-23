@@ -1,6 +1,5 @@
 package com.kuit.ourmenu.ui.home.component.recommendation.main
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,26 +16,25 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kuit.ourmenu.R
-import com.kuit.ourmenu.ui.home.dummy.HomeDummyData
+import coil3.compose.AsyncImage
+import com.kuit.ourmenu.data.model.home.response.RecommendMenuList
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
 fun HomeMainRecommendationItem(
     modifier: Modifier = Modifier,
-    recommendData: HomeDummyData
+    recommendData: RecommendMenuList
 ) {
     Box(
         modifier = modifier,
         contentAlignment = Alignment.BottomStart
     ) {
-        Image(
-            painter = painterResource(recommendData.imageRes), // TODO : 추후 Async Image Loading 적용
+        AsyncImage(
+            model = recommendData.menuImgUrl,
             contentDescription = "Main Recommendation Image",
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -55,7 +53,7 @@ fun HomeMainRecommendationItem(
                 contentAlignment = Alignment.CenterStart, // 수직 및 수평 중앙 정렬
             ) {
                 Text(
-                    text = recommendData.name,
+                    text = recommendData.menuName,
                     style = ourMenuTypography().pretendard_700_24.copy(
                         shadow = Shadow(
                             color = Color.Black.copy(alpha = 0.2f), // 그림자 색상 및 투명도
@@ -74,7 +72,7 @@ fun HomeMainRecommendationItem(
                 contentAlignment = Alignment.CenterStart, // 수직 및 수평 중앙 정렬
             ) {
                 Text(
-                    text = recommendData.store,
+                    text = recommendData.menuPrice.toString(), // TODO: storeTitle로 변경
                     style = ourMenuTypography().pretendard_600_16.copy(
                         shadow = Shadow(
                             color = Color.Black.copy(alpha = 0.2f), // 그림자 색상 및 투명도

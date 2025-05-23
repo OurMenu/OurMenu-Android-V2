@@ -12,14 +12,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.kuit.ourmenu.ui.home.dummy.HomeDummyData
+import com.kuit.ourmenu.data.model.home.response.RecommendMenuList
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeMainRecommendationList(
     modifier: Modifier = Modifier,
-    homeMainDataList: List<HomeDummyData>
+    homeMainDataList: List<RecommendMenuList>
 ) {
+    // 리스트가 비어있으면 아무것도 표시하지 않음
+    if (homeMainDataList.isEmpty()) return
+
     val state = rememberLazyListState() // TODO : hoisting
     val startIndex = (Int.MAX_VALUE / 2) - (Int.MAX_VALUE / 2) % homeMainDataList.size
     LaunchedEffect(Unit) {
