@@ -8,20 +8,33 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.ui.common.topappbar.OurMenuAddButtonTopAppBar
 import com.kuit.ourmenu.ui.home.component.recommendation.main.HomeMainRecommendation
 import com.kuit.ourmenu.ui.home.component.recommendation.sub.HomeSubRecommendation
-import com.kuit.ourmenu.ui.home.dummy.HomeDummyData
+import com.kuit.ourmenu.ui.home.viewmodel.HomeViewModel
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+    // TODO: navagation 연결
+    viewModel: HomeViewModel = hiltViewModel()
+) {
 
     val scrollState = rememberScrollState()
+
+    val homeData by viewModel.home.collectAsStateWithLifecycle()
+
+    val answer = homeData.answer
+    val answerRecommendMenus = homeData.answerRecommendMenus
+    val tagRecommendMenus = homeData.tagRecommendMenus
+    val otherRecommendMenus = homeData.otherRecommendMenus
 
     Scaffold(
         topBar = {
@@ -38,7 +51,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             HomeMainRecommendation(
                 modifier = Modifier
                     .padding(top = 16.dp, bottom = 29.dp),
-                homeMainDataList = HomeDummyData.dummyData
+                homeMainDataList = answerRecommendMenus
             )
 
 
@@ -47,7 +60,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                     .fillMaxWidth()
                     .wrapContentHeight()
                     .padding(bottom = 25.dp),
-                homeSubDataList = HomeDummyData.dummyData
+                homeSubDataList = tagRecommendMenus
             )
 
             HomeSubRecommendation(
@@ -55,7 +68,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                     .fillMaxWidth()
                     .wrapContentHeight()
                     .padding(bottom = 25.dp),
-                homeSubDataList = HomeDummyData.dummyData
+                homeSubDataList = otherRecommendMenus
             )
         }
     }
