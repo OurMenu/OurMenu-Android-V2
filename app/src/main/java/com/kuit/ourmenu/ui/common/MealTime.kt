@@ -28,9 +28,7 @@ import com.kuit.ourmenu.utils.ViewUtil.noRippleClickable
 fun MealTimeGrid(
     modifier: Modifier = Modifier,
     mealTimes: List<MealTime>,
-    selectedTimes: List<String>,
-    addTime: (Int, String) -> Unit,
-    removeTime: (Int, String) -> Unit
+    updateSelectedTime: (Int) -> Unit,
 ) {
     val state = rememberLazyGridState()
 
@@ -48,12 +46,7 @@ fun MealTimeGrid(
                     .height(42.dp),
                 mealTime = mealTimes[index].mealTime,
                 selected = mealTimes[index].selected,
-                updateSelected = { mealTime, selected ->
-                    if (selected) {
-                        if (selectedTimes.size < 4) addTime(index, mealTime)
-                    } else
-                        removeTime(index, mealTime)
-                }
+                updateSelected = { updateSelectedTime(index) }
             )
         }
     }
@@ -64,7 +57,7 @@ fun MealTimeItem(
     modifier: Modifier = Modifier,
     mealTime: String = "10:00",
     selected: Boolean = false,
-    updateSelected: (String, Boolean) -> Unit = { _, _ -> },
+    updateSelected: () -> Unit = { },
 ) {
 
     val containerColor = if (selected) Primary100 else Neutral100
@@ -79,9 +72,7 @@ fun MealTimeItem(
                 shape = RoundedCornerShape(size = 8.dp)
             )
             .background(color = containerColor, shape = RoundedCornerShape(size = 8.dp))
-            .noRippleClickable {
-                updateSelected(mealTime, !selected)
-            }
+            .noRippleClickable { updateSelected() }
     ) {
         Text(
             text = mealTime,

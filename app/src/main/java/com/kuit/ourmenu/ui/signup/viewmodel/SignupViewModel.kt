@@ -69,24 +69,15 @@ class SignupViewModel @Inject constructor(
         }
     }
 
-    fun addSelectedTime(index: Int, selectedTime: String) {
+    fun updateSelectedTime(index: Int) {
         _uiState.update {
+            val selected = it.mealTimes[index - 6].selected
             it.copy(
-                selectedTimes = it.selectedTimes.toMutableList() + selectedTime,
-                mealTimes = it.mealTimes.mapIndexed { i, mealTime ->
-                    if (i == index) mealTime.copy(selected = true) else mealTime
-                }
-            )
-        }
-    }
-
-    fun removeSelectedTime(index: Int, selectedTime: String) {
-        _uiState.update {
-            it.copy(
-                selectedTimes = it.selectedTimes.toMutableList() - selectedTime,
-                mealTimes = it.mealTimes.mapIndexed { i, mealTime ->
-                    if (i == index) mealTime.copy(selected = false) else mealTime
-                }
+                selectedTimes =
+                    if (selected) it.selectedTimes.toMutableList() - it.mealTimes[index - 6].mealTime
+                    else it.selectedTimes.toMutableList() + it.mealTimes[index - 6].mealTime,
+                mealTimes = it.mealTimes.toMutableList()
+                    .apply { this[index - 6].selected = !selected }
             )
         }
     }
