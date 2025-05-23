@@ -18,6 +18,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuit.ourmenu.R
@@ -50,13 +52,17 @@ import com.kuit.ourmenu.utils.ViewUtil.noRippleClickable
 fun MyRoute(
     padding: PaddingValues,
     navigateToEdit: () -> Unit = {},
-    navigateToLanding : () -> Unit = {},
+    navigateToLanding: () -> Unit = {},
     viewModel: MyPageViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    if(uiState.isLogoutSuccess || uiState.isDeleteAccountSuccess) {
+    if (uiState.isLogoutSuccess || uiState.isDeleteAccountSuccess) {
         navigateToLanding()
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.getUserInfo()
     }
 
     MyScreen(
@@ -150,7 +156,7 @@ fun MyScreen(
 
                 Column(
                     modifier = Modifier
-                        .padding(top = 32.dp)
+                        .padding(top = 22.dp)
                 ) {
                     InfoRow(infoTitle = stringResource(R.string.notice)) {
                         // TODO: 공지사항 화면으로 이동
@@ -252,7 +258,9 @@ fun InfoRow(
     ) {
         Text(
             text = infoTitle,
-            style = OurMenuTypography().pretendard_600_16,
+            style = OurMenuTypography().pretendard_600_16.copy(
+                lineHeight = 24.sp
+            ),
             color = Neutral900
         )
 

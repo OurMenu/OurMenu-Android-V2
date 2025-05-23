@@ -8,7 +8,7 @@ data class UserInfoResponse(
     @SerialName("email")
     val email: String,
     @SerialName("mealTime")
-    val mealTime: List<Int>,
+    val mealTime: List<String>,
     @SerialName("signInType")
     val signInType: String
 )
