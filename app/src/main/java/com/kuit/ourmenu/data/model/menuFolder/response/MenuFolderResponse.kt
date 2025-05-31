@@ -12,8 +12,8 @@ data class MenuFolderResponse(
 data class MenuFolderList(
     val menuFolderId: Int,
     val menuFolderTitle: String,
-    val menuFolderUrl: String,
-    val menuFolderIcon: String,
+    val menuFolderImgUrl: String,
+    val menuFolderIconImgUrl: String,
     val menuIds: List<Int>,
     val index: Int,
 )
