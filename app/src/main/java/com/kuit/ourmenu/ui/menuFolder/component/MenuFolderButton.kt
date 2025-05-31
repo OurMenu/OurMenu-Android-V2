@@ -195,10 +195,11 @@ fun MenuFolderContent(
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.img_popup_dice),
+                    AsyncImage(
+                        model = menuFolder.menuFolderIconImgUrl,
                         contentDescription = "Folder Icon",
-                        modifier = Modifier.size(32.dp)
+                        modifier = Modifier.size(32.dp),
+                        contentScale = ContentScale.Fit,
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(

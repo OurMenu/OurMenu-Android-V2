@@ -43,7 +43,7 @@ fun NavGraphBuilder.menuFolderNavGraph(
         MenuFolderScreen(
             onNavigateToDetail = navigateToMenuFolderDetail,
             onNavigateToAllMenu = navigateToMenuFolderAllMenu,
-//            onNavigateToAddMenu = {},
+            onNavigateToAddMenu = navigateToAddMenu,
         )
 
         composable<Routes.MenuFolderDetail> {

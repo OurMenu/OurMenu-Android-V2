@@ -1,6 +1,5 @@
 package com.kuit.ourmenu.ui.menuFolder.screen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,12 +26,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil3.compose.AsyncImage
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.data.model.base.type.SortOrderType
 import com.kuit.ourmenu.ui.common.topappbar.BackButtonTopAppBar
@@ -47,9 +46,9 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 @Composable
 fun MenuFolderDetailScreen(
     menuFolderId: Int,
-    onNavigateToMenuInfo: (Int) -> Unit, // TODO: Menu Info로 화면 이동 구현
+    onNavigateToMenuInfo: (Int) -> Unit,
 //    onNavigateToMap: () -> Unit, // TODO: Map으로 화면 이동 구현
-    onNavigateToAddMenu: () -> Unit, // TODO: AddMenu로 화면 이동 구현
+    onNavigateToAddMenu: () -> Unit,
     onNavigateBack: () -> Unit,
     viewModel: MenuFolderDetailViewModel = hiltViewModel()
 ) {
@@ -75,9 +74,9 @@ fun MenuFolderDetailScreen(
                     modifier = Modifier
                         .height(192.dp),
                 ) {
-                    Image(
-                        painter = painterResource(R.drawable.img_dummy_pizza),
-                        contentDescription = "menu folder image",
+                    AsyncImage(
+                        model = menuFolderDetail.menuFolderImgUrl,
+                        contentDescription = "Menu Folder Image",
                         contentScale = ContentScale.FillWidth,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -107,16 +106,16 @@ fun MenuFolderDetailScreen(
 
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-
-                            ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.img_popup_dice),
+                        ) {
+                            AsyncImage(
+                                model = menuFolderDetail.menuFolderIconImgUrl,
                                 contentDescription = "Folder Icon",
-                                modifier = Modifier.size(32.dp)
+                                modifier = Modifier.size(32.dp),
+                                contentScale = ContentScale.Fit,
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
-                                text = stringResource(R.string.menu_folder_name),
+                                text = menuFolderDetail.menuFolderTitle,
                                 color = NeutralWhite,
                                 style = ourMenuTypography().pretendard_600_20,
                             )
@@ -133,7 +132,8 @@ fun MenuFolderDetailScreen(
                             selectedOption = selectedOption.displayName,
                             color = NeutralWhite
                         ) { selectedDisplayName ->
-                            val newSortOption = options.first { it.displayName == selectedDisplayName }
+                            val newSortOption =
+                                options.first { it.displayName == selectedDisplayName }
                             selectedOption = newSortOption
                             viewModel.updateSortOrder(newSortOption, menuFolderId)
                         }
