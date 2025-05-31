@@ -31,9 +31,11 @@ fun HomeScreen(
 
     val homeData by viewModel.home.collectAsStateWithLifecycle()
 
-    val answer = homeData.answerImgUrl
+    val answerImgUrl = homeData.answerImgUrl
     val answerRecommendMenus = homeData.answerRecommendMenus
+    val tagRecommendImgUrl = homeData.tagRecommendImgUrl
     val tagRecommendMenus = homeData.tagRecommendMenus
+    val otherRecommendImgUrl = homeData.otherRecommendImgUrl
     val otherRecommendMenus = homeData.otherRecommendMenus
 
     Scaffold(
@@ -51,6 +53,7 @@ fun HomeScreen(
             HomeMainRecommendation(
                 modifier = Modifier
                     .padding(top = 16.dp, bottom = 29.dp),
+                imgUrl = answerImgUrl,
                 homeMainDataList = answerRecommendMenus
             )
 
@@ -60,6 +63,7 @@ fun HomeScreen(
                     .fillMaxWidth()
                     .wrapContentHeight()
                     .padding(bottom = 25.dp),
+                imgUrl = tagRecommendImgUrl,
                 homeSubDataList = tagRecommendMenus
             )
 
@@ -68,6 +72,7 @@ fun HomeScreen(
                     .fillMaxWidth()
                     .wrapContentHeight()
                     .padding(bottom = 25.dp),
+                imgUrl = otherRecommendImgUrl,
                 homeSubDataList = otherRecommendMenus
             )
         }

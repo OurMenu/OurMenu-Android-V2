@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -13,6 +12,7 @@ import com.kuit.ourmenu.data.model.home.response.RecommendMenuList
 @Composable
 fun HomeMainRecommendation(
     modifier: Modifier = Modifier,
+    imgUrl: String = "",
     homeMainDataList: List<RecommendMenuList>
 ) {
     Column(
@@ -21,8 +21,8 @@ fun HomeMainRecommendation(
         HomeMainRecommendationText(
             modifier = Modifier
                 .padding(horizontal = 20.dp)
-                .width(278.dp)
-                .height(144.dp)
+                .height(148.dp),
+            imgUrl = imgUrl
         )
 
         HomeMainRecommendationList(
