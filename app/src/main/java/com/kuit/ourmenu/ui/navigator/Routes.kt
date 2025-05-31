@@ -21,6 +21,8 @@ sealed interface Routes{
     // 메뉴 추가
     @Serializable
     data object AddMenu: Routes
+    @Serializable
+    data object AddMenuInfo: Routes
 
     // Mypage
 
