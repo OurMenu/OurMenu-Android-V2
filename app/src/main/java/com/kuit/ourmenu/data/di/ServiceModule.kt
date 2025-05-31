@@ -3,6 +3,7 @@ package com.kuit.ourmenu.data.di
 import com.kuit.ourmenu.data.service.AuthService
 import com.kuit.ourmenu.data.service.CacheService
 import com.kuit.ourmenu.data.service.DummyService
+import com.kuit.ourmenu.data.service.MapService
 import com.kuit.ourmenu.data.service.MenuFolderService
 import com.kuit.ourmenu.data.service.UserService
 import dagger.Module
@@ -30,6 +31,11 @@ object ServiceModule {
     @Singleton
     fun providesUserService(retrofit: Retrofit): UserService =
         retrofit.create(UserService::class.java)
+
+    @Provides
+    @Singleton
+    fun providesMapService(retrofit: Retrofit): MapService =
+        retrofit.create(MapService::class.java)
 
     @Provides
     @Singleton

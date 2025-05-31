@@ -35,10 +35,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil3.compose.LocalPlatformContext
+import coil3.compose.rememberAsyncImagePainter
+import coil3.request.ImageRequest
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.data.model.map.response.CrawlingStoreDetailResponse
 import com.kuit.ourmenu.ui.addmenu.component.item.SelectMenuItem
-import com.kuit.ourmenu.ui.addmenu.viewmodel.AddMenuDummyStoreInfo
-import com.kuit.ourmenu.ui.addmenu.viewmodel.AddMenuSearchViewModel
+import com.kuit.ourmenu.ui.addmenu.viewmodel.AddMenuViewModel
 import com.kuit.ourmenu.ui.common.BottomFullWidthButton
 import com.kuit.ourmenu.ui.theme.Neutral100
 import com.kuit.ourmenu.ui.theme.Neutral300
@@ -54,11 +57,13 @@ import kotlinx.coroutines.launch
 @Composable
 fun AddMenuBottomSheetContent(
     scaffoldState: BottomSheetScaffoldState,
-    storeInfo: AddMenuDummyStoreInfo,
+    storeInfo: CrawlingStoreDetailResponse,
+    selectedMenuIndex: Int?,
+    onNavigateToAddMenuInfo: () -> Unit,
     onItemClick: (Int) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val enableNextButton = storeInfo.menuList.any { it }
+    val enableNextButton = selectedMenuIndex != null
 
     Column(
         modifier = Modifier
@@ -66,7 +71,7 @@ fun AddMenuBottomSheetContent(
             .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
     ) {
         Text(
-            text = "식당 이름",
+            text = storeInfo.storeTitle,
             style = ourMenuTypography().pretendard_700_20
         )
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
@@ -77,7 +82,7 @@ fun AddMenuBottomSheetContent(
                 tint = Color.Unspecified
             )
             Text(
-                text = "주소에 해당하는 텍스트",
+                text = storeInfo.storeAddress,
                 style = ourMenuTypography().pretendard_500_14,
                 color = Neutral700,
                 modifier = Modifier.padding(start = 8.dp)
@@ -89,34 +94,28 @@ fun AddMenuBottomSheetContent(
                 .fillMaxWidth()
                 .padding(top = 8.dp), horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            //이미지 3개 배치
-            Image(
-                painter = painterResource(id = R.drawable.img_dummy_pizza),
-                contentDescription = "dummy data",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .width(104.dp)
-                    .height(80.dp)
-                    .clip(RoundedCornerShape(8.dp))
-            )
-            Image(
-                painter = painterResource(id = R.drawable.img_dummy_pizza),
-                contentDescription = "dummy data",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .width(104.dp)
-                    .height(80.dp)
-                    .clip(RoundedCornerShape(8.dp))
-            )
-            Image(
-                painter = painterResource(id = R.drawable.img_dummy_pizza),
-                contentDescription = "dummy data",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .width(104.dp)
-                    .height(80.dp)
-                    .clip(RoundedCornerShape(8.dp))
-            )
+            // 이미지 3개 배치
+            for(i in 0..2) {
+                Image(
+                    painter = if (i < storeInfo.storeImgs.size) {
+                        rememberAsyncImagePainter(
+                            model = ImageRequest.Builder(LocalPlatformContext.current)
+                                // 전달 받는 storeImgs의 값에 https://가 없이 전달됨
+                                .data("https://"+storeInfo.storeImgs[i])
+                                .size(104, 80)
+                                .build()
+                        )
+                    } else {
+                        painterResource(id = R.drawable.img_dummy_menu)
+                    },
+                    contentDescription = "img${i + 1}",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .width(104.dp)
+                        .height(80.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                )
+            }
         }
         //BottomSheet가 확장된 상태가 아닐 때 (AddMenuScreen에서) 보여줄 버튼
         if (scaffoldState.bottomSheetState.targetValue != SheetValue.Expanded) {
@@ -143,10 +142,10 @@ fun AddMenuBottomSheetContent(
                     .weight(1f)
                     .padding(top = 12.dp)
             ) {
-                itemsIndexed(storeInfo.menuList) { index, isSelected ->
-//                    Log.d("AddMenuBottomSheetContent", "Item: $index, $isSelected")
+                itemsIndexed(storeInfo.menus) { index, menu ->
                     SelectMenuItem(
-                        isSelected = isSelected,
+                        menu = menu,
+                        isSelected = selectedMenuIndex == index,
                         onClick = { onItemClick(index) }
                     )
                 }
@@ -168,9 +167,9 @@ fun AddMenuBottomSheetContent(
                 ) {
                     if (enableNextButton){
                         //버튼 활성화 된 경우의 동작
+                        onNavigateToAddMenuInfo()
                     }
                 }
-
             }
         }
     }
@@ -181,13 +180,27 @@ fun AddMenuBottomSheetContent(
 @Composable
 private fun AddMenuBottomSheetContentPreview() {
     val scaffoldState = rememberBottomSheetScaffoldState()
-    val viewModel: AddMenuSearchViewModel = viewModel()
+    val viewModel: AddMenuViewModel = viewModel()
     val storeInfo by viewModel.storeInfo.collectAsStateWithLifecycle()
+    val selectedMenuIndex by viewModel.selectedMenuIndex.collectAsStateWithLifecycle()
+    
     LaunchedEffect(Unit) {
         //아래 주석 해제하면 bottom sheet 확장된 상태 확인 가능
         scaffoldState.bottomSheetState.expand()
     }
-    AddMenuBottomSheetContent(scaffoldState, storeInfo) { index ->
-        viewModel.updateSelectedMenu(index = index)
-    }
+    AddMenuBottomSheetContent(
+        scaffoldState = scaffoldState,
+        storeInfo = storeInfo ?: CrawlingStoreDetailResponse(
+            storeId = "",
+            storeTitle = "",
+            storeAddress = "",
+            storeImgs = emptyList(),
+            menus = emptyList(),
+            storeMapX = 0.0,
+            storeMapY = 0.0
+        ),
+        selectedMenuIndex = selectedMenuIndex,
+        onNavigateToAddMenuInfo = {},
+        onItemClick = { index -> viewModel.updateSelectedMenu(index) }
+    )
 }

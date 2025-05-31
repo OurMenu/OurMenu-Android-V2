@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,9 +21,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
-import com.kuit.ourmenu.ui.addmenu.component.item.StoreSearchItem
+import com.kuit.ourmenu.data.model.map.response.CrawlingHistoryResponse
+import com.kuit.ourmenu.data.model.map.response.CrawlingStoreDetailResponse
+import com.kuit.ourmenu.ui.addmenu.component.item.StoreSearchHistoryItem
+import com.kuit.ourmenu.ui.addmenu.component.item.StoreSearchResultItem
 import com.kuit.ourmenu.ui.common.BottomFullWidthButton
 import com.kuit.ourmenu.ui.theme.Neutral100
+import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
@@ -32,8 +36,8 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 fun AddMenuSearchBackground(
     modifier: Modifier = Modifier,
     searchActionDone: Boolean,
-    recentSearchResults: List<Boolean>, //이후에 타입 변경
-    searchResults: List<Boolean>, //이후에 타입 변경
+    searchHistory: List<CrawlingHistoryResponse>?, //이후에 타입 변경
+    searchResults: List<CrawlingStoreDetailResponse>?, //이후에 타입 변경
     onItemClick: () -> Unit
 ) {
     Box(
@@ -47,32 +51,41 @@ fun AddMenuSearchBackground(
         ) {
             if (searchActionDone) {
                 //검색을 한 경우
-                if (searchResults.isEmpty()) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 116.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_addmenu_noresult),
-                            contentDescription = "no result",
-                            tint = Color.Unspecified
-                        )
-                        Text(
-                            text = stringResource(R.string.no_result),
-                            style = ourMenuTypography().pretendard_600_14,
-                            color = Neutral500,
-                            modifier = Modifier.padding(top = 8.dp)
-                        )
-                    }
-                } else {
-                    LazyColumn(modifier = Modifier.padding(top = 68.dp)) {
-                        items(searchResults) { item ->
-                            StoreSearchItem(
-                                isLastItem = item,
-                            ){
-                                onItemClick()
+                if (searchResults != null) {
+                    if (searchResults.isEmpty()) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 68.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_addmenu_noresult),
+                                contentDescription = "no result",
+                                tint = Color.Unspecified
+                            )
+                            Text(
+                                text = stringResource(R.string.no_result),
+                                style = ourMenuTypography().pretendard_600_14,
+                                color = Neutral500,
+                                modifier = Modifier.padding(top = 8.dp)
+                            )
+                        }
+                    } else {
+                        LazyColumn(modifier = Modifier.padding(top = 68.dp)) {
+                            items(searchResults.size) { index ->
+                                StoreSearchResultItem(
+                                    resultItem = searchResults[index]
+                                ) {
+                                    onItemClick()
+                                }
+                                if (index < searchResults.size - 1) {
+                                    HorizontalDivider(
+                                        thickness = 1.dp,
+                                        color = Neutral300,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                }
                             }
                         }
                     }
@@ -85,15 +98,41 @@ fun AddMenuSearchBackground(
                     color = Neutral700,
                     modifier = Modifier.padding(start = 28.dp, top = 68.dp)
                 )
-                if (recentSearchResults.isEmpty()) {
-                    Column(modifier = Modifier.fillMaxSize()) { /*empty view*/ }
-                } else {
-                    LazyColumn() {
-                        items(recentSearchResults) { item ->
-                            StoreSearchItem(
-                                isLastItem = item,
-                            ){
-                                onItemClick()
+                if (searchHistory != null) {
+                    if (searchHistory.isEmpty()) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 68.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_addmenu_noresult),
+                                contentDescription = "no result",
+                                tint = Color.Unspecified
+                            )
+                            Text(
+                                text = stringResource(R.string.no_result),
+                                style = ourMenuTypography().pretendard_600_14,
+                                color = Neutral500,
+                                modifier = Modifier.padding(top = 8.dp)
+                            )
+                        }
+                    } else {
+                        LazyColumn() {
+                            items(searchHistory.size) { index ->
+                                StoreSearchHistoryItem(
+                                    historyItem = searchHistory[index]
+                                ) {
+                                    onItemClick()
+                                }
+                                if (index < searchHistory.size - 1) {
+                                    HorizontalDivider(
+                                        thickness = 1.dp,
+                                        color = Neutral300,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                }
                             }
                         }
                     }
@@ -118,17 +157,17 @@ fun AddMenuSearchBackground(
 @Composable
 private fun AddMenuSearchBackgroundPreview() {
     val searchActionDone by rememberSaveable { mutableStateOf(false) }
-    val recentSearchResults = mutableListOf(
-        false,
-        false,
-        false,
-        false,
-        true,
+    val recentSearchResults = listOf(
+        CrawlingHistoryResponse(
+            menuTitle = stringResource(R.string.our_ddeokbokki),
+            storeAddress = stringResource(R.string.resaturant_address),
+            modifiedAt = "2023-10-01T12:00:00Z",
+        )
     )
-    val searchResults: MutableList<Boolean> = mutableListOf(true)
+    val searchResults = emptyList<CrawlingStoreDetailResponse>()
     AddMenuSearchBackground(
         searchActionDone = searchActionDone,
-        recentSearchResults = recentSearchResults,
+        searchHistory = recentSearchResults,
         searchResults = searchResults,
     ){
         //onItemClick

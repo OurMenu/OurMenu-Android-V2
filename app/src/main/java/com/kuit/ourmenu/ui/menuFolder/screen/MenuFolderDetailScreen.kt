@@ -49,7 +49,7 @@ fun MenuFolderDetailScreen(
     menuFolderId: Int,
 //    onNavigateToMenuInfo: () -> Unit, // TODO: Menu Info로 화면 이동 구현
 //    onNavigateToMap: () -> Unit, // TODO: Map으로 화면 이동 구현
-//    onNavigateToAddMenu: () -> Unit, // TODO: AddMenu로 화면 이동 구현
+    onNavigateToAddMenu: () -> Unit, // TODO: AddMenu로 화면 이동 구현
     onNavigateBack: () -> Unit,
     viewModel: MenuFolderDetailViewModel = hiltViewModel()
 ) {
@@ -159,7 +159,7 @@ fun MenuFolderDetailScreen(
                             stringResource(R.string.add_menu),
                             modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 20.dp)
                         ) {
-//                            onNavigateToAddMenu()
+                            onNavigateToAddMenu()
                         }
                     }
                 }
@@ -180,7 +180,7 @@ private fun MenuFolderDetailScreenPreview() {
         menuFolderId = 0,
 //        onNavigateToMenuInfo = {},
 //        onNavigateToMap = {},
-//        onNavigateToAddMenu = {},
+        onNavigateToAddMenu = {},
         onNavigateBack = {},
     )
 }
