@@ -60,7 +60,7 @@ fun MainNavHost(
             navigateBack = navController::navigateUp,
             navigateToMenuFolderDetail = navController::navigateToMenuFolderDetail,
             navigateToMenuFolderAllMenu = navController::navigateToMenuFolderAllMenu,
-//            navigateToMenuInfo = navController::navigateToMenuInfo,
+            navigateToMenuInfo = navController::navigateToMenuInfo,
             navigateToAddMenu = navController::navigateToAddMenu,
         )
 
@@ -83,7 +83,7 @@ fun MainNavHost(
             MenuFolderDetailScreen(
                 menuFolderId = menuFolderId,
                 onNavigateBack = navController::navigateUp,
-//                onNavigateToMenuInfo = navController::navigateToMenuInfo,
+                onNavigateToMenuInfo = navController::navigateToMenuInfo,
                 onNavigateToAddMenu = navController::navigateToAddMenu
             )
         }
@@ -96,7 +96,12 @@ fun MainNavHost(
 
         // 메뉴
         composable<Routes.MenuInfo> {
-            MenuInfoDefaultScreen(navController = navController.navController)
+            val menuId = it.toRoute<Routes.MenuInfo>().menuId
+            MenuInfoDefaultScreen(
+                menuId = menuId,
+                onNavigateBack = navController::navigateUp,
+//                onNavigateToMap = navController::navigateToMenuInfoMap
+            )
         }
         composable<Routes.MenuInfoMap> {
             MenuInfoMapScreen(navController = navController.navController)

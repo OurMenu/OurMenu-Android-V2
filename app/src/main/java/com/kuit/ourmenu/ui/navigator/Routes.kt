@@ -14,7 +14,7 @@ sealed interface Routes{
 
     // 메뉴
     @Serializable
-    data object MenuInfo: Routes
+    data class MenuInfo(val menuId: Int): Routes
     @Serializable
     data object MenuInfoMap: Routes
 

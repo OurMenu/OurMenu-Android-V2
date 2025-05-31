@@ -28,11 +28,15 @@ fun NavController.navigateToAddMenu() {
     navigate(Routes.AddMenu)
 }
 
+fun NavController.navigateToMenuInfo(menuId: Int) {
+    navigate(Routes.MenuInfo(menuId))
+}
+
 fun NavGraphBuilder.menuFolderNavGraph(
     navigateBack: () -> Unit,
     navigateToMenuFolderDetail: (Int) -> Unit,
     navigateToMenuFolderAllMenu: () -> Unit,
-//    navigateToMenuInfo: () -> Unit,
+    navigateToMenuInfo: (Int) -> Unit,
     navigateToAddMenu: () -> Unit,
 ) {
     composable<MainTabRoute.MenuFolder> {
@@ -46,7 +50,7 @@ fun NavGraphBuilder.menuFolderNavGraph(
             val menuFolderId = it.toRoute<Routes.MenuFolderDetail>().menuFolderId
             MenuFolderDetailScreen(
                 menuFolderId = menuFolderId,
-//                onNavigateToMenuInfo = navigateToMenuInfo,
+                onNavigateToMenuInfo = navigateToMenuInfo,
                 onNavigateBack = navigateBack,
                 onNavigateToAddMenu = navigateToAddMenu
             )
