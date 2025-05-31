@@ -59,9 +59,9 @@ fun NavGraphBuilder.menuFolderNavGraph(
         composable<Routes.MenuFolderAllMenu> {
             MenuFolderAllMenuScreen(
                 onNavigateBack = navigateBack,
-//                onNavigateToMenuInfo = navigateToMenuFolderDetail, // TODO: Menu Info로 화면 이동 구현
+                onNavigateToMenuInfo = navigateToMenuFolderDetail,
 //                onNavigateToMenuInfoMap = navigateToMenuFolderDetail, // TODO: Map으로 화면 이동 구현
-//                onNavigateToAddMenu = {}, // TODO: AddMenu로 화면 이동 구현
+                onNavigateToAddMenu = navigateToAddMenu,
             )
         }
     }

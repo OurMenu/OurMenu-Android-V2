@@ -90,7 +90,9 @@ fun MainNavHost(
         composable<Routes.MenuFolderAllMenu> {
             MenuFolderAllMenuScreen(
                 onNavigateBack = navController::navigateUp,
-                // TODO: 나머지 navigate 작성
+                onNavigateToMenuInfo = navController::navigateToMenuInfo,
+//                onNavigateToMap = navController::navigateToMenuInfoMap,
+                onNavigateToAddMenu = navController::navigateToAddMenu
             )
         }
 
