@@ -8,27 +8,31 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.kuit.ourmenu.data.model.menuinfo.response.MenuFolder
 import com.kuit.ourmenu.ui.common.chip.MenuFolderChip
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun MenuInfoFolderChipGrid(
     modifier: Modifier = Modifier,
-    menuFolderList: List<String> = listOf()
+    menuFolderList: List<MenuFolder> = listOf()
 ) {
 
     FlowRow(
         modifier = Modifier
             .padding(top = 2.dp)
     ) {
-        menuFolderList.forEach { title ->
+        menuFolderList.forEach { menuFolder ->
             MenuFolderChip(
                 modifier = Modifier.padding(
                     top = 4.dp,
                 ),
-                menuFolderTitle = title
-            )
-            if (title != menuFolderList.last()) {
+                menuFolderIconImgUrl = menuFolder.menuFolderIconImgUrl,
+                menuFolderTitle = menuFolder.menuFolderTitle
+            ) {
+                // TODO: 메뉴판 클릭 시 동작 구현
+            }
+            if (menuFolder != menuFolderList.last()) {
                 Spacer(modifier = Modifier.padding(end = 4.dp))
             }
         }
@@ -41,17 +45,17 @@ fun MenuInfoFolderChipGrid(
 )
 @Composable
 private fun MenuInfoFolderChipGridPreview() {
-    MenuInfoFolderChipGrid(
-        menuFolderList = listOf(
-            "메뉴판1",
-            "메뉴판22",
-            "메뉴판333",
-            "메뉴판4444",
-            "메뉴판55555",
-            "메뉴판666666",
-            "메뉴판7777777",
-            "메뉴판88888888",
-            "메뉴판999999999"
-        )
-    )
+//    MenuInfoFolderChipGrid(
+//        menuFolderList = listOf(
+//            "메뉴판1",
+//            "메뉴판22",
+//            "메뉴판333",
+//            "메뉴판4444",
+//            "메뉴판55555",
+//            "메뉴판666666",
+//            "메뉴판7777777",
+//            "메뉴판88888888",
+//            "메뉴판999999999"
+//        )
+//    )
 }

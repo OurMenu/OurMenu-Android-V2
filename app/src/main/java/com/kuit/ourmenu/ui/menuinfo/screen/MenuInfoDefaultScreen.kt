@@ -8,12 +8,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuit.ourmenu.ui.menuinfo.component.info.MenuInfoAdditionalContent
 import com.kuit.ourmenu.ui.menuinfo.component.info.MenuInfoChipContent
 import com.kuit.ourmenu.ui.menuinfo.component.info.MenuInfoContent
@@ -21,12 +23,24 @@ import com.kuit.ourmenu.ui.menuinfo.component.info.MenuInfoImagePager
 import com.kuit.ourmenu.ui.menuinfo.component.info.MenuInfoMapButton
 import com.kuit.ourmenu.ui.menuinfo.component.info.MenuInfoTopIcons
 import com.kuit.ourmenu.ui.menuinfo.dummy.MenuInfoDummyData
+import com.kuit.ourmenu.ui.menuinfo.viewmodel.MenuInfoViewModel
 import com.kuit.ourmenu.ui.theme.Neutral300
 
 @Composable
-fun MenuInfoDefaultScreen(navController: NavController) {
+fun MenuInfoDefaultScreen(
+    menuId: Int,
+    onNavigateBack: () -> Unit,
+//    onNavigateToMap: () -> Unit,
+    viewModel: MenuInfoViewModel = hiltViewModel()
+) {
+    LaunchedEffect(menuId) {
+        viewModel.getMenuInfo(menuId)
+    }
 
-    val pagerState = rememberPagerState { 3 }
+    val menuInfo by viewModel.menuInfo.collectAsStateWithLifecycle()
+    val pagerState = rememberPagerState(
+        pageCount = { menuInfo.menuImgUrls.size.coerceAtLeast(1) } // 최소 1
+    )
 
     Box {
         Column(
@@ -36,7 +50,7 @@ fun MenuInfoDefaultScreen(navController: NavController) {
             Box {
                 MenuInfoImagePager(
                     pagerState = pagerState,
-                    pageItems = MenuInfoDummyData.dummyData
+                    imgUrls = menuInfo.menuImgUrls
                 )
                 MenuInfoTopIcons(
                     onBackClick = { },
@@ -45,7 +59,7 @@ fun MenuInfoDefaultScreen(navController: NavController) {
             }
 
             MenuInfoContent(
-                MenuInfoDummyData.dummyData
+                menuInfoData = menuInfo
             )
 
             HorizontalDivider(
@@ -56,11 +70,12 @@ fun MenuInfoDefaultScreen(navController: NavController) {
             )
 
             MenuInfoChipContent(
-                menuInfoData = MenuInfoDummyData.dummyData
+                menuInfoData = menuInfo
             )
 
             MenuInfoAdditionalContent(
-                address = MenuInfoDummyData.dummyData.address,
+                address = menuInfo.storeAddress,
+                // TODO: 메뉴 정보에 따라 변경 필요
                 memoTitle = MenuInfoDummyData.dummyData.memoTitle,
                 memoContent = MenuInfoDummyData.dummyData.memoContent
             )
@@ -77,7 +92,7 @@ fun MenuInfoDefaultScreen(navController: NavController) {
 @Preview(showBackground = true)
 @Composable
 private fun MenuInfoDefaultPreview() {
-    val navController = rememberNavController()
-
-    MenuInfoDefaultScreen(navController)
+//    val navController = rememberNavController()
+//
+//    MenuInfoDefaultScreen(navController)
 }
