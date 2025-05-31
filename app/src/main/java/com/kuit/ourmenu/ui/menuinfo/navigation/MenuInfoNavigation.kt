@@ -13,6 +13,7 @@ fun NavController.navigateToMenuInfo(menuId: Int) {
 
 fun NavGraphBuilder.menuInfoNavGraph(
     navigateBack: () -> Unit,
+    navigateToMenuFolderDetail: (Int) -> Unit,
     navigateToMenuInfoMap: () -> Unit
 ) {
     composable<Routes.MenuInfo> {
@@ -20,6 +21,7 @@ fun NavGraphBuilder.menuInfoNavGraph(
         MenuInfoDefaultScreen(
             menuId = menuId,
             onNavigateBack = navigateBack,
+            onNavigateToMenuFolderDetail = navigateToMenuFolderDetail,
 //            onNavigateToMap = navigateToMenuInfoMap
         )
     }

@@ -15,7 +15,8 @@ import com.kuit.ourmenu.ui.common.chip.MenuFolderChip
 @Composable
 fun MenuInfoFolderChipGrid(
     modifier: Modifier = Modifier,
-    menuFolderList: List<MenuFolder> = listOf()
+    onNavigateToMenuFolderDetail: (Int) -> Unit = {},
+    menuFolderList: List<MenuFolder> = listOf(),
 ) {
 
     FlowRow(
@@ -30,7 +31,7 @@ fun MenuInfoFolderChipGrid(
                 menuFolderIconImgUrl = menuFolder.menuFolderIconImgUrl,
                 menuFolderTitle = menuFolder.menuFolderTitle
             ) {
-                // TODO: 메뉴판 클릭 시 동작 구현
+                onNavigateToMenuFolderDetail(menuFolder.menuFolderId)
             }
             if (menuFolder != menuFolderList.last()) {
                 Spacer(modifier = Modifier.padding(end = 4.dp))

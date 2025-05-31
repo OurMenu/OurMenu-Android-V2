@@ -21,6 +21,7 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
 fun MenuInfoChipContent(
+    onNavigateToMenuFolderDetail: (Int) -> Unit = {},
     menuInfoData: MenuInfoResponse
 ) {
     Column(
@@ -38,6 +39,7 @@ fun MenuInfoChipContent(
         )
 
         MenuInfoFolderChipGrid(
+            onNavigateToMenuFolderDetail = onNavigateToMenuFolderDetail,
             menuFolderList = menuInfoData.menuFolders
         )
 

@@ -32,6 +32,7 @@ import com.kuit.ourmenu.ui.theme.NeutralWhite
 fun MenuInfoDefaultScreen(
     menuId: Int,
     onNavigateBack: () -> Unit,
+    onNavigateToMenuFolderDetail: (Int) -> Unit,
 //    onNavigateToMap: () -> Unit,
     viewModel: MenuInfoViewModel = hiltViewModel()
 ) {
@@ -72,6 +73,7 @@ fun MenuInfoDefaultScreen(
                     )
 
                     MenuInfoChipContent(
+                        onNavigateToMenuFolderDetail = onNavigateToMenuFolderDetail,
                         menuInfoData = menuInfo
                     )
 

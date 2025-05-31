@@ -102,6 +102,7 @@ fun MainNavHost(
             MenuInfoDefaultScreen(
                 menuId = menuId,
                 onNavigateBack = navController::navigateUp,
+                onNavigateToMenuFolderDetail = navController::navigateToMenuFolderDetail,
 //                onNavigateToMap = navController::navigateToMenuInfoMap
             )
         }
