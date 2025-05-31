@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -16,15 +17,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.kuit.ourmenu.ui.common.topappbar.BackButtonTopAppBar
 import com.kuit.ourmenu.ui.menuinfo.component.info.MenuInfoAdditionalContent
 import com.kuit.ourmenu.ui.menuinfo.component.info.MenuInfoChipContent
 import com.kuit.ourmenu.ui.menuinfo.component.info.MenuInfoContent
 import com.kuit.ourmenu.ui.menuinfo.component.info.MenuInfoImagePager
 import com.kuit.ourmenu.ui.menuinfo.component.info.MenuInfoMapButton
-import com.kuit.ourmenu.ui.menuinfo.component.info.MenuInfoTopIcons
 import com.kuit.ourmenu.ui.menuinfo.dummy.MenuInfoDummyData
 import com.kuit.ourmenu.ui.menuinfo.viewmodel.MenuInfoViewModel
 import com.kuit.ourmenu.ui.theme.Neutral300
+import com.kuit.ourmenu.ui.theme.NeutralWhite
 
 @Composable
 fun MenuInfoDefaultScreen(
@@ -42,50 +44,56 @@ fun MenuInfoDefaultScreen(
         pageCount = { menuInfo.menuImgUrls.size.coerceAtLeast(1) } // 최소 1
     )
 
-    Box {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
+    Scaffold(
+        topBar = {},
+        content = { innerPadding ->
             Box {
-                MenuInfoImagePager(
-                    pagerState = pagerState,
-                    imgUrls = menuInfo.menuImgUrls
-                )
-                MenuInfoTopIcons(
-                    onBackClick = { },
-                    onVertClick = { }
-                )
+                Column(
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .fillMaxSize()
+                ) {
+                    Box {
+                        MenuInfoImagePager(
+                            pagerState = pagerState,
+                            imgUrls = menuInfo.menuImgUrls
+                        )
+                    }
+
+                    MenuInfoContent(
+                        menuInfoData = menuInfo
+                    )
+
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp),
+                        color = Neutral300
+                    )
+
+                    MenuInfoChipContent(
+                        menuInfoData = menuInfo
+                    )
+
+                    MenuInfoAdditionalContent(
+                        address = menuInfo.storeAddress,
+                        // TODO: 메뉴 정보에 따라 변경 필요
+                        memoTitle = MenuInfoDummyData.dummyData.memoTitle,
+                        memoContent = MenuInfoDummyData.dummyData.memoContent
+                    )
+                }
+                MenuInfoMapButton(
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(end = 20.dp, bottom = 28.dp),
+                ) { }
             }
 
-            MenuInfoContent(
-                menuInfoData = menuInfo
-            )
-
-            HorizontalDivider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
-                color = Neutral300
-            )
-
-            MenuInfoChipContent(
-                menuInfoData = menuInfo
-            )
-
-            MenuInfoAdditionalContent(
-                address = menuInfo.storeAddress,
-                // TODO: 메뉴 정보에 따라 변경 필요
-                memoTitle = MenuInfoDummyData.dummyData.memoTitle,
-                memoContent = MenuInfoDummyData.dummyData.memoContent
-            )
+            BackButtonTopAppBar(NeutralWhite, true) {
+                onNavigateBack()
+            }
         }
-        MenuInfoMapButton(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(end = 20.dp, bottom = 28.dp),
-        ) { }
-    }
+    )
 }
 
 
