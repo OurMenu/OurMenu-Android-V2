@@ -2,8 +2,8 @@ package com.kuit.ourmenu.ui.menuFolder.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kuit.ourmenu.data.model.menuFolder.response.MenuFolderDetailResponse
 import com.kuit.ourmenu.data.model.base.type.SortOrderType
+import com.kuit.ourmenu.data.model.menuFolder.response.MenuFolderDetailResponse
 import com.kuit.ourmenu.data.repository.MenuFolderRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,8 +15,8 @@ import javax.inject.Inject
 class MenuFolderDetailViewModel @Inject constructor(
     private val menuFolderRepository: MenuFolderRepository,
 ): ViewModel() {
-    private val _menuFolderDetails = MutableStateFlow<List<MenuFolderDetailResponse>>(emptyList())
-    val menuFolderDetails = _menuFolderDetails.asStateFlow()
+    private val _menuFolderDetail = MutableStateFlow(MenuFolderDetailResponse())
+    val menuFolderDetail = _menuFolderDetail.asStateFlow()
 
     private val _menuFolderId = MutableStateFlow(0)
     val menuFolderId = _menuFolderId.asStateFlow()
@@ -30,7 +30,7 @@ class MenuFolderDetailViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
-    fun getMenuFolderDetails(
+    fun getMenuFolderDetail(
         menuFolderId: Int,
         sortOrder: SortOrderType = _sortOrder.value
     ) {
@@ -39,11 +39,11 @@ class MenuFolderDetailViewModel @Inject constructor(
             _isLoading.value = true
             _error.value = null
 
-            menuFolderRepository.getMenuFolderDetails(menuFolderId, sortOrder.apiValue)
+            menuFolderRepository.getMenuFolderDetail(menuFolderId, sortOrder.apiValue)
                 .fold(
                     onSuccess = { response ->
                         if (response != null) {
-                            _menuFolderDetails.value = response
+                            _menuFolderDetail.value = response
                             _menuFolderId.value = menuFolderId
                             _sortOrder.value = sortOrder
                         }
@@ -60,7 +60,7 @@ class MenuFolderDetailViewModel @Inject constructor(
     fun updateSortOrder(sortOrderType: SortOrderType, menuFolderId: Int) {
         if (_sortOrder.value != sortOrderType) {
             _sortOrder.value = sortOrderType
-            getMenuFolderDetails(menuFolderId, sortOrderType)
+            getMenuFolderDetail(menuFolderId, sortOrderType)
         }
     }
 }

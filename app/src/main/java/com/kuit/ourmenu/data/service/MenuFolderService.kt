@@ -16,7 +16,7 @@ interface MenuFolderService {
     suspend fun getMenuFolderDetails(
         @Path("menuFolderId") menuFolderId: Int,
         @Query("sortOrder") sortOrder: String,
-    ): BaseResponse<List<MenuFolderDetailResponse>>
+    ): BaseResponse<MenuFolderDetailResponse>
 
     @GET("api/menus")
     suspend fun getMenuFolderAll(

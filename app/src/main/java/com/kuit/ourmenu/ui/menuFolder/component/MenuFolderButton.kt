@@ -170,7 +170,7 @@ fun MenuFolderContent(
             .fillMaxSize()
     ) {
         AsyncImage(
-            model = menuFolder.menuFolderUrl,
+            model = menuFolder.menuFolderImgUrl,
             contentDescription = "Folder Image",
             contentScale = ContentScale.FillWidth,
             modifier = Modifier
@@ -231,8 +231,8 @@ private fun MenuFolderButtonPreview() {
     val dummyMenuFolder = MenuFolderList(
         menuFolderId = 1,
         menuFolderTitle = "인기 메뉴",
-        menuFolderUrl = "https://ourmenu-default.s3.ap-northeast-2.amazonaws.com/default_menu_folder_img.svg",
-        menuFolderIcon = "DICE",
+        menuFolderImgUrl = "https://ourmenu-default.s3.ap-northeast-2.amazonaws.com/default_menu_folder_img.svg",
+        menuFolderIconImgUrl = "DICE",
         menuIds = listOf(1, 2, 3),
         index = 0
     )
