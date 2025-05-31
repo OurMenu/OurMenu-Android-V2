@@ -31,7 +31,7 @@ fun HomeScreen(
 
     val homeData by viewModel.home.collectAsStateWithLifecycle()
 
-    val answer = homeData.answer
+    val answer = homeData.answerImgUrl
     val answerRecommendMenus = homeData.answerRecommendMenus
     val tagRecommendMenus = homeData.tagRecommendMenus
     val otherRecommendMenus = homeData.otherRecommendMenus

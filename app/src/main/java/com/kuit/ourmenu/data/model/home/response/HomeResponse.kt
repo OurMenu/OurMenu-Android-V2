@@ -4,17 +4,18 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class HomeResponse(
-    val answer: String = "",
+    val answerImgUrl: String = "",
     val answerRecommendMenus: List<RecommendMenuList> = emptyList(),
-    val tag: String = "",
+    val tagRecommendImgUrl: String = "",
     val tagRecommendMenus: List<RecommendMenuList> = emptyList(),
+    val otherRecommendImgUrl: String = "",
     val otherRecommendMenus: List<RecommendMenuList> = emptyList(),
 )
 
 @Serializable
 data class RecommendMenuList(
     val menuId: Int = 0,
-    val menuName: String = "",
-    val menuPrice: Int = 0, // TODO: StoreTitle로 변경
+    val menuTitle: String = "",
+    val storeName: String = "",
     val menuImgUrl: String = "",
 )

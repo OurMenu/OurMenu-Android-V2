@@ -42,14 +42,14 @@ fun HomeSubRecommendationItem(
                 .clip(shape = RoundedCornerShape(12.dp))
         )
         Text(
-            text = recommendData.menuName,
+            text = recommendData.menuTitle,
             style = ourMenuTypography().pretendard_600_18.copy(
                 color = Neutral900,
                 lineHeight = 27.sp
             )
         )
         Text(
-            text = recommendData.menuPrice.toString(), // TODO: StoreTitle으로 수정
+            text = recommendData.storeName,
             style = TextStyle(
                 // TODO : Design system 적용
                 fontSize = 14.sp,

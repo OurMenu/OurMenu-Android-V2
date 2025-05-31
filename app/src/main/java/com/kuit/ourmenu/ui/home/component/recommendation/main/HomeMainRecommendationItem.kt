@@ -53,7 +53,7 @@ fun HomeMainRecommendationItem(
                 contentAlignment = Alignment.CenterStart, // 수직 및 수평 중앙 정렬
             ) {
                 Text(
-                    text = recommendData.menuName,
+                    text = recommendData.menuTitle,
                     style = ourMenuTypography().pretendard_700_24.copy(
                         shadow = Shadow(
                             color = Color.Black.copy(alpha = 0.2f), // 그림자 색상 및 투명도
@@ -72,7 +72,7 @@ fun HomeMainRecommendationItem(
                 contentAlignment = Alignment.CenterStart, // 수직 및 수평 중앙 정렬
             ) {
                 Text(
-                    text = recommendData.menuPrice.toString(), // TODO: storeTitle로 변경
+                    text = recommendData.storeName,
                     style = ourMenuTypography().pretendard_600_16.copy(
                         shadow = Shadow(
                             color = Color.Black.copy(alpha = 0.2f), // 그림자 색상 및 투명도
