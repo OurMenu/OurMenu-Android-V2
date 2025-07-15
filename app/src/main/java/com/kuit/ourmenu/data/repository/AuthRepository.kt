@@ -21,7 +21,7 @@ class AuthRepository @Inject constructor(
 ) {
     suspend fun signup(
         email: String?,
-        mealTime: List<Int>,
+        mealTime: List<String>,
         password: String?,
         signInType: SignInType
     ) = runCatching {

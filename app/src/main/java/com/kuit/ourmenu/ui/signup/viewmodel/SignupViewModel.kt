@@ -163,7 +163,9 @@ class SignupViewModel @Inject constructor(
 
             authRepository.signup(
                 email = completeEmail,
-                mealTime = _uiState.value.selectedTimes,
+                mealTime = _uiState.value.selectedTimes.map {
+                    "${it.toString().padStart(2, '0')}:00:00"
+                },
                 password = _uiState.value.password.takeIf { it.isNotEmpty() },
                 signInType = SignInType.EMAIL
             ).fold(
@@ -192,7 +194,9 @@ class SignupViewModel @Inject constructor(
 
             authRepository.signup(
                 email = kakaoEmail,
-                mealTime = _uiState.value.selectedTimes,
+                mealTime = _uiState.value.selectedTimes.map {
+                    "${it.toString().padStart(2, '0')}:00:00"
+                },
                 password = _uiState.value.password.takeIf { it.isNotEmpty() },
                 signInType = SignInType.KAKAO
             ).fold(
