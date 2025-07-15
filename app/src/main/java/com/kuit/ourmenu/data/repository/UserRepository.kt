@@ -30,7 +30,7 @@ class UserRepository @Inject constructor(
     }
 
     suspend fun updateMealTimes(
-        newMealTimes: List<Int>
+        newMealTimes: List<String>
     ) = runCatching {
         userService.updateMealTimes(
             ChangeMealTimeRequest(newMealTimes)

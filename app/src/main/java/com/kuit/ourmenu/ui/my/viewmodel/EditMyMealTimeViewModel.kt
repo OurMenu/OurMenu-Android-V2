@@ -55,7 +55,7 @@ class EditMyMealTimeViewModel @Inject constructor(
     fun changeMealTime() {
         viewModelScope.launch {
             userRepository.updateMealTimes(
-                newMealTimes = _uiState.value.selectedTimes
+                newMealTimes = _uiState.value.selectedTimes.sorted().map { "${it.toString().padStart(2, '0')}:00:00" }
             ).fold(
                 onSuccess = {
                     _uiState.update {

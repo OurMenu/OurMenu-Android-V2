@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ChangeMealTimeRequest(
     @SerialName("mealTime")
-    val mealTime: List<Int>
+    val mealTime: List<String>
 )
