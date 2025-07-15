@@ -1,5 +1,6 @@
 package com.kuit.ourmenu.ui.my.screen
 
+import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,11 +26,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuit.ourmenu.R
@@ -57,6 +60,7 @@ fun MyRoute(
     viewModel: MyPageViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     LaunchedEffect(
         uiState.isLogoutSuccess,
@@ -81,7 +85,28 @@ fun MyRoute(
         updateCurrentPasswordModalVisible = viewModel::updateCurrentPasswordModalVisible,
         updateNewPasswordModalVisible = viewModel::updateNewPasswordModalVisible,
         updateLogoutModalVisible = viewModel::updateLogoutModalVisible,
-        updateDeleteAccountModalVisible = viewModel::updateDeleteAccountModalVisible
+        updateDeleteAccountModalVisible = viewModel::updateDeleteAccountModalVisible,
+        navigateToAnnouncement = {
+            val intent = Intent(
+                Intent.ACTION_VIEW,
+                uiState.announcementUrl.toUri()
+            )
+            context.startActivity(intent)
+        },
+        navigateToCustomerService = {
+            val intent = Intent(
+                Intent.ACTION_VIEW,
+                uiState.customerServiceUrl.toUri()
+            )
+            context.startActivity(intent)
+        },
+        navigateToReview = {
+            val intent = Intent(
+                Intent.ACTION_VIEW,
+                uiState.appReviewUrl.toUri()
+            ).apply { setPackage("com.android.vending") }
+            context.startActivity(intent)
+        },
     )
 }
 
@@ -99,6 +124,9 @@ fun MyScreen(
     updateNewPasswordModalVisible: (Boolean) -> Unit = {},
     updateLogoutModalVisible: (Boolean) -> Unit = {},
     updateDeleteAccountModalVisible: (Boolean) -> Unit = {},
+    navigateToAnnouncement: () -> Unit = {},
+    navigateToCustomerService: () -> Unit = {},
+    navigateToReview: () -> Unit = {},
 ) {
 
     Box(
@@ -170,13 +198,13 @@ fun MyScreen(
                         .padding(top = 22.dp)
                 ) {
                     InfoRow(infoTitle = stringResource(R.string.notice)) {
-                        // TODO: 공지사항 화면으로 이동
+                        navigateToAnnouncement()
                     }
                     InfoRow(infoTitle = stringResource(R.string.customer_service)) {
-                        // TODO: 고객센터 화면으로 이동
+                        navigateToCustomerService()
                     }
                     InfoRow(infoTitle = stringResource(R.string.app_review)) {
-                        // TODO: 앱 리뷰 화면으로 이동
+                        navigateToReview()
                     }
                     Text(
                         modifier = Modifier.padding(top = 10.dp, start = 20.dp),
@@ -250,11 +278,12 @@ fun MyScreen(
 
 @Composable
 fun InfoRow(
+    modifier: Modifier = Modifier,
     infoTitle: String,
     onClick: () -> Unit
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .noRippleClickable(onClick = onClick)
             .padding(start = 20.dp, end = 30.dp)
@@ -271,7 +300,6 @@ fun InfoRow(
         )
 
         Icon(
-//            painter = painterResource(R.drawable.ic_arrow_right),
             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
             contentDescription = null,
             modifier = Modifier.height(24.dp)

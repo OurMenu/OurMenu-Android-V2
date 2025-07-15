@@ -14,6 +14,9 @@ data class MyPageUiState(
     val showDeleteAccountModal: Boolean = false,
     val isLogoutSuccess: Boolean = false,
     val isDeleteAccountSuccess: Boolean = false,
+    val announcementUrl: String = "",
+    val customerServiceUrl: String = "",
+    val appReviewUrl: String = "",
 )
 
 data class UserMealTime(
