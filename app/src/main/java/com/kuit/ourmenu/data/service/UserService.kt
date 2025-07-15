@@ -29,7 +29,7 @@ interface UserService {
     ): BaseResponse<Unit>
 
     @GET("api/users")
-    suspend fun getUserInfo(): BaseResponse<UserInfoResponse> // TODO : 리스폰스 변경에 따라 수정해야함
+    suspend fun getUserInfo(): BaseResponse<UserInfoResponse>
 
     @DELETE("api/users")
     suspend fun deleteUser(): BaseResponse<Unit>

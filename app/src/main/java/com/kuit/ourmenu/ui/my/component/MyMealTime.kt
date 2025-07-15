@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.ui.my.viewmodel.UserMealTime
 import com.kuit.ourmenu.ui.theme.Neutral200
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral900
@@ -31,11 +32,13 @@ import com.kuit.ourmenu.ui.theme.OurMenuTypography
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 import com.kuit.ourmenu.utils.ExtensionUtil.toMealTime
+import kotlin.collections.forEachIndexed
+import kotlin.collections.lastIndex
 
 @Composable
 fun MyMealTime(
     navigateToEdit: () -> Unit = {},
-    mealTimes: List<Int> = listOf(),
+    mealTimes: List<UserMealTime> = listOf(),
 ) {
     Column(
         modifier = Modifier
@@ -73,7 +76,7 @@ fun MyMealTime(
 }
 
 @Composable
-fun MyMealTimeBox(mealTimes: List<Int>) {
+fun MyMealTimeBox(mealTimes: List<UserMealTime>) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -92,11 +95,11 @@ fun MyMealTimeBox(mealTimes: List<Int>) {
                 Icon(
                     painter = painterResource(R.drawable.ic_clock),
                     contentDescription = null,
-                    tint = Color.Unspecified,
+                    tint = if (time.isAfter) Primary500Main else Color.Unspecified,
                     modifier = Modifier.padding(end = 16.dp)
                 )
                 Text(
-                    text = time.toMealTime(),
+                    text = "${time.mealTime}:00",
                     style = OurMenuTypography().pretendard_600_18,
                     color = Neutral900
                 )
@@ -113,5 +116,11 @@ fun MyMealTimeBox(mealTimes: List<Int>) {
 @Preview(showBackground = true)
 @Composable
 private fun MyMealTimePreview() {
-    MyMealTime()
+    MyMealTime(
+        mealTimes = listOf(
+            UserMealTime(mealTime = 8, isAfter = true),
+            UserMealTime(mealTime = 12, isAfter = true),
+            UserMealTime(mealTime = 18, isAfter = false)
+        )
+    )
 }

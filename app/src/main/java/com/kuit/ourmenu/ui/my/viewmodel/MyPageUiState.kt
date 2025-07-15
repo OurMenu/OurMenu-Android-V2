@@ -5,7 +5,7 @@ import com.kuit.ourmenu.data.model.auth.SignInType
 data class MyPageUiState(
     val email: String = "",
     val signInType: SignInType = SignInType.EMAIL,
-    val mealTimes: List<Int> = emptyList(),
+    val mealTimes: List<UserMealTime> = emptyList(),
     val error: String = "",
     val bottomSheetVisible: Boolean = false,
     val showCurrentPasswordModal: Boolean = false,
@@ -14,4 +14,9 @@ data class MyPageUiState(
     val showDeleteAccountModal: Boolean = false,
     val isLogoutSuccess: Boolean = false,
     val isDeleteAccountSuccess: Boolean = false,
+)
+
+data class UserMealTime(
+    val mealTime: Int,
+    val isAfter: Boolean = false,
 )

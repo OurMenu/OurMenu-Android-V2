@@ -42,6 +42,7 @@ import com.kuit.ourmenu.ui.my.component.MyMealTime
 import com.kuit.ourmenu.ui.my.component.MyNewPasswordModal
 import com.kuit.ourmenu.ui.my.viewmodel.MyPageUiState
 import com.kuit.ourmenu.ui.my.viewmodel.MyPageViewModel
+import com.kuit.ourmenu.ui.my.viewmodel.UserMealTime
 import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.NeutralBlack
@@ -72,7 +73,7 @@ fun MyRoute(
     MyScreen(
         padding = padding,
         uiState = uiState,
-        navigateToEdit = { navigateToEdit(uiState.mealTimes) },
+        navigateToEdit = { navigateToEdit(uiState.mealTimes.map { it.mealTime }) },
         changePassword = viewModel::changePassword,
         logout = viewModel::logout,
         deleteAccount = viewModel::deleteAccount,
@@ -282,7 +283,20 @@ fun InfoRow(
 @Composable
 private fun MyScreenPreview() {
     MyScreen(
-        uiState = MyPageUiState(),
+        uiState = MyPageUiState(
+            email = "ourmenu@gmai.com",
+            mealTimes = listOf(
+                UserMealTime(
+                    10, true
+                ),
+                UserMealTime(
+                    13, true
+                ),
+                UserMealTime(
+                    16, true
+                )
+            )
+        ),
         padding = PaddingValues(),
     )
 }

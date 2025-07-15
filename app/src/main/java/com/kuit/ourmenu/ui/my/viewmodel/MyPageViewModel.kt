@@ -31,10 +31,16 @@ class MyPageViewModel @Inject constructor(
                         _uiState.update {
                             it.copy(
                                 email = response.email,
-                                mealTimes = response.mealTime.map {
-                                    it.substring(3, 5).toInt()
-                                }, // TODO: 리스폰스 변경에 따라 수정해야함
+                                mealTimes = response.mealTimeList.map { mealTime ->
+                                    UserMealTime(
+                                        mealTime = mealTime.mealTime.substring(0, 2).toInt(),
+                                        isAfter = mealTime.isAfter,
+                                    )
+                                },
                                 signInType = SignInType.valueOf(response.signInType),
+                                announcementUrl = response.announcementUrl,
+                                customerServiceUrl = response.customerServiceUrl,
+                                appReviewUrl = response.appReviewUrl,
                             )
                         }
                     } else {
