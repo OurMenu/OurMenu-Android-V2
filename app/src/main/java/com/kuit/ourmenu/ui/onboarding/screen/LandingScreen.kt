@@ -91,7 +91,7 @@ fun LandingRoute(
         navigateToLogin = navigateToLogin,
         navigateToSignupEmail = navigateToSignupEmail,
         onKakaoLoginClick = {
-            viewModel.getKakaoLogin()
+            viewModel.getKakaoLogin(context = context)
         }
     )
 }

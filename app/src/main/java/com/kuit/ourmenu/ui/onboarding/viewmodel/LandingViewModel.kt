@@ -1,5 +1,6 @@
 package com.kuit.ourmenu.ui.onboarding.viewmodel
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -29,16 +30,16 @@ class LandingViewModel @Inject constructor(
     private val _error: MutableStateFlow<String?> = MutableStateFlow(null)
     val error = _error.asStateFlow()
 
-    init {
-        // TODO : 디버깅 후 블록 삭제
-        UserApiClient.instance.unlink { error ->
-            if (error != null) {
-                Log.e("KakaoModule", "연결 끊기 실패", error)
-            } else {
-                Log.i("KakaoModule", "연결 끊기 성공. SDK에서 토큰 삭제 됨")
-            }
-        }
-    }
+//    카카오 로그인 테스트용 unlink 함수
+//    init {
+//        UserApiClient.instance.unlink { error ->
+//            if (error != null) {
+//                Log.e("KakaoModule", "연결 끊기 실패", error)
+//            } else {
+//                Log.i("KakaoModule", "연결 끊기 성공. SDK에서 토큰 삭제 됨")
+//            }
+//        }
+//    }
 
     fun updateKakaoState(state: KakaoState) {
         _uiState.update {
@@ -46,11 +47,14 @@ class LandingViewModel @Inject constructor(
         }
     }
 
-    fun getKakaoLogin() {
+    fun getKakaoLogin(
+        context: Context
+    ) {
         kakaoRepository.getKakaoLogin(
+            context = context,
             successLogin = {
                 updateKakaoState(KakaoState.Loading)
-            }
+            },
         )
     }
 

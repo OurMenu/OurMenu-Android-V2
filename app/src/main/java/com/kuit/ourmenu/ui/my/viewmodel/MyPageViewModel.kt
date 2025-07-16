@@ -1,5 +1,6 @@
 package com.kuit.ourmenu.ui.my.viewmodel
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -100,7 +101,9 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    fun logout() {
+    fun logout(
+        context: Context
+    ) {
         viewModelScope.launch {
             var kakaoResult = true
 
@@ -125,14 +128,18 @@ class MyPageViewModel @Inject constructor(
                     },
                     onFailure = {
                         Log.d("MyPageViewModel", "logout Failure: $it")
-                        kakaoRepository.getKakaoLogin { }
+                        kakaoRepository.getKakaoLogin(
+                            context = context,
+                        ) { }
                     }
                 )
             }
         }
     }
 
-    fun deleteAccount() {
+    fun deleteAccount(
+        context: Context
+    ) {
         viewModelScope.launch {
             var kakaoResult = true
 
@@ -156,7 +163,9 @@ class MyPageViewModel @Inject constructor(
                     },
                     onFailure = {
                         Log.d("MyPageViewModel", "deleteAccount: $it")
-                        kakaoRepository.getKakaoLogin { }
+                        kakaoRepository.getKakaoLogin(
+                            context = context
+                        ) { }
                     }
                 )
             }

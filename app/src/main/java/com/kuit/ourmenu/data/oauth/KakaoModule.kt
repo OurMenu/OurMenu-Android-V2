@@ -14,10 +14,9 @@ import javax.inject.Singleton
 import kotlin.coroutines.resume
 
 @Singleton
-class KakaoRepository @Inject constructor(
-    @ApplicationContext private val context: Context
-) {
+class KakaoRepository @Inject constructor() {
     fun getKakaoLogin(
+        context: Context,
         successLogin: () -> Unit,
     ) {
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
@@ -29,7 +28,9 @@ class KakaoRepository @Inject constructor(
         }
 
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
+            Log.d("KakaoModule", "카카오톡으로 로그인 가능")
             UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
+                Log.d("KakaoModule", "카카오톡으로 로그인 시도")
                 if (error != null) {
                     Log.e("KakaoModule", "카카오톡으로 로그인 실패", error)
                     if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
@@ -40,9 +41,23 @@ class KakaoRepository @Inject constructor(
                 } else if (token != null) {
                     Log.i("KakaoModule", "카카오톡으로 로그인 성공 ${token.accessToken}")
                 }
+                UserApiClient.instance.me { user, error ->
+                    if (error != null) {
+                        Log.e("KakaoModule", "사용자 정보 요청 실패", error)
+                    }
+                    else if (user != null) {
+                        Log.i("KakaoModule", "사용자 정보 요청 성공" +
+                                "\n회원번호: ${user.id}" +
+                                "\n이메일: ${user.kakaoAccount?.email}" +
+                                "\n닉네임: ${user.kakaoAccount?.profile?.nickname}" +
+                                "\n프로필사진: ${user.kakaoAccount?.profile?.thumbnailImageUrl}")
+                    }
+                }
+
                 successLogin()
             }
         } else {
+            Log.d("KakaoModule", "카카오톡으로 로그인 불가능, 카카오계정으로 로그인 시도")
             UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
             successLogin()
         }
