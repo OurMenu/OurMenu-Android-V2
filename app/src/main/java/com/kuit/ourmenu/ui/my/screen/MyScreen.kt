@@ -322,6 +322,7 @@ fun MyScreen(
         // 모달 처리
         if (uiState.bottomSheetVisible) {
             MyBottomModal(
+                signInType = uiState.signInType,
                 onDismissRequest = { updateBottomSheetVisible(false) },
                 onChangePassword = {
                     updateCurrentPasswordModalVisible(true)
