@@ -5,6 +5,7 @@ sealed class PasswordState {
     data object NotMeetCondition : PasswordState()
     data object DifferentPassword : PasswordState()
     data object Valid : PasswordState()
+    data object IncorrectPassword : PasswordState()
 }
 
 private fun isValidPassword(password: String): Boolean {

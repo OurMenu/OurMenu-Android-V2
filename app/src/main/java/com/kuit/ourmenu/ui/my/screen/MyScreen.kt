@@ -1,12 +1,18 @@
 package com.kuit.ourmenu.ui.my.screen
 
 import android.content.Intent
+import android.provider.SyncStateContract.Helpers.update
+import android.util.Log
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,14 +23,21 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -36,6 +49,8 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.ui.common.OurSnackbarHost
+import com.kuit.ourmenu.ui.common.model.PasswordState
 import com.kuit.ourmenu.ui.common.topappbar.OurMenuAddButtonTopAppBar
 import com.kuit.ourmenu.ui.my.component.DeleteAccountModal
 import com.kuit.ourmenu.ui.my.component.LogoutModal
@@ -50,7 +65,11 @@ import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.Neutral900
 import com.kuit.ourmenu.ui.theme.NeutralBlack
 import com.kuit.ourmenu.ui.theme.OurMenuTypography
+import com.kuit.ourmenu.utils.AnimationUtil.shakeErrorInputField
+import com.kuit.ourmenu.utils.AnimationUtil.shakeErrorInputFieldWithFocus
 import com.kuit.ourmenu.utils.ViewUtil.noRippleClickable
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun MyRoute(
@@ -61,6 +80,15 @@ fun MyRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val shakeOffset = remember { Animatable(0f) }
+    val focusRequester = remember { FocusRequester() }
+    val passwordConfirmEnabled by remember {
+        derivedStateOf {
+            uiState.newPassword.isNotEmpty() && uiState.confirmNewPassword.isNotEmpty()
+        }
+    }
 
     LaunchedEffect(
         uiState.isLogoutSuccess,
@@ -70,15 +98,77 @@ fun MyRoute(
             navigateToLanding()
     }
 
+    LaunchedEffect(
+        uiState.showCompleteSnackbar
+    ) {
+        if (uiState.showCompleteSnackbar) {
+            snackbarHostState.showSnackbar(
+                message = "비밀번호가 변경되었어요.",
+                duration = SnackbarDuration.Short,
+            )
+        }
+    }
+
     LaunchedEffect(Unit) {
         viewModel.getUserInfo()
+    }
+
+    LaunchedEffect(uiState.passwordState) {
+        when (uiState.passwordState) {
+            PasswordState.NotMeetCondition -> {
+                shakeErrorInputFieldWithFocus(
+                    shakeOffset = shakeOffset,
+                    focusRequester = focusRequester,
+                    message = "비밀번호 조건을 다시 확인해주세요.",
+                    snackbarHostState = snackbarHostState,
+                    scope = scope
+                )
+                scope.launch {
+                    delay(1600)
+                    viewModel.updatePasswordState(PasswordState.Default)
+                }
+            }
+
+            PasswordState.DifferentPassword -> {
+                shakeErrorInputField(
+                    shakeOffset = shakeOffset,
+                    message = "비밀번호가 일치하지 않아요.",
+                    snackbarHostState = snackbarHostState,
+                    scope = scope
+                )
+                scope.launch {
+                    delay(800)
+                    viewModel.updatePasswordState(PasswordState.Default)
+                }
+            }
+
+            PasswordState.Valid -> {
+                viewModel.changePassword()
+            }
+
+            PasswordState.IncorrectPassword -> {
+                viewModel.reInputCurrentPassword()
+                shakeErrorInputFieldWithFocus(
+                    shakeOffset = shakeOffset,
+                    focusRequester = focusRequester,
+                    message = "현재 비밀번호가 일치하지 않아요.",
+                    snackbarHostState = snackbarHostState,
+                    scope = scope
+                )
+            }
+
+            else -> {}
+        }
     }
 
     MyScreen(
         padding = padding,
         uiState = uiState,
+        snackbarHostState = snackbarHostState,
+        focusRequester = focusRequester,
+        shakeOffset = shakeOffset,
         navigateToEdit = { navigateToEdit(uiState.mealTimes.map { it.mealTime }) },
-        changePassword = viewModel::changePassword,
+        updatePasswordState = { viewModel.updatePasswordState(null) },
         logout = viewModel::logout,
         deleteAccount = viewModel::deleteAccount,
         updateBottomSheetVisible = viewModel::updateBottomSheetVisible,
@@ -107,7 +197,24 @@ fun MyRoute(
             ).apply { setPackage("com.android.vending") }
             context.startActivity(intent)
         },
+        passwordConfirmEnabled = passwordConfirmEnabled,
+        updateCurrentPassword = viewModel::updateCurrentPassword,
+        updateNewPassWordChange = viewModel::updateNewPassword,
+        updateConfirmPasswordChange = viewModel::updateConfirmNewPassword,
+        updatePasswordVisibilityChange = viewModel::updatePasswordVisibility
     )
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 44.dp),
+        contentAlignment = Alignment.TopCenter
+    ) {
+        OurSnackbarHost(
+            hostState = snackbarHostState,
+            isChecked = true,
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -115,8 +222,11 @@ fun MyRoute(
 fun MyScreen(
     padding: PaddingValues,
     uiState: MyPageUiState,
+    snackbarHostState: SnackbarHostState,
+    focusRequester: FocusRequester,
+    shakeOffset: Animatable<Float, AnimationVector1D>,
     navigateToEdit: () -> Unit = {},
-    changePassword: (String) -> Unit = {},
+    updatePasswordState: () -> Unit = {},
     logout: () -> Unit = {},
     deleteAccount: () -> Unit = {},
     updateBottomSheetVisible: (Boolean) -> Unit = {},
@@ -127,24 +237,17 @@ fun MyScreen(
     navigateToAnnouncement: () -> Unit = {},
     navigateToCustomerService: () -> Unit = {},
     navigateToReview: () -> Unit = {},
+    passwordConfirmEnabled: Boolean,
+    updateCurrentPassword: (String) -> Unit = {},
+    updateNewPassWordChange: (String) -> Unit = {},
+    updateConfirmPasswordChange: (String) -> Unit = {},
+    updatePasswordVisibilityChange: () -> Unit = {}
 ) {
-
     Box(
         modifier = Modifier
-            .padding(padding)
+            .padding(bottom = padding.calculateBottomPadding())
     ) {
         Scaffold(
-            topBar = {
-                OurMenuAddButtonTopAppBar(
-                    modifier = Modifier
-                        .drawBehind {
-                            drawRect(
-                                color = NeutralBlack
-                            )
-                        }
-                        .shadow(elevation = 4.dp)
-                )
-            }
         ) { innerPadding ->
             Column(
                 modifier = Modifier
@@ -241,8 +344,15 @@ fun MyScreen(
                 onDismiss = { updateCurrentPasswordModalVisible(false) },
                 onConfirm = {
                     updateNewPasswordModalVisible(true)
-                    updateCurrentPasswordModalVisible(false)
-                }
+                },
+                snackbarHostState = snackbarHostState,
+                currentPassword = uiState.currentPassword,
+                isPasswordVisible = uiState.isPasswordViewVisible,
+                updatePassword = { updateCurrentPassword(it) },
+                updatePasswordVisible = { updatePasswordVisibilityChange() },
+                focusRequester = focusRequester,
+                passwordState = uiState.passwordState,
+                shakeOffset = shakeOffset,
             )
         }
 
@@ -250,10 +360,20 @@ fun MyScreen(
         if (uiState.showNewPasswordModal) {
             MyNewPasswordModal(
                 onDismiss = { updateNewPasswordModalVisible(false) },
-                onConfirm = { newPassword ->
-                    changePassword(newPassword)
-                }
-            )
+                onConfirm = { updatePasswordState() },
+                focusRequester = focusRequester,
+                shakeOffset = shakeOffset,
+                snackbarHostState = snackbarHostState,
+                newPassword = uiState.newPassword,
+                passwordState = uiState.passwordState,
+                confirmNewPassword = uiState.confirmNewPassword,
+                isPasswordVisible = uiState.isPasswordViewVisible,
+                passwordConfirmEnabled = passwordConfirmEnabled,
+                updateNewPassWordChange = { updateNewPassWordChange(it) },
+                updateConfirmPasswordChange = { updateConfirmPasswordChange(it) },
+                updatePasswordVisibilityChange = { updatePasswordVisibilityChange() },
+
+                )
         }
 
         // 로그아웃 모달
@@ -326,6 +446,10 @@ private fun MyScreenPreview() {
             )
         ),
         padding = PaddingValues(),
+        snackbarHostState = SnackbarHostState(),
+        focusRequester = FocusRequester(),
+        shakeOffset = remember { Animatable(0f) },
+        passwordConfirmEnabled = true,
     )
 }
 

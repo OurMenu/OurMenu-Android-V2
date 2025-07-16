@@ -1,6 +1,7 @@
 package com.kuit.ourmenu.ui.my.viewmodel
 
 import com.kuit.ourmenu.data.model.auth.SignInType
+import com.kuit.ourmenu.ui.common.model.PasswordState
 
 data class MyPageUiState(
     val email: String = "",
@@ -17,6 +18,12 @@ data class MyPageUiState(
     val announcementUrl: String = "",
     val customerServiceUrl: String = "",
     val appReviewUrl: String = "",
+    val currentPassword: String = "",
+    val newPassword: String = "",
+    val confirmNewPassword: String = "",
+    val isPasswordViewVisible: Boolean = false,
+    val showCompleteSnackbar: Boolean = false,
+    val passwordState: PasswordState = PasswordState.Default
 )
 
 data class UserMealTime(
