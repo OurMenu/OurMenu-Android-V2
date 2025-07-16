@@ -106,6 +106,7 @@ fun MyRoute(
                 message = "비밀번호가 변경되었어요.",
                 duration = SnackbarDuration.Short,
             )
+            viewModel.updateShowCompleteState(false)
         }
     }
 
