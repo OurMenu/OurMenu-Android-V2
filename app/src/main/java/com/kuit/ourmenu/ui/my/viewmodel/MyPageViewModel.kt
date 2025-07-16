@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kuit.ourmenu.data.model.auth.SignInType
-import com.kuit.ourmenu.data.model.base.OurMenuApiFailureException
 import com.kuit.ourmenu.data.oauth.KakaoRepository
 import com.kuit.ourmenu.data.repository.AuthRepository
 import com.kuit.ourmenu.data.repository.UserRepository
@@ -15,12 +14,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val authRepository: AuthRepository,
+    private val kakaoRepository: KakaoRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MyPageUiState())
@@ -101,29 +102,64 @@ class MyPageViewModel @Inject constructor(
 
     fun logout() {
         viewModelScope.launch {
-            authRepository.logout().fold(
-                onSuccess = {
-                    updateLogoutModalVisible(false)
-                    Log.d("MyPageViewModel", "logout: $it")
-                },
-                onFailure = {
-                    Log.d("MyPageViewModel", "logout: $it")
-                }
-            )
+            var kakaoResult = true
+
+            runBlocking {
+                kakaoRepository.logout(
+                    errorLogout = {
+                        Log.d("MyPageViewModel", "Kakao logout failed: $it")
+                        kakaoResult = false
+                    },
+                    successLogout = {
+                        Log.d("MyPageViewModel", "Kakao logout success")
+                        kakaoResult = true
+                    }
+                )
+            }
+
+            if (kakaoResult) {
+                authRepository.logout().fold(
+                    onSuccess = {
+                        Log.d("MyPageViewModel", "logout Success: $it")
+                        setLogoutSuccess()
+                    },
+                    onFailure = {
+                        Log.d("MyPageViewModel", "logout Failure: $it")
+                        kakaoRepository.getKakaoLogin { }
+                    }
+                )
+            }
         }
     }
 
     fun deleteAccount() {
         viewModelScope.launch {
-            userRepository.deleteUser().fold(
-                onSuccess = {
-                    updateDeleteAccountModalVisible(false)
-                    Log.d("MyPageViewModel", "deleteAccount: $it")
-                },
-                onFailure = {
-                    Log.d("MyPageViewModel", "deleteAccount: $it")
-                }
-            )
+            var kakaoResult = true
+
+            runBlocking {
+                kakaoRepository.unlink(
+                    errorUnlink = {
+                        Log.d("MyPageViewModel", "Kakao unlink failed: $it")
+                        kakaoResult = false
+                    },
+                    successUnlink = {
+                        Log.d("MyPageViewModel", "Kakao unlink success")
+                        kakaoResult = true
+                    }
+                )
+            }
+            if (kakaoResult) {
+                userRepository.deleteUser().fold(
+                    onSuccess = {
+                        Log.d("MyPageViewModel", "deleteAccount: $it")
+                        setDeleteAccountSuccess()
+                    },
+                    onFailure = {
+                        Log.d("MyPageViewModel", "deleteAccount: $it")
+                        kakaoRepository.getKakaoLogin { }
+                    }
+                )
+            }
         }
     }
 
@@ -169,6 +205,20 @@ class MyPageViewModel @Inject constructor(
                     showNewPasswordModal = true,
                 )
             }
+        }
+    }
+
+    fun setLogoutSuccess() {
+        updateLogoutModalVisible(false)
+        _uiState.update {
+            it.copy(isLogoutSuccess = true)
+        }
+    }
+
+    fun setDeleteAccountSuccess() {
+        updateDeleteAccountModalVisible(false)
+        _uiState.update {
+            it.copy(isDeleteAccountSuccess = true)
         }
     }
 

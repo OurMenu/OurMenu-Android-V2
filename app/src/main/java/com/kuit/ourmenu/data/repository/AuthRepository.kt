@@ -41,9 +41,6 @@ class AuthRepository @Inject constructor(
     }
 
     suspend fun logout() = runCatching {
-        kakaoRepository.logout { error ->
-            throw error
-        }
         authService.logout().handleBaseResponse().getOrThrow()
     }
 

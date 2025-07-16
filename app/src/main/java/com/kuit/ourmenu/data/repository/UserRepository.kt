@@ -42,9 +42,6 @@ class UserRepository @Inject constructor(
     }
 
     suspend fun deleteUser() = runCatching {
-        kakaoRepository.unlink { error ->
-            throw error
-        }
         userService.deleteUser().handleBaseResponse().getOrThrow()
     }
 }

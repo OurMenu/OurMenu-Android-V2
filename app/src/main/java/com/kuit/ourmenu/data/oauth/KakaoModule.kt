@@ -71,6 +71,7 @@ class KakaoRepository @Inject constructor(
     }
 
     fun logout(
+        successLogout: () -> Unit,
         errorLogout: (Throwable) -> Unit,
     ) {
         if (AuthApiClient.instance.hasToken()) {
@@ -80,12 +81,14 @@ class KakaoRepository @Inject constructor(
                     errorLogout(error)
                 } else {
                     Log.i("KakaoTag", "로그아웃 성공. SDK에서 토큰 삭제됨")
+                    successLogout()
                 }
             }
         }
     }
 
     fun unlink(
+        successUnlink: () -> Unit,
         errorUnlink: (Throwable) -> Unit,
     ) {
         if (AuthApiClient.instance.hasToken()) {
@@ -95,6 +98,7 @@ class KakaoRepository @Inject constructor(
                     errorUnlink(error)
                 } else {
                     Log.i("KakaoTag", "회원 탈퇴 성공. SDK에서 토큰 삭제됨")
+                    successUnlink()
                 }
             }
         }
