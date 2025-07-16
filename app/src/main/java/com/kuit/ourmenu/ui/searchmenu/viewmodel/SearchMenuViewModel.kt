@@ -267,9 +267,8 @@ class SearchMenuViewModel @Inject constructor(
             )
 
             response.onSuccess { result ->
-                if (result != null) {
+                if (result != null && result.isNotEmpty()) {
                     Log.d("SearchMenuViewModel", "등록 메뉴 정보 조회 성공: ${result.size}개")
-                    Log.d("SearchMenuViewModel", "등록 메뉴 정보 조회 성공: ${result[0].storeTitle}")
                     // 검색 결과 저장
                     _searchResult.value = result
                 }
@@ -310,6 +309,17 @@ class SearchMenuViewModel @Inject constructor(
                 }
             }.onFailure {
                 Log.d("SearchMenuViewModel", "핀 위치의 메뉴 조회 실패: ${it.message}")
+            }
+        }
+    }
+
+    fun getMapMenuDetail(menuId: Long){
+        viewModelScope.launch {
+            val response = mapRepository.getMapMenuDetail(menuId)
+            response.onSuccess {
+                Log.d("SearchMenuViewModel", "메뉴 상세 조회 성공: $it")
+            }.onFailure {
+                Log.d("SearchMenuViewModel", "메뉴 상세 조회 실패: ${it.message}")
             }
         }
     }

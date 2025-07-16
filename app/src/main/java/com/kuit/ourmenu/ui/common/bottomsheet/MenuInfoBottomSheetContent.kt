@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,7 +29,6 @@ import com.kuit.ourmenu.R
 import com.kuit.ourmenu.data.model.map.response.MapDetailResponse
 import com.kuit.ourmenu.data.model.map.response.MenuFolderInfo
 import com.kuit.ourmenu.ui.common.chip.MenuFolderChip
-import com.kuit.ourmenu.ui.common.chip.TagChip
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.Neutral900
@@ -108,11 +107,12 @@ fun MenuInfoContent(
             MenuFolderChip(
                 modifier = Modifier
                     .align(Alignment.CenterEnd),
+                menuFolderIconImgUrl = menuInfoData.menuFolderInfo.menuFolderIconImgUrl,
                 menuFolderTitle = menuFolderTitle
             )
         }
         Text(
-            text = menuInfoData.menuFolderInfo.menuFolderTitle,
+            text = "응답에 가게명 누락", // TODO: 가게명 처리
             style = ourMenuTypography().pretendard_600_14.copy(
                 lineHeight = 12.sp,
                 color = Neutral500
@@ -159,17 +159,21 @@ fun MenuInfoTagContent(
 ) {
     FlowRow(modifier = modifier) {
         menuTags.forEach { tag ->
-            TagChip(
-                modifier = Modifier.padding(
-                    top = 4.dp,
-                ),
-                tagIcon = R.drawable.ic_tag_rice, // TODO: Get appropriate icon based on tag
-                tagName = tag,
-                enabled = false,
-                selected = true,
-                onClick = { }
+            val painter = rememberAsyncImagePainter(
+                model = ImageRequest.Builder(LocalPlatformContext.current)
+                    .data(tag)
+                    .size(96, 32)
+                    .build()
             )
-            Spacer(modifier = Modifier.padding(end = 4.dp))
+
+            Image(
+                painter = painter,
+                contentDescription = null,
+                modifier = Modifier
+                    .height(32.dp)
+                    .padding(top = 4.dp, end = 4.dp),
+                contentScale = ContentScale.FillHeight
+            )
         }
     }
 }
