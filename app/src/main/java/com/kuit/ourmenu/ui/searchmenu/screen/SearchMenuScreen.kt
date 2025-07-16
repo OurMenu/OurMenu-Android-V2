@@ -1,5 +1,6 @@
 package com.kuit.ourmenu.ui.searchmenu.screen
 
+import android.Manifest
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -25,12 +26,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.GoToMapButton
 import com.kuit.ourmenu.ui.common.SearchTextField
@@ -42,6 +45,7 @@ import com.kuit.ourmenu.ui.searchmenu.component.SearchHistoryList
 import com.kuit.ourmenu.ui.searchmenu.model.SearchHistoryData
 import com.kuit.ourmenu.ui.searchmenu.viewmodel.SearchMenuViewModel
 import com.kuit.ourmenu.ui.theme.NeutralWhite
+import com.kuit.ourmenu.utils.PermissionHandler
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,7 +65,9 @@ fun SearchMenuScreen(
     val interactionSource = remember { MutableInteractionSource() }
     val searchBarFocused by interactionSource.collectIsFocusedAsState()
     val focusManager = LocalFocusManager.current
-    
+    val context = LocalContext.current
+    val locationPermissionGranted by viewModel.locationPermissionGranted.collectAsStateWithLifecycle()
+
     // 지도 중심 좌표
     val currentCenter by viewModel.currentCenter.collectAsState()
     
@@ -80,11 +86,34 @@ fun SearchMenuScreen(
         }
     }
 
+    // 권한 허용이 안된 경우 권한 요청
+    if (!locationPermissionGranted) {
+        PermissionHandler(
+            permission = Manifest.permission.ACCESS_FINE_LOCATION,
+            rationaleMessage = "Location permission is required to show your current location on the map",
+            onPermissionGranted = {
+                viewModel.updateLocationPermission(true)
+            },
+            onPermissionDenied = {
+                viewModel.updateLocationPermission(false)
+            }
+        )
+    }
+
     val mapView = mapViewWithLifecycle(
         mapController = viewModel.mapController
     ) { kakaoMap ->
         // viewModel에서 kakaoMap을 초기화
-        viewModel.initializeMap(kakaoMap)
+        viewModel.initializeMap(kakaoMap, context)
+    }
+
+    // permission 여부 변한 경우에 발생
+    LaunchedEffect(locationPermissionGranted) {
+        if (locationPermissionGranted) {
+            viewModel.mapController.kakaoMap.value?.let { kakaoMap ->
+                viewModel.initializeMap(kakaoMap, context)
+            }
+        }
     }
 
     LaunchedEffect(searchBarFocused) {

@@ -1,8 +1,13 @@
 package com.kuit.ourmenu.ui.searchmenu.viewmodel
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.location.LocationServices
 import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.LatLng
 import com.kakao.vectormap.camera.CameraUpdateFactory
@@ -16,16 +21,21 @@ import com.kuit.ourmenu.data.model.map.response.MapSearchHistoryResponse
 import com.kuit.ourmenu.data.model.map.response.MapSearchResponse
 import com.kuit.ourmenu.data.repository.MapRepository
 import com.kuit.ourmenu.ui.common.map.MapController
+import com.kuit.ourmenu.utils.PreferencesManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.net.URL
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchMenuViewModel @Inject constructor(
-    private val mapRepository: MapRepository
+    private val mapRepository: MapRepository,
+    private val preferencesManager: PreferencesManager
 ) : ViewModel() {
     // 검색 기록
     private val _searchHistory = MutableStateFlow<List<MapSearchHistoryResponse>?>(emptyList())
@@ -33,7 +43,7 @@ class SearchMenuViewModel @Inject constructor(
 
     // 전체 등록된 메뉴
     private val _myMenus = MutableStateFlow<List<MapResponse>?>(emptyList())
-    val myMenus = _myMenus.asStateFlow()
+    val myMenus = _myMenus.asStateFlow() // TODO: 리팩토링
 
     // 검색 결과
     private val _searchResult = MutableStateFlow<List<MapSearchResponse>?>(emptyList())
@@ -49,9 +59,43 @@ class SearchMenuViewModel @Inject constructor(
 
     val mapController = MapController()
 
+    // Permission state
+    private val _locationPermissionGranted = MutableStateFlow(false)
+    val locationPermissionGranted: StateFlow<Boolean> = _locationPermissionGranted.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            preferencesManager.locationPermissionGranted.collect { granted ->
+                _locationPermissionGranted.value = granted
+                Log.d("AddMenuViewModel", "location permission : $granted")
+            }
+        }
+    }
+
+    fun updateLocationPermission(granted: Boolean) {
+        viewModelScope.launch {
+            preferencesManager.setLocationPermissionGranted(granted)
+        }
+    }
+
     // 지도 초기화
-    fun initializeMap(kakaoMap: KakaoMap) {
+    @SuppressLint("MissingPermission")
+    fun initializeMap(kakaoMap: KakaoMap, context: Context) {
         // Initial map setup
+        // Get current location and move camera
+        Log.d("AddMenuViewModel", "initialize Map")
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
+        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+            location?.let {
+                Log.d("AddMenuViewModel", "location success: lat=${it.latitude}, long=${it.longitude}")
+                moveCamera(it.latitude, it.longitude)
+//                addMarker(it.latitude, it.longitude, R.drawable.img_popup_dice)
+            } ?: run {
+                Log.d("AddMenuViewModel", "location fail")
+                moveCamera(37.5416, 127.0793)
+//                addMarker(37.5416, 127.0793, R.drawable.img_popup_dice)
+            }
+        }
 //        moveCamera(37.5416, 127.0793)
         getMyMenus()
 //        showSearchResultOnMap()
@@ -90,29 +134,57 @@ class SearchMenuViewModel @Inject constructor(
         }
     }
 
+    // URL에서 이미지를 비트맵으로 로드하는 함수
+    private suspend fun loadImageFromUrl(url: String): Bitmap? = withContext(Dispatchers.IO) {
+        return@withContext try {
+            val connection = URL(url).openConnection()
+            connection.connectTimeout = 5000
+            connection.readTimeout = 5000
+            connection.connect()
+
+            val input = connection.getInputStream()
+            BitmapFactory.decodeStream(input)
+        } catch (e: Exception) {
+            Log.e("SearchMenuViewModel", "이미지 로드 실패: ${e.message}")
+            null
+        }
+    }
+
     // 지도에 핀 추가
-    fun addMarker(latitude: Double, longitude: Double, resourceId: Int) {
-        mapController.kakaoMap.value?.let { map ->
-            val style = map.labelManager?.addLabelStyles(
-                LabelStyles.from(LabelStyle.from(resourceId))
-            )
-            val options = LabelOptions.from(LatLng.from(latitude, longitude)).setStyles(style)
-                .setClickable(true)
-            map.labelManager?.layer?.addLabel(options)
-            map.setOnLabelClickListener { kakaoMap, labelLayer, label ->
-                // 핀 클릭시 동작 정의
-                Log.d("SearchMenuViewModel", "핀 클릭됨")
-                moveCamera(latitude = label.position.latitude, longitude = label.position.longitude)
-
-                // Find the matching menu item and call getMapDetail
-                _myMenus.value?.find { menu ->
-                    menu.mapY == label.position.latitude && menu.mapX == label.position.longitude
-                }?.let { matchingMenu ->
-                    Log.d("SearchMenuViewModel", "핀 클릭된 메뉴: ${matchingMenu.mapId}")
-                    getMapDetail(matchingMenu.mapId)
+    fun addMarker(latitude: Double, longitude: Double, pinImageUrl: String) {
+        viewModelScope.launch {
+            val bitmap = loadImageFromUrl(pinImageUrl)
+            
+            mapController.kakaoMap.value?.let { map ->
+                val style = if (bitmap != null) {
+                    map.labelManager?.addLabelStyles(
+                        LabelStyles.from(LabelStyle.from(bitmap))
+                    )
+                } else {
+                    // 이미지 로드 실패시 기본 이미지 사용
+                    map.labelManager?.addLabelStyles(
+                        LabelStyles.from(LabelStyle.from(R.drawable.img_popup_dice))
+                    )
                 }
+                
+                val options = LabelOptions.from(LatLng.from(latitude, longitude)).setStyles(style)
+                    .setClickable(true)
+                map.labelManager?.layer?.addLabel(options)
+                map.setOnLabelClickListener { kakaoMap, labelLayer, label ->
+                    // 핀 클릭시 동작 정의
+                    Log.d("SearchMenuViewModel", "핀 클릭됨")
+                    moveCamera(latitude = label.position.latitude, longitude = label.position.longitude)
 
-                true
+                    // Find the matching menu item and call getMapDetail
+                    _myMenus.value?.find { menu ->
+                        menu.mapY == label.position.latitude && menu.mapX == label.position.longitude
+                    }?.let { matchingMenu ->
+                        Log.d("SearchMenuViewModel", "핀 클릭된 메뉴: ${matchingMenu.mapId}")
+                        getMapDetail(matchingMenu.mapId)
+                    }
+
+                    true
+                }
             }
         }
     }
@@ -129,10 +201,10 @@ class SearchMenuViewModel @Inject constructor(
             val response = mapRepository.getMapSearchHistory()
             response.onSuccess {
                 _searchHistory.value = it
-                Log.d("SearchMenuViewModel", "크롤링 기록 조회 성공")
+                Log.d("SearchMenuViewModel", "검색 기록 조회 성공")
             }.onFailure {
                 // Handle error
-                Log.d("SearchMenuViewModel", "크롤링 기록 조회 실패 : ${it.message}")
+                Log.d("SearchMenuViewModel", "검색 기록 조회 실패 : ${it.message}")
             }
         }
     }
@@ -143,7 +215,7 @@ class SearchMenuViewModel @Inject constructor(
         lat: Double
     ) {
         viewModelScope.launch {
-            Log.d("SearchMenuViewModel", "크롤링 스토어 정보 요청: $query, 좌표($lat, $long)")
+            Log.d("SearchMenuViewModel", "등록 메뉴 정보 요청: $query, 좌표($lat, $long)")
 
             val response = mapRepository.getMapSearch(
                 title = query,
@@ -153,13 +225,13 @@ class SearchMenuViewModel @Inject constructor(
 
             response.onSuccess { result ->
                 if (result != null) {
-                    Log.d("SearchMenuViewModel", "크롤링 스토어 정보 조회 성공: ${result.size}개")
-                    Log.d("SearchMenuViewModel", "크롤링 스토어 정보 조회 성공: ${result[0].storeTitle}")
+                    Log.d("SearchMenuViewModel", "등록 메뉴 정보 조회 성공: ${result.size}개")
+                    Log.d("SearchMenuViewModel", "등록 메뉴 정보 조회 성공: ${result[0].storeTitle}")
                     // 검색 결과 저장
                     _searchResult.value = result
                 }
             }.onFailure {
-                Log.d("SearchMenuViewModel", "크롤링 스토어 정보 조회 실패: ${it.message}")
+                Log.d("SearchMenuViewModel", "등록 메뉴 정보 조회 실패: ${it.message}")
             }
         }
     }
@@ -205,13 +277,13 @@ class SearchMenuViewModel @Inject constructor(
         myMenus.value?.forEach { store ->
             val latitude = store.mapY
             val longitude = store.mapX
-            addMarker(latitude, longitude, R.drawable.img_popup_dice)
+            addMarker(latitude, longitude, store.menuPinDisableImgUrl)
             Log.d(
                 "SearchMenuViewModel",
                 "mapId: ${store.mapId} lat: (${latitude}, long: ${longitude})"
             )
         }
-        // 첫 번째 검색 결과로 카메라 이동
+        // 첫 번째 검색 결과로 카메라 이동 TODO: 현재 위치랑 가까운 결과로 이동
         myMenus.value?.get(0)?.let { moveCamera(it.mapY, it.mapX) }
     }
 }
