@@ -86,7 +86,9 @@ fun MenuInfoContent(
                     .align(Alignment.CenterStart)
             ) {
                 Text(
-                    text = menuInfoData.menuTitle,
+                    text = with(menuInfoData.menuTitle) {
+                        if (length > 10) take(10) + "..." else this
+                    },
                     style = ourMenuTypography().pretendard_700_20.copy(
                         lineHeight = 32.sp,
                         color = Neutral900,
