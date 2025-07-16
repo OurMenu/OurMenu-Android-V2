@@ -11,10 +11,10 @@ data class MapMenuDetailResponse(
     val menuTitle: String,
     @SerialName("menuPrice")
     val menuPrice: Int,
-    @SerialName("menuPin")
-    val menuPin: String,
-    @SerialName("menuTags")
-    val menuTags: List<String>,
+    @SerialName("menuPinImgUrl")
+    val menuPinImgUrl: String,
+    @SerialName("menuTagImgUrls")
+    val menuTagImgUrls: List<String>,
     @SerialName("menuImgUrls")
     val menuImgUrls: List<String>,
     @SerialName("menuFolderInfo")

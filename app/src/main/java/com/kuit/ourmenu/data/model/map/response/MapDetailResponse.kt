@@ -11,10 +11,10 @@ data class MapDetailResponse(
     val menuTitle: String,
     @SerialName("menuPrice")
     val menuPrice: Int,
-    @SerialName("menuPin")
-    val menuPin: String,
-    @SerialName("menuTags")
-    val menuTags: List<String>,
+    @SerialName("menuPinImgUrl")
+    val menuPinImgUrl: String,
+    @SerialName("menuTagImgUrls")
+    val menuTagImgUrls: List<String>,
     @SerialName("menuImgUrls")
     val menuImgUrls: List<String>,
     @SerialName("menuFolderInfo")
@@ -31,8 +31,8 @@ data class MapDetailResponse(
 data class MenuFolderInfo(
     @SerialName("menuFolderTitle")
     val menuFolderTitle: String,
-    @SerialName("menuFolderIcon")
-    val menuFolderIcon: String,
+    @SerialName("menuFolderIconImgUrl")
+    val menuFolderIconImgUrl: String,
     @SerialName("menuFolderCount")
     val menuFolderCount: Int
 )
