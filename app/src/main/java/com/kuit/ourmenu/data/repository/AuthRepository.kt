@@ -17,7 +17,6 @@ import javax.inject.Singleton
 class AuthRepository @Inject constructor(
     private val authService: AuthService,
     private val tokenManager: TokenManager,
-    private val kakaoRepository: KakaoRepository
 ) {
     suspend fun signup(
         email: String?,
