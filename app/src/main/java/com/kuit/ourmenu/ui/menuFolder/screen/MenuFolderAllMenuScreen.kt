@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuit.ourmenu.R
-import com.kuit.ourmenu.data.model.menuFolder.response.SortOrderType
+import com.kuit.ourmenu.data.model.base.type.SortOrderType
 import com.kuit.ourmenu.ui.common.bottomsheet.BottomSheetDragHandle
 import com.kuit.ourmenu.ui.common.topappbar.BackButtonTopAppBar
 import com.kuit.ourmenu.ui.menuFolder.component.AddButton
@@ -56,6 +56,9 @@ import kotlinx.coroutines.launch
 @Composable
 fun MenuFolderAllMenuScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToMenuInfo: (Int) -> Unit,
+//    onNavigateToMap: () -> Unit, // TODO: Map으로 화면 이동 구현
+    onNavigateToAddMenu: () -> Unit,
     viewModel: MenuFolderAllViewModel = hiltViewModel()
 ) {
     val menus by viewModel.menuFolderAll.collectAsStateWithLifecycle()
@@ -101,7 +104,8 @@ fun MenuFolderAllMenuScreen(
                     coroutineScope.launch {
                         val tagFilterCount = selectedTags.size
 
-                        val isPriceChanged = minPrice != null && minPrice != 0L || maxPrice != null && maxPrice != 50000L
+                        val isPriceChanged =
+                            minPrice != null && minPrice != 0L || maxPrice != null && maxPrice != 50000L
                         val priceFilterCount = if (isPriceChanged) 1 else 0
 
                         filterCount = tagFilterCount + priceFilterCount
@@ -193,10 +197,10 @@ fun MenuFolderAllMenuScreen(
                     MenuFolderMenuButton(
                         menuFolderDetail = menus[index],
                         onMenuClick = {
-//                            navController.navigate(route = Routes.MenuInfo)
+                            onNavigateToMenuInfo(menus[index].menuId)
                         },
                         onMapClick = {
-//                            navController.navigate(route = Routes.MenuInfoMap)
+//                                onNavigateToMap()
                         }
                     )
                 }
@@ -206,7 +210,7 @@ fun MenuFolderAllMenuScreen(
                         stringResource(R.string.add_menu),
                         modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 20.dp)
                     ) {
-//                        navController.navigate(route = Routes.AddMenu)
+                        onNavigateToAddMenu()
                     }
                 }
             }

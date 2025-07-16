@@ -7,77 +7,102 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.kuit.ourmenu.ui.common.topappbar.BackButtonTopAppBar
 import com.kuit.ourmenu.ui.menuinfo.component.info.MenuInfoAdditionalContent
 import com.kuit.ourmenu.ui.menuinfo.component.info.MenuInfoChipContent
 import com.kuit.ourmenu.ui.menuinfo.component.info.MenuInfoContent
 import com.kuit.ourmenu.ui.menuinfo.component.info.MenuInfoImagePager
 import com.kuit.ourmenu.ui.menuinfo.component.info.MenuInfoMapButton
-import com.kuit.ourmenu.ui.menuinfo.component.info.MenuInfoTopIcons
 import com.kuit.ourmenu.ui.menuinfo.dummy.MenuInfoDummyData
+import com.kuit.ourmenu.ui.menuinfo.viewmodel.MenuInfoViewModel
 import com.kuit.ourmenu.ui.theme.Neutral300
+import com.kuit.ourmenu.ui.theme.NeutralWhite
 
 @Composable
-fun MenuInfoDefaultScreen(navController: NavController) {
+fun MenuInfoDefaultScreen(
+    menuId: Int,
+    onNavigateBack: () -> Unit,
+    onNavigateToMenuFolderDetail: (Int) -> Unit,
+//    onNavigateToMap: () -> Unit,
+    viewModel: MenuInfoViewModel = hiltViewModel()
+) {
+    LaunchedEffect(menuId) {
+        viewModel.getMenuInfo(menuId)
+    }
 
-    val pagerState = rememberPagerState { 3 }
+    val menuInfo by viewModel.menuInfo.collectAsStateWithLifecycle()
+    val pagerState = rememberPagerState(
+        pageCount = { menuInfo.menuImgUrls.size.coerceAtLeast(1) } // 최소 1
+    )
 
-    Box {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
+    Scaffold(
+        topBar = {},
+        content = { innerPadding ->
             Box {
-                MenuInfoImagePager(
-                    pagerState = pagerState,
-                    pageItems = MenuInfoDummyData.dummyData
-                )
-                MenuInfoTopIcons(
-                    onBackClick = { },
-                    onVertClick = { }
-                )
+                Column(
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .fillMaxSize()
+                ) {
+                    Box {
+                        MenuInfoImagePager(
+                            pagerState = pagerState,
+                            imgUrls = menuInfo.menuImgUrls
+                        )
+                    }
+
+                    MenuInfoContent(
+                        menuInfoData = menuInfo
+                    )
+
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp),
+                        color = Neutral300
+                    )
+
+                    MenuInfoChipContent(
+                        onNavigateToMenuFolderDetail = onNavigateToMenuFolderDetail,
+                        menuInfoData = menuInfo
+                    )
+
+                    MenuInfoAdditionalContent(
+                        address = menuInfo.storeAddress,
+                        // TODO: 메뉴 정보에 따라 변경 필요
+                        memoTitle = MenuInfoDummyData.dummyData.memoTitle,
+                        memoContent = MenuInfoDummyData.dummyData.memoContent
+                    )
+                }
+                MenuInfoMapButton(
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(end = 20.dp, bottom = 28.dp),
+                ) { }
             }
 
-            MenuInfoContent(
-                MenuInfoDummyData.dummyData
-            )
-
-            HorizontalDivider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
-                color = Neutral300
-            )
-
-            MenuInfoChipContent(
-                menuInfoData = MenuInfoDummyData.dummyData
-            )
-
-            MenuInfoAdditionalContent(
-                address = MenuInfoDummyData.dummyData.address,
-                memoTitle = MenuInfoDummyData.dummyData.memoTitle,
-                memoContent = MenuInfoDummyData.dummyData.memoContent
-            )
+            BackButtonTopAppBar(NeutralWhite, true) {
+                onNavigateBack()
+            }
         }
-        MenuInfoMapButton(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(end = 20.dp, bottom = 28.dp),
-        ) { }
-    }
+    )
 }
 
 
 @Preview(showBackground = true)
 @Composable
 private fun MenuInfoDefaultPreview() {
-    val navController = rememberNavController()
-
-    MenuInfoDefaultScreen(navController)
+//    val navController = rememberNavController()
+//
+//    MenuInfoDefaultScreen(navController)
 }

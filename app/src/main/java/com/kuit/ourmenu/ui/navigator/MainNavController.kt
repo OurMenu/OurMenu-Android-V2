@@ -13,6 +13,7 @@ import com.kuit.ourmenu.ui.menuFolder.navigation.navigateToAddMenu
 import com.kuit.ourmenu.ui.menuFolder.navigation.navigateToMenuFolder
 import com.kuit.ourmenu.ui.menuFolder.navigation.navigateToMenuFolderAllMenu
 import com.kuit.ourmenu.ui.menuFolder.navigation.navigateToMenuFolderDetail
+import com.kuit.ourmenu.ui.menuinfo.navigation.navigateToMenuInfo
 import com.kuit.ourmenu.ui.my.navigation.navigateToMy
 import com.kuit.ourmenu.ui.onboarding.navigation.navigateOnboardingToHome
 import com.kuit.ourmenu.ui.onboarding.navigation.navigateToLogin
@@ -96,12 +97,18 @@ class MainNavController(
         navController.navigateToMenuFolderAllMenu()
     }
 
+    // Add Menu
     fun navigateToAddMenu() {
         navController.navigateToAddMenu()
     }
 
     fun navigateToAddMenuInfo() {
         navController.navigateToAddMenuInfo()
+    }
+
+    // Menu Info
+    fun navigateToMenuInfo(menuId: Int) {
+        navController.navigateToMenuInfo(menuId)
     }
 
     @Composable

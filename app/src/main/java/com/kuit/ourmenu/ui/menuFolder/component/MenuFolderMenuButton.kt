@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.kuit.ourmenu.R
-import com.kuit.ourmenu.data.model.menuFolder.response.MenuFolderDetailResponse
+import com.kuit.ourmenu.data.model.menuFolder.response.MenuFolderDetailMenus
 import com.kuit.ourmenu.data.model.menuFolder.response.MenuFolderMenuItem
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral700
@@ -137,7 +137,7 @@ fun MenuFolderMenuButton(
 @Composable
 private fun MenuFolderMenuButtonPreview() {
     MenuFolderMenuButton(
-        menuFolderDetail = MenuFolderDetailResponse(
+        menuFolderDetail = MenuFolderDetailMenus(
             menuId = 1,
             menuTitle = "Menu Title",
             storeTitle = "Store Title",
