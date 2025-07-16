@@ -9,8 +9,8 @@ data class MapResponse(
     val mapId: Long,
     @SerialName("menuPinImgUrl")
     val menuPinImgUrl: String,
-    @SerialName("menuPinDisabledImgUrl")
-    val menuPinDisabledImgUrl: String,
+    @SerialName("menuPinDisableImgUrl")
+    val menuPinDisableImgUrl: String,
     @SerialName("mapX")
     val mapX: Double,
     @SerialName("mapY")

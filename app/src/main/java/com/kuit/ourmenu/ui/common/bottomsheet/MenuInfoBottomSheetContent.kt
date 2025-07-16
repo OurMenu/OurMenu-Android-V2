@@ -64,7 +64,7 @@ fun MenuInfoBottomSheetContent(
         MenuInfoTagContent(
             modifier = Modifier
                 .fillMaxWidth(),
-            menuTags = menuInfoData.menuTags
+            menuTags = menuInfoData.menuTagImgUrls
         )
     }
 }
@@ -182,12 +182,12 @@ private fun MenuInfoBottomSheetContentPreview() {
             menuId = 1,
             menuTitle = "Test Menu",
             menuPrice = 10000,
-            menuPin = "pin",
-            menuTags = listOf("한식", "밥"),
+            menuPinImgUrl = "pin",
+            menuTagImgUrls = listOf("한식", "밥"),
             menuImgUrls = listOf(),
             menuFolderInfo = MenuFolderInfo(
                 menuFolderTitle = "Test Store",
-                menuFolderIcon = "icon",
+                menuFolderIconImgUrl = "icon",
                 menuFolderCount = 1
             ),
             mapId = 1,

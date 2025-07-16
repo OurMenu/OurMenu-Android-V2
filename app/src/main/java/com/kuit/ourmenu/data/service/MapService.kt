@@ -18,15 +18,15 @@ interface MapService {
     @GET("api/users/menus/{mapId}/maps")
     suspend fun getMapDetail(
         @Path("mapId") mapId: Long
-    ): BaseResponse<List<MapDetailResponse>>
+    ): BaseResponse<List<MapDetailResponse>> // TODO: 리팩토링
 
     @GET("api/users/menus/maps")
-    suspend fun getMap(): BaseResponse<List<MapResponse>>
+    suspend fun getMap(): BaseResponse<List<MapResponse>> // TODO: 리팩토링
 
     @GET("api/users/menus/maps/{menuId}/search")
     suspend fun getMapMenuDetail(
         @Path("menuId") menuId: Long
-    ): BaseResponse<MapMenuDetailResponse>
+    ): BaseResponse<MapMenuDetailResponse> // TODO: 리팩토링
 
     @GET("api/users/menus/maps/search")
     suspend fun getMapSearch(
