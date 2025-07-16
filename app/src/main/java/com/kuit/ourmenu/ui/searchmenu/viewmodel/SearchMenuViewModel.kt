@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
+import androidx.core.graphics.scale
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.LocationServices
@@ -56,6 +57,10 @@ class SearchMenuViewModel @Inject constructor(
     // 화면에 보이는 지도 상의 중심에 해당하는 좌표
     private val _currentCenter = MutableStateFlow<LatLng?>(null)
     val currentCenter: StateFlow<LatLng?> = _currentCenter
+
+    // 현재 활성화된 라벨의 mapId를 추적
+    private val _activeMapId = MutableStateFlow<Long?>(null)
+    val activeMapId = _activeMapId.asStateFlow()
 
     val mapController = MapController()
 
@@ -143,7 +148,20 @@ class SearchMenuViewModel @Inject constructor(
             connection.connect()
 
             val input = connection.getInputStream()
-            BitmapFactory.decodeStream(input)
+            // 원본 비트맵 로드
+            val originalBitmap = BitmapFactory.decodeStream(input)
+            
+            // 원하는 크기로 리사이징 (예: 원본의 2배)
+            originalBitmap?.let { bitmap ->
+                val width = bitmap.width * 2  // 원본 너비의 2배
+                val height = bitmap.height * 2  // 원본 높이의 2배
+                bitmap.scale(width, height).also {
+                    // 원본 비트맵 메모리 해제
+                    if (it != bitmap) {
+                        bitmap.recycle()
+                    }
+                }
+            }
         } catch (e: Exception) {
             Log.e("SearchMenuViewModel", "이미지 로드 실패: ${e.message}")
             null
@@ -151,23 +169,36 @@ class SearchMenuViewModel @Inject constructor(
     }
 
     // 지도에 핀 추가
-    fun addMarker(latitude: Double, longitude: Double, pinImageUrl: String) {
+    private fun addMarker(store: MapResponse, isActive: Boolean = false) {
         viewModelScope.launch {
-            val bitmap = loadImageFromUrl(pinImageUrl)
+            val imageUrl = if (isActive) store.menuPinImgUrl else store.menuPinDisableImgUrl
+            val bitmap = loadImageFromUrl(imageUrl)
             
             mapController.kakaoMap.value?.let { map ->
                 val style = if (bitmap != null) {
                     map.labelManager?.addLabelStyles(
-                        LabelStyles.from(LabelStyle.from(bitmap))
+                        LabelStyles.from(
+                            LabelStyle.from(bitmap).apply {
+                                isApplyDpScale = true
+                                setPadding(0f)
+                                setAnchorPoint(0.5f, 0.5f)
+                            }
+                        )
                     )
                 } else {
                     // 이미지 로드 실패시 기본 이미지 사용
                     map.labelManager?.addLabelStyles(
-                        LabelStyles.from(LabelStyle.from(R.drawable.img_popup_dice))
+                        LabelStyles.from(
+                            LabelStyle.from(R.drawable.img_popup_dice).apply {
+                                isApplyDpScale = true
+                                setPadding(0f)
+                                setAnchorPoint(0.5f, 0.5f)
+                            }
+                        )
                     )
                 }
                 
-                val options = LabelOptions.from(LatLng.from(latitude, longitude)).setStyles(style)
+                val options = LabelOptions.from(LatLng.from(store.mapY, store.mapX)).setStyles(style)
                     .setClickable(true)
                 map.labelManager?.layer?.addLabel(options)
                 map.setOnLabelClickListener { kakaoMap, labelLayer, label ->
@@ -180,12 +211,24 @@ class SearchMenuViewModel @Inject constructor(
                         menu.mapY == label.position.latitude && menu.mapX == label.position.longitude
                     }?.let { matchingMenu ->
                         Log.d("SearchMenuViewModel", "핀 클릭된 메뉴: ${matchingMenu.mapId}")
+                        // 현재 활성화된 mapId 업데이트
+                        _activeMapId.value = matchingMenu.mapId
+                        // 모든 마커 다시 그리기
+                        refreshMarkers()
                         getMapDetail(matchingMenu.mapId)
                     }
 
                     true
                 }
             }
+        }
+    }
+
+    // 모든 마커 다시 그리기
+    private fun refreshMarkers() {
+        clearMarkers()
+        myMenus.value?.forEach { store ->
+            addMarker(store, store.mapId == _activeMapId.value)
         }
     }
 
@@ -275,12 +318,10 @@ class SearchMenuViewModel @Inject constructor(
     fun showSearchResultOnMap() {
         clearMarkers()
         myMenus.value?.forEach { store ->
-            val latitude = store.mapY
-            val longitude = store.mapX
-            addMarker(latitude, longitude, store.menuPinDisableImgUrl)
+            addMarker(store, store.mapId == _activeMapId.value)
             Log.d(
                 "SearchMenuViewModel",
-                "mapId: ${store.mapId} lat: (${latitude}, long: ${longitude})"
+                "mapId: ${store.mapId} lat: (${store.mapY}, long: ${store.mapX})"
             )
         }
         // 첫 번째 검색 결과로 카메라 이동 TODO: 현재 위치랑 가까운 결과로 이동
