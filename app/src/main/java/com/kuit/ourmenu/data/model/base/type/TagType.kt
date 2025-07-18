@@ -1,4 +1,4 @@
-package com.kuit.ourmenu.data.model.menuFolder.response
+package com.kuit.ourmenu.data.model.base.type
 
 enum class TagType(val apiValue: String, val displayName: String) {
     KOREA("KOREA", "한식"),

@@ -1,7 +1,7 @@
 package com.kuit.ourmenu.utils
 
 import com.kuit.ourmenu.R
-import com.kuit.ourmenu.data.model.menuFolder.response.TagType
+import com.kuit.ourmenu.data.model.base.type.TagType
 
 object TagListProvider {
     val categoryTagList = listOf(

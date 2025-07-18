@@ -1,5 +1,7 @@
 package com.kuit.ourmenu.ui.addmenu.screen
 
+import android.Manifest
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -30,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,6 +41,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.data.model.map.response.CrawlingStoreDetailResponse
 import com.kuit.ourmenu.ui.addmenu.component.AddMenuSearchBackground
 import com.kuit.ourmenu.ui.addmenu.component.bottomsheet.AddMenuBottomSheetContent
 import com.kuit.ourmenu.ui.addmenu.viewmodel.AddMenuViewModel
@@ -47,6 +51,7 @@ import com.kuit.ourmenu.ui.common.topappbar.OurMenuBackButtonTopAppBar
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
+import com.kuit.ourmenu.utils.PermissionHandler
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,7 +59,7 @@ import kotlinx.coroutines.launch
 fun AddMenuScreen(
     modifier: Modifier = Modifier,
     viewModel: AddMenuViewModel = hiltViewModel(),
-
+    onNavigateToAddMenuInfo: () -> Unit
 ) {
     var scaffoldState = rememberBottomSheetScaffoldState()
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
@@ -65,10 +70,13 @@ fun AddMenuScreen(
     val searchBarFocused by interactionSource.collectIsFocusedAsState()
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     val recentSearchResults by viewModel.searchHistory.collectAsStateWithLifecycle()
     val searchResults by viewModel.searchResult.collectAsStateWithLifecycle()
     val storeInfo by viewModel.storeInfo.collectAsStateWithLifecycle()
+    val selectedMenuIndex by viewModel.selectedMenuIndex.collectAsStateWithLifecycle() // storeInfo에서 선택된 메뉴의 인덱스
+    val locationPermissionGranted by viewModel.locationPermissionGranted.collectAsStateWithLifecycle()
 
     // 지도 중심 좌표 상태
     val currentCenter by viewModel.currentCenter.collectAsState()
@@ -76,11 +84,36 @@ fun AddMenuScreen(
     // Collect history data from ViewModel
     val searchHistory by viewModel.searchHistory.collectAsState()
 
+    // 권한 허용이 안된 경우 권한 요청
+    if (!locationPermissionGranted) {
+        PermissionHandler(
+            permission = Manifest.permission.ACCESS_FINE_LOCATION,
+            rationaleMessage = "Location permission is required to show your current location on the map",
+            onPermissionGranted = {
+                viewModel.updateLocationPermission(true)
+            },
+            onPermissionDenied = {
+                viewModel.updateLocationPermission(false)
+            }
+        )
+    }
+
     val mapView = mapViewWithLifecycle(
         mapController = viewModel.mapController
     ) { kakaoMap ->
-        // viewModel에서 kakaoMap을 초기화
-        viewModel.initializeMap(kakaoMap)
+        // 이미 permission 허용한 경우
+        if (locationPermissionGranted) {
+            viewModel.initializeMap(kakaoMap, context)
+        }
+    }
+
+    // permission 여부 변한 경우에 발생
+    LaunchedEffect(locationPermissionGranted) {
+        if (locationPermissionGranted) {
+            viewModel.mapController.kakaoMap.value?.let { kakaoMap ->
+                viewModel.initializeMap(kakaoMap, context)
+            }
+        }
     }
 
     LaunchedEffect(searchBarFocused) {
@@ -117,7 +150,19 @@ fun AddMenuScreen(
             //bottom sheet 구성
             AddMenuBottomSheetContent(
                 scaffoldState = scaffoldState,
-                storeInfo = storeInfo,
+                storeInfo = storeInfo ?: CrawlingStoreDetailResponse(
+                    storeId = "",
+                    storeTitle = "",
+                    storeAddress = "",
+                    storeImgs = emptyList(),
+                    menus = emptyList(),
+                    storeMapX = 0.0,
+                    storeMapY = 0.0
+                ),
+                selectedMenuIndex = selectedMenuIndex,
+                onNavigateToAddMenuInfo = {
+                    onNavigateToAddMenuInfo()
+                },
                 onItemClick = { index -> viewModel.updateSelectedMenu(index) })
         },
         //조건 만족하면 bottom sheet 보여주고, 아니면 화면에 안보이도록 처리
@@ -185,8 +230,26 @@ fun AddMenuScreen(
                 if (searchBarFocused) focusManager.clearFocus()
                 searchActionDone = true
 
-            }
+                if (searchText.isNotEmpty()){
+                    viewModel.updateCurrentCenter()
 
+                    val center = viewModel.getCurrentCoordinates()
+                    if (center != null) {
+                        val (latitude, longitude) = center
+                        Log.d("SearchMenuScreen", "검색 위치: $latitude, $longitude")
+
+                        // 검색어와 현재 좌표로 크롤링 스토어 정보 요청
+                        viewModel.getCrawlingStoreInfo(
+                            query = searchText,
+                            long = longitude,
+                            lat = latitude
+                        )
+
+                        showBottomSheet = true
+                        showSearchBackground = false
+                    }
+                }
+            }
         }
     }
 }
@@ -194,5 +257,10 @@ fun AddMenuScreen(
 @Preview(showBackground = true)
 @Composable
 private fun AddMenuScreenPreview() {
-    AddMenuScreen()
+    val viewModel : AddMenuViewModel = hiltViewModel()
+    AddMenuScreen(
+        modifier = Modifier,
+        viewModel = viewModel,
+        onNavigateToAddMenuInfo = {}
+    )
 }

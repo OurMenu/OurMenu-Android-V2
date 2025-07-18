@@ -192,7 +192,7 @@ fun SearchMenuScreen(
                         val (latitude, longitude) = center
                         Log.d("SearchMenuScreen", "검색 위치: $latitude, $longitude")
                         
-                        // 검색어와 현재 좌표로 크롤링 스토어 정보 요청
+                        // 검색어와 현재 좌표로 스토어 정보 요청
                         viewModel.getMapSearchResult(
                             query = searchText,
                             long = longitude,

@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kuit.ourmenu.ui.menuinfo.dummy.MenuInfoDummyData
+import com.kuit.ourmenu.data.model.menuinfo.response.MenuInfoResponse
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.Neutral900
@@ -20,7 +20,7 @@ import com.kuit.ourmenu.utils.ExtensionUtil.toWon
 
 @Composable
 fun MenuInfoContent(
-    menuInfoData: MenuInfoDummyData
+    menuInfoData: MenuInfoResponse
 ) {
     Column {
         Box(
@@ -51,7 +51,7 @@ fun MenuInfoContent(
             )
         }
         Text(
-            text = menuInfoData.store,
+            text = menuInfoData.storeTitle,
             style = ourMenuTypography().pretendard_600_32.copy(
                 fontSize = 14.sp,
                 lineHeight = 18.sp,
@@ -66,7 +66,7 @@ fun MenuInfoContent(
 @Preview(showBackground = true)
 @Composable
 private fun MenuInfoContentPreview() {
-    MenuInfoContent(
-        MenuInfoDummyData.dummyData
-    )
+//    MenuInfoContent(
+//        MenuInfoDummyData.dummyData
+//    )
 }

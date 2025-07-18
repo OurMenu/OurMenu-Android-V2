@@ -39,7 +39,7 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 fun MenuFolderScreen(
     onNavigateToDetail: (Int) -> Unit,
     onNavigateToAllMenu: () -> Unit,
-//    onNavigateToAddMenu: () -> Unit, // TODO: AddMenu로 화면 이동 구현
+    onNavigateToAddMenu: () -> Unit,
     viewModel: MenuFolderViewModel = hiltViewModel()
 ) {
     // 현재 스와이프된 버튼의 인덱스를 관리 (한 번에 하나만 스와이프되도록)
@@ -54,7 +54,7 @@ fun MenuFolderScreen(
         topBar = {
             MenuFolderTopAppBar(
                 onClick = {
-//                    onNavigateToAddMenu()
+                    onNavigateToAddMenu()
                 }
             )
         }
@@ -124,6 +124,6 @@ private fun MenuFolderScreenPreview() {
     MenuFolderScreen(
         onNavigateToDetail = {},
         onNavigateToAllMenu = {},
-//        onNavigateToAddMenu = {},
+        onNavigateToAddMenu = {},
     )
 }
