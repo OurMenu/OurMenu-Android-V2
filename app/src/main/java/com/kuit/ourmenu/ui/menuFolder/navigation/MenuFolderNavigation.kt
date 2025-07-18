@@ -24,34 +24,44 @@ fun NavController.navigateToMenuFolderAllMenu() {
     navigate(Routes.MenuFolderAllMenu)
 }
 
+fun NavController.navigateToAddMenu() {
+    navigate(Routes.AddMenu)
+}
+
+fun NavController.navigateToMenuInfo(menuId: Int) {
+    navigate(Routes.MenuInfo(menuId))
+}
+
 fun NavGraphBuilder.menuFolderNavGraph(
     navigateBack: () -> Unit,
     navigateToMenuFolderDetail: (Int) -> Unit,
     navigateToMenuFolderAllMenu: () -> Unit,
-//    navigateToMenuInfo: () -> Unit,
+    navigateToMenuInfo: (Int) -> Unit,
+    navigateToAddMenu: () -> Unit,
 ) {
     composable<MainTabRoute.MenuFolder> {
         MenuFolderScreen(
             onNavigateToDetail = navigateToMenuFolderDetail,
             onNavigateToAllMenu = navigateToMenuFolderAllMenu,
-//            onNavigateToAddMenu = {},
+            onNavigateToAddMenu = navigateToAddMenu,
         )
 
         composable<Routes.MenuFolderDetail> {
             val menuFolderId = it.toRoute<Routes.MenuFolderDetail>().menuFolderId
             MenuFolderDetailScreen(
                 menuFolderId = menuFolderId,
-//                onNavigateToMenuInfo = navigateToMenuInfo,
+                onNavigateToMenuInfo = navigateToMenuInfo,
                 onNavigateBack = navigateBack,
+                onNavigateToAddMenu = navigateToAddMenu
             )
         }
 
         composable<Routes.MenuFolderAllMenu> {
             MenuFolderAllMenuScreen(
                 onNavigateBack = navigateBack,
-//                onNavigateToMenuInfo = navigateToMenuFolderDetail, // TODO: Menu Info로 화면 이동 구현
+                onNavigateToMenuInfo = navigateToMenuFolderDetail,
 //                onNavigateToMenuInfoMap = navigateToMenuFolderDetail, // TODO: Map으로 화면 이동 구현
-//                onNavigateToAddMenu = {}, // TODO: AddMenu로 화면 이동 구현
+                onNavigateToAddMenu = navigateToAddMenu,
             )
         }
     }

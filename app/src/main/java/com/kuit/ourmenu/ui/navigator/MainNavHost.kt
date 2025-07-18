@@ -7,6 +7,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.kuit.ourmenu.ui.addmenu.navigation.addMenuNavGraph
 import com.kuit.ourmenu.ui.addmenu.screen.AddMenuScreen
 import com.kuit.ourmenu.ui.home.navigation.homeNavGraph
 import com.kuit.ourmenu.ui.menuFolder.navigation.menuFolderNavGraph
@@ -62,7 +63,13 @@ fun MainNavHost(
             navigateBack = navController::navigateUp,
             navigateToMenuFolderDetail = navController::navigateToMenuFolderDetail,
             navigateToMenuFolderAllMenu = navController::navigateToMenuFolderAllMenu,
-//            navigateToMenuInfo = navController::navigateToMenuInfo,
+            navigateToMenuInfo = navController::navigateToMenuInfo,
+            navigateToAddMenu = navController::navigateToAddMenu,
+        )
+
+        addMenuNavGraph(
+            navigateBack = navController::navigateUp,
+            navigateToAddMenuInfo = navController::navigateToAddMenuInfo
         )
 
         searchMenuNavGraph(
@@ -82,22 +89,28 @@ fun MainNavHost(
             MenuFolderDetailScreen(
                 menuFolderId = menuFolderId,
                 onNavigateBack = navController::navigateUp,
-//                onNavigateToMenuInfo = navController::navigateToMenuInfo,
-//                onNavigateToAddMenu = { menuId ->
-//                    navController.navigateToAddMenu(menuId)
-//                }
+                onNavigateToMenuInfo = navController::navigateToMenuInfo,
+                onNavigateToAddMenu = navController::navigateToAddMenu
             )
         }
         composable<Routes.MenuFolderAllMenu> {
             MenuFolderAllMenuScreen(
                 onNavigateBack = navController::navigateUp,
-                // TODO: 나머지 navigate 작성
+                onNavigateToMenuInfo = navController::navigateToMenuInfo,
+//                onNavigateToMap = navController::navigateToMenuInfoMap,
+                onNavigateToAddMenu = navController::navigateToAddMenu
             )
         }
 
         // 메뉴
         composable<Routes.MenuInfo> {
-            MenuInfoDefaultScreen(navController = navController.navController)
+            val menuId = it.toRoute<Routes.MenuInfo>().menuId
+            MenuInfoDefaultScreen(
+                menuId = menuId,
+                onNavigateBack = navController::navigateUp,
+                onNavigateToMenuFolderDetail = navController::navigateToMenuFolderDetail,
+//                onNavigateToMap = navController::navigateToMenuInfoMap
+            )
         }
         composable<Routes.MenuInfoMap> {
             MenuInfoMapScreen(navController = navController.navController)
@@ -105,7 +118,9 @@ fun MainNavHost(
 
         // 메뉴 추가
         composable<Routes.AddMenu> {
-            AddMenuScreen()
+            AddMenuScreen(
+                onNavigateToAddMenuInfo = navController::navigateToAddMenuInfo
+            )
         }
     }
 }

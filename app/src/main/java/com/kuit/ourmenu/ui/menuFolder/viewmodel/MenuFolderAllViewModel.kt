@@ -3,8 +3,8 @@ package com.kuit.ourmenu.ui.menuFolder.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kuit.ourmenu.data.model.menuFolder.response.MenuFolderAllResponse
-import com.kuit.ourmenu.data.model.menuFolder.response.SortOrderType
-import com.kuit.ourmenu.data.model.menuFolder.response.TagType
+import com.kuit.ourmenu.data.model.base.type.SortOrderType
+import com.kuit.ourmenu.data.model.base.type.TagType
 import com.kuit.ourmenu.data.repository.MenuFolderRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -13,7 +13,7 @@ class MenuFolderRepository @Inject constructor(
         menuFolderService.getMenuFolders().handleBaseResponse().getOrThrow()
     }
 
-    suspend fun getMenuFolderDetails(
+    suspend fun getMenuFolderDetail(
         menuFolderId: Int,
         sortOrder: String,
     ) = runCatching {
