@@ -3,7 +3,6 @@ package com.kuit.ourmenu.data.repository
 import com.kuit.ourmenu.data.model.base.handleBaseResponse
 import com.kuit.ourmenu.data.model.user.request.ChangeMealTimeRequest
 import com.kuit.ourmenu.data.model.user.request.ChangePasswordRequest
-import com.kuit.ourmenu.data.oauth.KakaoRepository
 import com.kuit.ourmenu.data.service.UserService
 import javax.inject.Inject
 import javax.inject.Singleton

@@ -1,4 +1,4 @@
-package com.kuit.ourmenu.data.oauth
+package com.kuit.ourmenu.data.repository
 
 import android.content.Context
 import android.util.Log
@@ -7,7 +7,6 @@ import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import javax.inject.Singleton

@@ -1,13 +1,11 @@
 package com.kuit.ourmenu.ui.onboarding.viewmodel
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kakao.sdk.user.UserApiClient
 import com.kuit.ourmenu.data.model.auth.SignInType
 import com.kuit.ourmenu.data.repository.AuthRepository
-import com.kuit.ourmenu.data.oauth.KakaoRepository
+import com.kuit.ourmenu.data.repository.KakaoRepository
 import com.kuit.ourmenu.ui.onboarding.model.LandingUiState
 import com.kuit.ourmenu.ui.onboarding.state.KakaoState
 import dagger.hilt.android.lifecycle.HiltViewModel

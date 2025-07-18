@@ -1,13 +1,11 @@
 package com.kuit.ourmenu.data.repository
 
-import android.util.Log
 import com.kuit.ourmenu.data.model.auth.SignInType
 import com.kuit.ourmenu.data.model.auth.request.ConfirmCodeRequest
 import com.kuit.ourmenu.data.model.auth.request.EmailRequest
 import com.kuit.ourmenu.data.model.auth.request.LoginRequest
 import com.kuit.ourmenu.data.model.auth.request.SignupRequest
 import com.kuit.ourmenu.data.model.base.handleBaseResponse
-import com.kuit.ourmenu.data.oauth.KakaoRepository
 import com.kuit.ourmenu.data.service.AuthService
 import com.kuit.ourmenu.utils.auth.TokenManager
 import javax.inject.Inject

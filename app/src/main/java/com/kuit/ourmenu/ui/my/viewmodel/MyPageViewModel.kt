@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kuit.ourmenu.data.model.auth.SignInType
-import com.kuit.ourmenu.data.oauth.KakaoRepository
+import com.kuit.ourmenu.data.repository.KakaoRepository
 import com.kuit.ourmenu.data.repository.AuthRepository
 import com.kuit.ourmenu.data.repository.UserRepository
 import com.kuit.ourmenu.ui.common.model.PasswordState
