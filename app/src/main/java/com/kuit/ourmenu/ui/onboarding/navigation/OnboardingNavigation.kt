@@ -8,6 +8,10 @@ import com.kuit.ourmenu.ui.navigator.Routes
 import com.kuit.ourmenu.ui.onboarding.screen.LandingRoute
 import com.kuit.ourmenu.ui.onboarding.screen.LoginRoute
 
+fun NavController.navigateToLanding() {
+    navigate(Routes.Landing)
+}
+
 fun NavController.navigateToLogin() {
     navigate(Routes.Login)
 }

@@ -25,6 +25,8 @@ sealed interface Routes{
     data object AddMenuInfo: Routes
 
     // Mypage
+    @Serializable
+    data class EditMyMealTime(val selectedTimes: List<Int>): Routes
 
     // Onboarding
     @Serializable

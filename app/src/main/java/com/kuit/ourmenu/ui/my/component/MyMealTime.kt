@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.ui.my.viewmodel.UserMealTime
 import com.kuit.ourmenu.ui.theme.Neutral200
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral900
@@ -30,10 +31,14 @@ import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.OurMenuTypography
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
+import com.kuit.ourmenu.utils.ExtensionUtil.toMealTime
+import kotlin.collections.forEachIndexed
+import kotlin.collections.lastIndex
 
 @Composable
 fun MyMealTime(
-    mealTimes: List<String> = listOf("8:00", "12:00", "19:00"),
+    navigateToEdit: () -> Unit = {},
+    mealTimes: List<UserMealTime> = listOf(),
 ) {
     Column(
         modifier = Modifier
@@ -51,9 +56,7 @@ fun MyMealTime(
         Spacer(Modifier.height(20.dp))
 
         Button(
-            onClick = {
-                // TODO: EditMyMealTimeScreen으로 이동
-            },
+            onClick = { navigateToEdit() },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(42.dp),
@@ -73,14 +76,14 @@ fun MyMealTime(
 }
 
 @Composable
-fun MyMealTimeBox(mealTimes: List<String>) {
+fun MyMealTimeBox(mealTimes: List<UserMealTime>) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 16.dp)
             .clip(RoundedCornerShape(12.dp))
             .background(NeutralWhite)
-            .padding(horizontal = 16.dp, vertical = 12.dp)
+            .padding(horizontal = 16.dp, vertical = 2.dp)
     ) {
         mealTimes.forEachIndexed { index, time ->
             Row(
@@ -92,11 +95,11 @@ fun MyMealTimeBox(mealTimes: List<String>) {
                 Icon(
                     painter = painterResource(R.drawable.ic_clock),
                     contentDescription = null,
-                    tint = Color.Unspecified,
+                    tint = if (time.isAfter) Primary500Main else Color.Unspecified,
                     modifier = Modifier.padding(end = 16.dp)
                 )
                 Text(
-                    text = time,
+                    text = "${time.mealTime}:00",
                     style = OurMenuTypography().pretendard_600_18,
                     color = Neutral900
                 )
@@ -113,5 +116,11 @@ fun MyMealTimeBox(mealTimes: List<String>) {
 @Preview(showBackground = true)
 @Composable
 private fun MyMealTimePreview() {
-    MyMealTime()
+    MyMealTime(
+        mealTimes = listOf(
+            UserMealTime(mealTime = 8, isAfter = true),
+            UserMealTime(mealTime = 12, isAfter = true),
+            UserMealTime(mealTime = 18, isAfter = false)
+        )
+    )
 }

@@ -1,6 +1,7 @@
 package com.kuit.ourmenu.ui.signup.uistate
 
-import com.kuit.ourmenu.ui.signup.model.PasswordState
+import com.kuit.ourmenu.ui.common.model.MealTime
+import com.kuit.ourmenu.ui.common.model.PasswordState
 import com.kuit.ourmenu.ui.signup.model.SignupState
 
 data class SignupUiState(
@@ -11,9 +12,9 @@ data class SignupUiState(
     val passwordVisible: Boolean = false,
     val codes: List<String> = listOf("", "", "", "", "", ""),
     val mealTimes: List<MealTime> = List(18) {
-        MealTime(mealTime = "${it + 6}:00")
+        MealTime(mealTime = it + 6)
     },
-    val selectedTimes: List<String> = emptyList(),
+    val selectedTimes: List<Int> = emptyList(),
     val emailState: SignupState = SignupState.Default,
     val verifyState: SignupState = SignupState.Default,
     val passwordState: PasswordState = PasswordState.Default,
@@ -21,7 +22,3 @@ data class SignupUiState(
     val error: String = ""
 )
 
-data class MealTime(
-    val mealTime: String,
-    var selected: Boolean = false
-)

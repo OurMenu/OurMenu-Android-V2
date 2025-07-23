@@ -8,7 +8,7 @@ data class SignupRequest(
     @SerialName("email")
     val email: String?,
     @SerialName("mealTime")
-    val mealTime: List<Int>,
+    val mealTime: List<String>,
     @SerialName("password")
     val password: String?,
     @SerialName("signInType")
