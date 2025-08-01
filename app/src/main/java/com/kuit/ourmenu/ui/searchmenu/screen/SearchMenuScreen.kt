@@ -181,8 +181,10 @@ fun SearchMenuScreen(
             } else {
                 SearchHistoryList(
                     historyList = searchHistory,
-                    onClick = {
+                    onClick = { menuId ->
                         // 크롤링 기록 아이템 클릭시 동작
+                        viewModel.getMapMenuDetail(menuId)
+                        Log.d("SearchMenuScreen", "검색 기록 아이템 클릭: $menuId")
                         showSearchBackground = false
                         showBottomSheet = true
                     }

@@ -33,7 +33,7 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 fun SearchHistoryList(
     modifier: Modifier = Modifier,
     historyList: List<MapSearchHistoryResponse>?,
-    onClick: () -> Unit = {},
+    onClick: (Long) -> Unit = {},
 ) {
     val lazyListState = rememberLazyListState()
 
@@ -99,13 +99,13 @@ fun SearchHistoryList(
 fun SearchHistoryItem(
     modifier: Modifier = Modifier,
     historyData: MapSearchHistoryResponse,
-    onClick: () -> Unit
+    onClick: (Long) -> Unit
 ) {
 
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
+            .clickable(onClick = { onClick(historyData.menuId) })
             .padding(vertical = 20.dp, horizontal = 28.dp)
     ) {
         Text(
