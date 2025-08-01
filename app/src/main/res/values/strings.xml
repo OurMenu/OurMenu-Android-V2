@@ -108,6 +108,9 @@
     <string name="taste">맛</string>
     <string name="occasion">상황</string>
 
+    <string name="delete_menu_folder_modal_title">정말로 삭제하시겠어요?</string>
+    <string name="delete_menu_folder_modal_content">삭제하면 복구가 어려울 수 있어요.\n다시 한 번 확인해 주세요.</string>
+
     <!--my page-->
     <string name="now_meal_time">현재 설정하신 식사 시간입니다!</string>
     <string name="change_meal_time">식사 시간 수정하기</string>

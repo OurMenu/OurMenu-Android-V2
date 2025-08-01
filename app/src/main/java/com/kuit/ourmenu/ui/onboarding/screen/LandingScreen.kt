@@ -63,7 +63,7 @@ fun LandingRoute(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current as Activity
-//    LaunchedEffect(Unit) { navigateToHome() }
+    LaunchedEffect(Unit) { navigateToHome() }
 
     LaunchedEffect(uiState.kakaoState) {
         Log.d("KakaoModule", uiState.kakaoState.toString())
