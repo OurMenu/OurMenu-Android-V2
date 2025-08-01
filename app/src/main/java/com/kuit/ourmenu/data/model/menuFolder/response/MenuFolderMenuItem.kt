@@ -1,7 +1,7 @@
 package com.kuit.ourmenu.data.model.menuFolder.response
 
 interface MenuFolderMenuItem {
-    val menuId: Int
+    val menuId: Long
     val menuTitle: String
     val storeTitle: String
     val storeAddress: String

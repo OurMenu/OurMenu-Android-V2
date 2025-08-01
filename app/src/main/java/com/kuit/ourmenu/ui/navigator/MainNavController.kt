@@ -118,7 +118,7 @@ class MainNavController(
     }
 
     // Menu Info
-    fun navigateToMenuInfo(menuId: Int) {
+    fun navigateToMenuInfo(menuId: Long) {
         navController.navigateToMenuInfo(menuId)
     }
 

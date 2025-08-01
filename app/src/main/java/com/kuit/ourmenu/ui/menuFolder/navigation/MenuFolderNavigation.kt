@@ -34,9 +34,9 @@ fun NavController.navigateToMenuInfo(menuId: Long) {
 
 fun NavGraphBuilder.menuFolderNavGraph(
     navigateBack: () -> Unit,
-    navigateToMenuFolderDetail: (Int) -> Unit,
+    navigateToMenuFolderDetail: (Long) -> Unit,
     navigateToMenuFolderAllMenu: () -> Unit,
-    navigateToMenuInfo: (Int) -> Unit,
+    navigateToMenuInfo: (Long) -> Unit,
     navigateToAddMenu: () -> Unit,
 ) {
     composable<MainTabRoute.MenuFolder> {
