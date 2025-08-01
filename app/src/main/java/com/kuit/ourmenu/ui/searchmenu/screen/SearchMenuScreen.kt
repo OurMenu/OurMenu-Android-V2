@@ -20,6 +20,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -41,7 +42,6 @@ import com.kuit.ourmenu.ui.common.map.mapViewWithLifecycle
 import com.kuit.ourmenu.ui.common.topappbar.OurMenuAddButtonTopAppBar
 import com.kuit.ourmenu.ui.searchmenu.component.SearchBottomSheetContent
 import com.kuit.ourmenu.ui.searchmenu.component.SearchHistoryList
-import com.kuit.ourmenu.ui.searchmenu.model.SearchHistoryData
 import com.kuit.ourmenu.ui.searchmenu.viewmodel.SearchMenuViewModel
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.utils.PermissionHandler
@@ -63,6 +63,7 @@ fun SearchMenuScreen(
     var searchActionDone by rememberSaveable { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
     val searchBarFocused by interactionSource.collectIsFocusedAsState()
+    val scope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
     val locationPermissionGranted by viewModel.locationPermissionGranted.collectAsStateWithLifecycle()
@@ -119,10 +120,11 @@ fun SearchMenuScreen(
         if (searchBarFocused) {
             showSearchBackground = true
             showBottomSheet = false
-            
-            // Fetch crawling history when search field is focused
-            launch {
+
+            // 검색 기록 조회
+            scope.launch {
                 viewModel.getSearchHistory()
+                Log.d("SearchMenuScreen", "검색 기록 조회: $searchHistory")
             }
         }
     }
@@ -177,16 +179,8 @@ fun SearchMenuScreen(
                     )
                 }
             } else {
-                val historyDataList = searchHistory?.map { history ->
-                    SearchHistoryData(
-                        menuTitle = history.menuTitle,
-                        storeTitle = history.storeAddress.split(',').firstOrNull() ?: "",
-                        address = history.storeAddress
-                    )
-                } ?: emptyList()
-                
                 SearchHistoryList(
-                    historyList = historyDataList,
+                    historyList = searchHistory,
                     onClick = {
                         // 크롤링 기록 아이템 클릭시 동작
                         showSearchBackground = false
@@ -238,7 +232,7 @@ fun SearchMenuScreen(
                     .align(Alignment.BottomEnd)
                     .padding(bottom = 16.dp, end = 20.dp),
                 onClick = { 
-                    // TODO: 임시로 설정해놓은 카메라 이동
+                    // TODO: 임시로 설정해놓은 카메라 이동, 실제로는 네이버 지도에 해당 가게 검색 결과로 이동
                     viewModel.moveCamera(37.5416, 127.0793)
                 },
             )
