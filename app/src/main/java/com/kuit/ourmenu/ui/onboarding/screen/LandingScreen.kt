@@ -39,9 +39,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.BottomFullWidthButton
-import com.kuit.ourmenu.ui.oauth.KakaoModule.getKakaoLogin
 import com.kuit.ourmenu.ui.onboarding.component.BottomFullWidthBorderButton
-import com.kuit.ourmenu.ui.onboarding.model.LandingUiState
 import com.kuit.ourmenu.ui.onboarding.state.KakaoState
 import com.kuit.ourmenu.ui.onboarding.viewmodel.LandingViewModel
 import com.kuit.ourmenu.ui.theme.Neutral300
@@ -65,6 +63,7 @@ fun LandingRoute(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current as Activity
+//    LaunchedEffect(Unit) { navigateToHome() }
 
     LaunchedEffect(uiState.kakaoState) {
         Log.d("KakaoModule", uiState.kakaoState.toString())
@@ -92,10 +91,7 @@ fun LandingRoute(
         navigateToLogin = navigateToLogin,
         navigateToSignupEmail = navigateToSignupEmail,
         onKakaoLoginClick = {
-            getKakaoLogin(
-                context = context,
-                successLogin = { viewModel.updateKakaoState(KakaoState.Loading) }
-            )
+            viewModel.getKakaoLogin(context = context)
         }
     )
 }

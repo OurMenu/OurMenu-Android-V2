@@ -1,6 +1,7 @@
 package com.kuit.ourmenu.data.repository
 
 import com.kuit.ourmenu.data.model.base.handleBaseResponse
+import com.kuit.ourmenu.data.model.user.request.ChangeMealTimeRequest
 import com.kuit.ourmenu.data.model.user.request.ChangePasswordRequest
 import com.kuit.ourmenu.data.service.UserService
 import javax.inject.Inject
@@ -8,7 +9,8 @@ import javax.inject.Singleton
 
 @Singleton
 class UserRepository @Inject constructor(
-    private val userService: UserService
+    private val userService: UserService,
+    private val kakaoRepository: KakaoRepository
 ) {
 
     suspend fun sendTemporaryPassword(
@@ -27,13 +29,18 @@ class UserRepository @Inject constructor(
     }
 
     suspend fun updateMealTimes(
-        mealTimes: List<Int>
+        newMealTimes: List<String>
     ) = runCatching {
-        userService.updateMealTimes(mealTimes).handleBaseResponse().getOrThrow()
+        userService.updateMealTimes(
+            ChangeMealTimeRequest(newMealTimes)
+        ).handleBaseResponse().getOrThrow()
     }
 
     suspend fun getUserInfo() = runCatching {
         userService.getUserInfo().handleBaseResponse().getOrThrow()
     }
 
+    suspend fun deleteUser() = runCatching {
+        userService.deleteUser().handleBaseResponse().getOrThrow()
+    }
 }

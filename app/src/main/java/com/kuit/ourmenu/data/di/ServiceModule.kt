@@ -6,6 +6,7 @@ import com.kuit.ourmenu.data.service.DummyService
 import com.kuit.ourmenu.data.service.HomeService
 import com.kuit.ourmenu.data.service.MapService
 import com.kuit.ourmenu.data.service.MenuFolderService
+import com.kuit.ourmenu.data.service.MenuInfoService
 import com.kuit.ourmenu.data.service.UserService
 import dagger.Module
 import dagger.Provides
@@ -53,4 +54,8 @@ object ServiceModule {
     fun provideHomeService(retrofit: Retrofit): HomeService =
         retrofit.create(HomeService::class.java)
 
+    @Provides
+    @Singleton
+    fun provideMenuInfoService(retrofit: Retrofit): MenuInfoService =
+        retrofit.create(MenuInfoService::class.java)
 }

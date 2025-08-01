@@ -14,7 +14,7 @@ sealed interface Routes{
 
     // 메뉴
     @Serializable
-    data object MenuInfo: Routes
+    data class MenuInfo(val menuId: Int): Routes
     @Serializable
     data object MenuInfoMap: Routes
 
@@ -25,6 +25,8 @@ sealed interface Routes{
     data object AddMenuInfo: Routes
 
     // Mypage
+    @Serializable
+    data class EditMyMealTime(val selectedTimes: List<Int>): Routes
 
     // Onboarding
     @Serializable

@@ -1,5 +1,7 @@
 package com.kuit.ourmenu.data.model.base
 
+import android.R.id.message
+
 fun <T> BaseResponse<T>.handleBaseResponse(): Result<T?> =
     if (isSuccess) {
         Result.success(response)
@@ -13,10 +15,8 @@ fun <T> BaseResponse<T>.handleBaseResponse(): Result<T?> =
         )
     }
 
-class OurMenuApiFailureException(
+data class OurMenuApiFailureException(
     val status: Int? = null,
-    private val code: String? = null,
+    val code: String? = null,
     override val message: String? = null
-) : Exception(
-    "OurMenu API failure: status = $status, code = $code, message = $message"
-)
+) : Throwable()

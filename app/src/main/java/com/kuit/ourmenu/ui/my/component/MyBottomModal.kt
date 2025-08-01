@@ -15,11 +15,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kuit.ourmenu.R
+import com.kuit.ourmenu.data.model.auth.SignInType
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral700
@@ -29,6 +31,7 @@ import com.kuit.ourmenu.ui.theme.Primary500Main
 
 @Composable
 fun MyBottomModal(
+    signInType: SignInType = SignInType.EMAIL,
     onDismissRequest: () -> Unit,
     onChangePassword: () -> Unit,
     onLogout: () -> Unit,
@@ -44,27 +47,29 @@ fun MyBottomModal(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp)
+                .padding(8.dp)
         ) {
             // 모달 본문
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
                     .background(
                         NeutralWhite,
                         shape = RoundedCornerShape(12.dp)
                     )
             ) {
-                SheetItem(
-                    text = stringResource(R.string.change_password),
-                    textColor = Neutral700,
-                    onClick = {
-                        onDismissRequest()
-                        onChangePassword()
-                    }
-                )
-
-                HorizontalDivider(color = Neutral300)
+                if (signInType == SignInType.EMAIL) {
+                    SheetItem(
+                        text = stringResource(R.string.change_password),
+                        textColor = Neutral700,
+                        onClick = {
+                            onDismissRequest()
+                            onChangePassword()
+                        }
+                    )
+                    HorizontalDivider(color = Neutral300)
+                }
 
                 SheetItem(
                     text = stringResource(R.string.logout),
@@ -91,11 +96,12 @@ fun MyBottomModal(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .clickable(onClick = onDismissRequest)
                     .background(
                         NeutralWhite,
                         shape = RoundedCornerShape(12.dp)
                     )
-                    .clickable(onClick = onDismissRequest)
                     .padding(vertical = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -118,8 +124,8 @@ private fun SheetItem(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 16.dp)
-            .clickable(onClick = onClick),
+            .clickable(onClick = onClick)
+            .padding(vertical = 16.dp),
         contentAlignment = Alignment.Center,
     ) {
         Text(

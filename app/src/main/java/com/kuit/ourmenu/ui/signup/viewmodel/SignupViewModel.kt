@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kuit.ourmenu.data.model.auth.SignInType
 import com.kuit.ourmenu.data.repository.AuthRepository
-import com.kuit.ourmenu.ui.oauth.KakaoModule.getUserEmail
-import com.kuit.ourmenu.ui.signup.model.PasswordState
+import com.kuit.ourmenu.data.repository.KakaoRepository
+import com.kuit.ourmenu.ui.common.model.PasswordState
 import com.kuit.ourmenu.ui.signup.model.SignupState
 import com.kuit.ourmenu.ui.signup.uistate.SignupUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignupViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val kakaoRepository: KakaoRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SignupUiState())
@@ -69,24 +70,24 @@ class SignupViewModel @Inject constructor(
         }
     }
 
-    fun addSelectedTime(index: Int, selectedTime: String) {
+    fun updateSelectedTime(index: Int) {
         _uiState.update {
-            it.copy(
-                selectedTimes = it.selectedTimes.toMutableList() + selectedTime,
-                mealTimes = it.mealTimes.mapIndexed { i, mealTime ->
-                    if (i == index) mealTime.copy(selected = true) else mealTime
-                }
-            )
-        }
-    }
+            val selected = it.mealTimes[index].selected
+            val currentSelectedTimes = it.selectedTimes.toMutableList()
+            val mealTime = it.mealTimes[index].mealTime
 
-    fun removeSelectedTime(index: Int, selectedTime: String) {
-        _uiState.update {
             it.copy(
-                selectedTimes = it.selectedTimes.toMutableList() - selectedTime,
-                mealTimes = it.mealTimes.mapIndexed { i, mealTime ->
-                    if (i == index) mealTime.copy(selected = false) else mealTime
-                }
+                mealTimes = it.mealTimes.toMutableList()
+                    .apply {
+                        this[index].selected = !selected && currentSelectedTimes.size < 4
+                    }.toList(),
+                selectedTimes =
+                    run {
+                        if (!selected && currentSelectedTimes.size < 4) {
+                            currentSelectedTimes.add(mealTime)
+                        } else currentSelectedTimes.remove(mealTime)
+                        currentSelectedTimes.toList()
+                    },
             )
         }
     }
@@ -162,7 +163,9 @@ class SignupViewModel @Inject constructor(
 
             authRepository.signup(
                 email = completeEmail,
-                mealTime = _uiState.value.selectedTimes.map { it.substringBefore(":").toInt() },
+                mealTime = _uiState.value.selectedTimes.sorted().map {
+                    "${it.toString().padStart(2, '0')}:00:00"
+                },
                 password = _uiState.value.password.takeIf { it.isNotEmpty() },
                 signInType = SignInType.EMAIL
             ).fold(
@@ -187,11 +190,13 @@ class SignupViewModel @Inject constructor(
 
     private fun signupWithKakao() {
         viewModelScope.launch {
-            val kakaoEmail = getUserEmail()
+            val kakaoEmail = kakaoRepository.getUserEmail()
 
             authRepository.signup(
                 email = kakaoEmail,
-                mealTime = _uiState.value.selectedTimes.map { it.substringBefore(":").toInt() },
+                mealTime = _uiState.value.selectedTimes.sorted().map {
+                    "${it.toString().padStart(2, '0')}:00:00"
+                },
                 password = _uiState.value.password.takeIf { it.isNotEmpty() },
                 signInType = SignInType.KAKAO
             ).fold(

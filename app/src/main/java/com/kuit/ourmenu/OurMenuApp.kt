@@ -1,12 +1,14 @@
 package com.kuit.ourmenu
 
 import android.app.Application
+import android.util.Log
 import coil3.ImageLoader
 import coil3.PlatformContext
 import coil3.SingletonImageLoader
 import coil3.memory.MemoryCache
 import coil3.util.DebugLogger
 import com.kakao.sdk.common.KakaoSdk
+import com.kakao.sdk.common.util.Utility
 import com.kakao.vectormap.KakaoMapSdk
 import dagger.hilt.android.HiltAndroidApp
 
@@ -16,11 +18,10 @@ class OurMenuApp : Application(), SingletonImageLoader.Factory {
         super.onCreate()
         KakaoSdk.init(this, BuildConfig.KAKAO_APP_KEY)
         KakaoMapSdk.init(this, BuildConfig.KAKAO_APP_KEY)
-        /*
-        * 이 부분을 주석 해제해서 keyHash 값 읽으시면 됩니다.
-        * val keyHash = Utility.getKeyHash(this)
-        * Log.d("KeyHash", keyHash)
-        * */
+        // 이 부분을 주석 해제해서 keyHash 값 읽으시면 됩니다
+        val keyHash = Utility.getKeyHash(this)
+        Log.d("KeyHash", keyHash)
+
 
     }
 

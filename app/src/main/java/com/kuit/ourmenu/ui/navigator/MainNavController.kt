@@ -13,8 +13,11 @@ import com.kuit.ourmenu.ui.menuFolder.navigation.navigateToAddMenu
 import com.kuit.ourmenu.ui.menuFolder.navigation.navigateToMenuFolder
 import com.kuit.ourmenu.ui.menuFolder.navigation.navigateToMenuFolderAllMenu
 import com.kuit.ourmenu.ui.menuFolder.navigation.navigateToMenuFolderDetail
+import com.kuit.ourmenu.ui.menuinfo.navigation.navigateToMenuInfo
+import com.kuit.ourmenu.ui.my.navigation.navigateToEditMyMealTime
 import com.kuit.ourmenu.ui.my.navigation.navigateToMy
 import com.kuit.ourmenu.ui.onboarding.navigation.navigateOnboardingToHome
+import com.kuit.ourmenu.ui.onboarding.navigation.navigateToLanding
 import com.kuit.ourmenu.ui.onboarding.navigation.navigateToLogin
 import com.kuit.ourmenu.ui.searchmenu.navigation.navigateToSearchMenu
 import com.kuit.ourmenu.ui.signup.navigation.navigateToSignupEmail
@@ -59,6 +62,10 @@ class MainNavController(
     }
 
     // Onboarding
+    fun navigateToLanding() {
+        navController.navigateToLanding()
+    }
+
     fun navigateToLogin() {
         navController.navigateToLogin()
     }
@@ -96,12 +103,23 @@ class MainNavController(
         navController.navigateToMenuFolderAllMenu()
     }
 
+    // My
+    fun navigateToEditMyMealTime(selectedTimes: List<Int>) {
+        navController.navigateToEditMyMealTime(selectedTimes)
+    }
+
+    // Add Menu
     fun navigateToAddMenu() {
         navController.navigateToAddMenu()
     }
 
     fun navigateToAddMenuInfo() {
         navController.navigateToAddMenuInfo()
+    }
+
+    // Menu Info
+    fun navigateToMenuInfo(menuId: Int) {
+        navController.navigateToMenuInfo(menuId)
     }
 
     @Composable

@@ -1,6 +1,5 @@
 package com.kuit.ourmenu.data.repository
 
-import android.util.Log
 import com.kuit.ourmenu.data.model.auth.SignInType
 import com.kuit.ourmenu.data.model.auth.request.ConfirmCodeRequest
 import com.kuit.ourmenu.data.model.auth.request.EmailRequest
@@ -15,11 +14,11 @@ import javax.inject.Singleton
 @Singleton
 class AuthRepository @Inject constructor(
     private val authService: AuthService,
-    private val tokenManager: TokenManager
+    private val tokenManager: TokenManager,
 ) {
     suspend fun signup(
         email: String?,
-        mealTime: List<Int>,
+        mealTime: List<String>,
         password: String?,
         signInType: SignInType
     ) = runCatching {

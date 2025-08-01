@@ -23,7 +23,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.common.DisableBottomFullWidthButton
 import com.kuit.ourmenu.ui.common.topappbar.OnboardingTopAppBar
-import com.kuit.ourmenu.ui.signup.component.MealTimeGrid
+import com.kuit.ourmenu.ui.common.MealTimeGrid
 import com.kuit.ourmenu.ui.signup.model.SignupState
 import com.kuit.ourmenu.ui.signup.uistate.SignupUiState
 import com.kuit.ourmenu.ui.signup.viewmodel.SignupViewModel
@@ -57,8 +57,7 @@ fun SignupMealTimeRoute(
         navigateBack = navigateBack,
         uiState = uiState,
         enable = enable.value,
-        addSelectedTime = viewModel::addSelectedTime,
-        removeSelectedTime = viewModel::removeSelectedTime,
+        updateSelectedTime = viewModel::updateSelectedTime,
         signup = viewModel::signup
     )
 
@@ -69,8 +68,7 @@ fun SignupMealTimeScreen(
     navigateBack: () -> Unit,
     uiState: SignupUiState,
     enable: Boolean,
-    addSelectedTime: (Int, String) -> Unit,
-    removeSelectedTime: (Int, String) -> Unit,
+    updateSelectedTime: (Int) -> Unit,
     signup: () -> Unit,
 ) {
     Scaffold(
@@ -110,13 +108,9 @@ fun SignupMealTimeScreen(
                 MealTimeGrid(
                     modifier = Modifier.padding(top = 29.dp),
                     mealTimes = uiState.mealTimes,
-                    selectedTimes = uiState.selectedTimes,
-                    addTime = { index, mealTime ->
-                        addSelectedTime(index, mealTime)
+                    updateSelectedTime = { index ->
+                        updateSelectedTime(index)
                     },
-                    removeTime = { index, mealTime ->
-                        removeSelectedTime(index, mealTime)
-                    }
                 )
             }
 
@@ -145,8 +139,7 @@ private fun SignupMealTimeScreenPreview() {
         navigateBack = {},
         uiState = SignupUiState(),
         enable = true,
-        addSelectedTime = { _, _ -> },
-        removeSelectedTime = { _, _ -> },
-        signup = {}
+        updateSelectedTime = {},
+        signup = { },
     )
 }

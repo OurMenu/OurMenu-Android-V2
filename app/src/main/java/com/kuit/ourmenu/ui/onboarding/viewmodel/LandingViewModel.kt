@@ -1,12 +1,11 @@
 package com.kuit.ourmenu.ui.onboarding.viewmodel
 
-import android.util.Log
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kakao.sdk.user.UserApiClient
 import com.kuit.ourmenu.data.model.auth.SignInType
 import com.kuit.ourmenu.data.repository.AuthRepository
-import com.kuit.ourmenu.ui.oauth.KakaoModule.getUserEmail
+import com.kuit.ourmenu.data.repository.KakaoRepository
 import com.kuit.ourmenu.ui.onboarding.model.LandingUiState
 import com.kuit.ourmenu.ui.onboarding.state.KakaoState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LandingViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val kakaoRepository: KakaoRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LandingUiState())
@@ -28,16 +28,16 @@ class LandingViewModel @Inject constructor(
     private val _error: MutableStateFlow<String?> = MutableStateFlow(null)
     val error = _error.asStateFlow()
 
-    init {
-        // TODO : 디버깅 후 블록 삭제
-        UserApiClient.instance.unlink { error ->
-            if (error != null) {
-                Log.e("KakaoModule", "연결 끊기 실패", error)
-            } else {
-                Log.i("KakaoModule", "연결 끊기 성공. SDK에서 토큰 삭제 됨")
-            }
-        }
-    }
+//    카카오 로그인 테스트용 unlink 함수
+//    init {
+//        UserApiClient.instance.unlink { error ->
+//            if (error != null) {
+//                Log.e("KakaoModule", "연결 끊기 실패", error)
+//            } else {
+//                Log.i("KakaoModule", "연결 끊기 성공. SDK에서 토큰 삭제 됨")
+//            }
+//        }
+//    }
 
     fun updateKakaoState(state: KakaoState) {
         _uiState.update {
@@ -45,9 +45,20 @@ class LandingViewModel @Inject constructor(
         }
     }
 
+    fun getKakaoLogin(
+        context: Context
+    ) {
+        kakaoRepository.getKakaoLogin(
+            context = context,
+            successLogin = {
+                updateKakaoState(KakaoState.Loading)
+            },
+        )
+    }
+
     fun signInWithKakao() {
         viewModelScope.launch {
-            val email = getUserEmail()
+            val email = kakaoRepository.getUserEmail()
             email ?: run {
                 _uiState.update {
                     it.copy(error = "이메일을 가져오는데 실패했습니다.")
@@ -91,7 +102,7 @@ class LandingViewModel @Inject constructor(
     }
 
     private suspend fun checkKakaoEmail(): Boolean {
-        val email = getUserEmail()
+        val email = kakaoRepository.getUserEmail()
 
         authRepository.checkKakaoEmail(email).fold(
             onSuccess = { response ->
