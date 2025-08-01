@@ -106,6 +106,7 @@ class MainNavController(
     // My
     fun navigateToEditMyMealTime(selectedTimes: List<Int>) {
         navController.navigateToEditMyMealTime(selectedTimes)
+    }
 
     // Add Menu
     fun navigateToAddMenu() {
