@@ -78,7 +78,9 @@ fun MenuInfoMapScreen(navController: NavController) {
                     mapX = 127.0,
                     mapY = 37.0
                 )
-            )
+            ){
+
+            }
         },
         sheetPeekHeight = bottomSheetContentHeight,
     ) { innerPaddings ->
