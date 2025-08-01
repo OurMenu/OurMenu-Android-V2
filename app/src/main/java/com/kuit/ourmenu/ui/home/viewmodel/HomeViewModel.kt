@@ -2,6 +2,7 @@ package com.kuit.ourmenu.ui.home.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kuit.ourmenu.data.model.base.OurMenuApiFailureException
 import com.kuit.ourmenu.data.model.home.response.HomeQuestionResponse
 import com.kuit.ourmenu.data.model.home.response.HomeResponse
 import com.kuit.ourmenu.data.repository.HomeRepository
@@ -47,11 +48,11 @@ class HomeViewModel @Inject constructor(
                 .fold(
                     onSuccess = {
                         getHome()
-                        onDialogDismiss()
                     },
                     onFailure = { throwable ->
                         _error.value = throwable.message ?: "답변 제출 중 오류가 발생했습니다."
                         onDialogDismiss()
+                        _isLoading.value = false
                     }
                 )
 
@@ -66,6 +67,8 @@ class HomeViewModel @Inject constructor(
     private fun fetchQuestion() {
         viewModelScope.launch {
             _isLoading.value = true
+            _error.value = null
+
             homeRepository.postHomeQuestion()
                 .fold(
                     onSuccess = { response ->
@@ -73,18 +76,17 @@ class HomeViewModel @Inject constructor(
                         if (response == null) {
                             onDialogDismiss()
                             getHome()
+                        } else {
+                            _isLoading.value = false
                         }
                     },
                     onFailure = { throwable ->
-                        _error.value = throwable.message ?: "질문을 불러오는 중 오류가 발생했습니다."
-                        onDialogDismiss()
-                        getHome()
+                        handleFailure(throwable)
+                        _isLoading.value = false
                     }
                 )
-            _isLoading.value = false
         }
     }
-
     fun getHome() {
         viewModelScope.launch {
             _isLoading.value = true
@@ -96,13 +98,32 @@ class HomeViewModel @Inject constructor(
                         if (response != null) {
                             _home.value = response
                         }
+                        onDialogDismiss()
+                        _isLoading.value = false
                     },
                     onFailure = { throwable ->
-                        _error.value = throwable.message ?: "홈을 불러오는 중 오류가 발생했습니다."
+                        handleFailure(throwable)
+                        _isLoading.value = false
                     }
                 )
+        }
+    }
 
-            _isLoading.value = false
+    private fun handleFailure(throwable: Throwable) {
+        when (throwable) {
+            is OurMenuApiFailureException -> {
+                if (throwable.code == "H400") {
+                    _showDialog.value = true
+                    fetchQuestion()
+                } else {
+                    _error.value = throwable.message ?: "알 수 없는 서버 오류입니다."
+                    onDialogDismiss()
+                }
+            }
+            else -> {
+                _error.value = "네트워크 연결을 확인해주세요."
+                onDialogDismiss()
+            }
         }
     }
 }
