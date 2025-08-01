@@ -34,6 +34,10 @@ class HomeViewModel @Inject constructor(
         fetchQuestion()
     }
 
+    fun refreshQuestion() {
+        fetchQuestion()
+    }
+
     fun selectAnswer(answer: String) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -61,6 +65,7 @@ class HomeViewModel @Inject constructor(
 
     private fun fetchQuestion() {
         viewModelScope.launch {
+            _isLoading.value = true
             homeRepository.postHomeQuestion()
                 .fold(
                     onSuccess = { response ->
@@ -76,6 +81,7 @@ class HomeViewModel @Inject constructor(
                         getHome()
                     }
                 )
+            _isLoading.value = false
         }
     }
 
