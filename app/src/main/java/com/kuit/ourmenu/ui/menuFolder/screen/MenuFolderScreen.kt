@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -28,6 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuit.ourmenu.R
 import com.kuit.ourmenu.ui.menuFolder.component.AddButton
+import com.kuit.ourmenu.ui.menuFolder.component.DeleteMenuFolderModal
 import com.kuit.ourmenu.ui.menuFolder.component.MenuFolderButton
 import com.kuit.ourmenu.ui.menuFolder.component.MenuFolderTopAppBar
 import com.kuit.ourmenu.ui.menuFolder.viewmodel.MenuFolderViewModel
@@ -47,6 +49,8 @@ fun MenuFolderScreen(
 
     val menuFolders by viewModel.menuFolders.collectAsStateWithLifecycle()
     val totalMenuCount by viewModel.menuCount.collectAsStateWithLifecycle()
+    var showDeleteModel by remember { mutableStateOf(false) }
+    var deleteIndex by remember { mutableIntStateOf(-1) }
 
     Log.d("MenuFolderScreen", "menuFolders: $menuFolders")
 
@@ -59,6 +63,20 @@ fun MenuFolderScreen(
             )
         }
     ) { innerPadding ->
+        if (showDeleteModel) {
+            DeleteMenuFolderModal(
+                onDismiss = {
+                    deleteIndex = -1
+                    showDeleteModel = false
+                },
+                onConfirm = {
+                    deleteIndex = -1
+                    viewModel.deleteMenuFolder(deleteIndex)
+                    swipedIndex = -1
+                }
+            )
+        }
+
         LazyColumn(
             modifier = Modifier
                 .padding(innerPadding)
@@ -104,7 +122,8 @@ fun MenuFolderScreen(
                         onNavigateToDetail(folder.menuFolderId)
                     },
                     onDeleteClick = {
-                        viewModel.deleteMenuFolder(folder.menuFolderId)
+                        showDeleteModel = true
+                        deleteIndex = folder.menuFolderId
                     }
                 )
             }
