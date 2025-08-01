@@ -102,6 +102,9 @@ fun MenuFolderScreen(
                     onReset = { if (swipedIndex == index) swipedIndex = -1 },
                     onButtonClick = {
                         onNavigateToDetail(folder.menuFolderId)
+                    },
+                    onDeleteClick = {
+                        viewModel.deleteMenuFolder(folder.menuFolderId)
                     }
                 )
             }

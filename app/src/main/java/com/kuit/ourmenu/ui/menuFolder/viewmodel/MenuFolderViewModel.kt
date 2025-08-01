@@ -52,4 +52,23 @@ class MenuFolderViewModel @Inject constructor(
             _isLoading.value = false
         }
     }
+
+    fun deleteMenuFolder(menuFolderId: Int) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _error.value = null
+
+            menuFolderRepository.deleteMenuFolder(menuFolderId.toLong())
+                .fold(
+                    onSuccess = {
+                        getMenuFolders() // Refresh the list after deletion
+                    },
+                    onFailure = { throwable ->
+                        _error.value = throwable.message ?: "메뉴 폴더 삭제 중 오류가 발생했습니다."
+                    }
+                )
+
+            _isLoading.value = false
+        }
+    }
 }
