@@ -8,6 +8,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,7 +32,7 @@ fun HomeScreen(
     val scrollState = rememberScrollState()
 
     val homeData by viewModel.home.collectAsStateWithLifecycle()
-
+    val questionData by viewModel.questionState.collectAsStateWithLifecycle()
     val showDialog by viewModel.showDialog.collectAsStateWithLifecycle()
 
     val answerImgUrl = homeData.answerImgUrl
@@ -41,16 +42,17 @@ fun HomeScreen(
     val otherRecommendImgUrl = homeData.otherRecommendImgUrl
     val otherRecommendMenus = homeData.otherRecommendMenus
 
-    if (showDialog) {
+    if (showDialog && questionData != null) {
         HomePopUpDialog(
-            onDismissRequest = { viewModel.onDialogDismiss() },
-            onPositiveClick = {
-                // TODO: "좋아!" 버튼 클릭 시 로직 구현
-                viewModel.onDialogDismiss() // 로직 처리 후 다이얼로그 닫기
+            questionData = questionData!!,
+            onAnswerSelected = { selectedAnswer ->
+                viewModel.selectAnswer(selectedAnswer)
             },
-            onNegativeClick = {
-                // TODO: "별로야.." 버튼 클릭 시 로직 구현
-                viewModel.onDialogDismiss() // 로직 처리 후 다이얼로그 닫기
+            onDismissRequest = {
+                viewModel.dismissDialog()
+            },
+            onDiceClick = {
+                viewModel.refreshQuestion()
             }
         )
     }
