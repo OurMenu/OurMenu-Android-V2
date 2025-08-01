@@ -1,11 +1,14 @@
 package com.kuit.ourmenu.data.service
 
 import com.kuit.ourmenu.data.model.base.BaseResponse
+import com.kuit.ourmenu.data.model.menuFolder.request.MenuFolderIndexRequest
 import com.kuit.ourmenu.data.model.menuFolder.response.MenuFolderAllResponse
 import com.kuit.ourmenu.data.model.menuFolder.response.MenuFolderDetailResponse
 import com.kuit.ourmenu.data.model.menuFolder.response.MenuFolderResponse
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -33,4 +36,10 @@ interface MenuFolderService {
     suspend fun deleteMenuFolder(
         @Path("menuFolderId") menuFolderId: Long
     ): BaseResponse<Unit>
+
+    @PATCH("api/menu-folders/{menuFolderId}/index")
+    suspend fun updateMenuFolderIndex(
+        @Path("menuFolderId") menuFolderId: Long,
+        @Body request: MenuFolderIndexRequest
+    ): BaseResponse<MenuFolderDetailResponse>
 }

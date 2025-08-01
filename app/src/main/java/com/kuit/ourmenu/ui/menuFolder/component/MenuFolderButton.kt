@@ -50,6 +50,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun MenuFolderButton(
+    modifier: Modifier = Modifier,
     menuFolder: MenuFolderList,
     isSwiped: Boolean, // 현재 버튼이 스와이프된 상태인지 확인
     onSwipe: () -> Unit, // 새로운 버튼이 스와이프될 때 호출
@@ -74,7 +75,7 @@ fun MenuFolderButton(
     }
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .height(132.dp)
             .fillMaxWidth()
             .pointerInput(Unit) {
@@ -278,6 +279,7 @@ private fun MenuFolderButtonPreview() {
     )
 
     MenuFolderButton(
+        modifier = Modifier,
         menuFolder = dummyMenuFolder,
         false, {}, {})
 }
