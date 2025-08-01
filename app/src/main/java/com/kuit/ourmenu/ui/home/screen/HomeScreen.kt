@@ -49,7 +49,7 @@ fun HomeScreen(
                 viewModel.selectAnswer(selectedAnswer)
             },
             onDismissRequest = {
-                viewModel.dismissDialog()
+                viewModel.onDialogDismiss()
             },
             onDiceClick = {
                 viewModel.refreshQuestion()
