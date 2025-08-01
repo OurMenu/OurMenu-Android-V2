@@ -9,6 +9,8 @@ data class MapMenuDetailResponse(
     val menuId: Int,
     @SerialName("menuTitle")
     val menuTitle: String,
+    @SerialName("storeTitle")
+    val storeTitld: String,
     @SerialName("menuPrice")
     val menuPrice: Int,
     @SerialName("menuPinImgUrl")
@@ -20,11 +22,11 @@ data class MapMenuDetailResponse(
     @SerialName("menuFolderInfo")
     val menuFolderInfo: MenuFolderInfo,
     @SerialName("mapId")
-    val mapId: Int,
+    val mapId: Long,
     @SerialName("mapX")
-    val mapX: Int,
+    val mapX: Double,
     @SerialName("mapY")
-    val mapY: Int,
+    val mapY: Double,
 )
 
 

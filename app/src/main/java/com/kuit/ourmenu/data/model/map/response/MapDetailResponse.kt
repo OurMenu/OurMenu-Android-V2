@@ -11,6 +11,8 @@ data class MapDetailResponse(
     val menuTitle: String,
     @SerialName("menuPrice")
     val menuPrice: Int,
+    @SerialName("storeTitle")
+    val storeTitle: String,
     @SerialName("menuPinImgUrl")
     val menuPinImgUrl: String,
     @SerialName("menuTagImgUrls")
