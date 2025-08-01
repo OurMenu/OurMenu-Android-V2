@@ -40,4 +40,10 @@ class MenuFolderRepository @Inject constructor(
             sortOrder = sortOrder
         ).handleBaseResponse().getOrThrow()
     }
+
+    suspend fun deleteMenuFolder(
+        menuFolderId: Long
+    ) = runCatching {
+        menuFolderService.deleteMenuFolder(menuFolderId).handleBaseResponse().getOrThrow()
+    }
 }

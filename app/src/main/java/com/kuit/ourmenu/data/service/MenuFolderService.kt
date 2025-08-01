@@ -4,6 +4,7 @@ import com.kuit.ourmenu.data.model.base.BaseResponse
 import com.kuit.ourmenu.data.model.menuFolder.response.MenuFolderAllResponse
 import com.kuit.ourmenu.data.model.menuFolder.response.MenuFolderDetailResponse
 import com.kuit.ourmenu.data.model.menuFolder.response.MenuFolderResponse
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -27,4 +28,9 @@ interface MenuFolderService {
         @Query("size") size: Int,
         @Query("sortOrder") sortOrder: String,
     ): BaseResponse<List<MenuFolderAllResponse>>
+
+    @DELETE("api/menu-folders/{menuFolderId}")
+    suspend fun deleteMenuFolder(
+        @Path("menuFolderId") menuFolderId: Long
+    ): BaseResponse<Unit>
 }
