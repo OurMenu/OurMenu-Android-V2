@@ -17,7 +17,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -69,13 +68,13 @@ fun SearchMenuScreen(
     val locationPermissionGranted by viewModel.locationPermissionGranted.collectAsStateWithLifecycle()
 
     // 지도 중심 좌표
-    val currentCenter by viewModel.currentCenter.collectAsState()
+    val currentCenter by viewModel.currentCenter.collectAsStateWithLifecycle()
     
     // 검색기록
-    val searchHistory by viewModel.searchHistory.collectAsState()
+    val searchHistory by viewModel.searchHistory.collectAsStateWithLifecycle()
     
     // 핀 위치에 해당하는 메뉴들
-    val menusOnPin by viewModel.menusOnPin.collectAsState()
+    val menusOnPin by viewModel.menusOnPin.collectAsStateWithLifecycle()
 
     val density = LocalDensity.current
     val singleItemHeight = 300.dp // Fixed height for each item
