@@ -45,7 +45,7 @@ fun MainNavHost(
             navigateToSignupPassword = navController::navigateToSignupPassword,
             navigateToSignupMealTime = navController::navigateToSignupMealTime,
             getSignupViewModel = { navBackStackEntry ->
-                navBackStackEntry.destination.parent?.route?.let {
+                navBackStackEntry.destination.route?.let {
 
                     val parent = remember(navBackStackEntry) {
                         navController.navController.getBackStackEntry(Routes.SignupEmail)
