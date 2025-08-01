@@ -1,6 +1,8 @@
 package com.kuit.ourmenu.ui.common.bottomsheet
 
+import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,12 +40,17 @@ import com.kuit.ourmenu.utils.ExtensionUtil.toWon
 @Composable
 fun MenuInfoBottomSheetContent(
     modifier: Modifier = Modifier,
-    menuInfoData: MapDetailResponse
+    menuInfoData: MapDetailResponse,
+    onClick: (Long) -> Unit
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
+            .clickable {
+                Log.d("MenuInfoBottomSheetContent", "Menu ID: ${menuInfoData.menuId}")
+                onClick(menuInfoData.menuId)
+            }
     ) {
         MenuInfoContent(
             modifier = Modifier
@@ -201,5 +208,7 @@ private fun MenuInfoBottomSheetContentPreview() {
             mapX = 127.0,
             mapY = 37.0
         )
-    )
+    ){
+        // 클릭시 동작
+    }
 }

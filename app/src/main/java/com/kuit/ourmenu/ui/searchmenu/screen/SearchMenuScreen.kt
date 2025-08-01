@@ -52,6 +52,7 @@ import kotlinx.coroutines.launch
 fun SearchMenuScreen(
     modifier: Modifier = Modifier,
     viewModel: SearchMenuViewModel = hiltViewModel(),
+    onNavigateToMenuDetail: (Long) -> Unit
 ) {
 
     val scaffoldState = rememberBottomSheetScaffoldState()
@@ -143,7 +144,11 @@ fun SearchMenuScreen(
         sheetContent = {
             SearchBottomSheetContent(
                 modifier = Modifier.fillMaxWidth(),
-                dataList = menusOnPin ?: emptyList()
+                dataList = menusOnPin ?: emptyList(),
+                onItemClick = { menuId ->
+                    Log.d("SearchMenuScreen", "바텀 시트 메뉴 아이템 클릭: $menuId")
+                    onNavigateToMenuDetail(menuId)
+                }
             )
         },
         sheetContainerColor = NeutralWhite,
@@ -246,5 +251,8 @@ fun SearchMenuScreen(
 @Preview(showBackground = true)
 @Composable
 private fun SearchMenuScreenPreview() {
-    SearchMenuScreen()
+    SearchMenuScreen(
+    ){
+
+    }
 }
