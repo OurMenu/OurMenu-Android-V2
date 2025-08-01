@@ -114,7 +114,7 @@ fun MenuInfoContent(
             )
         }
         Text(
-            text = "응답에 가게명 누락", // TODO: 가게명 처리
+            text = menuInfoData.storeTitle,
             style = ourMenuTypography().pretendard_600_14.copy(
                 lineHeight = 12.sp,
                 color = Neutral500
@@ -187,6 +187,7 @@ private fun MenuInfoBottomSheetContentPreview() {
         menuInfoData = MapDetailResponse(
             menuId = 1,
             menuTitle = "Test Menu",
+            storeTitle = "가게 이름",
             menuPrice = 10000,
             menuPinImgUrl = "pin",
             menuTagImgUrls = listOf("한식", "밥"),

@@ -64,6 +64,7 @@ fun MenuInfoMapScreen(navController: NavController) {
                 menuInfoData = MapDetailResponse(
                     menuId = 1,
                     menuTitle = "Test Menu",
+                    storeTitle = "가게 이름",
                     menuPrice = 10000,
                     menuPinImgUrl = "pin",
                     menuTagImgUrls = listOf("한식", "밥"),
