@@ -2,13 +2,11 @@ package com.kuit.ourmenu.ui.home.component.dialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,13 +26,12 @@ import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
-fun HomePopUpDialog(modifier: Modifier = Modifier) {
-
-    Dialog(
-        onDismissRequest = {
-            // TODO : Dismiss Dialog Event
-        },
-    ) {
+fun HomePopUpDialog(
+    onDismissRequest: () -> Unit,
+    onPositiveClick: () -> Unit,
+    onNegativeClick: () -> Unit
+) {
+    Dialog(onDismissRequest = onDismissRequest) {
         Surface(
             modifier = Modifier
                 .shadow(elevation = 8.dp)
@@ -62,9 +59,7 @@ fun HomePopUpDialog(modifier: Modifier = Modifier) {
                     onDiceClick = {
                         // TODO : Dice Click Event
                     },
-                    onCloseClick = {
-                        // TODO : Close Click Event
-                    }
+                    onCloseClick = onDismissRequest
                 )
                 Text(
                     modifier = Modifier
@@ -97,7 +92,8 @@ fun HomePopUpDialog(modifier: Modifier = Modifier) {
                         .fillMaxWidth()
                         .height(48.dp),
                     buttonText = "좋아!",
-                    containerColor = Primary500Main
+                    containerColor = Primary500Main,
+                    onClick = onPositiveClick
                 )
 
                 DialogBigButton(
@@ -106,7 +102,8 @@ fun HomePopUpDialog(modifier: Modifier = Modifier) {
                         .fillMaxWidth()
                         .height(48.dp),
                     buttonText = "별로야..",
-                    containerColor = Primary500Main
+                    containerColor = Primary500Main,
+                    onClick = onNegativeClick
                 )
             }
         }
@@ -119,5 +116,9 @@ fun HomePopUpDialog(modifier: Modifier = Modifier) {
 )
 @Composable
 private fun HomePopUpDialogPreview() {
-    HomePopUpDialog()
+    HomePopUpDialog(
+        onDismissRequest = {},
+        onPositiveClick = {},
+        onNegativeClick = {}
+    )
 }

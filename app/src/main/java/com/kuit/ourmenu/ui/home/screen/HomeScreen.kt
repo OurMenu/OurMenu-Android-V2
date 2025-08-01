@@ -17,6 +17,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.kuit.ourmenu.ui.common.topappbar.OurMenuAddButtonTopAppBar
+import com.kuit.ourmenu.ui.home.component.dialog.HomePopUpDialog
 import com.kuit.ourmenu.ui.home.component.recommendation.main.HomeMainRecommendation
 import com.kuit.ourmenu.ui.home.component.recommendation.sub.HomeSubRecommendation
 import com.kuit.ourmenu.ui.home.viewmodel.HomeViewModel
@@ -31,12 +32,28 @@ fun HomeScreen(
 
     val homeData by viewModel.home.collectAsStateWithLifecycle()
 
+    val showDialog by viewModel.showDialog.collectAsStateWithLifecycle()
+
     val answerImgUrl = homeData.answerImgUrl
     val answerRecommendMenus = homeData.answerRecommendMenus
     val tagRecommendImgUrl = homeData.tagRecommendImgUrl
     val tagRecommendMenus = homeData.tagRecommendMenus
     val otherRecommendImgUrl = homeData.otherRecommendImgUrl
     val otherRecommendMenus = homeData.otherRecommendMenus
+
+    if (showDialog) {
+        HomePopUpDialog(
+            onDismissRequest = { viewModel.onDialogDismiss() },
+            onPositiveClick = {
+                // TODO: "좋아!" 버튼 클릭 시 로직 구현
+                viewModel.onDialogDismiss() // 로직 처리 후 다이얼로그 닫기
+            },
+            onNegativeClick = {
+                // TODO: "별로야.." 버튼 클릭 시 로직 구현
+                viewModel.onDialogDismiss() // 로직 처리 후 다이얼로그 닫기
+            }
+        )
+    }
 
     Scaffold(
         topBar = {

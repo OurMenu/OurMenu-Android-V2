@@ -18,6 +18,9 @@ class HomeViewModel @Inject constructor(
     private val _home = MutableStateFlow(HomeResponse())
     val home = _home.asStateFlow()
 
+    private val _showDialog = MutableStateFlow(true)
+    val showDialog = _showDialog.asStateFlow()
+
     private val _error: MutableStateFlow<String?> = MutableStateFlow(null)
     val error = _error.asStateFlow()
 
@@ -26,6 +29,10 @@ class HomeViewModel @Inject constructor(
 
     init {
         getHome()
+    }
+
+    fun onDialogDismiss() {
+        _showDialog.value = false
     }
 
     fun getHome() {
