@@ -2,6 +2,7 @@ package com.kuit.ourmenu.ui.home.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kuit.ourmenu.data.model.home.response.HomeQuestionResponse
 import com.kuit.ourmenu.data.model.home.response.HomeResponse
 import com.kuit.ourmenu.data.repository.HomeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,6 +15,8 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val homeRepository: HomeRepository
 ): ViewModel() {
+    private val _questionState = MutableStateFlow<HomeQuestionResponse?>(null)
+    val questionState = _questionState.asStateFlow()
 
     private val _home = MutableStateFlow(HomeResponse())
     val home = _home.asStateFlow()
@@ -28,11 +31,52 @@ class HomeViewModel @Inject constructor(
     val isLoading = _isLoading.asStateFlow()
 
     init {
-        getHome()
+        fetchQuestion()
+    }
+
+    fun selectAnswer(answer: String) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _error.value = null
+
+            homeRepository.postHomeAnswer(answer)
+                .fold(
+                    onSuccess = {
+                        getHome()
+                        onDialogDismiss()
+                    },
+                    onFailure = { throwable ->
+                        _error.value = throwable.message ?: "답변 제출 중 오류가 발생했습니다."
+                        onDialogDismiss()
+                    }
+                )
+
+            _isLoading.value = false
+        }
     }
 
     fun onDialogDismiss() {
         _showDialog.value = false
+    }
+
+    private fun fetchQuestion() {
+        viewModelScope.launch {
+            homeRepository.postHomeQuestion()
+                .fold(
+                    onSuccess = { response ->
+                        _questionState.value = response
+                        if (response == null) {
+                            onDialogDismiss()
+                            getHome()
+                        }
+                    },
+                    onFailure = { throwable ->
+                        _error.value = throwable.message ?: "질문을 불러오는 중 오류가 발생했습니다."
+                        onDialogDismiss()
+                        getHome()
+                    }
+                )
+        }
     }
 
     fun getHome() {
