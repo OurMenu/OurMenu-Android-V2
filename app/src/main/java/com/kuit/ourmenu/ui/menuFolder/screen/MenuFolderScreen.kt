@@ -123,8 +123,9 @@ fun MenuFolderScreen(
                         onDragStart = { offset ->
                             swipedIndex = -1
                             dragAndDropListState.onDragStart(offset)
-                            dragStartFolderId =
-                                menuFolders[dragAndDropListState.initialIndex ?: 0].menuFolderId
+                            dragStartFolderId = dragAndDropListState.initialIndex?.let { index ->
+                                menuFolders.getOrNull(index)?.menuFolderId ?: -1
+                            } ?: -1
                         },
                         onDragEnd = {
                             viewModel.patchMenuFolders(

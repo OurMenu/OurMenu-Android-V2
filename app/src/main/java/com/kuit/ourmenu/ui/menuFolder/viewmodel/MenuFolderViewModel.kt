@@ -86,8 +86,6 @@ class MenuFolderViewModel @Inject constructor(
 
         val toIndex = to.coerceAtMost(_menuFolders.value.size - 1)
 
-        val index = _menuFolders.value[toIndex].index
-
         viewModelScope.launch {
             _isLoading.value = true
             _error.value = null
