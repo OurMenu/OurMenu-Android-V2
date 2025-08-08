@@ -32,6 +32,15 @@ android {
 
     }
 
+    signingConfigs {
+        getByName("debug") {
+            keyAlias = properties["SIGNED_KEY_ALIAS"] as String?
+            keyPassword = properties["SIGNED_KEY_PASSWORD"] as String?
+            storeFile = properties["SIGNED_STORE_FILE"]?.let { file(it) }
+            storePassword = properties["SIGNED_STORE_PASSWORD"] as String?
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false

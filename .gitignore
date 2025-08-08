@@ -168,3 +168,4 @@ fabric.properties
 ### AndroidStudio Patch ###
 
 !/gradle/wrapper/gradle-wrapper.jar
+/app/debug/output-metadata.json
