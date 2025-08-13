@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.firebase.crashlytics)
     id("com.google.dagger.hilt.android") // Hilt 플러그인 추가
     kotlin("kapt") // Hilt를 위한 kapt 추가
 }
@@ -30,6 +31,24 @@ android {
         manifestPlaceholders["KAKAO_APP_KEY"] = properties["KAKAO_APP_KEY"].toString()
         buildConfigField("String", "KAKAO_APP_KEY", properties["KAKAO_APP_KEY"].toString())
 
+    }
+
+    signingConfigs {
+        val debugKeystore = rootProject.file("debug.keystore")
+        if (debugKeystore.exists()) {
+            getByName("debug") {
+                storeFile = debugKeystore
+                storePassword = "android"
+                keyAlias = "androiddebugkey"
+                keyPassword = "android"
+            }
+        }
+        getByName("debug") {
+            storeFile = file("$rootDir/debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
     }
 
     buildTypes {
@@ -98,12 +117,17 @@ dependencies {
     // Kakao SDK
     implementation("com.kakao.sdk:v2-all:2.20.6")
     implementation("com.kakao.sdk:v2-user:2.20.6") // 카카오 로그인 API 모듈
-    implementation ("com.kakao.maps.open:android:2.12.8") // 카카오 맵 API
+    implementation("com.kakao.maps.open:android:2.12.8") // 카카오 맵 API
 
     // coil
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
     implementation(libs.coil.svg)
+
+    // Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlytics.ndk)
+    implementation(libs.firebase.analytics)
 }
 
 // Hilt를 사용할 때 필요한 Annotation Processor
