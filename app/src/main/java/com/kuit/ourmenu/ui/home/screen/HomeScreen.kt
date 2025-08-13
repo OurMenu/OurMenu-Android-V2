@@ -29,6 +29,7 @@ import com.kuit.ourmenu.ui.home.viewmodel.HomeViewModel
 fun HomeScreen(
     padding: PaddingValues,
     onNavigateToMenuInfo: (Int) -> Unit = {},
+    onNavigateToAddMenu: () -> Unit = {},
     viewModel: HomeViewModel = hiltViewModel()
 ) {
 
@@ -62,7 +63,9 @@ fun HomeScreen(
 
     Scaffold(
         topBar = {
-            OurMenuAddButtonTopAppBar()
+            OurMenuAddButtonTopAppBar(
+                onAddMenuClick = onNavigateToAddMenu
+            )
         }
     ) {
         Column(

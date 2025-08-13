@@ -14,12 +14,14 @@ fun NavController.navigateToHome(navOptions: NavOptions) {
 
 fun NavGraphBuilder.homeNavGraph(
     padding: PaddingValues,
-    navigateToMenuInfo: (Int) -> Unit
+    navigateToMenuInfo: (Int) -> Unit,
+    navigateToAddMenu: () -> Unit,
 ) {
     composable<MainTabRoute.Home> {
         HomeScreen(
             padding = padding,
-            onNavigateToMenuInfo = navigateToMenuInfo
+            onNavigateToMenuInfo = navigateToMenuInfo,
+            onNavigateToAddMenu = navigateToAddMenu,
         )
     }
 }
