@@ -45,8 +45,8 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
 fun MenuFolderDetailScreen(
-    menuFolderId: Int,
-    onNavigateToMenuInfo: (Int) -> Unit,
+    menuFolderId: Long,
+    onNavigateToMenuInfo: (Long) -> Unit,
 //    onNavigateToMap: () -> Unit, // TODO: Map으로 화면 이동 구현
     onNavigateToAddMenu: () -> Unit,
     onNavigateBack: () -> Unit,

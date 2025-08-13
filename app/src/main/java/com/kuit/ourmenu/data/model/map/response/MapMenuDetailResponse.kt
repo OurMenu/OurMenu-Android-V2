@@ -6,9 +6,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MapMenuDetailResponse(
     @SerialName("menuId")
-    val menuId: Int,
+    val menuId: Long,
     @SerialName("menuTitle")
     val menuTitle: String,
+    @SerialName("storeTitle")
+    val storeTitle: String,
     @SerialName("menuPrice")
     val menuPrice: Int,
     @SerialName("menuPinImgUrl")
@@ -20,11 +22,11 @@ data class MapMenuDetailResponse(
     @SerialName("menuFolderInfo")
     val menuFolderInfo: MenuFolderInfo,
     @SerialName("mapId")
-    val mapId: Int,
+    val mapId: Long,
     @SerialName("mapX")
-    val mapX: Int,
+    val mapX: Double,
     @SerialName("mapY")
-    val mapY: Int,
+    val mapY: Double,
 )
 
 

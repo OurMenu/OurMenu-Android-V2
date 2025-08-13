@@ -17,7 +17,7 @@ class MenuInfoViewModel @Inject constructor(
     private val _menuInfo = MutableStateFlow(MenuInfoResponse())
     val menuInfo = _menuInfo.asStateFlow()
 
-    private val _menuId = MutableStateFlow(0)
+    private val _menuId = MutableStateFlow<Long>(0)
     val menuId = _menuId.asStateFlow()
 
     private val _error: MutableStateFlow<String?> = MutableStateFlow(null)
@@ -27,7 +27,7 @@ class MenuInfoViewModel @Inject constructor(
     val isLoading = _isLoading.asStateFlow()
 
     fun getMenuInfo(
-        menuId: Int
+        menuId: Long
     ) {
         _menuId.value = menuId
 

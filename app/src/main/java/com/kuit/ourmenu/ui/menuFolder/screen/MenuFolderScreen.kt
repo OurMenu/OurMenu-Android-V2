@@ -53,7 +53,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun MenuFolderScreen(
     padding: PaddingValues,
-    onNavigateToDetail: (Int) -> Unit,
+    onNavigateToDetail: (Long) -> Unit,
     onNavigateToAllMenu: () -> Unit,
     onNavigateToAddMenu: () -> Unit,
     viewModel: MenuFolderViewModel = hiltViewModel()

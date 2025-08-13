@@ -15,7 +15,7 @@ class MenuFolderRepository @Inject constructor(
     }
 
     suspend fun getMenuFolderDetail(
-        menuFolderId: Int,
+        menuFolderId: Long,
         sortOrder: String,
     ) = runCatching {
         menuFolderService.getMenuFolderDetails(

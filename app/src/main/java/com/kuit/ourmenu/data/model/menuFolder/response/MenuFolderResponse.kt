@@ -10,7 +10,7 @@ data class MenuFolderResponse(
 
 @Serializable
 data class MenuFolderList(
-    val menuFolderId: Int,
+    val menuFolderId: Long,
     val menuFolderTitle: String,
     val menuFolderImgUrl: String,
     val menuFolderIconImgUrl: String,

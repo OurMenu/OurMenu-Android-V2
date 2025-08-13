@@ -23,16 +23,15 @@ import com.kuit.ourmenu.ui.menuinfo.component.info.MenuInfoChipContent
 import com.kuit.ourmenu.ui.menuinfo.component.info.MenuInfoContent
 import com.kuit.ourmenu.ui.menuinfo.component.info.MenuInfoImagePager
 import com.kuit.ourmenu.ui.menuinfo.component.info.MenuInfoMapButton
-import com.kuit.ourmenu.ui.menuinfo.dummy.MenuInfoDummyData
 import com.kuit.ourmenu.ui.menuinfo.viewmodel.MenuInfoViewModel
 import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 
 @Composable
 fun MenuInfoDefaultScreen(
-    menuId: Int,
+    menuId: Long,
     onNavigateBack: () -> Unit,
-    onNavigateToMenuFolderDetail: (Int) -> Unit,
+    onNavigateToMenuFolderDetail: (Long) -> Unit,
 //    onNavigateToMap: () -> Unit,
     viewModel: MenuInfoViewModel = hiltViewModel()
 ) {
@@ -73,15 +72,15 @@ fun MenuInfoDefaultScreen(
                     )
 
                     MenuInfoChipContent(
-                        onNavigateToMenuFolderDetail = onNavigateToMenuFolderDetail,
+                        // TODO: 메뉴 폴더 정보에 따라 변경 필요, 여러개인 경우 각 폴더에 대한 이동 구현
+//                        onNavigateToMenuFolderDetail = onNavigateToMenuFolderDetail(menuInfo.menuFolders.),
                         menuInfoData = menuInfo
                     )
 
                     MenuInfoAdditionalContent(
                         address = menuInfo.storeAddress,
-                        // TODO: 메뉴 정보에 따라 변경 필요
-                        memoTitle = MenuInfoDummyData.dummyData.memoTitle,
-                        memoContent = MenuInfoDummyData.dummyData.memoContent
+                        memoTitle = menuInfo.menuMemoTitle,
+                        memoContent = menuInfo.menuMemoContent
                     )
                 }
                 MenuInfoMapButton(
@@ -105,4 +104,11 @@ private fun MenuInfoDefaultPreview() {
 //    val navController = rememberNavController()
 //
 //    MenuInfoDefaultScreen(navController)
+    val viewModel: MenuInfoViewModel = hiltViewModel()
+    MenuInfoDefaultScreen(
+        menuId = 1,
+        onNavigateBack = {},
+        onNavigateToMenuFolderDetail = {},
+        viewModel = viewModel
+    )
 }

@@ -95,7 +95,7 @@ class MainNavController(
     }
 
     // Menu Folder
-    fun navigateToMenuFolderDetail(menuFolderId: Int) {
+    fun navigateToMenuFolderDetail(menuFolderId: Long) {
         navController.navigateToMenuFolderDetail(menuFolderId)
     }
 
@@ -118,7 +118,7 @@ class MainNavController(
     }
 
     // Menu Info
-    fun navigateToMenuInfo(menuId: Int) {
+    fun navigateToMenuInfo(menuId: Long) {
         navController.navigateToMenuInfo(menuId)
     }
 

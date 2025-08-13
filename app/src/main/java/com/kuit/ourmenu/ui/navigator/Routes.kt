@@ -8,13 +8,13 @@ sealed interface Routes{
     @Serializable
     data object MenuFolder: Routes
     @Serializable
-    data class MenuFolderDetail(val menuFolderId: Int): Routes
+    data class MenuFolderDetail(val menuFolderId: Long): Routes
     @Serializable
     data object MenuFolderAllMenu: Routes
 
     // 메뉴
     @Serializable
-    data class MenuInfo(val menuId: Int): Routes
+    data class MenuInfo(val menuId: Long): Routes
     @Serializable
     data object MenuInfoMap: Routes
 
