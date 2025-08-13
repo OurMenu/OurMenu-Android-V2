@@ -14,7 +14,7 @@ fun HomeMainRecommendation(
     modifier: Modifier = Modifier,
     imgUrl: String = "",
     homeMainDataList: List<RecommendMenuList>,
-    onItemClick: (Int) -> Unit
+    onItemClick: (Long) -> Unit
 ) {
     Column(
         modifier = modifier

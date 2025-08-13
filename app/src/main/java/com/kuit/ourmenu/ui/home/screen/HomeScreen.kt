@@ -28,7 +28,7 @@ import com.kuit.ourmenu.ui.home.viewmodel.HomeViewModel
 @Composable
 fun HomeScreen(
     padding: PaddingValues,
-    onNavigateToMenuInfo: (Int) -> Unit = {},
+    onNavigateToMenuInfo: (Long) -> Unit = {},
     onNavigateToAddMenu: () -> Unit = {},
     viewModel: HomeViewModel = hiltViewModel()
 ) {

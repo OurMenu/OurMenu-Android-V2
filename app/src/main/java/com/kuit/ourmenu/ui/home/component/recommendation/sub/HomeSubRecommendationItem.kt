@@ -28,7 +28,7 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 @Composable
 fun HomeSubRecommendationItem(
     recommendData: RecommendMenuList,
-    onItemClick: (Int) -> Unit
+    onItemClick: (Long) -> Unit
 ) {
     Column(
         modifier = Modifier

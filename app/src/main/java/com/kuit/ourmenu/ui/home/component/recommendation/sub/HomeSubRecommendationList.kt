@@ -13,7 +13,7 @@ fun HomeSubRecommendationList(
     modifier: Modifier = Modifier,
     state: LazyListState,
     homeSubDataList: List<RecommendMenuList>,
-    onItemClick: (Int) -> Unit
+    onItemClick: (Long) -> Unit
 ) {
     LazyRow(
         modifier = modifier,

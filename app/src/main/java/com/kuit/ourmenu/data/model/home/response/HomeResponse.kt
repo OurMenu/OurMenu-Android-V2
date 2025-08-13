@@ -14,7 +14,7 @@ data class HomeResponse(
 
 @Serializable
 data class RecommendMenuList(
-    val menuId: Int = 0,
+    val menuId: Long = 0,
     val menuTitle: String = "",
     val storeName: String = "",
     val menuImgUrl: String = "",

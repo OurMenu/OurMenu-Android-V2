@@ -29,7 +29,7 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 fun HomeMainRecommendationItem(
     modifier: Modifier = Modifier,
     recommendData: RecommendMenuList,
-    onItemClick: (Int) -> Unit
+    onItemClick: (Long) -> Unit
 ) {
     Box(
         modifier = modifier.clickable{

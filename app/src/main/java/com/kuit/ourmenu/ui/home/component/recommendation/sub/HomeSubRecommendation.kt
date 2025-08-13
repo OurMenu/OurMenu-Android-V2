@@ -16,7 +16,7 @@ fun HomeSubRecommendation(
     modifier: Modifier = Modifier,
     imgUrl: String = "",
     homeSubDataList: List<RecommendMenuList>,
-    onItemClick: (Int) -> Unit
+    onItemClick: (Long) -> Unit
 ) {
     val state = rememberLazyListState() // TODO : hoisting
     Column(modifier = modifier) {

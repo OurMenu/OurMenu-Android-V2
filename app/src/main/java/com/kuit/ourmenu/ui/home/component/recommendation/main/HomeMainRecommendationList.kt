@@ -19,7 +19,7 @@ import com.kuit.ourmenu.data.model.home.response.RecommendMenuList
 fun HomeMainRecommendationList(
     modifier: Modifier = Modifier,
     homeMainDataList: List<RecommendMenuList>,
-    onItemClick: (Int) -> Unit
+    onItemClick: (Long) -> Unit
 ) {
     // 리스트가 비어있으면 아무것도 표시하지 않음
     if (homeMainDataList.isEmpty()) return
