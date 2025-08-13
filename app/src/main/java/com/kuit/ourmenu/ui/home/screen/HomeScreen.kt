@@ -1,6 +1,8 @@
 package com.kuit.ourmenu.ui.home.screen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -8,7 +10,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,8 +24,10 @@ import com.kuit.ourmenu.ui.home.component.recommendation.main.HomeMainRecommenda
 import com.kuit.ourmenu.ui.home.component.recommendation.sub.HomeSubRecommendation
 import com.kuit.ourmenu.ui.home.viewmodel.HomeViewModel
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(
+    padding: PaddingValues,
     // TODO: navagation 연결
     viewModel: HomeViewModel = hiltViewModel()
 ) {
@@ -61,10 +64,11 @@ fun HomeScreen(
         topBar = {
             OurMenuAddButtonTopAppBar()
         }
-    ) { innerPadding ->
+    ) {
         Column(
             modifier = Modifier
-                .padding(innerPadding)
+                .padding(padding)
+//                .padding(innerPadding)
                 .verticalScroll(scrollState),
             horizontalAlignment = Alignment.Start
         ) {
@@ -105,5 +109,8 @@ fun HomeScreen(
 @Composable
 private fun HomeScreenPreview() {
     val navController = rememberNavController()
-    HomeScreen()
+    HomeScreen(
+        padding = PaddingValues(0.dp),
+//        viewModel = hiltViewModel(navController = navController)
+    )
 }

@@ -18,6 +18,7 @@ fun NavGraphBuilder.homeNavGraph(
 ) {
     composable<MainTabRoute.Home> {
         HomeScreen(
+            padding = padding,
             // navigate 이벤트 + 기타 이벤트
         )
     }
