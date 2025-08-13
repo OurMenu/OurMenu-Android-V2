@@ -348,4 +348,24 @@ class SearchMenuViewModel @Inject constructor(
         // 첫 번째 검색 결과로 카메라 이동 TODO: 현재 위치랑 가까운 결과로 이동
         myMenus.value?.get(0)?.let { moveCamera(it.mapY, it.mapX) }
     }
+
+    // 네이버맵 이동을 위한 가게명 조회
+    suspend fun getWebSearchQuery(mapId: Long): String {
+        val baseUrl = "https://map.naver.com/p/search/"
+        val response = mapRepository.getMapDetail(mapId)
+        return response.fold(
+            onSuccess = { menuList ->
+                if (menuList.isNullOrEmpty()) {
+                    Log.d("SearchMenuViewModel", "메뉴 상세 조회 실패: 메뉴가 없습니다.")
+                    ""
+                } else {
+                    baseUrl + menuList.first().storeTitle
+                }
+            },
+            onFailure = { 
+                Log.d("SearchMenuViewModel", "메뉴 상세 조회 실패: ${it.message}")
+                ""
+            }
+        )
+    }
 }
