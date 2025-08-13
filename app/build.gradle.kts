@@ -34,6 +34,15 @@ android {
     }
 
     signingConfigs {
+        val debugKeystore = rootProject.file("debug.keystore")
+        if (debugKeystore.exists()) {
+            getByName("debug") {
+                storeFile = debugKeystore
+                storePassword = "android"
+                keyAlias = "androiddebugkey"
+                keyPassword = "android"
+            }
+        }
         getByName("debug") {
             storeFile = file("$rootDir/debug.keystore")
             storePassword = "android"
@@ -108,7 +117,7 @@ dependencies {
     // Kakao SDK
     implementation("com.kakao.sdk:v2-all:2.20.6")
     implementation("com.kakao.sdk:v2-user:2.20.6") // 카카오 로그인 API 모듈
-    implementation ("com.kakao.maps.open:android:2.12.8") // 카카오 맵 API
+    implementation("com.kakao.maps.open:android:2.12.8") // 카카오 맵 API
 
     // coil
     implementation(libs.coil.compose)

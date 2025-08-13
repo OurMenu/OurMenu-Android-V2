@@ -43,5 +43,5 @@ jobs: # CI에서 수행할 작업을 정의한다.
 #          ./gradlew detekt
 
       - name: Run build
-        run: ./gradlew buildDebug --stacktrace
+        run: ./gradlew assembleDebug --stacktrace
 
