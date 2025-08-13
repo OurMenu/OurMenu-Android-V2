@@ -10,7 +10,7 @@ class MenuInfoRepository @Inject constructor(
     private val menuInfoService: MenuInfoService
 ) {
     suspend fun getMenuInfo(
-        menuId: Int
+        menuId: Long
     ) = runCatching {
         menuInfoService.getMenuInfo(menuId).handleBaseResponse().getOrThrow()
     }

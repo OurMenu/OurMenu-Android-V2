@@ -7,13 +7,13 @@ import androidx.navigation.toRoute
 import com.kuit.ourmenu.ui.menuinfo.screen.MenuInfoDefaultScreen
 import com.kuit.ourmenu.ui.navigator.Routes
 
-fun NavController.navigateToMenuInfo(menuId: Int) {
+fun NavController.navigateToMenuInfo(menuId: Long) {
     navigate(Routes.MenuInfo(menuId))
 }
 
 fun NavGraphBuilder.menuInfoNavGraph(
     navigateBack: () -> Unit,
-    navigateToMenuFolderDetail: (Int) -> Unit,
+    navigateToMenuFolderDetail: (Long) -> Unit,
     navigateToMenuInfoMap: () -> Unit
 ) {
     composable<Routes.MenuInfo> {

@@ -4,10 +4,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MenuInfoResponse(
-    val menuId: Int = 0,
+    val menuId: Long = 0,
     val menuTitle: String = "",
     val menuPrice: Int = 0,
     val menuPinImgUrl: String = "",
+    val menuMemoTitle: String = "",
+    val menuMemoContent: String = "",
     val storeTitle: String = "",
     val storeAddress: String = "",
     val tagImgUrls: List<String> = emptyList(),

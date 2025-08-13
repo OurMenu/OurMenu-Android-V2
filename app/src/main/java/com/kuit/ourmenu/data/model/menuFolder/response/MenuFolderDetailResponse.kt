@@ -13,7 +13,7 @@ data class MenuFolderDetailResponse(
 
 @Serializable
 data class MenuFolderDetailMenus(
-    override val menuId: Int = 0,
+    override val menuId: Long = 0,
     override val menuTitle: String = "",
     override val storeTitle: String = "",
     override val storeAddress: String = "",

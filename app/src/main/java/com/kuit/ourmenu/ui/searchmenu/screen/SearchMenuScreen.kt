@@ -17,10 +17,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -42,7 +42,6 @@ import com.kuit.ourmenu.ui.common.map.mapViewWithLifecycle
 import com.kuit.ourmenu.ui.common.topappbar.OurMenuAddButtonTopAppBar
 import com.kuit.ourmenu.ui.searchmenu.component.SearchBottomSheetContent
 import com.kuit.ourmenu.ui.searchmenu.component.SearchHistoryList
-import com.kuit.ourmenu.ui.searchmenu.model.SearchHistoryData
 import com.kuit.ourmenu.ui.searchmenu.viewmodel.SearchMenuViewModel
 import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.utils.PermissionHandler
@@ -53,6 +52,7 @@ import kotlinx.coroutines.launch
 fun SearchMenuScreen(
     modifier: Modifier = Modifier,
     viewModel: SearchMenuViewModel = hiltViewModel(),
+    onNavigateToMenuDetail: (Long) -> Unit
 ) {
 
     val scaffoldState = rememberBottomSheetScaffoldState()
@@ -64,18 +64,19 @@ fun SearchMenuScreen(
     var searchActionDone by rememberSaveable { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
     val searchBarFocused by interactionSource.collectIsFocusedAsState()
+    val scope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
     val locationPermissionGranted by viewModel.locationPermissionGranted.collectAsStateWithLifecycle()
 
     // 지도 중심 좌표
-    val currentCenter by viewModel.currentCenter.collectAsState()
+    val currentCenter by viewModel.currentCenter.collectAsStateWithLifecycle()
     
     // 검색기록
-    val searchHistory by viewModel.searchHistory.collectAsState()
+    val searchHistory by viewModel.searchHistory.collectAsStateWithLifecycle()
     
     // 핀 위치에 해당하는 메뉴들
-    val menusOnPin by viewModel.menusOnPin.collectAsState()
+    val menusOnPin by viewModel.menusOnPin.collectAsStateWithLifecycle()
 
     val density = LocalDensity.current
     val singleItemHeight = 300.dp // Fixed height for each item
@@ -120,10 +121,11 @@ fun SearchMenuScreen(
         if (searchBarFocused) {
             showSearchBackground = true
             showBottomSheet = false
-            
-            // Fetch crawling history when search field is focused
-            launch {
+
+            // 검색 기록 조회
+            scope.launch {
                 viewModel.getSearchHistory()
+                Log.d("SearchMenuScreen", "검색 기록 조회: $searchHistory")
             }
         }
     }
@@ -142,7 +144,11 @@ fun SearchMenuScreen(
         sheetContent = {
             SearchBottomSheetContent(
                 modifier = Modifier.fillMaxWidth(),
-                dataList = menusOnPin ?: emptyList()
+                dataList = menusOnPin ?: emptyList(),
+                onItemClick = { menuId ->
+                    Log.d("SearchMenuScreen", "바텀 시트 메뉴 아이템 클릭: $menuId")
+                    onNavigateToMenuDetail(menuId)
+                }
             )
         },
         sheetContainerColor = NeutralWhite,
@@ -178,18 +184,12 @@ fun SearchMenuScreen(
                     )
                 }
             } else {
-                val historyDataList = searchHistory?.map { history ->
-                    SearchHistoryData(
-                        menuTitle = history.menuTitle,
-                        storeTitle = history.storeAddress.split(',').firstOrNull() ?: "",
-                        address = history.storeAddress
-                    )
-                } ?: emptyList()
-                
                 SearchHistoryList(
-                    historyList = historyDataList,
-                    onClick = {
+                    historyList = searchHistory,
+                    onClick = { menuId ->
                         // 크롤링 기록 아이템 클릭시 동작
+                        viewModel.getMapMenuDetail(menuId)
+                        Log.d("SearchMenuScreen", "검색 기록 아이템 클릭: $menuId")
                         showSearchBackground = false
                         showBottomSheet = true
                     }
@@ -239,7 +239,7 @@ fun SearchMenuScreen(
                     .align(Alignment.BottomEnd)
                     .padding(bottom = 16.dp, end = 20.dp),
                 onClick = { 
-                    // TODO: 임시로 설정해놓은 카메라 이동
+                    // TODO: 임시로 설정해놓은 카메라 이동, 실제로는 네이버 지도에 해당 가게 검색 결과로 이동
                     viewModel.moveCamera(37.5416, 127.0793)
                 },
             )
@@ -251,5 +251,8 @@ fun SearchMenuScreen(
 @Preview(showBackground = true)
 @Composable
 private fun SearchMenuScreenPreview() {
-    SearchMenuScreen()
+    SearchMenuScreen(
+    ){
+
+    }
 }

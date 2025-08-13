@@ -8,6 +8,6 @@ import retrofit2.http.Path
 interface MenuInfoService {
     @GET("api/menus/{menuId}")
     suspend fun getMenuInfo(
-        @Path("menuId") menuId: Int
+        @Path("menuId") menuId: Long
     ): BaseResponse<MenuInfoResponse>
 }
