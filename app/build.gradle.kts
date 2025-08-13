@@ -34,7 +34,7 @@ android {
     }
 
     signingConfigs {
-        val debugKeystore = rootProject.file("debug.keystore")
+        val debugKeystore = file("$rootDir/debug.keystore")
         if (debugKeystore.exists()) {
             getByName("debug") {
                 storeFile = debugKeystore
@@ -42,12 +42,6 @@ android {
                 keyAlias = "androiddebugkey"
                 keyPassword = "android"
             }
-        }
-        getByName("debug") {
-            storeFile = file("$rootDir/debug.keystore")
-            storePassword = "android"
-            keyAlias = "androiddebugkey"
-            keyPassword = "android"
         }
     }
 
