@@ -31,7 +31,6 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             var showSplash by remember { mutableStateOf(true) }
-
             val navController = rememberMainNavigator()
 
             OurMenuTheme {
