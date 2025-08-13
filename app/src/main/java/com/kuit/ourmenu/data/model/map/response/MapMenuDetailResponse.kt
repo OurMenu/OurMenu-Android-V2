@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MapMenuDetailResponse(
     @SerialName("menuId")
-    val menuId: Int,
+    val menuId: Long,
     @SerialName("menuTitle")
     val menuTitle: String,
     @SerialName("storeTitle")
-    val storeTitld: String,
+    val storeTitle: String,
     @SerialName("menuPrice")
     val menuPrice: Int,
     @SerialName("menuPinImgUrl")
