@@ -3,6 +3,7 @@ package com.kuit.ourmenu.data.di
 import com.kuit.ourmenu.data.service.AuthService
 import com.kuit.ourmenu.data.service.CacheService
 import com.kuit.ourmenu.data.service.DummyService
+import com.kuit.ourmenu.data.service.HomeService
 import com.kuit.ourmenu.data.service.MapService
 import com.kuit.ourmenu.data.service.MenuFolderService
 import com.kuit.ourmenu.data.service.MenuInfoService
@@ -47,6 +48,11 @@ object ServiceModule {
     @Singleton
     fun provideMenuFolderService(retrofit: Retrofit): MenuFolderService =
         retrofit.create(MenuFolderService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideHomeService(retrofit: Retrofit): HomeService =
+        retrofit.create(HomeService::class.java)
 
     @Provides
     @Singleton

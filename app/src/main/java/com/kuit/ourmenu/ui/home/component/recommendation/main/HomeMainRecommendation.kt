@@ -1,22 +1,20 @@
 package com.kuit.ourmenu.ui.home.component.recommendation.main
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.kuit.ourmenu.ui.home.dummy.HomeDummyData
+import com.kuit.ourmenu.data.model.home.response.RecommendMenuList
 
 @Composable
 fun HomeMainRecommendation(
     modifier: Modifier = Modifier,
-    homeMainDataList : List<HomeDummyData>
+    imgUrl: String = "",
+    homeMainDataList: List<RecommendMenuList>,
+    onItemClick: (Long) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -24,8 +22,8 @@ fun HomeMainRecommendation(
         HomeMainRecommendationText(
             modifier = Modifier
                 .padding(horizontal = 20.dp)
-                .width(278.dp)
-                .height(144.dp)
+                .height(148.dp),
+            imgUrl = imgUrl
         )
 
         HomeMainRecommendationList(
@@ -33,16 +31,8 @@ fun HomeMainRecommendation(
                 .fillMaxWidth()
                 .padding(top = 32.dp)
                 .height(244.dp),
-            homeMainDataList = homeMainDataList
+            homeMainDataList = homeMainDataList,
+            onItemClick = onItemClick
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun MainRecommendationPreview() {
-    HomeMainRecommendation(
-        modifier = Modifier.padding(top = 16.dp),
-        homeMainDataList = HomeDummyData.dummyData
-    )
 }

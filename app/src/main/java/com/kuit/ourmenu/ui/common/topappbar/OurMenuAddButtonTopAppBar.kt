@@ -18,7 +18,10 @@ import com.kuit.ourmenu.ui.theme.NeutralWhite
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OurMenuAddButtonTopAppBar(modifier: Modifier = Modifier) {
+fun OurMenuAddButtonTopAppBar(
+    modifier: Modifier = Modifier,
+    onAddMenuClick: () -> Unit = {}
+) {
     // 기본
     TopAppBar(
         modifier = modifier.fillMaxWidth(),
@@ -35,7 +38,7 @@ fun OurMenuAddButtonTopAppBar(modifier: Modifier = Modifier) {
         },
         actions = {
             IconButton(
-                onClick = { /* TODO : Add Menu Button Click Event */ },
+                onClick = onAddMenuClick,
                 modifier = Modifier.padding(end = 20.dp)
             ) {
                 Icon(
