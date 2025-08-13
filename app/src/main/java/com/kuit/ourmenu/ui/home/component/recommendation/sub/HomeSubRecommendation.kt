@@ -15,7 +15,8 @@ import com.kuit.ourmenu.data.model.home.response.RecommendMenuList
 fun HomeSubRecommendation(
     modifier: Modifier = Modifier,
     imgUrl: String = "",
-    homeSubDataList: List<RecommendMenuList>
+    homeSubDataList: List<RecommendMenuList>,
+    onItemClick: (Int) -> Unit
 ) {
     val state = rememberLazyListState() // TODO : hoisting
     Column(modifier = modifier) {
@@ -31,7 +32,8 @@ fun HomeSubRecommendation(
                 .fillMaxWidth()
                 .wrapContentHeight(),
             state = state,
-            homeSubDataList = homeSubDataList
+            homeSubDataList = homeSubDataList,
+            onItemClick = onItemClick
         )
     }
 }

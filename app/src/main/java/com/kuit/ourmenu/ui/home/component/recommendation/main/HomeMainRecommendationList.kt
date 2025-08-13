@@ -18,7 +18,8 @@ import com.kuit.ourmenu.data.model.home.response.RecommendMenuList
 @Composable
 fun HomeMainRecommendationList(
     modifier: Modifier = Modifier,
-    homeMainDataList: List<RecommendMenuList>
+    homeMainDataList: List<RecommendMenuList>,
+    onItemClick: (Int) -> Unit
 ) {
     // 리스트가 비어있으면 아무것도 표시하지 않음
     if (homeMainDataList.isEmpty()) return
@@ -43,7 +44,8 @@ fun HomeMainRecommendationList(
                     .height(244.dp)
                     .width(304.dp)
                     .padding(horizontal = 6.dp),
-                recommendData = homeMainDataList[itemIndex]
+                recommendData = homeMainDataList[itemIndex],
+                onItemClick = onItemClick
             )
         }
     }

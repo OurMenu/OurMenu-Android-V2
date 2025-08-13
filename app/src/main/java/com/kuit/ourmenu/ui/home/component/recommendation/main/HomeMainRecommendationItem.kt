@@ -1,5 +1,6 @@
 package com.kuit.ourmenu.ui.home.component.recommendation.main
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,10 +28,13 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 @Composable
 fun HomeMainRecommendationItem(
     modifier: Modifier = Modifier,
-    recommendData: RecommendMenuList
+    recommendData: RecommendMenuList,
+    onItemClick: (Int) -> Unit
 ) {
     Box(
-        modifier = modifier,
+        modifier = modifier.clickable{
+            onItemClick(recommendData.menuId)
+        },
         contentAlignment = Alignment.BottomStart
     ) {
         AsyncImage(

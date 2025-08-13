@@ -57,6 +57,7 @@ fun MainNavHost(
 
         homeNavGraph(
             padding = padding,
+            navigateToMenuInfo = navController::navigateToMenuInfo
         )
 
         menuFolderNavGraph(

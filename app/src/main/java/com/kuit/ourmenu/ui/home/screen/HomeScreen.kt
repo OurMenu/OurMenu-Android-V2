@@ -28,7 +28,7 @@ import com.kuit.ourmenu.ui.home.viewmodel.HomeViewModel
 @Composable
 fun HomeScreen(
     padding: PaddingValues,
-    // TODO: navagation 연결
+    onNavigateToMenuInfo: (Int) -> Unit = {},
     viewModel: HomeViewModel = hiltViewModel()
 ) {
 
@@ -77,7 +77,8 @@ fun HomeScreen(
                 modifier = Modifier
                     .padding(top = 16.dp, bottom = 29.dp),
                 imgUrl = answerImgUrl,
-                homeMainDataList = answerRecommendMenus
+                homeMainDataList = answerRecommendMenus,
+                onItemClick = onNavigateToMenuInfo
             )
 
 
@@ -87,7 +88,8 @@ fun HomeScreen(
                     .wrapContentHeight()
                     .padding(bottom = 25.dp),
                 imgUrl = tagRecommendImgUrl,
-                homeSubDataList = tagRecommendMenus
+                homeSubDataList = tagRecommendMenus,
+                onItemClick = onNavigateToMenuInfo
             )
 
             HomeSubRecommendation(
@@ -96,7 +98,8 @@ fun HomeScreen(
                     .wrapContentHeight()
                     .padding(bottom = 25.dp),
                 imgUrl = otherRecommendImgUrl,
-                homeSubDataList = otherRecommendMenus
+                homeSubDataList = otherRecommendMenus,
+                onItemClick = onNavigateToMenuInfo
             )
         }
     }

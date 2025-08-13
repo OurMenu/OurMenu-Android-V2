@@ -1,5 +1,6 @@
 package com.kuit.ourmenu.ui.home.component.recommendation.sub
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -26,10 +27,13 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
 fun HomeSubRecommendationItem(
-    recommendData: RecommendMenuList
+    recommendData: RecommendMenuList,
+    onItemClick: (Int) -> Unit
 ) {
     Column(
-        modifier = Modifier.padding(end = 11.dp)
+        modifier = Modifier
+            .padding(end = 11.dp)
+            .clickable { onItemClick(recommendData.menuId) }
     ) {
         AsyncImage(
             model = recommendData.menuImgUrl,

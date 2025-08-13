@@ -13,7 +13,8 @@ import com.kuit.ourmenu.data.model.home.response.RecommendMenuList
 fun HomeMainRecommendation(
     modifier: Modifier = Modifier,
     imgUrl: String = "",
-    homeMainDataList: List<RecommendMenuList>
+    homeMainDataList: List<RecommendMenuList>,
+    onItemClick: (Int) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -30,7 +31,8 @@ fun HomeMainRecommendation(
                 .fillMaxWidth()
                 .padding(top = 32.dp)
                 .height(244.dp),
-            homeMainDataList = homeMainDataList
+            homeMainDataList = homeMainDataList,
+            onItemClick = onItemClick
         )
     }
 }

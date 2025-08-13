@@ -12,7 +12,8 @@ import com.kuit.ourmenu.data.model.home.response.RecommendMenuList
 fun HomeSubRecommendationList(
     modifier: Modifier = Modifier,
     state: LazyListState,
-    homeSubDataList: List<RecommendMenuList>
+    homeSubDataList: List<RecommendMenuList>,
+    onItemClick: (Int) -> Unit
 ) {
     LazyRow(
         modifier = modifier,
@@ -23,7 +24,8 @@ fun HomeSubRecommendationList(
     ) {
         items(homeSubDataList.size) { data ->
             HomeSubRecommendationItem(
-                recommendData = homeSubDataList[data]
+                recommendData = homeSubDataList[data],
+                onItemClick = onItemClick
             )
         }
     }
