@@ -1,6 +1,7 @@
 package com.kuit.ourmenu.data.repository
 
 import com.kuit.ourmenu.data.model.base.handleBaseResponse
+import com.kuit.ourmenu.data.model.menuFolder.request.MenuFolderIndexRequest
 import com.kuit.ourmenu.data.service.MenuFolderService
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -38,6 +39,22 @@ class MenuFolderRepository @Inject constructor(
             page = page,
             size = size,
             sortOrder = sortOrder
+        ).handleBaseResponse().getOrThrow()
+    }
+
+    suspend fun deleteMenuFolder(
+        menuFolderId: Long
+    ) = runCatching {
+        menuFolderService.deleteMenuFolder(menuFolderId).handleBaseResponse().getOrThrow()
+    }
+
+    suspend fun updateMenuFolderIndex(
+        menuFolderId: Long,
+        request: MenuFolderIndexRequest
+    ) = runCatching {
+        menuFolderService.updateMenuFolderIndex(
+            menuFolderId = menuFolderId,
+            request = request
         ).handleBaseResponse().getOrThrow()
     }
 }
