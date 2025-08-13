@@ -14,7 +14,8 @@ import com.kuit.ourmenu.ui.common.bottomsheet.MenuInfoBottomSheetContent
 @Composable
 fun SearchBottomSheetContent(
     modifier: Modifier = Modifier,
-    dataList: List<MapDetailResponse>
+    dataList: List<MapDetailResponse>,
+    onItemClick: (Long) -> Unit
 ) {
     LazyColumn(
         modifier = modifier
@@ -22,7 +23,10 @@ fun SearchBottomSheetContent(
         items(dataList.size) { index ->
             MenuInfoBottomSheetContent(
                 modifier = Modifier.padding(vertical = 20.dp),
-                menuInfoData = dataList[index]
+                menuInfoData = dataList[index],
+                onClick = { menuId -> 
+                    onItemClick(menuId)
+                }
             )
             if (index != dataList.size - 1) {
                 HorizontalDivider()
@@ -39,6 +43,7 @@ private fun SearchBottomSheetContentPreview() {
             MapDetailResponse(
                 menuId = 1,
                 menuTitle = "Test Menu",
+                storeTitle = "가게 이름",
                 menuPrice = 10000,
                 menuPinImgUrl = "pin",
                 menuTagImgUrls = listOf("한식", "밥"),
@@ -53,5 +58,7 @@ private fun SearchBottomSheetContentPreview() {
                 mapY = 37.0
             )
         )
-    )
+    ){
+
+    }
 }

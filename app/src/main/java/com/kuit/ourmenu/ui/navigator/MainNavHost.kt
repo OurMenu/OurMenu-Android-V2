@@ -73,7 +73,7 @@ fun MainNavHost(
         )
 
         searchMenuNavGraph(
-            padding = padding,
+            navigateToMenuDetail = navController::navigateToMenuInfo,
         )
 
         myNavGraph(

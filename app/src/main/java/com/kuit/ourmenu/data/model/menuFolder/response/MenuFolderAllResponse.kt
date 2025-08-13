@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MenuFolderAllResponse(
-    override val menuId: Int,
+    override val menuId: Long,
     override val menuTitle: String,
     override val storeTitle: String,
     override val storeAddress: String,

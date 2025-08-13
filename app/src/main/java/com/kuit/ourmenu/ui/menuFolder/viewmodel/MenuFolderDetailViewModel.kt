@@ -18,7 +18,7 @@ class MenuFolderDetailViewModel @Inject constructor(
     private val _menuFolderDetail = MutableStateFlow(MenuFolderDetailResponse())
     val menuFolderDetail = _menuFolderDetail.asStateFlow()
 
-    private val _menuFolderId = MutableStateFlow(0)
+    private val _menuFolderId = MutableStateFlow<Long>(0)
     val menuFolderId = _menuFolderId.asStateFlow()
 
     private val _sortOrder = MutableStateFlow(SortOrderType.TITLE_ASC)
@@ -31,7 +31,7 @@ class MenuFolderDetailViewModel @Inject constructor(
     val isLoading = _isLoading.asStateFlow()
 
     fun getMenuFolderDetail(
-        menuFolderId: Int,
+        menuFolderId: Long,
         sortOrder: SortOrderType = _sortOrder.value
     ) {
         _menuFolderId.value = menuFolderId
@@ -57,7 +57,7 @@ class MenuFolderDetailViewModel @Inject constructor(
         }
     }
 
-    fun updateSortOrder(sortOrderType: SortOrderType, menuFolderId: Int) {
+    fun updateSortOrder(sortOrderType: SortOrderType, menuFolderId: Long) {
         if (_sortOrder.value != sortOrderType) {
             _sortOrder.value = sortOrderType
             getMenuFolderDetail(menuFolderId, sortOrderType)

@@ -37,7 +37,7 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 
 @Composable
 fun MenuFolderScreen(
-    onNavigateToDetail: (Int) -> Unit,
+    onNavigateToDetail: (Long) -> Unit,
     onNavigateToAllMenu: () -> Unit,
     onNavigateToAddMenu: () -> Unit,
     viewModel: MenuFolderViewModel = hiltViewModel()

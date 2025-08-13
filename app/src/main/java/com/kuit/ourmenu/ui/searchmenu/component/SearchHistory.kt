@@ -23,7 +23,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kuit.ourmenu.R
-import com.kuit.ourmenu.ui.searchmenu.model.SearchHistoryData
+import com.kuit.ourmenu.data.model.map.response.MapSearchHistoryResponse
+import com.kuit.ourmenu.ui.theme.Neutral300
 import com.kuit.ourmenu.ui.theme.Neutral500
 import com.kuit.ourmenu.ui.theme.Neutral700
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
@@ -31,8 +32,8 @@ import com.kuit.ourmenu.ui.theme.ourMenuTypography
 @Composable
 fun SearchHistoryList(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
-    historyList: List<SearchHistoryData>
+    historyList: List<MapSearchHistoryResponse>?,
+    onClick: (Long) -> Unit = {},
 ) {
     val lazyListState = rememberLazyListState()
 
@@ -41,28 +42,53 @@ fun SearchHistoryList(
             .fillMaxWidth()
             .padding(top = 68.dp)
     ) {
-        Text(
-            text = "최근 검색",
-            style = ourMenuTypography().pretendard_600_16.copy(
-                lineHeight = 20.sp,
-                color = Neutral700
-            ),
-            modifier = modifier
-                .padding(bottom = 4.dp)
-                .padding(horizontal = 28.dp)
-        )
-        LazyColumn(
-            state = lazyListState
-        ) {
-
-            items(historyList.size) { index ->
-                SearchHistoryItem(
-                    historyData = historyList[index],
-                    onClick = onClick
+        if (historyList == null || historyList.isEmpty()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 68.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_addmenu_noresult),
+                    contentDescription = "no result",
+                    tint = Color.Unspecified
                 )
+                Text(
+                    text = stringResource(R.string.no_result),
+                    style = ourMenuTypography().pretendard_600_14,
+                    color = Neutral500,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
+        } else {
+            Text(
+                text = "최근 검색",
+                style = ourMenuTypography().pretendard_600_16.copy(
+                    lineHeight = 20.sp,
+                    color = Neutral700
+                ),
+                modifier = modifier
+                    .padding(bottom = 4.dp)
+                    .padding(horizontal = 28.dp)
+            )
+            LazyColumn(
+                state = lazyListState
+            ) {
 
-                if (index != historyList.size - 1) {
-                    HorizontalDivider()
+                items(historyList.size) { index ->
+                    SearchHistoryItem(
+                        historyData = historyList[index],
+                        onClick = onClick
+                    )
+
+                    if (index != historyList.size - 1) {
+                        HorizontalDivider(
+                            thickness = 1.dp,
+                            color = Neutral300,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
                 }
             }
         }
@@ -72,14 +98,14 @@ fun SearchHistoryList(
 @Composable
 fun SearchHistoryItem(
     modifier: Modifier = Modifier,
-    historyData: SearchHistoryData,
-    onClick: () -> Unit
+    historyData: MapSearchHistoryResponse,
+    onClick: (Long) -> Unit
 ) {
 
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
+            .clickable(onClick = { onClick(historyData.menuId) })
             .padding(vertical = 20.dp, horizontal = 28.dp)
     ) {
         Text(
@@ -115,7 +141,7 @@ fun SearchHistoryItem(
                         .wrapContentHeight(align = Alignment.CenterVertically)
                 )
                 Text(
-                    text = stringResource(R.string.neungdongro_112),
+                    text = historyData.storeAddress,
                     style = ourMenuTypography().pretendard_600_14.copy(
                         lineHeight = 20.sp,
                         color = Neutral500
@@ -135,20 +161,23 @@ fun SearchHistoryItem(
 private fun SearchHistoryPreview() {
     SearchHistoryList(
         historyList = listOf(
-            SearchHistoryData(
+            MapSearchHistoryResponse(
                 menuTitle = "피자",
                 storeTitle = "피자헛",
-                address = "서울특별시 강남구 역삼동 123-4"
+                menuId = 1,
+                storeAddress = "서울특별시 강남구 역삼동 123-4"
             ),
-            SearchHistoryData(
+            MapSearchHistoryResponse(
                 menuTitle = "치킨",
                 storeTitle = "굽네치킨",
-                address = "서울특별시 강남구 역삼동 123-4"
+                menuId = 2,
+                storeAddress = "서울특별시 강남구 역삼동 456-7"
             ),
-            SearchHistoryData(
+            MapSearchHistoryResponse(
                 menuTitle = "햄버거",
                 storeTitle = "맥도날드",
-                address = "서울특별시 강남구 역삼동 123-4"
+                menuId = 3,
+                storeAddress = "서울특별시 강남구 역삼동 987-6"
             )
         ),
     )

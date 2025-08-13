@@ -16,7 +16,7 @@ fun NavController.navigateToMenuFolder(navOptions: NavOptions) {
 }
 
 // 이동 이벤트 (menuFolderId 전달)
-fun NavController.navigateToMenuFolderDetail(menuFolderId: Int) {
+fun NavController.navigateToMenuFolderDetail(menuFolderId: Long) {
     navigate(Routes.MenuFolderDetail(menuFolderId))
 }
 
@@ -28,15 +28,15 @@ fun NavController.navigateToAddMenu() {
     navigate(Routes.AddMenu)
 }
 
-fun NavController.navigateToMenuInfo(menuId: Int) {
+fun NavController.navigateToMenuInfo(menuId: Long) {
     navigate(Routes.MenuInfo(menuId))
 }
 
 fun NavGraphBuilder.menuFolderNavGraph(
     navigateBack: () -> Unit,
-    navigateToMenuFolderDetail: (Int) -> Unit,
+    navigateToMenuFolderDetail: (Long) -> Unit,
     navigateToMenuFolderAllMenu: () -> Unit,
-    navigateToMenuInfo: (Int) -> Unit,
+    navigateToMenuInfo: (Long) -> Unit,
     navigateToAddMenu: () -> Unit,
 ) {
     composable<MainTabRoute.MenuFolder> {

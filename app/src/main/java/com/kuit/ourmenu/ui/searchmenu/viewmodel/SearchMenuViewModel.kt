@@ -313,11 +313,22 @@ class SearchMenuViewModel @Inject constructor(
         }
     }
 
-    fun getMapMenuDetail(menuId: Long){
+    fun getMapMenuDetail(menuId: Long) {
         viewModelScope.launch {
             val response = mapRepository.getMapMenuDetail(menuId)
-            response.onSuccess {
-                Log.d("SearchMenuViewModel", "메뉴 상세 조회 성공: $it")
+            response.onSuccess { menuDetail ->
+                Log.d("SearchMenuViewModel", "메뉴 상세 조회 성공: $menuDetail")
+                
+                // myMenus에서 해당 menuId를 가진 메뉴의 위치 정보 찾기
+                myMenus.value?.find { it.mapId == menuId }?.let { menu ->
+                    // 해당 위치로 카메라 이동
+                    moveCamera(menu.mapY, menu.mapX)
+                    // 해당 핀을 활성화 상태로 변경
+                    _activeMapId.value = menuId
+                    refreshMarkers()
+                    // 메뉴 상세 정보를 바텀시트에 표시하기 위해 설정
+                    getMapDetail(menuId)
+                }
             }.onFailure {
                 Log.d("SearchMenuViewModel", "메뉴 상세 조회 실패: ${it.message}")
             }
