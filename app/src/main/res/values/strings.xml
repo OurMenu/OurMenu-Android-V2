@@ -1,3 +1,134 @@
 <resources>
     <string name="app_name">OurMenu</string>
+    <string name="our_ddeokbokki">아워떡볶이</string>
+    <string name="neungdongro_112">서울 광진구 능동로 112</string>
+    <string name="add_menu_by_myself">메뉴 직접 추가하기</string>
+    <string name="next">다음</string>
+    <string name="confirm">확인</string>
+    <string name="add_menu">메뉴 추가하기</string>
+    <string name="asterisk">*</string>
+    <string name="menuboard">메뉴판</string>
+    <string name="save_menuboard">메뉴판을 선택해주세요</string>
+    <string name="menu_name">메뉴 이름</string>
+    <string name="type_menu_name">메뉴 이름을 입력해주세요</string>
+    <string name="menu_price">메뉴 가격</string>
+    <string name="type_menu_price">직접 가격을 입력해주세요</string>
+    <string name="store_name">가게 이름</string>
+    <string name="type_store_name">가게 이름을 입력해주세요</string>
+    <string name="resaturant_address">가게 주소</string>
+    <string name="type_store_address">가게 주소를 입력해주세요.</string>
+    <string name="type_restaurant_detailed_address">상세 주소를 입력해주세요.</string>
+    <string name="ourmenu">OURMENU</string>
+    <string name="add_store_and_menu_by_myself">가게와 메뉴 직접 추가</string>
+    <string name="no_result">검색 결과가 없어요!</string>
+    <string name="recent_search">최근 검색</string>
+    <string name="cancel">취소</string>
+    <string name="apply">적용하기</string>
+    <string name="placeholder">placeholder</string>
+    <string name="tag">태그</string>
+    <string name="choose_tag">태그 고르기</string>
+    <string name="memo">메모</string>
+    <string name="icon">아이콘</string>
+    <string name="type_title">제목을 입력해주세요.</string>
+    <string name="type_body">본문을 입력해주세요.</string>
+    <string name="food_tag">음식 태그</string>
+    <string name="multiple_choice_available">중복 선택 가능</string>
+    <string name="search_store_name">가게 이름 검색</string>
+
+    <!--  onboarding  -->
+    <string name="landing_introduce_title">아워메뉴에 온 걸 환영해요!</string>
+    <string name="landing_introduce_content">저희와 함께 매일 먹을 한 끼를 고민해요.</string>
+    <string name="login">로그인</string>
+    <string name="make_account">계정 만들기</string>
+    <string name="copy_right">Copyright © OURMENU Corp. All Rights Reserved.</string>
+    <string name="email">E-mail</string>
+    <string name="password">Password</string>
+    <string name="see_password">비밀번호 보기</string>
+    <string name="forgot_password">비밀번호 찾기</string>
+    <string name="have_account">계정이 없으신가요?</string>
+    <string name="input_email">이메일을 입력해주세요.</string>
+    <string name="input_email_description">로그인 및 회원가입, 본인확인에 필요합니다.</string>
+    <string name="placeholder_default">default</string>
+    <string name="placeholder_email_domain">직접 입력하기</string>
+    <string name="email_custom">직접 입력하기</string>
+    <string name="email_daum">daum.net</string>
+    <string name="email_gmail">gmail.com</string>
+    <string name="email_kakao">kakao.com</string>
+    <string name="email_nate">nate.com</string>
+    <string name="email_naver">naver.com</string>
+    <string name="sent_mail">메일을 보냈습니다!</string>
+    <string name="in_5_mins">5분 안에 </string>
+    <string name="enter_code">인증 코드를 입력해주세요.</string>
+    <string name="didnt_receive">메일이 오지 않았나요?</string>
+    <string name="resend">메일 다시 보내기</string>
+    <string name="enter_password">비밀번호를 입력해주세요.</string>
+    <string name="password_hint">영문, 숫자 포함 8자 이상</string>
+    <string name="password_placeholder">강력한 비밀번호를 만들어주세요!</string>
+    <string name="confirm_password_placeholder">비밀번호를 한 번 더 확인해주세요.</string>
+    <string name="send_auth_mail">인증 메일 보내기</string>
+    <string name="input_meal_time">평소 식사시간을 입력해주세요.</string>
+    <string name="input_meal_time_description">나중에 수정할 수 있으니 걱정마세요!</string>
+    <string name="placeholder_nickname">최대 10자</string>
+
+
+    <string name="go_to_map">지도 앱으로 이동</string>
+
+    <!--menu info-->
+    <string name="menu_folder">Menu Folder</string>
+    <string name="tag_eng">Tag</string>
+    <string name="info">Info</string>
+    <string name="memo_eng">Memo</string>
+    <string name="memo_title">매운 맛 선택 가능!</string>
+    <string name="memo_content">* 덕유산 / ㅇㅇ산 / 한라산\n기본도 정말 매우니 조심하기</string>
+    <string name="menu_info_goto_map">지도보기</string>
+
+    <!--search menu-->
+    <string name="search_place_holder">가게, 메뉴 이름 검색</string>
+    <string name="tag_number_warning">태그는 최대 12개까지 등록할 수 있어요</string>
+    <string name="reset">초기화</string>
+
+    <!--menu folder-->
+    <string name="delete">삭제</string>
+    <string name="edit">수정</string>
+    <string name="see_all_menu">전체 메뉴 보기</string>
+    <string name="menu_count">메뉴 %d개</string>
+    <string name="add_menu_folder">메뉴판 추가하기</string>
+    <string name="menu_price_won">%d 원</string>
+    <string name="all_menu">전체 메뉴</string>
+    <string name="count">%d 개</string>
+    <string name="menu_folder_name">한강 뷰 맛집</string>
+    <string name="filtering">필터링</string>
+    <string name="select_one">각 항목 당 1개 선택</string>
+    <string name="price_range_title">가격대</string>
+    <string name="price_range">%d원 ~ %d원</string>
+    <string name="tag_max_one">태그는 항목 당 1개만 선택할 수 있어요</string>
+
+    <string name="type">종류</string>
+    <string name="nationality">나라 별 음식</string>
+    <string name="taste">맛</string>
+    <string name="occasion">상황</string>
+
+    <string name="delete_menu_folder_modal_title">정말로 삭제하시겠어요?</string>
+    <string name="delete_menu_folder_modal_content">삭제하면 복구가 어려울 수 있어요.\n다시 한 번 확인해 주세요.</string>
+
+    <!--my page-->
+    <string name="now_meal_time">현재 설정하신 식사 시간입니다!</string>
+    <string name="change_meal_time">식사 시간 수정하기</string>
+    <string name="notice">공지사항</string>
+    <string name="customer_service">고객센터</string>
+    <string name="app_review">앱 리뷰 남기기</string>
+    <string name="app_version">현재 버전 : %s</string>
+
+    <string name="change_password">비밀번호 변경하기</string>
+    <string name="logout">로그아웃</string>
+    <string name="delete_account">회원 탈퇴</string>
+
+    <string name="current_password">기존 비밀번호</string>
+    <string name="enter_current_password">기존 비밀번호를\n입력해주세요.</string>
+    <string name="new_password">변경할 비밀번호</string>
+    <string name="confirm_new_password">변경할 비밀번호 확인</string>
+    <string name="enter_new_password">변경할 비밀번호를\n입력해주세요.</string>
+    <string name="want_to_logout">로그아웃 하시겠습니까?</string>
+    <string name="want_to_delete_account">탈퇴 하시겠습니까?</string>
+    <string name="delete_account_warning">탈퇴 시 계정 및 이용 기록은 모두 삭제되며,\n삭제된 데이터는 복구가 불가능합니다.</string>
 </resources>

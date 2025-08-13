@@ -1,0 +1,72 @@
+package com.kuit.ourmenu.ui.menuFolder.navigation
+
+import android.R.attr.padding
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavOptions
+import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
+import com.kuit.ourmenu.ui.menuFolder.screen.MenuFolderAllMenuScreen
+import com.kuit.ourmenu.ui.menuFolder.screen.MenuFolderDetailScreen
+import com.kuit.ourmenu.ui.menuFolder.screen.MenuFolderScreen
+import com.kuit.ourmenu.ui.navigator.MainTabRoute
+import com.kuit.ourmenu.ui.navigator.Routes
+
+fun NavController.navigateToMenuFolder(navOptions: NavOptions) {
+    navigate(MainTabRoute.MenuFolder, navOptions)
+}
+
+// 이동 이벤트 (menuFolderId 전달)
+fun NavController.navigateToMenuFolderDetail(menuFolderId: Long) {
+    navigate(Routes.MenuFolderDetail(menuFolderId))
+}
+
+fun NavController.navigateToMenuFolderAllMenu() {
+    navigate(Routes.MenuFolderAllMenu)
+}
+
+fun NavController.navigateToAddMenu() {
+    navigate(Routes.AddMenu)
+}
+
+fun NavController.navigateToMenuInfo(menuId: Long) {
+    navigate(Routes.MenuInfo(menuId))
+}
+
+fun NavGraphBuilder.menuFolderNavGraph(
+    padding: PaddingValues,
+    navigateBack: () -> Unit,
+    navigateToMenuFolderDetail: (Long) -> Unit,
+    navigateToMenuFolderAllMenu: () -> Unit,
+    navigateToMenuInfo: (Long) -> Unit,
+    navigateToAddMenu: () -> Unit,
+) {
+    composable<MainTabRoute.MenuFolder> {
+        MenuFolderScreen(
+            padding = padding,
+            onNavigateToDetail = navigateToMenuFolderDetail,
+            onNavigateToAllMenu = navigateToMenuFolderAllMenu,
+            onNavigateToAddMenu = navigateToAddMenu,
+        )
+
+        composable<Routes.MenuFolderDetail> {
+            val menuFolderId = it.toRoute<Routes.MenuFolderDetail>().menuFolderId
+            MenuFolderDetailScreen(
+                menuFolderId = menuFolderId,
+                onNavigateToMenuInfo = navigateToMenuInfo,
+                onNavigateBack = navigateBack,
+                onNavigateToAddMenu = navigateToAddMenu
+            )
+        }
+
+        composable<Routes.MenuFolderAllMenu> {
+            MenuFolderAllMenuScreen(
+                onNavigateBack = navigateBack,
+                onNavigateToMenuInfo = navigateToMenuFolderDetail,
+//                onNavigateToMenuInfoMap = navigateToMenuFolderDetail, // TODO: Map으로 화면 이동 구현
+                onNavigateToAddMenu = navigateToAddMenu,
+            )
+        }
+    }
+}

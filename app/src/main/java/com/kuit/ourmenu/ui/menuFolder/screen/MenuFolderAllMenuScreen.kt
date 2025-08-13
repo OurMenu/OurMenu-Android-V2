@@ -1,0 +1,227 @@
+package com.kuit.ourmenu.ui.menuFolder.screen
+
+import android.util.Log
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BottomSheetScaffold
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.kuit.ourmenu.R
+import com.kuit.ourmenu.data.model.base.type.SortOrderType
+import com.kuit.ourmenu.ui.common.bottomsheet.BottomSheetDragHandle
+import com.kuit.ourmenu.ui.common.topappbar.BackButtonTopAppBar
+import com.kuit.ourmenu.ui.menuFolder.component.AddButton
+import com.kuit.ourmenu.ui.menuFolder.component.FilterBottomSheet
+import com.kuit.ourmenu.ui.menuFolder.component.MenuFolderMenuButton
+import com.kuit.ourmenu.ui.menuFolder.component.SortDropdown
+import com.kuit.ourmenu.ui.menuFolder.viewmodel.MenuFolderAllViewModel
+import com.kuit.ourmenu.ui.theme.Neutral500
+import com.kuit.ourmenu.ui.theme.Neutral700
+import com.kuit.ourmenu.ui.theme.Neutral900
+import com.kuit.ourmenu.ui.theme.NeutralWhite
+import com.kuit.ourmenu.ui.theme.Primary500Main
+import com.kuit.ourmenu.ui.theme.ourMenuTypography
+import com.kuit.ourmenu.utils.TagListProvider
+import kotlinx.coroutines.launch
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MenuFolderAllMenuScreen(
+    onNavigateBack: () -> Unit,
+    onNavigateToMenuInfo: (Long) -> Unit,
+//    onNavigateToMap: () -> Unit, // TODO: Map으로 화면 이동 구현
+    onNavigateToAddMenu: () -> Unit,
+    viewModel: MenuFolderAllViewModel = hiltViewModel()
+) {
+    val menus by viewModel.menuFolderAll.collectAsStateWithLifecycle()
+    val selectedSort by viewModel.sortOrder.collectAsStateWithLifecycle()
+    val selectedTags by viewModel.selectedTags.collectAsStateWithLifecycle()
+    val minPrice by viewModel.minPrice.collectAsStateWithLifecycle()
+    val maxPrice by viewModel.maxPrice.collectAsStateWithLifecycle()
+    val menuCount = menus.size
+
+    var filterCount by rememberSaveable { mutableIntStateOf(0) } // 선택된 필터 개수 상태 관리
+
+    val scaffoldState = rememberBottomSheetScaffoldState()
+    val coroutineScope = rememberCoroutineScope()
+    LaunchedEffect(scaffoldState.bottomSheetState) {
+        snapshotFlow { scaffoldState.bottomSheetState.currentValue }
+            .collect { state ->
+                Log.d("AddMenuTagScreen", "BottomSheetState changed: $state")
+            }
+    }
+
+    BottomSheetScaffold(
+        scaffoldState = scaffoldState,
+        topBar = {
+            BackButtonTopAppBar(Neutral500, false) {
+                onNavigateBack()
+            }
+        },
+        sheetContainerColor = NeutralWhite,
+        sheetPeekHeight = 0.dp,
+        sheetContent = {
+            FilterBottomSheet(
+                categoryTagList = TagListProvider.categoryTagList,
+                nationalityTagList = TagListProvider.nationalityTagList,
+                tasteTagList = TagListProvider.tasteTagList,
+                occasionTagList = TagListProvider.occasionTagList,
+                onSelectedTagsChange = { newSelectedTags ->
+                    viewModel.updateTags(newSelectedTags)
+                },
+                onPriceRangeChange = { min, max ->
+                    viewModel.updatePriceRange(min, max)
+                },
+                onApplyButtonClick = {
+                    coroutineScope.launch {
+                        val tagFilterCount = selectedTags.size
+
+                        val isPriceChanged =
+                            minPrice != null && minPrice != 0L || maxPrice != null && maxPrice != 50000L
+                        val priceFilterCount = if (isPriceChanged) 1 else 0
+
+                        filterCount = tagFilterCount + priceFilterCount
+
+                        scaffoldState.bottomSheetState.partialExpand()
+                    }
+                }
+            )
+        },
+        sheetDragHandle = {
+            BottomSheetDragHandle()
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = stringResource(R.string.all_menu),
+                        style = ourMenuTypography().pretendard_600_20,
+                        color = Neutral900
+                    )
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    Text(
+                        text = String.format(stringResource(R.string.count), menuCount),
+                        style = ourMenuTypography().pretendard_500_14,
+                        color = Neutral700
+                    )
+                }
+
+                SortDropdown(
+                    options = SortOrderType.entries.map { it.displayName },
+                    selectedOption = selectedSort.displayName,
+                ) { selectedDisplayName ->
+                    SortOrderType.entries
+                        .firstOrNull { it.displayName == selectedDisplayName }
+                        ?.let { viewModel.updateSortOrder(it) }
+                }
+            }
+
+            // 필터 버튼 (필터 개수 반영)
+            Card(
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier
+                    .padding(top = 24.dp, bottom = 16.dp, start = 20.dp)
+                    .clickable {
+                        coroutineScope.launch {
+                            scaffoldState.bottomSheetState.expand() // 버튼 클릭 시 BottomSheet 열기
+                        }
+                    },
+                colors = CardDefaults.cardColors(containerColor = Primary500Main),
+                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+            ) {
+                Row(
+                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.ic_filter),
+                        contentDescription = "filter button",
+                    )
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    Text(
+                        text = "$filterCount", // 선택된 필터 개수 반영
+                        color = NeutralWhite,
+                        style = ourMenuTypography().pretendard_700_16
+                    )
+                }
+            }
+
+            LazyColumn(
+                modifier = Modifier,
+            ) {
+                items(menuCount) { index ->
+                    MenuFolderMenuButton(
+                        menuFolderDetail = menus[index],
+                        onMenuClick = {
+                            onNavigateToMenuInfo(menus[index].menuId)
+                        },
+                        onMapClick = {
+//                                onNavigateToMap()
+                        }
+                    )
+                }
+
+                item {
+                    AddButton(
+                        stringResource(R.string.add_menu),
+                        modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 20.dp)
+                    ) {
+                        onNavigateToAddMenu()
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MenuFolderAllMenuScreenPreview() {
+//    val navController = rememberNavController()
+//
+//    MenuFolderAllMenuScreen(navController)
+}
