@@ -124,7 +124,7 @@ fun MenuFolderScreen(
                             swipedIndex = -1
                             dragAndDropListState.onDragStart(offset)
                             dragStartFolderId = dragAndDropListState.initialIndex?.let { index ->
-                                menuFolders.getOrNull(index)?.menuFolderId ?: -1
+                                (menuFolders.getOrNull(index)?.menuFolderId ?: -1).toInt()
                             } ?: -1
                         },
                         onDragEnd = {
@@ -181,7 +181,7 @@ fun MenuFolderScreen(
                     },
                     onDeleteClick = {
                         showDeleteModel = true
-                        deleteIndex = folder.menuFolderId
+                        deleteIndex = folder.menuFolderId.toInt()
                     }
                 )
             }
