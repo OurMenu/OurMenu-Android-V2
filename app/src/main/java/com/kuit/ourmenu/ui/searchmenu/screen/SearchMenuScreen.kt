@@ -236,6 +236,11 @@ fun SearchMenuScreen(
                         showBottomSheet = true
                         showSearchBackground = false
                     }
+                }else{
+                    Log.d("SearchMenuScreen", "검색어가 비어있습니다.")
+                    viewModel.getMyMenus()
+                    showBottomSheet = false
+                    showSearchBackground = false
                 }
             }
 
