@@ -268,9 +268,14 @@ class SearchMenuViewModel @Inject constructor(
 
             response.onSuccess { result ->
                 if (result != null && result.isNotEmpty()) {
-                    Log.d("SearchMenuViewModel", "등록 메뉴 정보 조회 성공: ${result.size}개")
+                    Log.d("SearchMenuViewModel", "등록 메뉴 정보 조회 성공: $result")
                     // 검색 결과 저장
                     _searchResult.value = result
+                    // _myMenu의 아이템 중 검색 _searchResult의 menuTitle과 일치하는 것들만 지도에 표시
+                    _myMenus.value = _myMenus.value?.filter { menu ->
+                        result.any { searchResult -> searchResult.mapId == menu.mapId}
+                    } ?: emptyList()
+                    showSearchResultOnMap()
                 }
             }.onFailure {
                 Log.d("SearchMenuViewModel", "등록 메뉴 정보 조회 실패: ${it.message}")
