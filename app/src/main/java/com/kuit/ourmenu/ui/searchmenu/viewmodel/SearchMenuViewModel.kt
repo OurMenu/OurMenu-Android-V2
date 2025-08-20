@@ -320,19 +320,26 @@ class SearchMenuViewModel @Inject constructor(
 
     fun getMapMenuDetail(menuId: Long) {
         viewModelScope.launch {
+            getMyMenus()
             val response = mapRepository.getMapMenuDetail(menuId)
             response.onSuccess { menuDetail ->
                 Log.d("SearchMenuViewModel", "메뉴 상세 조회 성공: $menuDetail")
-                
-                // myMenus에서 해당 menuId를 가진 메뉴의 위치 정보 찾기
-                myMenus.value?.find { it.mapId == menuId }?.let { menu ->
-                    // 해당 위치로 카메라 이동
-                    moveCamera(menu.mapY, menu.mapX)
-                    // 해당 핀을 활성화 상태로 변경
-                    _activeMapId.value = menuId
-                    refreshMarkers()
+                // 검색 기록에서 해당 menuId를 가진 항목 찾기
+                searchHistory.value?.find { it.menuId == menuId }?.let { historyItem ->
+                    Log.d("SearchMenuViewModel", "검색 기록에서 찾은 mapId: ${historyItem.mapId}")
+                    // _myMenus를 해당 mapId로 필터링
+                    _myMenus.value = _myMenus.value?.filter { menu ->
+                        menu.mapId == historyItem.mapId
+                    } ?: emptyList()
+                    
+                    // 해당 mapId를 활성화 상태로 설정
+                    _activeMapId.value = historyItem.mapId
+                    
+                    // 지도에 검색 결과 표시
+                    showSearchResultOnMap()
+                    
                     // 메뉴 상세 정보를 바텀시트에 표시하기 위해 설정
-                    getMapDetail(menuId)
+                    getMapDetail(historyItem.mapId)
                 }
             }.onFailure {
                 Log.d("SearchMenuViewModel", "메뉴 상세 조회 실패: ${it.message}")
@@ -343,7 +350,7 @@ class SearchMenuViewModel @Inject constructor(
     // 지도에 검색 결과 핀 추가
     fun showSearchResultOnMap() {
         clearMarkers()
-        myMenus.value?.forEach { store ->
+        _myMenus.value?.forEach { store ->
             addMarker(store, store.mapId == _activeMapId.value)
             Log.d(
                 "SearchMenuViewModel",
@@ -351,7 +358,7 @@ class SearchMenuViewModel @Inject constructor(
             )
         }
         // 첫 번째 검색 결과로 카메라 이동 TODO: 현재 위치랑 가까운 결과로 이동
-        myMenus.value?.get(0)?.let { moveCamera(it.mapY, it.mapX) }
+        _myMenus.value?.get(0)?.let { moveCamera(it.mapY, it.mapX) }
     }
 
     // 네이버맵 이동을 위한 가게명 조회
