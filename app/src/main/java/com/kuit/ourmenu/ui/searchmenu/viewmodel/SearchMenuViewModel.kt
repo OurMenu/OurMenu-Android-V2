@@ -271,16 +271,25 @@ class SearchMenuViewModel @Inject constructor(
                     Log.d("SearchMenuViewModel", "등록 메뉴 정보 조회 성공: $result")
                     // 검색 결과 저장
                     _searchResult.value = result
-                    // _myMenu의 아이템 중 검색 _searchResult의 menuTitle과 일치하는 것들만 지도에 표시
-                    _myMenus.value = _myMenus.value?.filter { menu ->
-                        result.any { searchResult -> searchResult.mapId == menu.mapId}
-                    } ?: emptyList()
-                    // 검색 결과의 첫 번째 항목을 활성화 상태로 설정
-                    _activeMapId.value = result.firstOrNull()?.mapId
-                    showSearchResultOnMap()
-                    // 첫 번째 검색 결과의 상세 정보를 가져와서 바텀시트에 표시
-                    _activeMapId.value?.let { mapId ->
-                        getMapDetail(mapId)
+                    
+                    // 전체 메뉴 목록을 다시 가져온 후 필터링
+                    val allMenusResponse = mapRepository.getMap()
+                    allMenusResponse.onSuccess { allMenus ->
+                        if (allMenus != null) {
+                            // 전체 메뉴 중에서 검색 결과와 일치하는 것들만 필터링
+                            _myMenus.value = allMenus.filter { menu ->
+                                result.any { searchResult -> searchResult.mapId == menu.mapId }
+                            }
+                            
+                            // 검색 결과의 첫 번째 항목을 활성화 상태로 설정
+                            _activeMapId.value = result.firstOrNull()?.mapId
+                            showSearchResultOnMap()
+                            
+                            // 첫 번째 검색 결과의 상세 정보를 가져와서 바텀시트에 표시
+                            _activeMapId.value?.let { mapId ->
+                                getMapDetail(mapId)
+                            }
+                        }
                     }
                 }
             }.onFailure {
