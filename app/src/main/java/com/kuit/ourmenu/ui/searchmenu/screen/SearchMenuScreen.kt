@@ -248,6 +248,7 @@ fun SearchMenuScreen(
                     showBottomSheet = false
                     showSearchBackground = false
                 }
+                searchText = ""
             }
 
             GoToMapButton(
