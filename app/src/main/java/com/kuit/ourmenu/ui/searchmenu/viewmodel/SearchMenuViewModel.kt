@@ -268,9 +268,33 @@ class SearchMenuViewModel @Inject constructor(
 
             response.onSuccess { result ->
                 if (result != null && result.isNotEmpty()) {
-                    Log.d("SearchMenuViewModel", "등록 메뉴 정보 조회 성공: ${result.size}개")
+                    Log.d("SearchMenuViewModel", "등록 메뉴 정보 조회 성공: $result")
                     // 검색 결과 저장
                     _searchResult.value = result
+                    
+                    // 전체 메뉴 목록을 다시 가져온 후 필터링
+                    val allMenusResponse = mapRepository.getMap()
+                    allMenusResponse.onSuccess { allMenus ->
+                        if (allMenus != null) {
+                            // 전체 메뉴 중에서 검색 결과와 일치하는 것들만 필터링
+                            _myMenus.value = allMenus.filter { menu ->
+                                result.any { searchResult -> searchResult.mapId == menu.mapId }
+                            }
+                            // 검색 결과의 첫 번째 항목을 활성화 상태로 설정
+                            _activeMapId.value = result.firstOrNull()?.mapId
+                            showSearchResultOnMap()
+                            // 첫 번째 검색 결과의 상세 정보를 가져와서 바텀시트에 표시
+                            _activeMapId.value?.let { mapId ->
+                                getMapDetail(mapId)
+                            }
+                            // 검색 결과를 검색 기록에 반영
+                            if (result.firstOrNull()?.menuId != null){
+                                mapRepository.getMapMenuDetail(result.first().menuId)
+                                Log.d("SearchMenuViewModel", "검색 기록에 반영: ${result.first().menuId}")
+                            }
+
+                        }
+                    }
                 }
             }.onFailure {
                 Log.d("SearchMenuViewModel", "등록 메뉴 정보 조회 실패: ${it.message}")
@@ -315,22 +339,35 @@ class SearchMenuViewModel @Inject constructor(
 
     fun getMapMenuDetail(menuId: Long) {
         viewModelScope.launch {
-            val response = mapRepository.getMapMenuDetail(menuId)
-            response.onSuccess { menuDetail ->
-                Log.d("SearchMenuViewModel", "메뉴 상세 조회 성공: $menuDetail")
-                
-                // myMenus에서 해당 menuId를 가진 메뉴의 위치 정보 찾기
-                myMenus.value?.find { it.mapId == menuId }?.let { menu ->
-                    // 해당 위치로 카메라 이동
-                    moveCamera(menu.mapY, menu.mapX)
-                    // 해당 핀을 활성화 상태로 변경
-                    _activeMapId.value = menuId
-                    refreshMarkers()
-                    // 메뉴 상세 정보를 바텀시트에 표시하기 위해 설정
-                    getMapDetail(menuId)
+            // 먼저 전체 메뉴를 가져옴
+            val myMenusResponse = mapRepository.getMap()
+            myMenusResponse.onSuccess { menus ->
+                if (menus != null){
+                    val allMenus = menus
+                    Log.d("SearchMenuViewModel", "menuId로 메뉴 정보 요청: $menuId")
+                    val menuDetailResponse = mapRepository.getMapMenuDetail(menuId)
+                    menuDetailResponse.onSuccess { menuDetail ->
+                        Log.d("SearchMenuViewModel", "메뉴 상세 조회 성공: $menuDetail")
+                        // 검색 기록에서 해당 menuId를 가진 항목 찾기
+                        searchHistory.value?.find { it.menuId == menuId }?.let { historyItem ->
+                            Log.d("SearchMenuViewModel", "검색 기록에서 찾은 mapId: ${historyItem.mapId}")
+                            // 가져온 전체 메뉴에서 필터링
+                            _myMenus.value = allMenus.filter { menu ->
+                                menu.mapId == historyItem.mapId
+                            }
+                            // 해당 mapId를 활성화 상태로 설정
+                            _activeMapId.value = historyItem.mapId
+                            // 지도에 검색 결과 표시
+                            showSearchResultOnMap()
+                            // 메뉴 상세 정보를 바텀시트에 표시하기 위해 설정
+                            getMapDetail(historyItem.mapId)
+                        }
+                    }.onFailure {
+                        Log.d("SearchMenuViewModel", "메뉴 상세 조회 실패: ${it.message}")
+                    }
                 }
             }.onFailure {
-                Log.d("SearchMenuViewModel", "메뉴 상세 조회 실패: ${it.message}")
+                Log.d("SearchMenuViewModel", "내 메뉴 조회 실패: ${it.message}")
             }
         }
     }
@@ -338,14 +375,46 @@ class SearchMenuViewModel @Inject constructor(
     // 지도에 검색 결과 핀 추가
     fun showSearchResultOnMap() {
         clearMarkers()
-        myMenus.value?.forEach { store ->
-            addMarker(store, store.mapId == _activeMapId.value)
-            Log.d(
-                "SearchMenuViewModel",
-                "mapId: ${store.mapId} lat: (${store.mapY}, long: ${store.mapX})"
-            )
+        _myMenus.value?.let { menus ->
+            if (menus.isNotEmpty()) {
+                menus.forEach { store ->
+                    addMarker(store, store.mapId == _activeMapId.value)
+                    Log.d(
+                        "SearchMenuViewModel",
+                        "mapId: ${store.mapId} lat: (${store.mapY}, long: ${store.mapX})"
+                    )
+                }
+                // 첫 번째 검색 결과로 카메라 이동 TODO: 현재 위치랑 가까운 결과로 이동
+                moveCamera(menus[0].mapY, menus[0].mapX)
+            } else {
+                Log.d("SearchMenuViewModel", "검색 결과가 없습니다.")
+            }
         }
-        // 첫 번째 검색 결과로 카메라 이동 TODO: 현재 위치랑 가까운 결과로 이동
-        myMenus.value?.get(0)?.let { moveCamera(it.mapY, it.mapX) }
+    }
+
+    // 활성화된 맵 ID를 초기화하고 마커를 다시 그림
+    fun clearActiveMapId() {
+        _activeMapId.value = null
+        refreshMarkers()
+    }
+
+    // 네이버맵 이동을 위한 가게명 조회
+    suspend fun getWebSearchQuery(mapId: Long): String {
+        val baseUrl = "https://map.naver.com/p/search/"
+        val response = mapRepository.getMapDetail(mapId)
+        return response.fold(
+            onSuccess = { menuList ->
+                if (menuList.isNullOrEmpty()) {
+                    Log.d("SearchMenuViewModel", "메뉴 상세 조회 실패: 메뉴가 없습니다.")
+                    ""
+                } else {
+                    baseUrl + menuList.first().storeTitle
+                }
+            },
+            onFailure = { 
+                Log.d("SearchMenuViewModel", "메뉴 상세 조회 실패: ${it.message}")
+                ""
+            }
+        )
     }
 }
