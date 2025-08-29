@@ -135,11 +135,16 @@ fun SearchMenuScreen(
         }
     }
 
-    BackHandler(enabled = showSearchBackground) {
-        if (searchBarFocused) focusManager.clearFocus()
-        searchActionDone = false
-        showSearchBackground = false
-        searchText = ""
+    BackHandler(enabled = showSearchBackground || showBottomSheet) {
+        if (showSearchBackground) {
+            if (searchBarFocused) focusManager.clearFocus()
+            searchActionDone = false
+            showSearchBackground = false
+            searchText = ""
+        } else if (showBottomSheet) {
+            showBottomSheet = false
+            viewModel.clearActiveMapId()
+        }
     }
 
     BottomSheetScaffold(

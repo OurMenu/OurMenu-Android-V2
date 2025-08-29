@@ -378,6 +378,12 @@ class SearchMenuViewModel @Inject constructor(
         }
     }
 
+    // 활성화된 맵 ID를 초기화하고 마커를 다시 그림
+    fun clearActiveMapId() {
+        _activeMapId.value = null
+        refreshMarkers()
+    }
+
     // 네이버맵 이동을 위한 가게명 조회
     suspend fun getWebSearchQuery(mapId: Long): String {
         val baseUrl = "https://map.naver.com/p/search/"
