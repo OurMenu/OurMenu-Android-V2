@@ -1,5 +1,7 @@
 package com.kuit.ourmenu.ui.menuFolder.navigation
 
+import android.R.attr.padding
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -33,6 +35,7 @@ fun NavController.navigateToMenuInfo(menuId: Long) {
 }
 
 fun NavGraphBuilder.menuFolderNavGraph(
+    padding: PaddingValues,
     navigateBack: () -> Unit,
     navigateToMenuFolderDetail: (Long) -> Unit,
     navigateToMenuFolderAllMenu: () -> Unit,
@@ -41,6 +44,7 @@ fun NavGraphBuilder.menuFolderNavGraph(
 ) {
     composable<MainTabRoute.MenuFolder> {
         MenuFolderScreen(
+            padding = padding,
             onNavigateToDetail = navigateToMenuFolderDetail,
             onNavigateToAllMenu = navigateToMenuFolderAllMenu,
             onNavigateToAddMenu = navigateToAddMenu,

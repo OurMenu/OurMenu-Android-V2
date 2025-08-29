@@ -14,11 +14,14 @@ fun NavController.navigateToHome(navOptions: NavOptions) {
 
 fun NavGraphBuilder.homeNavGraph(
     padding: PaddingValues,
-    // navigate 이벤트
+    navigateToMenuInfo: (Long) -> Unit,
+    navigateToAddMenu: () -> Unit,
 ) {
     composable<MainTabRoute.Home> {
         HomeScreen(
-            // navigate 이벤트 + 기타 이벤트
+            padding = padding,
+            onNavigateToMenuInfo = navigateToMenuInfo,
+            onNavigateToAddMenu = navigateToAddMenu,
         )
     }
 }

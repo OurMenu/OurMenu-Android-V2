@@ -108,6 +108,9 @@
     <string name="taste">맛</string>
     <string name="occasion">상황</string>
 
+    <string name="delete_menu_folder_modal_title">정말로 삭제하시겠어요?</string>
+    <string name="delete_menu_folder_modal_content">삭제하면 복구가 어려울 수 있어요.\n다시 한 번 확인해 주세요.</string>
+
     <!--my page-->
     <string name="now_meal_time">현재 설정하신 식사 시간입니다!</string>
     <string name="change_meal_time">식사 시간 수정하기</string>
@@ -128,4 +131,8 @@
     <string name="want_to_logout">로그아웃 하시겠습니까?</string>
     <string name="want_to_delete_account">탈퇴 하시겠습니까?</string>
     <string name="delete_account_warning">탈퇴 시 계정 및 이용 기록은 모두 삭제되며,\n삭제된 데이터는 복구가 불가능합니다.</string>
+
+    <!--home-->
+    <string name="hello">안녕하세요!\n</string>
+    <string name="home_recommend">질문에 답해 기분에 맞는 메뉴를\n추천받아보세요!</string>
 </resources>

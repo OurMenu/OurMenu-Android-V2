@@ -59,6 +59,7 @@ output.json
 misc.xml
 deploymentTargetDropDown.xml
 render.experimental.xml
+deploymentTargetSelector.xml
 
 # Keystore files
 *.jks
@@ -168,3 +169,5 @@ fabric.properties
 ### AndroidStudio Patch ###
 
 !/gradle/wrapper/gradle-wrapper.jar
+/app/debug/output-metadata.json
+/app/build/outputs/**/output-metadata.json

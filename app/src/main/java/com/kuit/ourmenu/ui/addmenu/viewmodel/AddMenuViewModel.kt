@@ -57,6 +57,16 @@ class AddMenuViewModel @Inject constructor(
     private val _locationPermissionGranted = MutableStateFlow(false)
     val locationPermissionGranted: StateFlow<Boolean> = _locationPermissionGranted.asStateFlow()
 
+    private val _selectedMenuData = MutableStateFlow<SelectedMenuData>(
+        SelectedMenuData(
+            menuName = "",
+            price = "",
+            storeName = "",
+            address = ""
+        )
+    )
+    val selectedMenuData: StateFlow<SelectedMenuData> = _selectedMenuData.asStateFlow()
+
     init {
         viewModelScope.launch {
             preferencesManager.locationPermissionGranted.collect { granted ->
@@ -250,10 +260,9 @@ class AddMenuViewModel @Inject constructor(
     }
 }
 
-// TODO: 이후에 dto 반영시 삭제 예정
-data class AddMenuDummyStoreInfo(
-    val imgList: List<Int> = emptyList(),
-    val name: String = "",
+data class SelectedMenuData(
+    val menuName: String = "",
+    val price: String = "",
+    val storeName: String = "",
     val address: String = "",
-    val menuList: List<Boolean> = emptyList(),
 )

@@ -1,5 +1,6 @@
 package com.kuit.ourmenu.ui.menuFolder.component
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,11 +20,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,9 +30,11 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.kuit.ourmenu.R
@@ -44,10 +45,12 @@ import com.kuit.ourmenu.ui.theme.NeutralWhite
 import com.kuit.ourmenu.ui.theme.Primary500Main
 import com.kuit.ourmenu.ui.theme.ourMenuTypography
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 
 @Composable
 fun MenuFolderButton(
+    modifier: Modifier = Modifier,
     menuFolder: MenuFolderList,
     isSwiped: Boolean, // 현재 버튼이 스와이프된 상태인지 확인
     onSwipe: () -> Unit, // 새로운 버튼이 스와이프될 때 호출
@@ -56,31 +59,64 @@ fun MenuFolderButton(
     onEditClick: () -> Unit = {},
     onDeleteClick: () -> Unit = {}
 ) {
-    var offsetX by remember { mutableFloatStateOf(0f) }
+    val density = LocalDensity.current
+    val offset = remember {
+        Animatable(initialValue = 0f)
+    }
     val scope = rememberCoroutineScope()
-    val maxSwipe = 128f // 최대 스와이프 범위 (삭제 + 수정 버튼 너비)
+    val maxSwipe = with(density) {
+        128.dp.toPx() // 최대 스와이프 범위를 dp에서 px로 변환
+    }
+
+    LaunchedEffect(isSwiped) {
+        if (!isSwiped) {
+            offset.snapTo(0f)
+        }
+    }
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .height(132.dp)
             .fillMaxWidth()
             .pointerInput(Unit) {
+//                detectHorizontalDragGestures(
+//                    onDragEnd = {
+//                        scope.launch {
+//                            if (offsetX < -80f) {
+//                                onSwipe() // 다른 버튼을 닫고 이 버튼만 스와이프
+//                                offsetX = -maxSwipe
+//                            } else {
+//                                offsetX = 0f
+//                                onReset() // 스와이프가 닫히면 상태 초기화
+//                            }
+//                        }
+//                    }
+//                ) { change, dragAmount ->
+//                    change.consume()
+//                    offsetX = (offsetX + dragAmount).coerceIn(-maxSwipe, 0f)
+//                }
                 detectHorizontalDragGestures(
-                    onDragEnd = {
+                    onHorizontalDrag = { _, dragAmount ->
                         scope.launch {
-                            if (offsetX < -80f) {
-                                onSwipe() // 다른 버튼을 닫고 이 버튼만 스와이프
-                                offsetX = -maxSwipe
-                            } else {
-                                offsetX = 0f
-                                onReset() // 스와이프가 닫히면 상태 초기화
+                            val newOffset = (offset.value + dragAmount)
+                                .coerceIn(-maxSwipe, 0f)
+                            offset.snapTo(newOffset)
+                        }
+                    },
+                    onDragEnd = {
+                        if (offset.value < -maxSwipe / 2) {
+                            scope.launch {
+                                offset.animateTo(-maxSwipe)
                             }
+                            onSwipe()
+                        } else {
+                            scope.launch {
+                                offset.animateTo(0f)
+                            }
+                            onReset()
                         }
                     }
-                ) { change, dragAmount ->
-                    change.consume()
-                    offsetX = (offsetX + dragAmount).coerceIn(-maxSwipe, 0f)
-                }
+                )
             }
     ) {
         Box(
@@ -94,10 +130,12 @@ fun MenuFolderButton(
         // 스와이프 상태일 때만 offset 적용
         Box(
             modifier = Modifier
-                .offset(x = if (isSwiped) offsetX.dp else 0.dp)
-                .clickable(onClick = onButtonClick)
+//                .offset(x = if (isSwiped) offset.value.dp else 0.dp)
+                .offset { IntOffset(offset.value.roundToInt(), 0) }
+
         ) {
             MenuFolderContent(
+                onClick = onButtonClick,
                 menuFolder = menuFolder
             )
         }
@@ -161,6 +199,7 @@ fun MenuFolderDeleteButton(onDeleteClick: () -> Unit = {}) {
 
 @Composable
 fun MenuFolderContent(
+    onClick: () -> Unit = {},
     menuFolder: MenuFolderList,
 ) {
     val menuCount = menuFolder.menuIds.size
@@ -176,6 +215,7 @@ fun MenuFolderContent(
             modifier = Modifier
                 .fillMaxSize()
                 .clip(RoundedCornerShape(12.dp))
+                .clickable(onClick = onClick)
         )
 
         Box(
@@ -239,6 +279,7 @@ private fun MenuFolderButtonPreview() {
     )
 
     MenuFolderButton(
+        modifier = Modifier,
         menuFolder = dummyMenuFolder,
         false, {}, {})
 }
