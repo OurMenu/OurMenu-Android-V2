@@ -275,7 +275,13 @@ class SearchMenuViewModel @Inject constructor(
                     _myMenus.value = _myMenus.value?.filter { menu ->
                         result.any { searchResult -> searchResult.mapId == menu.mapId}
                     } ?: emptyList()
+                    // 검색 결과의 첫 번째 항목을 활성화 상태로 설정
+                    _activeMapId.value = result.firstOrNull()?.mapId
                     showSearchResultOnMap()
+                    // 첫 번째 검색 결과의 상세 정보를 가져와서 바텀시트에 표시
+                    _activeMapId.value?.let { mapId ->
+                        getMapDetail(mapId)
+                    }
                 }
             }.onFailure {
                 Log.d("SearchMenuViewModel", "등록 메뉴 정보 조회 실패: ${it.message}")
