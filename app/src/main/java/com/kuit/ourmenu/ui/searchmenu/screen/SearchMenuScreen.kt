@@ -86,8 +86,9 @@ fun SearchMenuScreen(
     val density = LocalDensity.current
     val singleItemHeight = 300.dp // Fixed height for each item
 
-    LaunchedEffect(menusOnPin) {
-        if (menusOnPin != null && menusOnPin?.isNotEmpty() == true) {
+    // 메뉴핀이 선택되었을 때 바텀시트 상태 변경
+    LaunchedEffect(menusOnPin, activeMapId) {
+        if (activeMapId != null && menusOnPin != null && menusOnPin?.isNotEmpty() == true) {
             showBottomSheet = true
         }
     }
