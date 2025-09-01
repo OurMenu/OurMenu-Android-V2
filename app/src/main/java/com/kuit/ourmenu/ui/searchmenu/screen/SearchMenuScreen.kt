@@ -1,6 +1,7 @@
 package com.kuit.ourmenu.ui.searchmenu.screen
 
 import android.Manifest
+import android.content.Intent
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -32,6 +33,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kuit.ourmenu.R
@@ -71,18 +73,22 @@ fun SearchMenuScreen(
 
     // 지도 중심 좌표
     val currentCenter by viewModel.currentCenter.collectAsStateWithLifecycle()
-    
+
     // 검색기록
     val searchHistory by viewModel.searchHistory.collectAsStateWithLifecycle()
-    
+
     // 핀 위치에 해당하는 메뉴들
     val menusOnPin by viewModel.menusOnPin.collectAsStateWithLifecycle()
+
+    // 선택된 라벨
+    val activeMapId by viewModel.activeMapId.collectAsStateWithLifecycle()
 
     val density = LocalDensity.current
     val singleItemHeight = 300.dp // Fixed height for each item
 
-    LaunchedEffect(menusOnPin) {
-        if (menusOnPin != null && menusOnPin?.isNotEmpty() == true) {
+    // 메뉴핀이 선택되었을 때 바텀시트 상태 변경
+    LaunchedEffect(menusOnPin, activeMapId) {
+        if (activeMapId != null && menusOnPin != null && menusOnPin?.isNotEmpty() == true) {
             showBottomSheet = true
         }
     }
@@ -130,11 +136,16 @@ fun SearchMenuScreen(
         }
     }
 
-    BackHandler(enabled = showSearchBackground) {
-        if (searchBarFocused) focusManager.clearFocus()
-        searchActionDone = false
-        showSearchBackground = false
-        searchText = ""
+    BackHandler(enabled = showSearchBackground || showBottomSheet) {
+        if (showSearchBackground) {
+            if (searchBarFocused) focusManager.clearFocus()
+            searchActionDone = false
+            showSearchBackground = false
+            searchText = ""
+        } else if (showBottomSheet) {
+            showBottomSheet = false
+            viewModel.clearActiveMapId()
+        }
     }
 
     BottomSheetScaffold(
@@ -160,7 +171,7 @@ fun SearchMenuScreen(
                 }
             )
         },
-        sheetPeekHeight = if(showBottomSheet) {
+        sheetPeekHeight = if (showBottomSheet) {
             val itemCount = menusOnPin?.size ?: 0
             (singleItemHeight * itemCount) + dragHandleHeight
         } else 0.dp,
@@ -190,6 +201,7 @@ fun SearchMenuScreen(
                         // 크롤링 기록 아이템 클릭시 동작
                         viewModel.getMapMenuDetail(menuId)
                         Log.d("SearchMenuScreen", "검색 기록 아이템 클릭: $menuId")
+                        focusManager.clearFocus()
                         showSearchBackground = false
                         showBottomSheet = true
                     }
@@ -210,37 +222,54 @@ fun SearchMenuScreen(
                 // onSearch 함수
                 if (searchBarFocused) focusManager.clearFocus()
                 searchActionDone = true
-                
+
                 // 검색 시 현재 지도 중심 좌표 사용
                 if (searchText.isNotEmpty()) {
                     // 검색 직전에 현재 지도 중심 좌표 업데이트
                     viewModel.updateCurrentCenter()
-                    
+
                     val center = viewModel.getCurrentCoordinates()
                     if (center != null) {
                         val (latitude, longitude) = center
                         Log.d("SearchMenuScreen", "검색 위치: $latitude, $longitude")
-                        
+
                         // 검색어와 현재 좌표로 스토어 정보 요청
                         viewModel.getMapSearchResult(
                             query = searchText,
                             long = longitude,
                             lat = latitude
                         )
-                        
+
                         showBottomSheet = true
                         showSearchBackground = false
                     }
+                }else{
+                    Log.d("SearchMenuScreen", "검색어가 비어있습니다.")
+                    viewModel.getMyMenus()
+                    showBottomSheet = false
+                    showSearchBackground = false
                 }
+                searchText = ""
             }
 
             GoToMapButton(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(bottom = 16.dp, end = 20.dp),
-                onClick = { 
-                    // TODO: 임시로 설정해놓은 카메라 이동, 실제로는 네이버 지도에 해당 가게 검색 결과로 이동
-                    viewModel.moveCamera(37.5416, 127.0793)
+                onClick = {
+                    // 네이버 지도에 해당 가게 검색 결과로 이동
+                    if (activeMapId == null) {
+                        Log.d("SearchMenuScreen", "활성화된 Map ID가 없습니다.")
+                    } else {
+                        scope.launch {
+                            val searchQuery = viewModel.getWebSearchQuery(activeMapId!!)
+                            if (searchQuery.isNotBlank()) {
+                                Log.d("SearchMenuScreen", "intent query: $searchQuery")
+                                val webIntent = Intent(Intent.ACTION_VIEW, searchQuery.toUri())
+                                context.startActivity(webIntent)
+                            }
+                        }
+                    }
                 },
             )
         }
@@ -252,7 +281,7 @@ fun SearchMenuScreen(
 @Composable
 private fun SearchMenuScreenPreview() {
     SearchMenuScreen(
-    ){
+    ) {
 
     }
 }

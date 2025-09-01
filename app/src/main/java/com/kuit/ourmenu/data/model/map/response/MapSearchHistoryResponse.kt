@@ -5,6 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MapSearchHistoryResponse(
+    @SerialName("mapId")
+    val mapId: Long,
     @SerialName("menuId")
     val menuId: Long,
     @SerialName("menuTitle")
