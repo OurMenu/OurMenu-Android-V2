@@ -7,7 +7,6 @@ import com.kuit.ourmenu.data.model.auth.request.SignupRequest
 import com.kuit.ourmenu.data.model.auth.response.CheckKakaoEmailResponse
 import com.kuit.ourmenu.data.model.auth.response.EmailResponse
 import com.kuit.ourmenu.data.model.auth.response.LoginResponse
-import com.kuit.ourmenu.data.model.auth.response.ReissueTokenResponse
 import com.kuit.ourmenu.data.model.auth.response.SignupResponse
 import com.kuit.ourmenu.data.model.base.BaseResponse
 import retrofit2.http.Body
@@ -27,10 +26,6 @@ interface AuthService {
         @Body request: LoginRequest
     ): BaseResponse<LoginResponse>
 
-    @POST("api/users/reissue-token")
-    suspend fun reissueToken(
-        @Body refreshToken: String
-    ): BaseResponse<ReissueTokenResponse>
 
     @POST("/api/users/auth/kakao")
     suspend fun checkKakaoEmail(
