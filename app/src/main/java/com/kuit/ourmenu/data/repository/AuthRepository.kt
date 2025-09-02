@@ -72,11 +72,6 @@ class AuthRepository @Inject constructor(
     }
 
 
-    suspend fun reissueToken(
-        refreshToken: String
-    ) = runCatching {
-        authService.reissueToken(refreshToken).handleBaseResponse().getOrThrow()
-    }
 
     suspend fun sendEmail(
         email: String
