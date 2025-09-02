@@ -162,21 +162,24 @@ private fun SearchHistoryPreview() {
     SearchHistoryList(
         historyList = listOf(
             MapSearchHistoryResponse(
+                mapId = 1,
+                menuId = 1,
                 menuTitle = "피자",
                 storeTitle = "피자헛",
-                menuId = 1,
                 storeAddress = "서울특별시 강남구 역삼동 123-4"
             ),
             MapSearchHistoryResponse(
+                mapId = 2,
+                menuId = 2,
                 menuTitle = "치킨",
                 storeTitle = "굽네치킨",
-                menuId = 2,
                 storeAddress = "서울특별시 강남구 역삼동 456-7"
             ),
             MapSearchHistoryResponse(
+                mapId = 3,
+                menuId = 3,
                 menuTitle = "햄버거",
                 storeTitle = "맥도날드",
-                menuId = 3,
                 storeAddress = "서울특별시 강남구 역삼동 987-6"
             )
         ),

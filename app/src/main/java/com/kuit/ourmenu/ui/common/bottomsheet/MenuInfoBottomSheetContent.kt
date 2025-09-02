@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -137,14 +136,17 @@ fun MenuInfoImage(
 ) {
     val imgUrls = menuInfoData.menuImgUrls
 
-    Row(modifier = modifier, horizontalArrangement = Arrangement.SpaceBetween) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
         for (i in 0 until 3) {
             Image(
                 painter = if (i < imgUrls.size && imgUrls[i].isNotEmpty()) {
                     rememberAsyncImagePainter(
                         model = ImageRequest.Builder(LocalPlatformContext.current)
                             .data(imgUrls[i])
-                            .size(104, 80)
+                            .size(108, 80)
                             .build()
                     )
                 } else {
@@ -152,10 +154,10 @@ fun MenuInfoImage(
                 },
                 contentDescription = null,
                 modifier = Modifier
-                    .size(104.dp, 80.dp)
+                    .weight(1f)
+                    .height(80.dp)
                     .clip(shape = RoundedCornerShape(8.dp))
             )
-//            if (i != 2) Spacer(modifier = Modifier.padding(end = 4.dp))
         }
     }
 }
